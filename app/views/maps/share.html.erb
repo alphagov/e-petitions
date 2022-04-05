@@ -7,7 +7,7 @@
       <div class="petition-share--preview-wrapper">
         <h2 class="petition-share--title">
           <span class="petition-share--site"><%= Site.host %></span>
-          <%= t(:"ui.map.share_page.title", action: truncate(@petition.action, length: 45, separator: ' ')) %>
+          <%= t(:"ui.map.share_page.title_html", action: truncate(@petition.action, length: 45, separator: ' ')) %>
         </h2>
         <p class="petition-share--description">
           <%= truncate(@petition.background, length: 90, separator: ' ') %>
