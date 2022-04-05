@@ -35,7 +35,14 @@ cy-GB:
           <a class="back-page" href="%{url}">Nôl</a>
         body_html: |-
           <h1 class="page-title">Ynglŷn â map y ddeiseb</h1>
-          <p>The signature distrubtion and map is based upon the following data sources:</p>
+          <p>Please note that individual constituency, electoral region and country signature count totals will be less than the total signature count recorded for the petition for the following reasons:</p>
+          <ul class="list-bullet">
+            <li>Petition was signed using a postcode that has not yet been published;</li>
+            <li>Petition was signed using a postcode that does not exist;</li>
+            <li>Petition was signed from outside of Wales;</li>
+            <li>Additional paper signatures were added to the petition.</li>
+          </ul>
+          <p>The calculation of signature distribution and display of the map boundaries utilises the following data sources:</p>
           <ul class="list-bullet">
             <li>Boundary line data sourced from <a href="https://osdatahub.os.uk/downloads/open/BoundaryLine">Ordnance Survey</a> and the <a href="https://geoportal.statistics.gov.uk">ONS Open Geography Portal</a>.</li>
             <li>Postcode data sourced from the <a href="https://geoportal.statistics.gov.uk/datasets/ons-postcode-directory-november-2021">ONS Postcode Directory (ONSPD)</a>.</li>
