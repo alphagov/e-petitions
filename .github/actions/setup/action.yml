@@ -8,6 +8,11 @@ runs:
       run: |
         sudo apt-get -yqq install libpq-dev
 
+    - name: Install GIS packages
+      shell: bash
+      run: |
+        sudo apt-get -yqq install libgeos-dev libproj-dev gdal-bin
+
     - name: Install gems
       shell: bash
       run: |
