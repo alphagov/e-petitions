@@ -5,10 +5,10 @@ cy-GB:
       feature_info:
         signatures:
           one: "llofnod"
-          two: "llofnod"
+          two: "lofnod"
           zero: "llofnod"
           other: "llofnod"
-        constituents: "etholwyr"
+        constituents: "etholwr"
         of: "o"
       petition_info:
         back: "Nôl"
@@ -17,19 +17,19 @@ cy-GB:
         sign_this_petition: "Llofnodi’r ddeiseb hon"
       map_switcher:
         show_signatures_by:
-          legend: "Dangos llofnodion gan"
-          constituencies: "etholaeth"
-          regions: "rhanbarth"
+          legend: "Dangos llofnodion yn ôl"
+          constituencies: "etholaethau"
+          regions: "rhanbarthau"
           countries: "gwlad"
         count_signatures_by:
-          legend: "Cyfrif llofnodion erbyn"
-          population: "% o etholwyr"
+          legend: "Cyfrif llofnodion yn ôl"
+          population: "% o etholwr"
           signatures: "% o lofnodion"
       zoom_and_share:
         zoom_in: "Chwyddo i Mewn"
         zoom_out: "Chwyddo allan"
-        share: "Rhannu Map"
-        about: "Ynghylch"
+        share: "Rhannu map"
+        about: "Gwybodaeth am y map"
       about_page:
         back_link_html: |-
           <a class="back-page" href="%{url}">Nôl</a>
@@ -637,7 +637,7 @@ cy-GB:
         rel="external">Senedd TV</a>.
       at_threshold_for_debate_will_be_considered: Caiff deisebau sydd â mwy na %{threshold}
         llofnod eu hystyried ar gyfer dadl yn y Senedd
-      show_on_a_map: "Dangoswch ar fap"
+      show_on_a_map: "Dangos ar fap"
     pagination:
       next_html: "<a class=\"next\" href=\"%{next_link}\">\r\n  <span class=\"paginate-label\">Nesaf</span>\r\n
         \ <span class=\"paginate page-count\">%{next_page} of %{total_pages}</span>\r\n</a>"
