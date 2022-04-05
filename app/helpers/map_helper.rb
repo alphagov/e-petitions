@@ -1,6 +1,7 @@
 module MapHelper
   class MapPreview
-    BASE_IMAGE   = Rails.root.join('app', 'assets', 'images', 'map', 'base.png')
+    BASE_IMAGE_EN   = Rails.root.join('app', 'assets', 'images', 'map', 'base_en.png')
+    BASE_IMAGE_CY   = Rails.root.join('app', 'assets', 'images', 'map', 'base_cy.png')
     EPSILON      = 0.000005
     COLOR_SCALE  = 0.8
     STROKE_COLOR = 0x3C3C3BFF # Dark Grey
@@ -94,7 +95,7 @@ module MapHelper
 
     def initialize(petition)
       @petition = petition
-      @png = ChunkyPNG::Canvas.from_file(BASE_IMAGE)
+      @png = ChunkyPNG::Canvas.from_file(base_image)
     end
 
     def draw(path, stroke, fill)
@@ -120,10 +121,14 @@ module MapHelper
     def max_value
       @max_value ||= journals.map { |_, v| v.percent_count }.max
     end
+
+    def base_image
+      I18n.locale == :"en-GB" ? BASE_IMAGE_EN : BASE_IMAGE_CY
+    end
   end
 
   def map_preview(petition)
-    key = [petition, :map_preview]
+    key = [I18n.locale, petition, :map_preview]
 
     options = {
       expires_in: 15.minutes,

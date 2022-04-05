@@ -744,6 +744,8 @@ en-GB:
       twitter_card_description: Official online petitions in response to issues of
         the day, listing the number that were referred to the Petitions Committee,
         and those that have been debated by the Senedd
+      opengraph_image: "os-social/opengraph-image-en.png"
+      opengraph_locale: "en_GB"
     share_title: 'Petition: %{petition}'
     list_headers:
       open_html: |-

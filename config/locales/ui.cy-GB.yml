@@ -733,6 +733,8 @@ cy-GB:
       get_json_csv_html: Gweld y data hyn yn fformat %{json_link} neu %{csv_link}
       share_this_petition: Rhannu’r ddeiseb hon
       twitter_card_description: Deisebau swyddogol ar-lein mewn ymateb i faterion cyfoes, yn rhestru sawl deiseb y cyfeiriwyd at y Pwyllgor Deisebau, a’r rhai y cynhaliwyd dadl arnynt yn y Senedd
+      opengraph_image: "os-social/opengraph-image-cy.png"
+      opengraph_locale: "cy_GB"
     share_title: 'Deiseb: %{petition}'
     list_headers:
       open_html: |-
