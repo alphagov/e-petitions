@@ -145,7 +145,7 @@
   }
 
   var calculateFillOpactity = function (scale, percentage) {
-    if (percentage < 0.0005) {
+    if (percentage < 0.000005) {
       return 0;
     } else {
       return (1 / scale) * percentage * 0.8;

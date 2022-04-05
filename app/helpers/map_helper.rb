@@ -1,7 +1,7 @@
 module MapHelper
   class MapPreview
     BASE_IMAGE   = Rails.root.join('app', 'assets', 'images', 'map', 'base.png')
-    EPSILON      = 0.0005
+    EPSILON      = 0.000005
     COLOR_SCALE  = 0.8
     STROKE_COLOR = 0x3C3C3BFF # Dark Grey
     FILL_COLOR   = 0xC9187EFF # Pink
