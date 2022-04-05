@@ -35,6 +35,15 @@ cy-GB:
           <a class="back-page" href="%{url}">Nôl</a>
         body_html: |-
           <h1 class="page-title">Ynglŷn â map y ddeiseb</h1>
+          <p>The signature distrubtion and map is based upon the following data sources:</p>
+          <ul class="list-bullet">
+            <li>Boundary line data sourced from <a href="https://osdatahub.os.uk/downloads/open/BoundaryLine">Ordnance Survey</a> and the <a href="https://geoportal.statistics.gov.uk">ONS Open Geography Portal</a>.</li>
+            <li>Postcode data sourced from the <a href="https://geoportal.statistics.gov.uk/datasets/ons-postcode-directory-november-2021">ONS Postcode Directory (ONSPD)</a>.</li>
+            <li>The estimated (mid-2021) population data is sourced from the <a href="https://gov.wales/data-senedd-cymru-constituency-areas-2021">Welsh Government</a> and the <a href="https://www.ons.gov.uk/peoplepopulationandcommunity/populationandmigration/populationestimates/datasets/populationestimatesforukenglandandwalesscotlandandnorthernireland">ONS</a>.</li>
+          </ul>
+          <h2>Copyright</h2>
+          <p>Source: Office for National Statistics licensed under the <a href="https://www.nationalarchives.gov.uk/doc/open-government-licence-cymraeg/version/3/">Open Government Licence v.3.0</a>.</p>
+          <p>Contains OS data © Crown copyright and database right 2022</p>
       share_page:
         back_link_html: |-
           <a class="back-page" href="%{url}">Nôl</a>
