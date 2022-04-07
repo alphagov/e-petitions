@@ -13,12 +13,17 @@ L.Control.MapSwitcher = L.Control.extend({
     var container = this._createContainer();
     var wrapper = this._createWrapper(container);
 
-    this._createViewSwitcher(wrapper);
-    this._createCountSwitcher(wrapper);
+    this._createViewSwitcher(container, wrapper);
+    this._createCountSwitcher(container, wrapper);
+    this._createShowButton(container, wrapper);
 
     L.DomEvent.disableClickPropagation(container);
 
     return container;
+  },
+
+  hide: function() {
+    this.getContainer().classList.remove('map-switcher--visible');
   },
 
   _createContainer: function() {
@@ -29,7 +34,7 @@ L.Control.MapSwitcher = L.Control.extend({
     return L.DomUtil.create('div', 'map-control-wrapper map-switcher', container);
   },
 
-  _createViewSwitcher: function(wrapper) {
+  _createViewSwitcher: function(container, wrapper) {
     var fieldset = L.DomUtil.create('fieldset', 'form-group view-switcher', wrapper);
     var legend = L.DomUtil.create('legend', '', fieldset);
     legend.innerHTML = this._ui.show_signatures_by.legend;
@@ -81,10 +86,11 @@ L.Control.MapSwitcher = L.Control.extend({
 
     fieldset.addEventListener('change', function (e){
       PetitionMap.setCurrentView(e.target.value);
+      container.classList.remove('map-switcher--visible');
     });
   },
 
-  _createCountSwitcher: function(wrapper) {
+  _createCountSwitcher: function(container, wrapper) {
     var fieldset = L.DomUtil.create('fieldset', 'form-group count-switcher', wrapper);
     var legend = L.DomUtil.create('legend', '', fieldset);
     legend.innerHTML = this._ui.count_signatures_by.legend;
@@ -106,6 +112,7 @@ L.Control.MapSwitcher = L.Control.extend({
 
     fieldset.addEventListener('change', function (e){
       PetitionMap.setCurrentCount(e.target.value);
+      container.classList.remove('map-switcher--visible');
     });
 
     var populationDiv = L.DomUtil.create('div', 'multiple-choice', fieldset);
@@ -122,6 +129,18 @@ L.Control.MapSwitcher = L.Control.extend({
     var populationLabel = L.DomUtil.create('label', '', populationDiv);
     populationLabel.htmlFor = 'current_count_constituents';
     populationLabel.innerHTML = this._ui.count_signatures_by.population;
+  },
+
+  _createShowButton: function(container, wrapper) {
+    var showBtn = L.DomUtil.create('button', 'button show-map-switcher', container);
+    var showBtnText = L.DomUtil.create('span', 'visuallyhidden', showBtn);
+    showBtn.type = 'button';
+    showBtnText.innerHTML = this._ui.show_map_switcher;
+
+    showBtn.addEventListener('click', function (e) {
+      PetitionMap.hideControls();
+      container.classList.add('map-switcher--visible');
+    });
   }
 });
 

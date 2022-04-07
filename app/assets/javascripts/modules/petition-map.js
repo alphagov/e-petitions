@@ -11,6 +11,7 @@
 
   var map = PetitionMap.map = L.map('map', {
     attributionControl: false,
+    doubleClickZoom: false,
     zoomControl: false,
     zoomSnap: 0.1,
     zoomDelta: 0.5,
@@ -81,6 +82,10 @@
     map.panBy([deltaX, deltaY], { noMoveStart: true, animate: false });
   }
 
+  PetitionMap.resetView = function () {
+    map.fitBounds(currentLayer.getBounds(), { padding: [25, 25], animate: false });
+  }
+
   PetitionMap.setCurrentView = function (newView) {
     if (currentLayer) {
       currentLayer.removeFrom(map);
@@ -132,6 +137,17 @@
 
   PetitionMap.getCurrentCount = function () {
     return currentCount;
+  }
+
+  PetitionMap.hideControls = function () {
+    controls.petitionInfo.hide();
+    controls.mapSwitcher.hide();
+
+    if (currentFeature) {
+      resetFeature(currentFeature)
+      controls.featureInfo.resetFeatureInfo();
+      currentFeature = null;
+    }
   }
 
   data.constituencies.initialize(data.petition);
@@ -222,12 +238,16 @@
   }
 
   var onClickFeature = function (e) {
+    controls.petitionInfo.hide();
+    controls.mapSwitcher.hide();
+
     if (currentFeature && currentFeature != e.target) {
       resetFeature(currentFeature);
       controls.featureInfo.resetFeatureInfo();
     }
 
     currentFeature = e.target;
+    highlightFeature(currentFeature);
     controls.featureInfo.setFeatureInfo(currentFeature.feature);
   }
 
@@ -285,6 +305,9 @@
   }
 
   var onClick = function(e) {
+    controls.mapSwitcher.hide();
+    controls.petitionInfo.hide();
+
     if (currentFeature) {
       resetFeature(currentFeature)
       controls.featureInfo.resetFeatureInfo();
@@ -292,7 +315,14 @@
     }
   }
 
+  var onDoubleClick = function(e) {
+    if (currentLayer) {
+      map.fitBounds(currentLayer.getBounds(), { padding: [25, 25], animate: false });
+    }
+  }
+
   map.on('movestart', onMoveStart);
   map.on('moveend', onMoveEnd);
   map.on('click', onClick);
+  map.on('dblclick', onDoubleClick);
 }).call(this);

@@ -17,10 +17,16 @@ L.Control.PetitionInfo = L.Control.extend({
     this._createPetitionAction(wrapper);
     this._createSignatureCount(wrapper);
     this._createSignPetitionButton(wrapper);
+    this._createShowButton(container, wrapper);
+    this._createCloseButton(container, wrapper);
 
     L.DomEvent.disableClickPropagation(container);
 
     return container;
+  },
+
+  hide: function() {
+    this.getContainer().classList.remove('petition-info--visible');
   },
 
   _createContainer: function() {
@@ -72,6 +78,29 @@ L.Control.PetitionInfo = L.Control.extend({
 
       return link;
     }
+  },
+
+  _createShowButton: function(container, wrapper) {
+    var showBtn = L.DomUtil.create('button', 'button show-petition-info', container);
+    var showBtnText = L.DomUtil.create('span', 'visuallyhidden', showBtn);
+    showBtn.type = 'button';
+    showBtnText.innerHTML = this._ui.show_petition_info;
+
+    showBtn.addEventListener('click', function (e) {
+      PetitionMap.hideControls();
+      container.classList.add('petition-info--visible');
+    });
+  },
+
+  _createCloseButton: function(container, wrapper) {
+    var closeBtn = L.DomUtil.create('button', 'button close-petition-info', wrapper);
+    var closeBtnText = L.DomUtil.create('span', 'visuallyhidden', closeBtn);
+    closeBtn.type = 'button';
+    closeBtnText.innerHTML = this._ui.close_petition_info;
+
+    closeBtn.addEventListener('click', function (e) {
+      container.classList.remove('petition-info--visible');
+    });
   }
 });
 

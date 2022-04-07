@@ -15,6 +15,8 @@ en-GB:
         petition: "Petition"
         signatures: "signatures"
         sign_this_petition: "Sign this petition"
+        show_petition_info: "Show petition details"
+        close_petition_info: "Hide petition details"
       map_switcher:
         show_signatures_by:
           legend: "Show signatures by"
@@ -25,6 +27,7 @@ en-GB:
           legend: "Count signatures by"
           population: "% of constituents"
           signatures: "% of signatures"
+        show_map_switcher: "Change current map view"
       zoom_and_share:
         zoom_in: "Zoom In"
         zoom_out: "Zoom Out"

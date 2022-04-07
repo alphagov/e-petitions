@@ -15,6 +15,8 @@ cy-GB:
         petition: "Deiseb"
         signatures: "llofnod"
         sign_this_petition: "Llofnodi’r ddeiseb hon"
+        show_petition_info: "Dangos manylion y ddeiseb"
+        close_petition_info: "Cuddio manylion y ddeiseb"
       map_switcher:
         show_signatures_by:
           legend: "Dangos llofnodion yn ôl"
@@ -25,6 +27,7 @@ cy-GB:
           legend: "Cyfrif llofnodion yn ôl"
           population: "% o etholwr"
           signatures: "% o lofnodion"
+        show_map_switcher: "Newid gwedd map cyfredol"
       zoom_and_share:
         zoom_in: "Chwyddo i Mewn"
         zoom_out: "Chwyddo allan"

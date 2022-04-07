@@ -40,11 +40,11 @@ L.Control.ZoomAndShare = L.Control.extend({
     var zoomInText = L.DomUtil.create('span', 'visuallyhidden', zoomInBtn);
     zoomInText.innerHTML = this._ui.zoom_in;
 
-    zoomOutBtn.addEventListener('click', function (e){
+    zoomOutBtn.addEventListener('click', function (e) {
       PetitionMap.map.zoomOut();
     });
 
-    zoomInBtn.addEventListener('click', function (e){
+    zoomInBtn.addEventListener('click', function (e) {
       PetitionMap.map.zoomIn();
     });
   },
