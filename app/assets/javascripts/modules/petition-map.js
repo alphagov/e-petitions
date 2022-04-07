@@ -8,6 +8,7 @@
   var currentLayer = null;
   var currentFeature = null;
   var moving = false;
+  var zooming = false;
 
   var map = PetitionMap.map = L.map('map', {
     attributionControl: false,
@@ -222,13 +223,15 @@
   }
 
   var onMouseMoveFeature = function (e) {
-    if (!moving && !e.target.isTooltipOpen()) {
+    if (!moving && !zooming && !e.target.isTooltipOpen()) {
       e.target.openTooltip();
     }
   }
 
   var onMouseOverFeature = function (e) {
-    highlightFeature(e.target);
+    if (!zooming) {
+      highlightFeature(e.target);
+    }
   }
 
   var onMouseOutFeature = function (e) {
@@ -285,6 +288,14 @@
   map.addControl(controls.zoomAndShare);
   map.addControl(controls.featureInfo);
 
+  var onZoomStart = function(e) {
+    zooming = true;
+  }
+
+  var onZoomEnd = function(e) {
+    zooming = false;
+  }
+
   var onMoveStart = function(e) {
     moving = true;
 
@@ -321,6 +332,8 @@
     }
   }
 
+  map.on('zoomstart', onZoomStart);
+  map.on('zoomend', onZoomEnd);
   map.on('movestart', onMoveStart);
   map.on('moveend', onMoveEnd);
   map.on('click', onClick);
