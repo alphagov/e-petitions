@@ -41,7 +41,6 @@ en-GB:
           <p>Please note that individual constituency, electoral region and country signature count totals will be less than the total signature count recorded for the petition for the following reasons:</p>
           <ul class="list-bullet">
             <li>Petition was signed using a postcode that has not yet been published;</li>
-            <li>Petition was signed using a postcode that does not exist;</li>
             <li>Petition was signed from outside of Wales;</li>
             <li>Additional paper signatures were added to the petition.</li>
           </ul>
