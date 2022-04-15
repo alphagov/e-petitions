@@ -1,5 +1,6 @@
 class MapsController < LocalizedController
   before_action :retrieve_petition
+  before_action :redirect_to_petition_url, unless: :show_map_page?
   before_action :redirect_to_gathering_support_url, if: :collecting_sponsors?
   before_action :redirect_to_moderation_info_url, if: :in_moderation?
 
@@ -35,6 +36,14 @@ class MapsController < LocalizedController
 
   def retrieve_petition
     @petition = Petition.show.find(petition_id)
+  end
+
+  def show_map_page?
+    Site.show_map_page?
+  end
+
+  def redirect_to_petition_url
+    redirect_to petition_url(@petition)
   end
 
   def collecting_sponsors?

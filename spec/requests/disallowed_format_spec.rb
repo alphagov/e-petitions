@@ -1,8 +1,11 @@
 require 'rails_helper'
 
 RSpec.describe 'Requests for pages when we do not support the format on that page', type: :request, show_exceptions: true do
-
   let(:petition) { FactoryBot.create :open_petition }
+
+  before do
+    allow(Site).to receive(:show_map_page?).and_return(true)
+  end
 
   shared_examples 'a route that only supports html formats' do |headers_only: false|
     unless headers_only
