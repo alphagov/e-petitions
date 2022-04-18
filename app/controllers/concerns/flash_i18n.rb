@@ -26,7 +26,7 @@ module FlashI18n
 
     if Array === key
       options = key.extract_options!
-      I18n.t(key.first, { scope: scope }.merge(options))
+      I18n.t(key.first, **({ scope: scope }.merge(options)))
     elsif Symbol === key
       I18n.t(key, scope: scope)
     else
