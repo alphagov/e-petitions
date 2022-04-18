@@ -1,11 +1,10 @@
 version: "3.7"
 
 x-application: &application
-  image: unboxed/epetitions
-  build: .
-  entrypoint: ./docker-entrypoint.sh
+  image: welsh-petitions/ruby
+  build: docker/ruby
   environment:
-    - DATABASE_URL=postgres://postgres@postgres:5432
+    - DATABASE_URL=postgres://postgres:fUG1DnZpy1rNkxiO@postgres:5432
     - MEMCACHE_SERVERS=memcached:11211
     - SPROCKETS_CACHE=/cache
   volumes:
@@ -18,8 +17,13 @@ x-application: &application
 
 services:
   postgres:
-    image: postgis/postgis:11-2.5
+    image: welsh-petitions/postgis
+    build: docker/postgis
     restart: always
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=fUG1DnZpy1rNkxiO
+      - POSTGRES_DB=postgres
     ports:
       - "5432:5432"
     volumes:

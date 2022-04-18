@@ -26,10 +26,10 @@ MODERATE_HOST=moderatepets.lvh.me
 
 If you do this before running the app for the first time it will automatically pick these up, otherwise you'll need to use a PostgreSQL client to edit the `url_en`, `url_cy` and `moderate_url` columns on the record in the `sites` table.
 
-### Create the databases
+### Create the database
 
 ```
-docker-compose run --rm web rake db:setup
+docker-compose run --rm web rake db:prepare
 ```
 
 ### Create an admin user
@@ -65,6 +65,12 @@ docker-compose up
 Once the services have started you can access the [front end][2], [back end][3] and any [emails sent][4].
 
 ## Tests
+
+Before running any tests the database needs to be prepared:
+
+```
+docker-compose run --rm web rake db:test:prepare
+```
 
 You can run the full test suite using following command:
 
