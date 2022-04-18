@@ -1,5 +1,7 @@
 class UpdateSignatureCountsJob < ApplicationJob
-  queue_as :highest_priority
+  include SessionAdvisoryLock
+
+  queue_as :counter
 
   delegate :update_signature_counts, to: :Site
   delegate :signature_count_updated_at, to: :Site
@@ -8,8 +10,11 @@ class UpdateSignatureCountsJob < ApplicationJob
   delegate :petition_ids_signed_since, to: :Signature
 
   rescue_from StandardError do |exception|
-    log_exception(exception)
-    retry_job(wait: signature_count_interval)
+    Appsignal.send_exception exception
+  end
+
+  around_perform do |job, block|
+    with_lock { block.call }
   end
 
   def perform(now = current_time)
@@ -26,6 +31,10 @@ class UpdateSignatureCountsJob < ApplicationJob
 
     # Exit if the signature counts have been updated since this job was scheduled
     return unless signature_count_updated_at < signature_count_at
+
+    # Exit unless the job is unique - this can happen if a job hangs and
+    # the periodic task to check if the job is running starts a new one
+    return unless job_unique?
 
     petitions.each do |petition|
       # Skip this petition if it's been updated since this job was scheduled
@@ -63,16 +72,12 @@ class UpdateSignatureCountsJob < ApplicationJob
 
   private
 
+  def job_unique?
+    Delayed::Job.where(queue: queue_name).count <= 1
+  end
+
   def current_time
     Time.current.change(usec: 0).iso8601
-  end
-
-  def log_exception(exception)
-    logger.info(log_message(exception))
-  end
-
-  def log_message(exception)
-    "#{exception.class.name} while running #{self.class.name}"
   end
 
   def petition_ids
