@@ -111,6 +111,7 @@ GEM
       xpath (~> 3.2)
     childprocess (3.0.0)
     chronic (0.10.2)
+    chunky_png (1.4.0)
     coderay (1.1.2)
     concurrent-ruby (1.1.10)
     connection_pool (2.2.1)
@@ -154,7 +155,7 @@ GEM
       launchy (~> 2.1)
       mail (~> 2.7)
     erubi (1.10.0)
-    execjs (2.7.0)
+    execjs (2.8.1)
     factory_bot (6.1.0)
       activesupport (>= 5.0.0)
     factory_bot_rails (6.1.0)
@@ -295,6 +296,8 @@ GEM
       rgeo (>= 1.0.0)
     rgeo-geojson (2.1.1)
       rgeo (>= 1.0.0)
+    rgeo-proj4 (3.1.1)
+      rgeo (~> 2.0)
     rspec-core (3.10.1)
       rspec-support (~> 3.10.0)
     rspec-expectations (3.10.1)
@@ -346,14 +349,14 @@ GEM
       actionpack (>= 5.2)
       activesupport (>= 5.2)
       sprockets (>= 3.0.0)
+    terser (1.1.8)
+      execjs (>= 0.3.0, < 3)
     textacular (5.4.0)
       activerecord (>= 5.0, < 6.2)
     thor (1.2.1)
     tilt (2.0.10)
     tzinfo (2.0.4)
       concurrent-ruby (~> 1.0)
-    uglifier (4.1.8)
-      execjs (>= 0.3.0, < 3)
     webdrivers (4.7.0)
       nokogiri (~> 1.6)
       rubyzip (>= 1.3.0)
@@ -389,6 +392,7 @@ DEPENDENCIES
   brakeman
   bundler-audit
   capybara
+  chunky_png
   connection_pool
   cucumber (~> 2.4.0)
   cucumber-rails
@@ -424,14 +428,15 @@ DEPENDENCIES
   rake
   redcarpet
   rgeo-geojson
+  rgeo-proj4
   rspec-rails
   sass-rails (~> 5.0)
   scrypt
   shoulda-matchers
   simplecov
   slack-notifier
+  terser
   textacular
-  uglifier
   webdrivers
   webmock
   whenever

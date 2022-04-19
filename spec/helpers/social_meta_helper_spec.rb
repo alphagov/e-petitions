@@ -90,11 +90,11 @@ RSpec.describe SocialMetaHelper, type: :helper do
       end
 
       subject do
-        helper.twitter_card_tag("image", "os-social/opengraph-image.png")
+        helper.twitter_card_tag("image", "os-social/twitter-image.png")
       end
 
       it "generates a meta tag with the correct asset image url" do
-        expect(subject).to match(%r{<meta name="twitter:image" content="https://petitions.senedd.wales/assets/os-social/opengraph-image.png" />})
+        expect(subject).to match(%r{<meta name="twitter:image" content="https://petitions.senedd.wales/assets/os-social/twitter-image.png" />})
       end
     end
   end

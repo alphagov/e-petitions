@@ -1,5 +1,6 @@
 head:
   keys:
+    - :map_page
     - :translations_updated_at
     - :locale
     - :site_updated_at

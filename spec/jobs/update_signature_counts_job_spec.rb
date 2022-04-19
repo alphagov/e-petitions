@@ -50,7 +50,7 @@ RSpec.describe UpdateSignatureCountsJob, type: :job do
     it "reschedules another job" do
       expect {
         described_class.perform_now(current_time.iso8601)
-      }.to have_enqueued_job(described_class).on_queue("highest_priority").at(scheduled_time)
+      }.to have_enqueued_job(described_class).on_queue("counter").at(scheduled_time)
     end
 
     describe "updating" do
@@ -391,6 +391,65 @@ RSpec.describe UpdateSignatureCountsJob, type: :job do
               constituency_journal.reload.signature_count
             }.by(5)
           end
+        end
+      end
+
+      shared_examples_for "it notifies Appsignal and doesn't retry" do
+        before do
+          allow(Appsignal).to receive(:send_exception)
+          described_class.perform_now(current_time.iso8601)
+        end
+
+        it "notifies Appsignal" do
+          expect(Appsignal).to have_received(:send_exception).with(an_instance_of(exception_class))
+        end
+
+        it "doesn't reschedule a job" do
+          expect(described_class).not_to have_been_enqueued
+        end
+      end
+
+      context "when a connection error occurs" do
+        let(:petition) { FactoryBot.create(:open_petition) }
+        let(:exception_class) { PG::ConnectionBad }
+
+        before do
+          expect(Signature).to receive(:petition_ids_signed_since).and_raise(exception_class)
+        end
+
+        include_examples "it notifies Appsignal and doesn't retry"
+      end
+
+      context "when an advisory lock error occurs" do
+        let(:petition) { FactoryBot.create(:open_petition) }
+        let(:exception_class) { SessionAdvisoryLock::LockFailedError }
+        let(:connection) { ActiveRecord::Base.connection }
+        let(:query) { a_string_matching(/pg_try_advisory_lock/) }
+
+        before do
+          expect(connection).to receive(:select_value).with(query).and_return(false)
+        end
+
+        include_examples "it notifies Appsignal and doesn't retry"
+      end
+
+      context "when multiple jobs are enqueued" do
+        let(:petition) { FactoryBot.create(:open_petition) }
+        let(:worker) { Delayed::Worker.new }
+
+        around do |example|
+          without_test_adapter { example.run }
+        end
+
+        before do
+          described_class.perform_later((current_time - 15.seconds).iso8601)
+          described_class.perform_later((current_time - 10.seconds).iso8601)
+        end
+
+        it "ensures that there is only one job running" do
+          expect {
+            worker.work_off
+          }.to change(Delayed::Job, :count).from(2).to(1)
         end
       end
     end

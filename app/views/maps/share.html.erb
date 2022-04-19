@@ -1,0 +1,33 @@
+<%= t(:"ui.map.share_page.back_link_html", url: petition_map_path(@petition)) %>
+<div class="text-page">
+<%= t(:"ui.map.share_page.body_html") %>
+  <div class="petition-share">
+    <div class="petition-share--preview">
+      <%= image_tag petition_map_path(@petition, :png), alt: "" %>
+      <div class="petition-share--preview-wrapper">
+        <h2 class="petition-share--title">
+          <span class="petition-share--site"><%= Site.host %></span>
+          <%= t(:"ui.map.share_page.title_html", action: truncate(@petition.action, length: 45, separator: ' ')) %>
+        </h2>
+        <p class="petition-share--description">
+          <%= truncate(@petition.background, length: 90, separator: ' ') %>
+        </p>
+      </div>
+    </div>
+
+    <ul>
+      <li class="facebook">
+        <%= share_map_via_facebook(@petition, rel: 'external', target: '_blank') %>
+      </li>
+      <li class="email">
+        <%= share_map_via_email(@petition, rel: 'external', target: '_blank') %>
+      </li>
+      <li class="twitter">
+        <%= share_map_via_twitter(@petition, rel: 'external', target: '_blank') %>
+      </li>
+      <li class="whatsapp">
+        <%= share_map_via_whatsapp(@petition, rel: 'external', target: '_blank') %>
+      </li>
+    </ul>
+  </div>
+</div>

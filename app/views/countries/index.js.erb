@@ -1,0 +1,33 @@
+<%= cache [I18n.locale, :countries, :js], expires_in: 1.hour do -%>
+(function () {
+  this.PetitionMap = this.PetitionMap || {};
+  PetitionMap.data = PetitionMap.data || {};
+  PetitionMap.data.countries = <%= raw render(partial: "countries", formats: %i[geojson]) %>;
+
+  PetitionMap.data.countries.initialize = function (petition) {
+    var maxSignatures = 0, maxPopulation = 0;
+
+    this.features.forEach(function (feature) {
+      var properties = feature.properties;
+
+      properties.signatures = petition.signatures_by_country[properties.id] || 0;
+      properties.totalSignatures = petition.signature_count;
+      properties.percentageOfSignatures = properties.signatures / properties.totalSignatures;
+      properties.percentageOfPopulation = properties.signatures / properties.population;
+
+      maxSignatures = Math.max(maxSignatures, properties.percentageOfSignatures);
+      maxPopulation = Math.max(maxPopulation, properties.percentageOfPopulation);
+    });
+
+    this.features.forEach(function (feature) {
+      var properties = feature.properties;
+      properties.signatureColourScale = maxSignatures;
+      properties.populationColourScale = maxPopulation;
+    });
+  }
+
+  PetitionMap.data.countries.minZoom = 4.5;
+  PetitionMap.data.countries.maxZoom = 7.5;
+  PetitionMap.data.countries.mapCenter = [55.7469, -3.4432];
+}).call(this);
+<% end %>

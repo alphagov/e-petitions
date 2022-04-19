@@ -10,7 +10,7 @@ RSpec.describe ConstituenciesController, type: :controller do
       expect(assigns[:constituencies]).not_to be_nil
     end
 
-    it "renders the constituencies/index.json.jbuilder template" do
+    it "renders the constituencies/index template" do
       expect(response).to render_template("constituencies/index")
     end
 
@@ -41,5 +41,35 @@ RSpec.describe ConstituenciesController, type: :controller do
     end
 
     it_behaves_like "a Constituency API controller"
+  end
+
+  describe "GET /constituencies.js" do
+    before do
+      get :index, format: "js"
+    end
+
+    it "responds with 200 OK" do
+      expect(response.status).to eq(200)
+    end
+
+    it "assigns the @constituencies instance variable" do
+      expect(assigns[:constituencies]).not_to be_nil
+    end
+
+    it "renders the constituencies/index template" do
+      expect(response).to render_template("constituencies/index")
+    end
+
+    it "does not set the Access-Control-Allow-Origin header to '*'" do
+      expect(response.headers["Access-Control-Allow-Origin"]).to be_nil
+    end
+
+    it "does not set the Access-Control-Allow-Methods header to 'GET'" do
+      expect(response.headers["Access-Control-Allow-Methods"]).to be_nil
+    end
+
+    it "does not set the Access-Control-Allow-Headers header to 'Origin, X-Requested-With, Content-Type, Accept'" do
+      expect(response.headers["Access-Control-Allow-Headers"]).to be_nil
+    end
   end
 end

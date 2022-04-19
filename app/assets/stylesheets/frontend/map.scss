@@ -1,0 +1,561 @@
+html {
+  height: 100%;
+}
+
+body {
+  min-height: 100%;
+
+  #content {
+    margin: 0;
+    padding: 0;
+    position: absolute;
+    max-width: none;
+    width: 100%;
+    bottom: 0;
+    top: 98px;
+
+    @include media(tablet) {
+      top: 106px;
+    }
+  }
+
+  #map {
+    background-color: $white;
+    height: 100%;
+    width: 100%;
+    user-select: none;
+    -ms-user-select: none;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+  }
+}
+
+.leaflet-top .leaflet-control {
+  margin-top: 9px;
+
+  @include media(tablet) {
+    margin-top: 18px;
+  }
+}
+
+.leaflet-bottom .leaflet-control {
+  margin-bottom: 9px;
+
+  @include media(tablet) {
+    margin-bottom: 18px;
+  }
+}
+
+.leaflet-left .leaflet-control {
+  margin-left: 9px;
+
+  @include media(tablet) {
+    margin-left: 18px;
+  }
+}
+
+.leaflet-right .leaflet-control {
+  margin-right: 9px;
+
+  @include media(tablet) {
+    margin-right: 18px;
+  }
+}
+
+.leaflet-container {
+  .feature-info {
+    font-family: "Montserrat", Helvetica, Arial, sans-serif !important;
+    background-color: $white;
+    border: 2px solid $dark-grey;
+    width: 160px;
+    padding: 9px;
+    user-select: text;
+    -ms-user-select: text;
+    -moz-user-select: text;
+    -webkit-user-select: text;
+
+    @include media(phone) {
+      width: 190px;
+    }
+
+    @include media(tablet) {
+      padding: 18px;
+      width: 230px;
+    }
+
+    h2 {
+      @include font-size(0.875rem, 1.125rem);
+      margin: 0 0 12px 0;
+    }
+
+    p {
+      @include font-size(0.75rem, 1rem);
+      margin: 3px 0 0 0;
+      line-height: 1.33;
+
+      @include media(tablet) {
+        margin: 6px 0 0 0;
+      }
+
+      small {
+        @include font-size(0.675rem, 0.875rem);
+        display: block;
+      }
+    }
+
+    p:last-child {
+      margin: 12px 0 0 0;
+    }
+  }
+
+  .petition-info {
+    font-family: "Montserrat", Helvetica, Arial, sans-serif !important;
+    background-color: $white;
+    border: 2px solid $dark-grey;
+    width: 190px;
+    padding: 9px;
+    display: none;
+    position: relative;
+
+    @include media(tablet) {
+      display: block;
+      padding: 18px;
+      width: 230px;
+    }
+
+    &--back-link {
+      @include font-size(0.75rem, 0.875rem);
+
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: $text-color;
+      display: inline-block;
+      font-weight: 600;
+      line-height: 1;
+      margin: 0;
+      padding: 0 0 0 12px;
+      position: relative;
+      text-decoration: none;
+
+      &:hover {
+        text-decoration: underline;
+      }
+
+      &::after {
+        @extend %icon-chevron-left-dark-grey;
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 8px;
+        height: 100%;
+      }
+
+      &:active, &:focus {
+        background-color: $focus-color;
+        color: $white;
+        outline: none;
+
+        &::after {
+          @extend %icon-chevron-left-white;
+        }
+      }
+    }
+
+    &--action {
+      @include font-size(1rem, 1.25rem);
+
+      margin: 0;
+      margin-top: 9px;
+      user-select: text;
+      -ms-user-select: text;
+      -moz-user-select: text;
+      -webkit-user-select: text;
+
+      & .label {
+        @include font-size(0.75rem, 1rem);
+
+        color: $mid-grey;
+        display: block;
+        font-weight: normal;
+        margin-bottom: 3px;
+      }
+
+      @include media(tablet) {
+        margin-top: 12px;
+
+        & .label {
+          margin-bottom: 6px;
+        }
+      }
+    }
+
+    &--signature-count {
+      @include font-size(1.125rem, 1.5rem);
+
+      color: $mid-grey;
+      font-weight: bold;
+      margin: 0;
+      margin-top: 3px;
+      user-select: text;
+      -ms-user-select: text;
+      -moz-user-select: text;
+      -webkit-user-select: text;
+
+      @include media(tablet) {
+        margin-top: 6px;
+      }
+
+      span.text {
+        @include font-size(0.875rem, 1.25rem);
+      }
+    }
+
+    &--sign-button {
+      @include font-size(0.75rem, 1rem);
+
+      background-color: $button-color;
+      border-color: $button-color;
+      color: $white;
+      border-width: 2px;
+      border-style: solid;
+      box-sizing: border-box;
+      cursor: pointer;
+      display: inline-block;
+      font-weight: bold;
+      margin: 0;
+      margin-top: 12px;
+      padding: 7px 9px;
+      position: relative;
+      -moz-outline-offset: -2px;
+      outline-offset: -2px;
+      border-radius: 0;
+      text-align: center;
+      text-decoration: none;
+      width: 100%;
+      padding-right: 28px;
+      text-align: left;
+
+      @include media(tablet) {
+        margin-top: 18px;
+      }
+
+      &:active, &:focus {
+        background-color: $white;
+        border-color: $focus-color;
+        color: $text-color;
+      }
+
+      &::after {
+        @extend %icon-chevron-right-white;
+
+        content: "";
+        position: absolute;
+        top: 0;
+        right: 7px;
+        width: 12px;
+        height: 100%;
+      }
+
+      &:active, &:focus {
+        &::after {
+          @extend %icon-chevron-right-dark-grey;
+        }
+      }
+    }
+  }
+
+  .close-petition-info {
+    display: none;
+    position: absolute;
+    top: 9px;
+    right: 9px;
+    width: 18px;
+    height: 18px;
+    border-color: $white;
+    background-image: url("data:image/svg+xml;charset=utf-8;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHBhdGggZmlsbD0iIzc0NzQ3NCIgZD0iTTI0IDIgMTQgMTJsMTAgMTAtMiAyLTEwLTEwTDIgMjRsLTItMiAxMC0xMEwwIDJsMi0yIDEwIDEwTDIyIDB6Ii8+PC9zdmc+");
+    background-color: #FFFFFF;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 16px 16px;
+    margin: 0;
+    padding: 0;
+
+    &:active, &:focus {
+      background-image: url("data:image/svg+xml;charset=utf-8;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHBhdGggZmlsbD0iIzNDM0MzQiIgZD0iTTI0IDIgMTQgMTJsMTAgMTAtMiAyLTEwLTEwTDIgMjRsLTItMiAxMC0xMEwwIDJsMi0yIDEwIDEwTDIyIDB6Ii8+PC9zdmc+");
+    }
+  }
+
+  .show-petition-info {
+    display: inline-block;
+    width: 32px;
+    height: 32px;
+    background-image: url("data:image/svg+xml;charset=utf-8;base64,PHN2ZyB3aWR0aD0iMzIiIGhlaWdodD0iMzIiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHBhdGggZD0iTTE2IDEwYTMgMyAwIDEgMCAwLTYgMyAzIDAgMCAwIDAgNlptLTMgMmg2djE2aC02VjEyWiIgZmlsbD0iI0ZGRiIvPjwvc3ZnPg==");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 32px 32px;
+    margin: 0;
+    padding: 0;
+
+    &:active, &:focus {
+      background-image: url("data:image/svg+xml;charset=utf-8;base64,PHN2ZyB3aWR0aD0iMzIiIGhlaWdodD0iMzIiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHBhdGggZD0iTTE2IDEwYTMgMyAwIDEgMCAwLTYgMyAzIDAgMCAwIDAgNlptLTMgMmg2djE2aC02VjEyWiIgZmlsbD0iI0M5MTk3RSIvPjwvc3ZnPg==");
+    }
+
+    @include media(tablet) {
+      display: none;
+    }
+  }
+
+  .petition-info--visible {
+    .show-petition-info {
+      display: none;
+    }
+
+    .close-petition-info {
+      display: block;
+
+      @include media(tablet) {
+        display: none;
+      }
+    }
+
+    .petition-info {
+      display: block;
+    }
+  }
+
+  .map-switcher {
+    font-family: "Montserrat", Helvetica, Arial, sans-serif !important;
+    background-color: $white;
+    border: 2px solid $dark-grey;
+    padding: 12px;
+    display: none;
+
+    @include media(tablet) {
+      display: block;
+      padding: 18px;
+    }
+
+    fieldset {
+      border: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    fieldset + fieldset {
+      margin-top: 18px;
+    }
+
+    legend {
+      @include font-size(0.75rem, 1rem);
+
+      font-weight: bold !important;
+      margin-bottom: 6px;
+    }
+
+    label {
+      font-weight: normal;
+    }
+
+    input[type=radio] {
+      width: 24px;
+      height: 24px;
+    }
+
+    [type=radio] + label::before {
+      width: 20px;
+      height: 20px;
+    }
+
+    [type=radio] + label::after {
+      border: 6px solid;
+      position: absolute;
+      top: 6px;
+      left: 6px;
+    }
+
+    @include media(tablet) {
+      input[type=radio] {
+        width: 28px;
+        height: 28px;
+      }
+
+      [type=radio] + label::before {
+        width: 24px;
+        height: 24px;
+      }
+
+      [type=radio] + label::after {
+        border: 7px solid;
+        position: absolute;
+        top: 7px;
+        left: 7px;
+      }
+    }
+
+    .multiple-choice {
+      @include font-size(0.675rem, 0.875rem);
+
+      padding-left: 24px;
+      margin-bottom: 12px;
+      min-height: 24px;
+
+      label {
+        padding: 3px 6px 1px;
+      }
+
+      @include media(tablet) {
+        padding-left: 28px;
+        margin-bottom: 16px;
+        min-height: 28px;
+
+        label {
+          padding: 4px 7px 2px;
+        }
+      }
+    }
+
+    .multiple-choice:last-child,
+    .multiple-choice:last-of-type {
+      margin-bottom: 0;
+    }
+  }
+
+  .show-map-switcher {
+    display: inline-block;
+    width: 32px;
+    height: 32px;
+    background-image: url("data:image/svg+xml;charset=utf-8;base64,PHN2ZyB3aWR0aD0iMzIiIGhlaWdodD0iMzIiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHBhdGggZD0iTTIwLjUwNiAxMC42NDNhMTYuMDE5IDE2LjAxOSAwIDAgMSA3Ljk4NSA1LjM1OCAxNi4wMjMgMTYuMDIzIDAgMCAxLTcuOTg1IDUuMzU2QTYuOTg0IDYuOTg0IDAgMCAwIDIzIDE2YzAtMi4xNS0uOTY5LTQuMDczLTIuNDk0LTUuMzU3Wm0tOS4wMTIgMEE2Ljk4NSA2Ljk4NSAwIDAgMCA5IDE2YzAgMi4xNDkuOTY4IDQuMDcyIDIuNDkzIDUuMzU2QTE2LjAxNCAxNi4wMTQgMCAwIDEgMy41MDkgMTZhMTYuMDE1IDE2LjAxNSAwIDAgMSA3Ljk4NS01LjM1N1pNMTYgMTJhNCA0IDAgMSAxIDAgOCA0IDQgMCAwIDEgMC04WiIgZmlsbD0iI0ZGRkZGRiIvPjwvc3ZnPg==");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 32px 32px;
+    margin: 0;
+    padding: 0;
+
+    &:active, &:focus {
+      background-image: url("data:image/svg+xml;charset=utf-8;base64,PHN2ZyB3aWR0aD0iMzIiIGhlaWdodD0iMzIiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHBhdGggZD0iTTIwLjUwNiAxMC42NDNhMTYuMDE5IDE2LjAxOSAwIDAgMSA3Ljk4NSA1LjM1OCAxNi4wMjMgMTYuMDIzIDAgMCAxLTcuOTg1IDUuMzU2QTYuOTg0IDYuOTg0IDAgMCAwIDIzIDE2YzAtMi4xNS0uOTY5LTQuMDczLTIuNDk0LTUuMzU3Wm0tOS4wMTIgMEE2Ljk4NSA2Ljk4NSAwIDAgMCA5IDE2YzAgMi4xNDkuOTY4IDQuMDcyIDIuNDkzIDUuMzU2QTE2LjAxNCAxNi4wMTQgMCAwIDEgMy41MDkgMTZhMTYuMDE1IDE2LjAxNSAwIDAgMSA3Ljk4NS01LjM1N1pNMTYgMTJhNCA0IDAgMSAxIDAgOCA0IDQgMCAwIDEgMC04WiIgZmlsbD0iI0M5MTg3RSIvPjwvc3ZnPg==");
+    }
+
+    @include media(tablet) {
+      display: none;
+    }
+  }
+
+  .map-switcher--visible {
+    .show-map-switcher {
+      display: none;
+    }
+
+    .map-switcher {
+      display: block;
+    }
+  }
+
+  .zoom-and-share {
+    background-color: rgba(255, 255, 255, 0.75);
+    padding: 9px;
+    max-width: 88px;
+
+    @include media(tablet) {
+      padding: 18px;
+      max-width: 112px;
+    }
+
+    .zoom-buttons {
+      display: none;
+      margin-bottom: 16px;
+      text-align: right;
+
+      @include media(tablet) {
+        display: block;
+        margin-bottom: 18px;
+      }
+
+      button {
+        width: 36px;
+        height: 36px;
+        margin: 0 0 0 12px;
+        background-repeat: no-repeat;
+        background-position: center;
+        background-size: 32px 32px;
+
+        &:first-child {
+          margin: 0;
+        }
+      }
+
+      .button--zoom-out {
+        background-image: url("data:image/svg+xml;charset=utf-8;base64,PHN2ZyB3aWR0aD0iMzIiIGhlaWdodD0iMzIiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGcgZmlsbD0ibm9uZSIgZmlsbC1ydWxlPSJldmVub2RkIj48cGF0aCBkPSJNMCAwaDMydjMySDB6Ii8+PHBhdGggZmlsbD0iI0ZGRkZGRiIgZD0iTTI3IDE0djRINXYtNHoiLz48L2c+PC9zdmc+");
+
+        &:active, &:focus {
+          background-image: url("data:image/svg+xml;charset=utf-8;base64,PHN2ZyB3aWR0aD0iMzIiIGhlaWdodD0iMzIiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGcgZmlsbD0ibm9uZSIgZmlsbC1ydWxlPSJldmVub2RkIj48cGF0aCBkPSJNMCAwaDMydjMySDB6Ii8+PHBhdGggZmlsbD0iI0M5MTk3RSIgZD0iTTI3IDE0djRINXYtNHoiLz48L2c+PC9zdmc+");
+        }
+      }
+
+      .button--zoom-in {
+        background-image: url("data:image/svg+xml;charset=utf-8;base64,PHN2ZyB3aWR0aD0iMzIiIGhlaWdodD0iMzIiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGcgZmlsbD0ibm9uZSIgZmlsbC1ydWxlPSJldmVub2RkIj48cGF0aCBkPSJNMCAwaDMydjMySDB6Ii8+PHBhdGggZmlsbD0iI0ZGRkZGRiIgZD0iTTE4IDV2OWg5djRoLTl2OWgtNHYtOUg1di00aDlWNXoiLz48L2c+PC9zdmc+");
+
+        &:active, &:focus {
+          background-image: url("data:image/svg+xml;charset=utf-8;base64,PHN2ZyB3aWR0aD0iMzIiIGhlaWdodD0iMzIiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGcgZmlsbD0ibm9uZSIgZmlsbC1ydWxlPSJldmVub2RkIj48cGF0aCBkPSJNMCAwaDMydjMySDB6Ii8+PHBhdGggZmlsbD0iI0M5MTk3RSIgZD0iTTE4IDV2OWg5djRoLTl2OWgtNHYtOUg1di00aDlWNXoiLz48L2c+PC9zdmc+");
+        }
+      }
+    }
+
+    ul {
+      text-align: right;
+      margin: 0;
+      padding: 0;
+
+      li {
+        display: block;
+        line-height: 1.125;
+        margin: 9px 0 0 0;
+        padding: 0;
+
+        a {
+          @include font-size(0.75rem, 0.875rem);
+
+          display: inline-block;
+          font-weight: normal;
+          color: $pink;
+          text-decoration: none;
+          padding: 0 12px 0 0;
+          position: relative;
+
+          &:hover {
+            text-decoration: underline;
+          }
+
+          &::after {
+            @extend %icon-chevron-right-pink;
+
+            content: "";
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 8px;
+            height: 12px;
+
+            @include media(tablet) {
+              height: 14px;
+            }
+          }
+
+          &:focus, &:active {
+            background-color: $pink;
+            color: $white;
+
+            &::after {
+              @extend %icon-chevron-right-white;
+            }
+          }
+        }
+
+        &:first-child {
+          margin-top: 0;
+        }
+      }
+    }
+  }
+}

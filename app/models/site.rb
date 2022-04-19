@@ -25,6 +25,7 @@ class Site < ActiveRecord::Base
     disable_collecting_signatures
     disable_petition_creation
     show_holding_page
+    show_map_page
   ]
 
   class << self

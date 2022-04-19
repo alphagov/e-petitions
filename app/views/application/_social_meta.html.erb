@@ -2,10 +2,18 @@
 <meta property="fb:admins" content="204502059" />
 <!-- Open Graph -->
 <%= open_graph_tag 'site_name', :site_name %>
-<%= open_graph_tag 'locale', 'en_GB' %>
-<%= open_graph_tag 'image', 'os-social/opengraph-image.png' %>
+<%= open_graph_tag 'locale', I18n.t(:"ui.application.opengraph_locale") %>
+<% if map_page? %>
+<%= open_graph_tag 'image', petition_map_url(@petition, :png) %>
+<% else %>
+<%= open_graph_tag 'image', I18n.t(:"ui.application.opengraph_image") %>
+<% end %>
 <% if defined?(@petition) %>
+<% if map_page? %>
+<%= open_graph_tag 'url', petition_map_url(@petition) %>
+<% else %>
 <%= open_graph_tag 'url', petition_url(@petition) %>
+<% end %>
 <%= open_graph_tag 'type', 'article' %>
 <%= open_graph_tag 'title', :title, petition: @petition.action %>
 <%= open_graph_tag 'description', @petition.background %>
@@ -15,9 +23,14 @@
 <%= open_graph_tag 'title', page_title %>
 <% end %>
 <!-- Twitter -->
-<%= twitter_card_tag 'card', 'summary' %>
 <%= twitter_card_tag 'site', '@WelshPetitions' %>
-<%= twitter_card_tag 'image', 'os-social/opengraph-image.png' %>
+<% if map_page? %>
+<%= twitter_card_tag 'card', 'summary_large_image' %>
+<%= twitter_card_tag 'image', petition_map_url(@petition, :png) %>
+<% else %>
+<%= twitter_card_tag 'card', 'summary' %>
+<%= twitter_card_tag 'image', 'os-social/twitter-image.png' %>
+<% end %>
 <% if defined?(@petition) %>
 <%= twitter_card_tag 'title', :title, petition: @petition.action %>
 <%= twitter_card_tag 'description', @petition.background %>

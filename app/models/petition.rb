@@ -101,6 +101,7 @@ class Petition < ActiveRecord::Base
   has_many :trending_domains, dependent: :delete_all
 
   has_many :signatures_by_country, class_name: "CountryPetitionJournal"
+  has_many :signatures_by_uk_country, -> { uk }, class_name: "CountryPetitionJournal"
   has_many :signatures_by_constituency, -> { preload(constituency: :region) }, class_name: "ConstituencyPetitionJournal"
 
   Translation = Struct.new(:petition, :locale) do

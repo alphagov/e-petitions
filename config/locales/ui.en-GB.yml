@@ -1,6 +1,65 @@
 ---
 en-GB:
   ui:
+    map:
+      feature_info:
+        signatures:
+          one: "signature"
+          two: "signatures"
+          zero: "signatures"
+          other: "signatures"
+        constituents: "constituents"
+        of: "of"
+      petition_info:
+        back: "Back"
+        petition: "Petition"
+        signatures: "signatures"
+        sign_this_petition: "Sign this petition"
+        show_petition_info: "Show petition details"
+        close_petition_info: "Hide petition details"
+      map_switcher:
+        show_signatures_by:
+          legend: "Show signatures by"
+          constituencies: "constituency"
+          regions: "region"
+          countries: "country"
+        count_signatures_by:
+          legend: "Count signatures by"
+          population: "% of constituents"
+          signatures: "% of signatures"
+        show_map_switcher: "Change current map view"
+      zoom_and_share:
+        zoom_in: "Zoom In"
+        zoom_out: "Zoom Out"
+        share: "Share Map"
+        about: "About"
+      about_page:
+        back_link_html: |-
+          <a class="back-page" href="%{url}">Back</a>
+        body_html: |-
+          <h1 class="page-title">About the petition map</h1>
+          <p>Please note that individual constituency, electoral region and country signature count totals will be less than the total signature count recorded for the petition for the following reasons:</p>
+          <ul class="list-bullet">
+            <li>Petition was signed using a postcode that has not yet been published;</li>
+            <li>Petition was signed from outside of Wales;</li>
+            <li>Additional paper signatures were added to the petition.</li>
+          </ul>
+          <p>The calculation of signature distribution and display of the map boundaries utilises the following data sources:</p>
+          <ul class="list-bullet">
+            <li>Boundary line data sourced from <a href="https://osdatahub.os.uk/downloads/open/BoundaryLine">Ordnance Survey</a> and the <a href="https://geoportal.statistics.gov.uk">ONS Open Geography Portal</a>.</li>
+            <li>Postcode data sourced from the <a href="https://geoportal.statistics.gov.uk/datasets/ons-postcode-directory-november-2021">ONS Postcode Directory (ONSPD)</a>.</li>
+            <li>The estimated (mid-2021) population data is sourced from the <a href="https://gov.wales/data-senedd-cymru-constituency-areas-2021">Welsh Government</a> and the <a href="https://www.ons.gov.uk/peoplepopulationandcommunity/populationandmigration/populationestimates/datasets/populationestimatesforukenglandandwalesscotlandandnorthernireland">ONS</a>.</li>
+          </ul>
+          <h2>Copyright</h2>
+          <p>Source: Office for National Statistics licensed under the <a href="https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/">Open Government Licence v3.0</a>.</p>
+          <p>Contains OS data © Crown copyright and database right 2022</p>
+      share_page:
+        back_link_html: |-
+          <a class="back-page" href="%{url}">Back</a>
+        body_html: |-
+          <h1 class="page-title">Share the petition map</h1>
+          <p>This is what your post will look like:</p>
+        title_html: "Petition: %{action}"
     flash:
       cant_sign_rejected: "Sorry, you can’t sign petitions that have been rejected"
       cant_sign_closed: "Sorry, you can’t sign petitions that have been closed"
@@ -348,7 +407,7 @@ en-GB:
             heading: Local to you
             find_local_petitions: Find petitions about local issues
         regional_members:
-          heading_html: 'Your Members of the Senedd for the <strong>%{region}</strong> region are:'
+          heading_html: "Your Members of the Senedd for the <strong>%{region}</strong> region are:"
         member_name_link_html: Your Member of the Senedd for the <strong>%{constituency_name}</strong> constituency is %{member_name_link}
       action:
         label: What do you want us to do?
@@ -391,10 +450,10 @@ en-GB:
             </div>
         error_summary:
           prompt:
-            one: 'Please fix the following error:'
-            two: 'Please fix the following errors:'
-            zero: 'Please fix the following error:'
-            other: 'Please fix the following errors:'
+            one: "Please fix the following error:"
+            two: "Please fix the following errors:"
+            zero: "Please fix the following error:"
+            other: "Please fix the following errors:"
           heading: We couldn’t create this petition
         petition_stage:
           heading: Start a petition
@@ -529,7 +588,7 @@ en-GB:
       senedd_debated_on: The Senedd debated this petition on %{date}
       additional_details:
         label: Additional details
-        help_html: ''
+        help_html: ""
         hint_optional: Optional - background information, evidence and references
       referral_threshold:
         waiting:
@@ -595,6 +654,7 @@ en-GB:
         rel="external">Senedd TV</a>.
       at_threshold_for_debate_will_be_considered: Petitions with more than %{threshold}
         signatures will be considered for a debate in the Senedd
+      show_on_a_map: "Show on a map"
     pagination:
       next_html: |-
         <a class="next" href="%{next_link}">
@@ -620,9 +680,9 @@ en-GB:
         contact_member:
           heading: Contact your Members of the Senedd
         regional_members:
-          region_html: 'Your Members of the Senedd for the <strong>%{region}</strong> region are:'
+          region_html: "Your Members of the Senedd for the <strong>%{region}</strong> region are:"
         member_name_link_html: Your Member of the Senedd for the <strong>%{constituency_name}</strong> constituency is %{member_name_link}
-        added_to_petition: 'We’ve added your signature to the petition:'
+        added_to_petition: "We’ve added your signature to the petition:"
         register_to_vote_html: |-
           <h2>Register to vote</h2>
           <p>To vote in the Senedd elections, you must be registered to vote.</p>
@@ -686,7 +746,9 @@ en-GB:
       twitter_card_description: Official online petitions in response to issues of
         the day, listing the number that were referred to the Petitions Committee,
         and those that have been debated by the Senedd
-    share_title: 'Petition: %{petition}'
+      opengraph_image: "os-social/opengraph-image-en.png"
+      opengraph_locale: "en_GB"
+    share_title: "Petition: %{petition}"
     list_headers:
       open_html: |-
         <p class="text-secondary">These petitions are collecting signatures</p>

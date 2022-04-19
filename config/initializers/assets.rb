@@ -10,16 +10,18 @@ Rails.application.config.assets.version = '1.0'
 # application.js, application.css, and all non-JS/CSS in the app/assets
 # folder are already added.
 Rails.application.config.assets.precompile += %w(
+  map.css
   admin.css
   delayed/web/application.css
   print.css
+  map.js
   admin.js
   character-counter.js
   auto-updater.js
 )
 
 # Compress JavaScript assets.
-Rails.application.config.assets.js_compressor = :uglifier
+Rails.application.config.assets.js_compressor = :terser
 
 # Allow overriding of the sprockets cache path
 Rails.application.config.assets.configure do |env|

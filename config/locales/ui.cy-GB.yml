@@ -1,6 +1,65 @@
 ---
 cy-GB:
   ui:
+    map:
+      feature_info:
+        signatures:
+          one: "llofnod"
+          two: "lofnod"
+          zero: "llofnod"
+          other: "llofnod"
+        constituents: "etholwr"
+        of: "o"
+      petition_info:
+        back: "Nôl"
+        petition: "Deiseb"
+        signatures: "llofnod"
+        sign_this_petition: "Llofnodi’r ddeiseb hon"
+        show_petition_info: "Dangos manylion y ddeiseb"
+        close_petition_info: "Cuddio manylion y ddeiseb"
+      map_switcher:
+        show_signatures_by:
+          legend: "Dangos llofnodion yn ôl"
+          constituencies: "etholaethau"
+          regions: "rhanbarthau"
+          countries: "gwlad"
+        count_signatures_by:
+          legend: "Cyfrif llofnodion yn ôl"
+          population: "% o etholwyr"
+          signatures: "% o lofnodion"
+        show_map_switcher: "Newid gwedd map cyfredol"
+      zoom_and_share:
+        zoom_in: "Chwyddo i Mewn"
+        zoom_out: "Chwyddo allan"
+        share: "Rhannu map"
+        about: "Gwybodaeth am y map"
+      about_page:
+        back_link_html: |-
+          <a class="back-page" href="%{url}">Nôl</a>
+        body_html: |-
+          <h1 class="page-title">Y map deisebau</h1>
+          <p>Nodwch y bydd cyfanswm nifer y llofnodion ar gyfer etholaethau, rhanbarthau etholiadol a gwledydd unigol yn llai na chyfanswm nifer y llofnodion a nodwyd ar gyfer y ddeiseb am y rhesymau a ganlyn:</p>
+          <ul class="list-bullet">
+            <li>Cafodd y ddeiseb ei llofnodi gan ddefnyddio cod post nad yw wedi’i gyhoeddi eto;</li>
+            <li>Cafodd y ddeiseb ei llofnodi o’r tu allan i Gymru;</li>
+            <li>Cafodd llofnodion papur ychwanegol eu hychwanegu at y ddeiseb.</li>
+          </ul>
+          <p>Er mwyn cyfrifo dosbarthiad y llofnodion a dangos y ffiniau ar y map, defnyddiwyd y ffynonellau data a ganlyn:</p>
+          <ul class="list-bullet">
+            <li>Data ynghylch ffiniau gan yr <a href="https://osdatahub.os.uk/downloads/open/BoundaryLine">Arolwg Ordnans</a> a <a href="https://geoportal.statistics.gov.uk">Phorth Daearyddiaeth Agored y Swyddfa Ystadegau Gwladol</a>.</li>
+            <li>Data ynghylch codau post o <a href="https://geoportal.statistics.gov.uk/datasets/ons-postcode-directory-november-2021">Gyfeiriadur Codau Post y Swyddfa Ystadegau Gwladol (ONSPD)</a>.</li>
+            <li>Daw’r data ynghylch amcangyfrifon poblogaeth (canol 2021) o <a href="https://gov.wales/data-senedd-cymru-constituency-areas-2021">Lywodraeth Cymru</a> a’r <a href="https://www.ons.gov.uk/peoplepopulationandcommunity/populationandmigration/populationestimates/datasets/populationestimatesforukenglandandwalesscotlandandnorthernireland">Swyddfa Ystadegau Gwladol</a>.</li>
+          </ul>
+          <h2>Hawlfraint</h2>
+          <p>Ffynhonnell: y Swyddfa Ystadegau Gwladol o dan <a href="https://www.nationalarchives.gov.uk/doc/open-government-licence-cymraeg/version/3/">Drwydded Llywodraeth Agored v3.0</a>.</p>
+          <p>Yn cynnwys data yr Arolwg Ordnans ⓗ Hawlfraint y Goron a hawl cronfa ddata 2022</p>
+      share_page:
+        back_link_html: |-
+          <a class="back-page" href="%{url}">Nôl</a>
+        body_html: |-
+          <h1 class="page-title">Rhannwch fap y ddeiseb</h1>
+          <p>Dyma sut olwg fydd ar eich post:</p>
+        title_html: "Deiseb: %{action}"
     flash:
       cant_sign_rejected: "Mae’n ddrwg gennym, ni allwch lofnodi deisebau sydd wedi’u gwrthod"
       cant_sign_closed: "Mae’n ddrwg gennym, ni allwch lofnodi deisebau sydd wedi’u cau"
@@ -353,7 +412,7 @@ cy-GB:
             heading: Lleol i chi
             find_local_petitions: Dod o hyd i ddeisebau am faterion lleol
         regional_members:
-          heading_html: 'Eich Aelodau o’r Senedd ar gyfer rhanbarth <strong>%{region}</strong> yw:'
+          heading_html: "Eich Aelodau o’r Senedd ar gyfer rhanbarth <strong>%{region}</strong> yw:"
         member_name_link_html: Eich Aelod o’r Senedd dros etholaeth <strong>%{constituency_name}</strong> yw %{member_name_link}
       action:
         label: Beth ydych chi am i ni ei wneud?
@@ -397,10 +456,10 @@ cy-GB:
             </div>
         error_summary:
           prompt:
-            one: 'Cywirwch y gwall a ganlyn:'
-            two: 'Cywirwch y gwallau a ganlyn:'
-            zero: 'Cywirwch y gwall a ganlyn:'
-            other: 'Cywirwch y gwallau a ganlyn:'
+            one: "Cywirwch y gwall a ganlyn:"
+            two: "Cywirwch y gwallau a ganlyn:"
+            zero: "Cywirwch y gwall a ganlyn:"
+            other: "Cywirwch y gwallau a ganlyn:"
           heading: Nid oeddem yn gallu creu’r ddeiseb hon
         petition_stage:
           heading: Dechrau deiseb
@@ -414,7 +473,7 @@ cy-GB:
             label: Blwyddyn
           month:
             label: Mis
-          heading: 'Am ba hyd hoffech chi gasglu llofnodion?'
+          heading: "Am ba hyd hoffech chi gasglu llofnodion?"
           duration:
             hint:
               custom: Bydd eich deiseb ar agor hyd at y dyddiad rydych chi’n ei nodi (o leiaf 30 diwrnod, uchafswm o chwe mis).
@@ -533,7 +592,7 @@ cy-GB:
       senedd_debated_on: Cynhaliwyd dadl yn y Senedd ar y ddeiseb hon ar %{date}
       additional_details:
         label: Rhagor o fanylion
-        help_html: ''
+        help_html: ""
         hint_optional: Dewisol - gwybodaeth gefndir, tystiolaeth a chyfeiriadau
       referral_threshold:
         waiting:
@@ -596,6 +655,7 @@ cy-GB:
         rel="external">Senedd TV</a>.
       at_threshold_for_debate_will_be_considered: Caiff deisebau sydd â mwy na %{threshold}
         llofnod eu hystyried ar gyfer dadl yn y Senedd
+      show_on_a_map: "Dangos ar fap"
     pagination:
       next_html: "<a class=\"next\" href=\"%{next_link}\">\r\n  <span class=\"paginate-label\">Nesaf</span>\r\n
         \ <span class=\"paginate page-count\">%{next_page} of %{total_pages}</span>\r\n</a>"
@@ -616,9 +676,9 @@ cy-GB:
         contact_member:
           heading: Cysylltu â’ch Aelod o’r Senedd
         regional_members:
-          region_html: 'Eich Aelodau o’r Senedd ar gyfer rhanbarth <strong>%{region}</strong> yw:'
+          region_html: "Eich Aelodau o’r Senedd ar gyfer rhanbarth <strong>%{region}</strong> yw:"
         member_name_link_html: Eich Aelod o’r Senedd dros etholaeth <strong>%{constituency_name}</strong> yw %{member_name_link}
-        added_to_petition: 'Rydym ni wedi ychwanegu eich enw at y ddeiseb:'
+        added_to_petition: "Rydym ni wedi ychwanegu eich enw at y ddeiseb:"
         register_to_vote_html: |-
           <h2>Cofrestru i bleidleisio</h2>
           <p>Er mwyn pleidleisio yn etholiadau’r Senedd, rhaid i chi fod wedi’ch cofrestru i bleidleisio.</p>
@@ -675,7 +735,9 @@ cy-GB:
       get_json_csv_html: Gweld y data hyn yn fformat %{json_link} neu %{csv_link}
       share_this_petition: Rhannu’r ddeiseb hon
       twitter_card_description: Deisebau swyddogol ar-lein mewn ymateb i faterion cyfoes, yn rhestru sawl deiseb y cyfeiriwyd at y Pwyllgor Deisebau, a’r rhai y cynhaliwyd dadl arnynt yn y Senedd
-    share_title: 'Deiseb: %{petition}'
+      opengraph_image: "os-social/opengraph-image-cy.png"
+      opengraph_locale: "cy_GB"
+    share_title: "Deiseb: %{petition}"
     list_headers:
       open_html: |-
         <p class="text-secondary">Mae modd ychwanegu llofnodion at y deisebau hyn</p>

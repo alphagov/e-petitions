@@ -1,8 +1,11 @@
 require 'rails_helper'
 
 RSpec.describe 'Requests for pages when we do not support the format on that page', type: :request, show_exceptions: true do
-
   let(:petition) { FactoryBot.create :open_petition }
+
+  before do
+    allow(Site).to receive(:show_map_page?).and_return(true)
+  end
 
   shared_examples 'a route that only supports html formats' do |headers_only: false|
     unless headers_only
@@ -440,6 +443,18 @@ RSpec.describe 'Requests for pages when we do not support the format on that pag
       expect(response.content_type).to eq "application/vnd.geo+json; charset=utf-8"
     end
 
+    it 'supports js via extension' do
+      get url + '.js', params: params
+      expect(response.status).to eq 200
+      expect(response.content_type).to eq "text/javascript; charset=utf-8"
+    end
+
+    it 'supports js via accepts header' do
+      get url, params: params, headers: { 'Accept' => 'text/javascript' }
+      expect(response.status).to eq 200
+      expect(response.content_type).to eq "text/javascript; charset=utf-8"
+    end
+
     it 'does not support xml via extension' do
       get url + '.xml', params: params
       expect(response.status).to eq 406
@@ -494,6 +509,18 @@ RSpec.describe 'Requests for pages when we do not support the format on that pag
       expect(response.content_type).to eq "application/vnd.geo+json; charset=utf-8"
     end
 
+    it 'supports js via extension' do
+      get url + '.js', params: params
+      expect(response.status).to eq 200
+      expect(response.content_type).to eq "text/javascript; charset=utf-8"
+    end
+
+    it 'supports js via accepts header' do
+      get url, params: params, headers: { 'Accept' => 'text/javascript' }
+      expect(response.status).to eq 200
+      expect(response.content_type).to eq "text/javascript; charset=utf-8"
+    end
+
     it 'does not support xml via extension' do
       get url + '.xml', params: params
       expect(response.status).to eq 406
@@ -516,6 +543,248 @@ RSpec.describe 'Requests for pages when we do not support the format on that pag
 
     it 'does not support html default' do
       get url, params: params
+      expect(response.status).to eq 406
+    end
+  end
+
+  context 'the countries url' do
+    let(:url) { '/countries' }
+    let(:params) { {} }
+
+    it 'supports json via extension' do
+      get url + '.json', params: params
+      expect(response.status).to eq 200
+      expect(response.content_type).to eq "application/json; charset=utf-8"
+    end
+
+    it 'supports json via accepts header' do
+      get url, params: params, headers: { 'Accept' => 'application/json' }
+      expect(response.status).to eq 200
+      expect(response.content_type).to eq "application/json; charset=utf-8"
+    end
+
+    it 'supports geojson via extension' do
+      get url + '.geojson', params: params
+      expect(response.status).to eq 200
+      expect(response.content_type).to eq "application/vnd.geo+json; charset=utf-8"
+    end
+
+    it 'supports geojson via accepts header' do
+      get url, params: params, headers: { 'Accept' => 'application/vnd.geo+json' }
+      expect(response.status).to eq 200
+      expect(response.content_type).to eq "application/vnd.geo+json; charset=utf-8"
+    end
+
+    it 'supports js via extension' do
+      get url + '.js', params: params
+      expect(response.status).to eq 200
+      expect(response.content_type).to eq "text/javascript; charset=utf-8"
+    end
+
+    it 'supports js via accepts header' do
+      get url, params: params, headers: { 'Accept' => 'text/javascript' }
+      expect(response.status).to eq 200
+      expect(response.content_type).to eq "text/javascript; charset=utf-8"
+    end
+
+    it 'does not support xml via extension' do
+      get url + '.xml', params: params
+      expect(response.status).to eq 406
+    end
+
+    it 'does not support xml via accepts header' do
+      get url, params: params, headers: { 'Accept' => 'application/xml' }
+      expect(response.status).to eq 406
+    end
+
+    it 'does not support html via extension' do
+      get url + '.html', params: params
+      expect(response.status).to eq 406
+    end
+
+    it 'does not support html via accepts header' do
+      get url, params: params, headers: { 'Accept' => 'text/html' }
+      expect(response.status).to eq 406
+    end
+
+    it 'does not support html default' do
+      get url, params: params
+      expect(response.status).to eq 406
+    end
+  end
+
+  context 'the petition map url' do
+    let(:url) { "/petitions/#{petition.id}/map" }
+    let(:petition) { FactoryBot.create(:open_petition) }
+    let(:params) { {} }
+
+    it 'supports html' do
+      get url, params: params
+      expect(response.status).to eq 200
+      expect(response.content_type).to eq "text/html; charset=utf-8"
+    end
+
+    it 'supports html via extension' do
+      get url + '.html', params: params
+      expect(response.status).to eq 200
+      expect(response.content_type).to eq "text/html; charset=utf-8"
+    end
+
+    it 'supports js via extension' do
+      get url + '.js', params: params
+      expect(response.status).to eq 200
+      expect(response.content_type).to eq "text/javascript; charset=utf-8"
+    end
+
+    it 'supports js via accepts header' do
+      get url, params: params, headers: { 'Accept' => 'text/javascript' }
+      expect(response.status).to eq 200
+      expect(response.content_type).to eq "text/javascript; charset=utf-8"
+    end
+
+    it 'does not support json via extension' do
+      get url + '.json', params: params
+      expect(response.status).to eq 406
+    end
+
+    it 'does not support json via accepts header' do
+      get url, params: params, headers: { 'Accept' => 'application/json' }
+      expect(response.status).to eq 406
+    end
+
+    it 'does not support geojson via extension' do
+      get url + '.geojson', params: params
+      expect(response.status).to eq 406
+    end
+
+    it 'does not support geojson via accepts header' do
+      get url, params: params, headers: { 'Accept' => 'application/vnd.geo+json' }
+      expect(response.status).to eq 406
+    end
+
+    it 'does not support xml via extension' do
+      get url + '.xml', params: params
+      expect(response.status).to eq 406
+    end
+
+    it 'does not support xml via accepts header' do
+      get url, params: params, headers: { 'Accept' => 'application/xml' }
+      expect(response.status).to eq 406
+    end
+  end
+
+  context 'the about petition map url' do
+    let(:url) { "/petitions/#{petition.id}/map/about" }
+    let(:petition) { FactoryBot.create(:open_petition) }
+    let(:params) { {} }
+
+    it 'supports html' do
+      get url, params: params
+      expect(response.status).to eq 200
+      expect(response.content_type).to eq "text/html; charset=utf-8"
+    end
+
+    it 'supports html via extension' do
+      get url + '.html', params: params
+      expect(response.status).to eq 200
+      expect(response.content_type).to eq "text/html; charset=utf-8"
+    end
+
+    it 'does not supports js via extension' do
+      get url + '.js', params: params
+      expect(response.status).to eq 406
+    end
+
+    it 'supports js via accepts header' do
+      get url, params: params, headers: { 'Accept' => 'text/javascript' }
+      expect(response.status).to eq 406
+    end
+
+    it 'does not support json via extension' do
+      get url + '.json', params: params
+      expect(response.status).to eq 406
+    end
+
+    it 'does not support json via accepts header' do
+      get url, params: params, headers: { 'Accept' => 'application/json' }
+      expect(response.status).to eq 406
+    end
+
+    it 'does not support geojson via extension' do
+      get url + '.geojson', params: params
+      expect(response.status).to eq 406
+    end
+
+    it 'does not support geojson via accepts header' do
+      get url, params: params, headers: { 'Accept' => 'application/vnd.geo+json' }
+      expect(response.status).to eq 406
+    end
+
+    it 'does not support xml via extension' do
+      get url + '.xml', params: params
+      expect(response.status).to eq 406
+    end
+
+    it 'does not support xml via accepts header' do
+      get url, params: params, headers: { 'Accept' => 'application/xml' }
+      expect(response.status).to eq 406
+    end
+  end
+
+  context 'the share petition map url' do
+    let(:url) { "/petitions/#{petition.id}/map/share" }
+    let(:petition) { FactoryBot.create(:open_petition) }
+    let(:params) { {} }
+
+    it 'supports html' do
+      get url, params: params
+      expect(response.status).to eq 200
+      expect(response.content_type).to eq "text/html; charset=utf-8"
+    end
+
+    it 'supports html via extension' do
+      get url + '.html', params: params
+      expect(response.status).to eq 200
+      expect(response.content_type).to eq "text/html; charset=utf-8"
+    end
+
+    it 'does not supports js via extension' do
+      get url + '.js', params: params
+      expect(response.status).to eq 406
+    end
+
+    it 'supports js via accepts header' do
+      get url, params: params, headers: { 'Accept' => 'text/javascript' }
+      expect(response.status).to eq 406
+    end
+
+    it 'does not support json via extension' do
+      get url + '.json', params: params
+      expect(response.status).to eq 406
+    end
+
+    it 'does not support json via accepts header' do
+      get url, params: params, headers: { 'Accept' => 'application/json' }
+      expect(response.status).to eq 406
+    end
+
+    it 'does not support geojson via extension' do
+      get url + '.geojson', params: params
+      expect(response.status).to eq 406
+    end
+
+    it 'does not support geojson via accepts header' do
+      get url, params: params, headers: { 'Accept' => 'application/vnd.geo+json' }
+      expect(response.status).to eq 406
+    end
+
+    it 'does not support xml via extension' do
+      get url + '.xml', params: params
+      expect(response.status).to eq 406
+    end
+
+    it 'does not support xml via accepts header' do
+      get url, params: params, headers: { 'Accept' => 'application/xml' }
       expect(response.status).to eq 406
     end
   end

@@ -464,6 +464,43 @@
 }
 
 .petition-share {
+  &--preview {
+    border: 1px solid #C6C6C6;
+    border-radius: 6px;
+    margin-bottom: 18px;
+
+    img {
+      border-radius: 5px 5px 0 0;
+      display: block;
+      width: 100%;
+    }
+  }
+
+  &--preview-wrapper {
+    background-color: $lighter-grey;
+    border-radius: 0 0 5px 5px;
+    border-top: 1px solid #C6C6C6;
+    padding: 12px;
+  }
+
+  &--title {
+    @include font-size(0.875rem, 1rem);
+    margin: 0 0 3px 0;
+
+    span {
+      @include font-size(0.75rem, 0.875rem);
+      color: $mid-grey;
+      display: block;
+      font-weight: normal;
+      margin-bottom: 3px;
+    }
+  }
+
+  &--description {
+    @include font-size(0.75rem, 0.875rem);
+    margin: 0;
+  }
+
   ul {
     @extend %contain-floats;
 

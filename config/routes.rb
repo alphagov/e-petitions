@@ -10,6 +10,10 @@ Rails.application.routes.draw do
       get '/regions', action: 'index', as: :regions
     end
 
+    scope controller: 'countries' do
+      get '/countries', action: 'index', as: :countries
+    end
+
     scope controller: 'topics' do
       get '/topics', action: 'index', as: :topics
     end
@@ -56,6 +60,12 @@ Rails.application.routes.draw do
       end
 
       scope '/:petition_id' do
+        scope '/map', controller: 'maps' do
+          get '/',      action: 'show',  as: :petition_map
+          get '/about', action: 'about', as: :about_petition_map
+          get '/share', action: 'share', as: :share_petition_map
+        end
+
         scope '/sponsors', controller: 'sponsors' do
           post '/new',       action: 'confirm',   as: :confirm_petition_sponsors
           get  '/thank-you', action: 'thank_you', as: :thank_you_petition_sponsors

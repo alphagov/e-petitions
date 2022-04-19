@@ -15,11 +15,34 @@ module SharingHelper
     share_button(:whatsapp, share_params(petition))
   end
 
+  def share_map_via_facebook(petition, options = {})
+    share_button(:facebook, share_map_params(petition))
+  end
+
+  def share_map_via_email(petition, options = {})
+    share_button(:email, share_map_params(petition))
+  end
+
+  def share_map_via_twitter(petition, options = {})
+    share_button(:twitter, share_map_params(petition))
+  end
+
+  def share_map_via_whatsapp(petition, options = {})
+    share_button(:whatsapp, share_map_params(petition))
+  end
+
   private
 
   def share_params(petition)
     {
       url: URI.encode_www_form_component(petition_url(petition)),
+      action: URI.encode_www_form_component(petition.action).gsub('+', '%20')
+    }
+  end
+
+  def share_map_params(petition)
+    {
+      url: URI.encode_www_form_component(petition_map_url(petition)),
       action: URI.encode_www_form_component(petition.action).gsub('+', '%20')
     }
   end

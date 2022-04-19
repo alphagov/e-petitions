@@ -487,6 +487,7 @@ FactoryBot.define do
     sequence(:name_en) { |n| "Constituency #{n}" }
     sequence(:name_cy) { |n| "Etholaeth #{n}" }
     example_postcode { Faker::Address.postcode.tr(" ", "") }
+    population { rand(60000..120000) }
   end
 
   factory :region do
@@ -505,6 +506,7 @@ FactoryBot.define do
     sequence(:id) { |n| "W11%06d" % n }
     sequence(:name_en) { |n| "Region #{n}" }
     sequence(:name_cy) { |n| "Rhanbarth #{n}" }
+    population { rand(500000..700000) }
   end
 
   factory :member do
