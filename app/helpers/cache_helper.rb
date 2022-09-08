@@ -64,6 +64,10 @@ module CacheHelper
         Site.last_petition_created_at
       end
 
+      def petition_creation_disabled
+        Site.disable_petition_creation?
+      end
+
       def petition
         assigns['petition'] if petition_page? || archived_petition_page?
       end

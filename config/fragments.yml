@@ -17,6 +17,7 @@ footer:
   keys:
     - :create_petition_page
     - :open_petition_page
+    - :petition_creation_disabled
   options:
     expires_in: 300
 
@@ -25,6 +26,7 @@ home_page:
     - :site_updated_at
     - :last_government_response_updated_at
     - :last_debate_outcome_updated_at
+    - :petition_creation_disabled
   options:
     expires_in: 300
 
@@ -45,6 +47,7 @@ petition:
     - :petition
     - :reveal_response
     - :site_updated_at
+    - :petition_creation_disabled
   options:
     expires_in: 300
 
