@@ -2,8 +2,21 @@
 
 <div class="grid-row">
   <div class="column-half extra-gutter">
+    <%= form_row for: [form.object, :disable_petition_creation], class: "inline" do %>
+      <%= form.label :disable_petition_creation, "Stop new petitions from being created?", class: "form-label" %>
+      <%= error_messages_for_field @site, :disable_petition_creation %>
+      <div class="multiple-choice">
+        <%= form.radio_button :disable_petition_creation, true %>
+        <%= form.label :disable_petition_creation, "Yes", for: "site_disable_petition_creation_true" %>
+      </div>
+      <div class="multiple-choice">
+        <%= form.radio_button :disable_petition_creation, false %>
+        <%= form.label :disable_petition_creation, "No", for: "site_disable_petition_creation_false" %>
+      </div>
+    <% end %>
+
     <%= form_row for: [form.object, :disable_collecting_signatures], class: "inline" do %>
-      <%= form.label :disable_collecting_signatures, "Pause all petitions?", class: "form-label" %>
+      <%= form.label :disable_collecting_signatures, "Stop collecting signatures on all open petitions?", class: "form-label" %>
       <%= error_messages_for_field @site, :disable_collecting_signatures %>
       <div class="multiple-choice">
         <%= form.radio_button :disable_collecting_signatures, true %>

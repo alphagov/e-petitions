@@ -24,8 +24,10 @@
   <%= render "pages/home/local_petitions" %>
 <% end %>
 
-<section class="section-panel start-petition" aria-labelledby="start-a-petition-heading">
-  <h2 id="start-a-petition-heading">Start a petition</h2>
-  <p>Anyone can start a petition as long as they are a British citizen or UK resident</p>
-  <%= link_to "Start a petition", check_petitions_path, :class => 'button' %>
-</section>
+<% unless Site.disable_petition_creation? %>
+  <section class="section-panel start-petition" aria-labelledby="start-a-petition-heading">
+    <h2 id="start-a-petition-heading">Start a petition</h2>
+    <p>Anyone can start a petition as long as they are a British citizen or UK resident</p>
+    <%= link_to "Start a petition", check_petitions_path, :class => 'button' %>
+  </section>
+<% end %>
