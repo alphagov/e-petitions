@@ -26,4 +26,30 @@ RSpec.describe Member, type: :model do
     it { is_expected.to have_db_index([:region_id]) }
     it { is_expected.to have_db_index([:constituency_id]).unique }
   end
+
+  describe "#colour" do
+    [
+      ['Welsh Liberal Democrats', '#FDBB30'],
+      ['Welsh Labour and Co-operative Party', '#CC0000'],
+      ['Welsh Labour', '#DC241F'],
+      ['Welsh Conservative Party', '#0087DC'],
+      ['Plaid Cymru', '#008142']
+    ].each do |party, colour|
+      context "when the member's party is '#{party}'" do
+        subject { described_class.new(party: party) }
+
+        it "returns '#{colour}'" do
+          expect(subject.colour).to eq(colour)
+        end
+      end
+    end
+
+    context "when the party is not in the list" do
+      subject { described_class.new(party: "Independent") }
+
+      it "returns '#DCDCDC'" do
+        expect(subject.colour).to eq("#DCDCDC")
+      end
+    end
+  end
 end
