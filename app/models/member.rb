@@ -35,7 +35,7 @@ class Member < ActiveRecord::Base
   end
 
   def colour
-    PARTY_COLOURS.fetch(party_en)
+    PARTY_COLOURS.fetch(party_en, '#DCDCDC')
   end
 
   private
