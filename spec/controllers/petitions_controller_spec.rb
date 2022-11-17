@@ -45,6 +45,9 @@ RSpec.describe PetitionsController, type: :controller do
       FactoryBot.create(:constituency, :cardiff_south_and_penarth)
     end
 
+    let(:now) { Time.current }
+    let(:beginning_of_day) { now.beginning_of_day }
+
     before do
       allow(Constituency).to receive(:find_by_postcode).with("CF991NA").and_return(constituency)
     end
@@ -79,14 +82,24 @@ RSpec.describe PetitionsController, type: :controller do
         expect(response).to redirect_to("https://petitions.senedd.wales/petitions/thank-you")
       end
 
-      it "should send gather sponsors email to petition's creator" do
-        perform_enqueued_jobs do
+      it "should send gather sponsors email to the petition creator" do
+        perform_enqueued_jobs(at: now) do
           post :create, params: { stage: "replay_email", petition_creator: params }
         end
 
         expect(last_email_sent).to deliver_to("john@example.com")
         expect(last_email_sent).to deliver_from(%{"Petitions: Senedd" <no-reply@petitions.senedd.wales>})
         expect(last_email_sent).to have_subject(/Action required: Petition “Save the planet”/)
+      end
+
+      it "should send a diversity survey email to the petition creator" do
+        perform_enqueued_jobs(at: 57.hours.after(beginning_of_day)) do
+          post :create, params: { stage: "replay_email", petition_creator: params }
+        end
+
+        expect(last_email_sent).to deliver_to("john@example.com")
+        expect(last_email_sent).to deliver_from(%{"Petitions: Senedd" <no-reply@petitions.senedd.wales>})
+        expect(last_email_sent).to have_subject(/Committee diversity monitoring survey/)
       end
 
       it "should successfully point the signature at the petition" do

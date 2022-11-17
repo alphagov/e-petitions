@@ -31,7 +31,7 @@ When(/^(Laura|a sponsor) supports my petition$/) do |who|
     And I select "Wales" from "Location"
     And I try to sign
     And I say I am happy with my email address
-    And "#{sponsor_email}" opens the email with subject "Please confirm your email address"
+    And "#{sponsor_email}" opens the email with subject "Please confirm your signature"
     And they click the first link in the email
   }
   signature = @sponsor_petition.signatures.for_email(sponsor_email).first
@@ -43,7 +43,7 @@ When(/^Laura verifies her signature again$/) do
   deliveries.delete_if { |email| email.to == %w[charlie.the.creator@example.com] }
 
   steps %{
-    And "laura.the.sponsor@example.com" opens the email with subject "Please confirm your email address"
+    And "laura.the.sponsor@example.com" opens the email with subject "Please confirm your signature"
     And they click the first link in the email
   }
 end
@@ -152,7 +152,7 @@ Then(/^(?:I|"(.*?)") should receive an email explaining the petition I am sponso
   expect(unread_emails_for(address).size).to eq 1
   open_last_email_for(address)
   steps %{
-    Then they should see "Please confirm your email address" in the email subject
+    Then they should see "Please confirm your signature" in the email subject
     And they should see "#{@sponsor_petition.action}" in the email body
     And they should see "#{@sponsor_petition.background}" in the email body
     And they should see "#{@sponsor_petition.additional_details}" in the email body

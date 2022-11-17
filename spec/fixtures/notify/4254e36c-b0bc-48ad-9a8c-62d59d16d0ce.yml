@@ -6,7 +6,7 @@ body: |-
   
   The Senedd debated the petition you signed – “((action_en))”
   
-  ((overview_en))
+  ((overview_en))  The Petitions Committee will consider the petition again in the future, in light of the discussion during the debate.
   
   Watch the debate: ((video_url_en))
   
@@ -29,7 +29,7 @@ body: |-
   
   Trafododd y Senedd y ddeiseb a lofnodwyd gennych - “((action_cy))”
   
-  ((overview_cy))
+  ((overview_cy))  Bydd y Pwyllgor Deisebau yn edrych ar y ddeiseb eto yn y dyfodol, a hynny yng ngoleuni’r drafodaeth yn ystod y ddadl.
   
   Gwyliwch y ddadl: ((video_url_cy))
   

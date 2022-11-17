@@ -1,6 +1,6 @@
 id: "c93ca86b-b508-417c-a4b5-28ec33047b2e"
 name: "gather_sponsors_for_petition_moderation_delay_en"
-subject: "Cam i’w gymryd: Deiseb “((action))” | Action required: Petition “((action))”"
+subject: "Action required: Petition “((action))” | Cam i’w gymryd: Deiseb “((action))”"
 body: |-
   Dear ((creator)),
   

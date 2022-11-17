@@ -1,6 +1,6 @@
 id: "de60bc30-2d7b-4a71-851f-0ac357af048f"
 name: "email_confirmation_for_signer_cy"
-subject: "Cadarnhewch eich cyfeiriad e-bost | Please confirm your email address"
+subject: "Cadarnhewch eich llofnod | Please confirm your signature"
 body: |-
   Cliciwch ar y linc i lofnodi’r ddeiseb:
   
