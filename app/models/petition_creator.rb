@@ -71,6 +71,7 @@ class PetitionCreator
   end
 
   STAGES = %w[petition replay_petition closing_date replay_closing_date creator replay_email]
+  DIVERSITY_SURVEY_DELAY = 57.hours
 
   PETITION_PARAMS     = [:action, :background, :additional_details]
   CLOSING_DATE_PARAMS = [:duration, :year, :month, :day]
@@ -140,6 +141,7 @@ class PetitionCreator
       unless rate_limit.exceeded?(@petition.creator)
         @petition.save!
         send_email_to_gather_sponsors(@petition)
+        send_email_about_diversity_survey(@petition)
       end
 
       return true
@@ -363,9 +365,18 @@ class PetitionCreator
     GatherSponsorsForPetitionEmailJob.perform_later(petition.creator)
   end
 
+  def send_email_about_diversity_survey(petition, now = Time.current)
+    diversity_survey_email_job(now).perform_later(petition.creator)
+  end
+
   private
 
   def rate_limit
     @rate_limit ||= RateLimit.first_or_create!
+  end
+
+  def diversity_survey_email_job(now)
+    time = now.beginning_of_day + DIVERSITY_SURVEY_DELAY
+    EmailCreatorAboutDiversitySurveyEmailJob.set(wait_until: time)
   end
 end
