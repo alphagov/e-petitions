@@ -1,14 +1,18 @@
 id: "824662f6-2cb1-4da8-b65d-6b071c569d0e"
 name: "notify_signer_of_debate_scheduled_en"
-subject: "Senedd will debate “((action_en))” | Bydd y Senedd yn trafod “((action_cy))”"
+subject: "The Senedd will debate “((action_en))” | Bydd y Senedd yn trafod “((action_cy))”"
 body: |-
   Dear ((name)),
   
-  Senedd is going to debate the petition you signed – “((action_en))”.
+  The Senedd is going to debate the petition you signed – “((action_en))”.
   
   ((petition_url_en))
   
   The debate is scheduled for ((debate_date_en)).
+  
+  Once it has been published, you’ll be able to find the agenda for the meeting here: https://business.senedd.wales/ieListMeetings.aspx?CommitteeId=401
+  
+  You’ll be able to watch online on https://www.senedd.tv/
   
   Once the debate has happened, we’ll email you a video and transcript.
   
@@ -28,6 +32,10 @@ body: |-
   ((petition_url_cy))
   
   Mae’r ddadl wedi’i hamserlennu ar gyfer ((debate_date_cy)).
+  
+  Unwaith mae wedi cael ei gyhoeddi, byddwch yn medru dod o hyd i'r agenda ar gyfer y cyfarfod yma: https://busnes.senedd.cymru/ieListMeetings.aspx?CommitteeId=401 
+  
+  Gallwch chi wylio’r ddadl ar-lein ar https://www.senedd.tv/ 
   
   Ar ôl i’r ddadl ddigwydd, byddwn yn e-bostio fideo a thrawsgrifiad atoch.
   

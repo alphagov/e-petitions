@@ -1,6 +1,6 @@
 id: "f10ca6dd-4f07-479c-a588-a3abbafe2c55"
 name: "petition_and_email_confirmation_for_sponsor_cy"
-subject: "Cadarnhewch eich cyfeiriad e-bost | Please confirm your email address"
+subject: "Cadarnhewch eich llofnod | Please confirm your signature"
 body: |-
   Cliciwch ar y linc i lofnodi’r ddeiseb:
   ((url_cy))

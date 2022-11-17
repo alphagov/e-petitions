@@ -1,6 +1,6 @@
 id: "0f912b39-37e2-4de0-886a-28c3e529d139"
 name: "petition_and_email_confirmation_for_sponsor_en"
-subject: "Please confirm your email address | Cadarnhewch eich cyfeiriad e-bost"
+subject: "Please confirm your signature | Cadarnhewch eich llofnod"
 body: |-
   Click this link to sign the petition:
   ((url_en))
