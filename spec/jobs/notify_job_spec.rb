@@ -2877,6 +2877,85 @@ RSpec.describe NotifyJob, type: :job, notify: false do
       end
     end
 
+    describe EmailCreatorAboutDiversitySurveyEmailJob do
+      let(:signature) { petition.creator }
+
+      it_behaves_like "a notify job" do
+        let(:petition) { FactoryBot.create(:referred_petition) }
+        let(:arguments) { [signature] }
+      end
+
+      context "when the petition was created in English" do
+        let(:petition) do
+          FactoryBot.create(
+            :referred_petition,
+            action_en: "Do stuff",
+            background_en: "Because of reasons",
+            additional_details_en: "Here's some more reasons",
+            action_cy: "Gwnewch bethau",
+            background_cy: "Oherwydd rhesymau",
+            additional_details_cy: "Dyma ychydig mwy o resymau",
+            locale: "en-GB",
+            creator_name: "Charlie",
+            creator_email: "charlie@example.com",
+            creator_attributes: {
+              locale: "en-GB"
+            }
+          )
+        end
+
+        it "sends an email via GOV.UK Notify with the English template" do
+          perform_enqueued_jobs do
+            described_class.perform_later(signature)
+          end
+
+          expect(notify_request(
+            email_address: "charlie@example.com",
+            template_id: "f238271b-d186-455a-b2d7-18b17109cb4d",
+            reference: "d85a62b0-efb6-51a2-9087-a10881e6728e",
+            personalisation: {
+              creator: "Charlie"
+            }
+          )).to have_been_made
+        end
+      end
+
+      context "when the petition was created in Welsh" do
+        let(:petition) do
+          FactoryBot.create(
+            :referred_petition,
+            action_en: "Do stuff",
+            background_en: "Because of reasons",
+            additional_details_en: "Here's some more reasons",
+            action_cy: "Gwnewch bethau",
+            background_cy: "Oherwydd rhesymau",
+            additional_details_cy: "Dyma ychydig mwy o resymau",
+            locale: "cy-GB",
+            creator_name: "Charlie",
+            creator_email: "charlie@example.com",
+            creator_attributes: {
+              locale: "cy-GB"
+            }
+          )
+        end
+
+        it "sends an email via GOV.UK Notify with the Welsh template" do
+          perform_enqueued_jobs do
+            described_class.perform_later(signature)
+          end
+
+          expect(notify_request(
+            email_address: "charlie@example.com",
+            template_id: "eb7d9389-d6d7-4a6a-bcc9-c5e8b449b34f",
+            reference: "d85a62b0-efb6-51a2-9087-a10881e6728e",
+            personalisation: {
+              creator: "Charlie"
+            }
+          )).to have_been_made
+        end
+      end
+    end
+
     describe EmailSignerAboutOtherBusinessEmailJob do
       let(:email) do
         FactoryBot.create(
