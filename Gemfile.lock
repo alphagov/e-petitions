@@ -130,7 +130,7 @@ GEM
       rails (>= 3.0.0)
     cucumber-wire (0.0.1)
     daemons (1.2.6)
-    dalli (2.7.6)
+    dalli (3.2.3)
     database_cleaner (1.6.2)
     delayed-web (0.4.9)
       rails (>= 3.2.13)
