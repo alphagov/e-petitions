@@ -73,7 +73,7 @@ RSpec.describe EmailReminder do
       let(:mail) { double }
       before do
         allow(PetitionMailer).to receive_messages(:special_resend_of_email_confirmation_for_signer => mail)
-        allow(mail).to receive(:deliver_now).and_raise Net::SMTPSyntaxError
+        allow(mail).to receive(:deliver_now).and_raise(Net::SMTPSyntaxError, "Error message")
       end
 
       it "continues" do
