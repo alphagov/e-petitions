@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_03_06_110716) do
+ActiveRecord::Schema.define(version: 2023_01_13_172652) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "intarray"
@@ -164,6 +164,9 @@ ActiveRecord::Schema.define(version: 2022_03_06_110716) do
     t.integer "topics", default: [], null: false, array: true
     t.datetime "email_requested_for_petition_mailshot_at"
     t.boolean "do_not_anonymize"
+    t.text "reason_for_removal"
+    t.string "state_at_removal", limit: 10
+    t.datetime "removed_at"
     t.index "to_tsvector('english'::regconfig, (action)::text)", name: "index_archived_petitions_on_action", using: :gin
     t.index "to_tsvector('english'::regconfig, (background)::text)", name: "index_archived_petitions_on_background", using: :gin
     t.index "to_tsvector('english'::regconfig, additional_details)", name: "index_archived_petitions_on_additional_details", using: :gin
@@ -533,6 +536,9 @@ ActiveRecord::Schema.define(version: 2022_03_06_110716) do
     t.integer "deadline_extension", default: 0, null: false
     t.integer "topics", default: [], null: false, array: true
     t.boolean "do_not_anonymize"
+    t.text "reason_for_removal"
+    t.string "state_at_removal", limit: 10
+    t.datetime "removed_at"
     t.index "((last_signed_at > signature_count_validated_at))", name: "index_petitions_on_validated_at_and_signed_at"
     t.index "to_tsvector('english'::regconfig, (action)::text)", name: "index_petitions_on_action", using: :gin
     t.index "to_tsvector('english'::regconfig, (background)::text)", name: "index_petitions_on_background", using: :gin

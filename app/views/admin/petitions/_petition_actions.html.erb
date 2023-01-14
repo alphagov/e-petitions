@@ -66,11 +66,17 @@
             <%= render 'petition_action_take_down', petition: @petition %>
           </li>
 
-        <% elsif @petition.rejection? -%>
+        <% elsif @petition.rejection? %>
           <li class="petition-action">
             <%= render 'petition_action_change_rejection_status', petition: @petition %>
           </li>
-        <% end -%>
+        <% end %>
+
+        <% if current_user.can_remove_petitions? && @petition.visible? %>
+          <li class="petition-action">
+            <%= render 'petition_action_remove_petition', petition: @petition %>
+          </li>
+        <% end %>
       <% end %>
     <% end %>
   </ul>

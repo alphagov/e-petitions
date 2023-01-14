@@ -94,6 +94,7 @@ en-GB:
       petition_not_updated: "Petition could not be updated - please contact support"
       petition_not_saved: "Petition could not be updated - please check the form for errors"
       petition_not_taken_down: "Petition could not be taken down - please check the form for errors"
+      petition_already_removed: "Petition has already been removed"
       preview_email_sent: "Preview email successfully sent"
       rate_limits_updated: "Rate limits updated successfully"
       rejection_reason_created: "Rejection reason created successfully"

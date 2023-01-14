@@ -1,0 +1,5 @@
+<% if @petition.is_a?(::Archived::Petition) %>
+  <%= link_to 'Remove from public view', admin_archived_petition_removal_path(@petition), class: 'petition-action-heading' %>
+<% else %>
+  <%= link_to 'Remove from public view', admin_petition_removal_path(@petition), class: 'petition-action-heading' %>
+<% end %>

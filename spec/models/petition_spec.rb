@@ -131,7 +131,7 @@ RSpec.describe Petition, type: :model do
     end
   end
 
-  context "validations" do
+  describe "validations" do
     it { is_expected.to validate_presence_of(:action).with_message(/must be completed/) }
     it { is_expected.to validate_presence_of(:background).with_message(/must be completed/) }
     it { is_expected.to validate_presence_of(:creator).with_message(/must be completed/) }
@@ -157,6 +157,11 @@ RSpec.describe Petition, type: :model do
     it { is_expected.to allow_value("open").for(:state) }
     it { is_expected.to allow_value("rejected").for(:state) }
     it { is_expected.to allow_value("hidden").for(:state) }
+
+    it { is_expected.not_to validate_presence_of(:reason_for_removal) }
+    it { is_expected.to validate_presence_of(:reason_for_removal).with_message(/enter a reason/).on(:removal) }
+    it { is_expected.not_to validate_length_of(:reason_for_removal).is_at_most(300) }
+    it { is_expected.to validate_length_of(:reason_for_removal).is_at_most(300).on(:removal) }
 
     context "when state is open" do
       subject { FactoryBot.build(:open_petition) }
@@ -3524,6 +3529,147 @@ RSpec.describe Petition, type: :model do
 
       it "returns true" do
         expect(petition.editing_disabled?).to eq(true)
+      end
+    end
+  end
+
+  describe "#removed?" do
+    context "when the state is removed" do
+      let(:petition) { FactoryBot.build(:petition, state: Petition::REMOVED_STATE) }
+
+      it "returns true" do
+        expect(petition.removed?).to be_truthy
+      end
+    end
+
+    context "for other states" do
+      (Petition::STATES - [Petition::REMOVED_STATE]).each do |state|
+        let(:petition) { FactoryBot.build(:petition, state: state) }
+
+        it "is not removed when state is #{state}" do
+          expect(petition.removed?).to be_falsey
+        end
+      end
+    end
+  end
+
+  describe "#remove" do
+    let(:petition) { FactoryBot.create(:closed_petition) }
+    let(:current_time) { Time.current.floor }
+
+    context "when the params are invalid" do
+      let(:params) do
+        { reason_for_removal: "" }
+      end
+
+      it "returns false" do
+        expect(petition.remove(params, current_time)).to be_falsey
+      end
+
+      it "doesn't change the state" do
+        expect {
+          petition.remove(params, current_time)
+        }.not_to change {
+          petition.state
+        }.from("closed")
+      end
+
+      it "doesn't record the state at removal" do
+        expect {
+          petition.remove(params, current_time)
+        }.not_to change {
+          petition.state_at_removal
+        }.from(nil)
+      end
+
+      it "doesn't record the time of removal" do
+        expect {
+          petition.remove(params, current_time)
+        }.not_to change {
+          petition.removed_at
+        }.from(nil)
+      end
+    end
+
+    context "when the params are valid" do
+      let(:params) do
+        { reason_for_removal: "Removed at the request of the creator" }
+      end
+
+      context "and the petition has not been removed" do
+        it "returns true" do
+          expect(petition.remove(params, current_time)).to be_truthy
+        end
+
+        it "changes the state to 'removed'" do
+          expect {
+            petition.remove(params, current_time)
+          }.to change {
+            petition.state
+          }.from("closed").to("removed")
+        end
+
+        it "records the reason for removal" do
+          expect {
+            petition.remove(params, current_time)
+          }.to change {
+            petition.reason_for_removal
+          }.from(nil).to("Removed at the request of the creator")
+        end
+
+        it "records the state at removal" do
+          expect {
+            petition.remove(params, current_time)
+          }.to change {
+            petition.state_at_removal
+          }.from(nil).to("closed")
+        end
+
+        it "records the time of removal" do
+          expect {
+            petition.remove(params, current_time)
+          }.to change {
+            petition.removed_at
+          }.from(nil).to(current_time)
+        end
+      end
+
+      context "and the petition has already been removed" do
+        let(:petition) do
+          FactoryBot.create(:removed_petition,
+            reason_for_removal: "Original reason",
+            state_at_removal: "closed",
+            removed_at: 1.hour.since(current_time)
+          )
+        end
+
+        it "returns false" do
+          expect(petition.remove(params, current_time)).to be_falsey
+        end
+
+        it "doesn't change the reason for removal" do
+          expect {
+            petition.remove(params, current_time)
+          }.not_to change {
+            petition.reason_for_removal
+          }.from("Original reason")
+        end
+
+        it "doesn't change the state at removal" do
+          expect {
+            petition.remove(params, current_time)
+          }.not_to change {
+            petition.state_at_removal
+          }.from("closed")
+        end
+
+        it "doesn't change the time of removal" do
+          expect {
+            petition.remove(params, current_time)
+          }.not_to change {
+            petition.removed_at
+          }.from(1.hour.since(current_time))
+        end
       end
     end
   end

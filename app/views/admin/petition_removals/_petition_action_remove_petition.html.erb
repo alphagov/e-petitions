@@ -1,0 +1,14 @@
+<%= form_for petition, url: admin_petition_removal_path(petition), method: :patch do |f| %>
+
+  <%= form_row :for => [f.object, :reason_for_removal] do %>
+    <%= f.label :reason_for_removal, "Remove from public view", class: 'form-label petition-action-heading' %>
+    <%= error_messages_for_field f.object, :reason_for_removal %>
+    <%= f.text_area :reason_for_removal, rows: 3, tabindex: increment, class: 'form-control', disabled: @petition.editing_disabled? %>
+    <small class="form-hint">Removing a petition from public view is final and cannot be undone</small>
+  <% end %>
+
+  <%= f.submit "Save", name: 'save', class: 'button-secondary', disabled: @petition.editing_disabled? %>
+  <%= link_to 'Cancel', admin_petition_path(@petition), class: 'button-secondary' %>
+<% end %>
+
+<%= render 'edit_lock' %>
