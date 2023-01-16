@@ -340,14 +340,12 @@ RSpec.describe ArchivePetitionJob, type: :job do
   context "with a removed petition" do
     let(:petition) do
       FactoryBot.create(:removed_petition,
-        reason_for_removal: "Removed at the request of the creator",
         state_at_removal: "closed",
         removed_at: 2.months.ago
       )
     end
 
     it "copies the attributes" do
-      expect(archived_petition.reason_for_removal).to eq(petition.reason_for_removal)
       expect(archived_petition.state_at_removal).to eq(petition.state_at_removal)
       expect(archived_petition.removed_at).to be_usec_precise_with(petition.removed_at)
     end

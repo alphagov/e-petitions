@@ -49,9 +49,6 @@ module Archived
     # Validate associated models so that archive petition job fails if they're not valid.
     validates_associated :debate_outcome, :government_response, :note, :rejection
 
-    # Validate a reason has been given only when a petition is being removed
-    validates :reason_for_removal, presence: true, length: { maximum: 300 }, on: :removal
-
     before_save :update_debate_state, if: :scheduled_debate_date_changed?
 
     extend Searchable(:action, :background, :additional_details)
@@ -288,18 +285,14 @@ module Archived
       state == REMOVED_STATE
     end
 
-    def remove(params, time = Time.current)
+    def remove(time = Time.current)
       return false if removed?
 
-      self.attributes = params
-
-      if valid?(:removal)
-        update(
-          state: REMOVED_STATE,
-          state_at_removal: state,
-          removed_at: time
-        )
-      end
+      update(
+        state: REMOVED_STATE,
+        state_at_removal: state,
+        removed_at: time
+      )
     end
 
     def duration
