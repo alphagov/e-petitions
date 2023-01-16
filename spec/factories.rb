@@ -202,7 +202,6 @@ FactoryBot.define do
 
     trait :removed do
       state { "removed" }
-      reason_for_removal { "Removed at the request of the creator" }
       state_at_removal { "closed" }
       removed_at { 1.hour.ago}
     end
@@ -418,7 +417,6 @@ FactoryBot.define do
 
   factory :removed_petition, :parent => :closed_petition do
     state { Petition::REMOVED_STATE }
-    reason_for_removal { "Removed at the request of the creator" }
     state_at_removal { "closed" }
     removed_at { 1.hour.ago }
   end

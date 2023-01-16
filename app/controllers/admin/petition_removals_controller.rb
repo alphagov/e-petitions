@@ -8,10 +8,10 @@ class Admin::PetitionRemovalsController < Admin::AdminController
   end
 
   def update
-    if @petition.remove(petition_params)
+    if @petition.remove
       redirect_to admin_petition_url(@petition), notice: :petition_updated
     else
-      render 'admin/petitions/show', alert: :petition_not_saved
+      redirect_to admin_petition_removal_url(@petition), alert: :petition_not_updated
     end
   end
 
@@ -19,10 +19,6 @@ class Admin::PetitionRemovalsController < Admin::AdminController
 
   def fetch_petition
     @petition = Petition.find(params[:petition_id])
-  end
-
-  def petition_params
-    params.require(:petition).permit(:reason_for_removal)
   end
 
   def already_removed?

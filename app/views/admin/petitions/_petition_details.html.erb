@@ -20,6 +20,11 @@
   </dd>
 <% end %>
 
+<% if @petition.removed? %>
+  <dt>Removed</dt>
+  <dd><%= date_time_format(@petition.removed_at) %></dd>
+<% end %>
+
 <% if @petition.collecting_sponsors? %>
   <dd>
     <%=  button_to 'Resend email to the creator', resend_admin_petition_url(@petition), method: :post, class: 'button', data: { confirm: "Resend a copy of the email to the petition creator and forward a copy to the feedback address?" } %>

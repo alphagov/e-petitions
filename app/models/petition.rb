@@ -125,9 +125,6 @@ class Petition < ActiveRecord::Base
   validates :creator, presence: true
   validates :state, inclusion: { in: STATES }
 
-  # Validate a reason has been given only when a petition is being removed
-  validates :reason_for_removal, presence: true, length: { maximum: 300 }, on: :removal
-
   with_options allow_nil: true, prefix: true do
     delegate :name, :email, to: :creator
     delegate :code, :details, to: :rejection
@@ -898,18 +895,14 @@ class Petition < ActiveRecord::Base
     state == REMOVED_STATE
   end
 
-  def remove(params, time = Time.current)
+  def remove(time = Time.current)
     return false if removed?
 
-    self.attributes = params
-
-    if valid?(:removal)
-      update(
-        state: REMOVED_STATE,
-        state_at_removal: state,
-        removed_at: time
-      )
-    end
+    update(
+      state: REMOVED_STATE,
+      state_at_removal: state,
+      removed_at: time
+    )
   end
 
   def update_lock!(user, now = Time.current)

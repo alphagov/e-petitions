@@ -2,11 +2,7 @@
 
 <h1><%= @petition.action %></h1>
 
-<% if @petition.removed? %>
-  <div class="committee-note">
-    <%= simple_format(h(@petition.reason_for_removal)) %>
-  </div>
-<% elsif @petition.committee_note? %>
+<% if @petition.committee_note? %>
   <div class="committee-note">
     <%= markdown_to_html(@petition.committee_note) %>
   </div>

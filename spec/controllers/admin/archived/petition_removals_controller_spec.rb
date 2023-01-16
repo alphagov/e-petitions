@@ -1,10 +1,10 @@
 require 'rails_helper'
 
-RSpec.describe Admin::PetitionRemovalsController, type: :controller, admin: true do
+RSpec.describe Admin::Archived::PetitionRemovalsController, type: :controller, admin: true do
   context "when not logged in" do
     [
-      ["GET", "/admin/petitions/:petition_id/removal", :show, { petition_id: 1 }],
-      ["PATCH", "/admin/petitions/:petition_id/removal", :update, { petition_id: 1 }],
+      ["GET", "/admin/archived/petitions/:petition_id/removal", :show, { petition_id: 1 }],
+      ["PATCH", "/admin/archived/petitions/:petition_id/removal", :update, { petition_id: 1 }],
     ].each do |method, path, action, params|
 
       describe "#{method} #{path}" do
@@ -23,8 +23,8 @@ RSpec.describe Admin::PetitionRemovalsController, type: :controller, admin: true
     before { login_as(moderator) }
 
     [
-      ["GET", "/admin/petitions/:petition_id/removal", :show, { petition_id: 1 }],
-      ["PATCH", "/admin/petitions/:petition_id/removal", :update, { petition_id: 1 }],
+      ["GET", "/admin/archived/petitions/:petition_id/removal", :show, { petition_id: 1 }],
+      ["PATCH", "/admin/archived/petitions/:petition_id/removal", :update, { petition_id: 1 }],
     ].each do |method, path, action, params|
 
       describe "#{method} #{path}" do
@@ -42,16 +42,16 @@ RSpec.describe Admin::PetitionRemovalsController, type: :controller, admin: true
     let(:sysadmin) { FactoryBot.create(:sysadmin_user) }
 
     before { login_as(sysadmin) }
-    before { allow(Petition).to receive(:find).with(petition.to_param).and_return(petition) }
+    before { allow(Archived::Petition).to receive(:find).with(petition.to_param).and_return(petition) }
 
     describe "GET /admin/petitions/:petition_id/removal" do
       before { get :show, params: { petition_id: petition.id } }
 
       context "when the petition has been removed" do
-        let(:petition) { FactoryBot.create(:removed_petition) }
+        let(:petition) { FactoryBot.create(:archived_petition, :removed) }
 
         it "redirects to the petition show page" do
-          expect(response).to redirect_to("https://moderate.petition.parliament.uk/admin/petitions/#{petition.id}")
+          expect(response).to redirect_to("https://moderate.petition.parliament.uk/admin/archived/petitions/#{petition.id}")
         end
 
         it "sets the flash notice message" do
@@ -60,26 +60,26 @@ RSpec.describe Admin::PetitionRemovalsController, type: :controller, admin: true
       end
 
       context "when the petition has not been removed" do
-        let(:petition) { FactoryBot.create(:closed_petition) }
+        let(:petition) { FactoryBot.create(:archived_petition) }
 
         it "returns 200 OK" do
           expect(response).to have_http_status(:ok)
         end
 
         it "renders the :show template" do
-          expect(response).to render_template("admin/petitions/show")
+          expect(response).to render_template("admin/archived/petitions/show")
         end
       end
     end
 
-    describe "PATCH /admin/petitions/:petition_id/removal" do
+    describe "PATCH /admin/archived/petitions/:petition_id/removal" do
       context "when the petition has been removed" do
-        let(:petition) { FactoryBot.create(:removed_petition) }
+        let(:petition) { FactoryBot.create(:archived_petition, :removed) }
 
         before { patch :update, params: { petition_id: petition.id } }
 
-        it "redirects to the petition show page" do
-          expect(response).to redirect_to("https://moderate.petition.parliament.uk/admin/petitions/#{petition.id}")
+        it "redirects to the archived petition show page" do
+          expect(response).to redirect_to("https://moderate.petition.parliament.uk/admin/archived/petitions/#{petition.id}")
         end
 
         it "sets the flash notice message" do
@@ -88,18 +88,18 @@ RSpec.describe Admin::PetitionRemovalsController, type: :controller, admin: true
       end
 
       context "when the petition has not been removed" do
-        let(:petition) { FactoryBot.create(:closed_petition) }
+        let(:petition) { FactoryBot.create(:archived_petition) }
 
         context "and the update fails" do
           before do
-            expect(Petition).to receive(:find).with(petition.to_param).and_return(petition)
+            expect(Archived::Petition).to receive(:find).with(petition.to_param).and_return(petition)
             expect(petition).to receive(:remove).and_return(false)
 
             patch :update, params: { petition_id: petition.id }
           end
 
-          it "redirects to the petition removal page" do
-            expect(response).to redirect_to("https://moderate.petition.parliament.uk/admin/petitions/#{petition.id}/removal")
+          it "redirects to the archived petition removal page" do
+            expect(response).to redirect_to("https://moderate.petition.parliament.uk/admin/archived/petitions/#{petition.id}/removal")
           end
 
           it "sets the flash alert message" do
@@ -113,14 +113,14 @@ RSpec.describe Admin::PetitionRemovalsController, type: :controller, admin: true
 
         context "and the update succeeds" do
           before do
-            expect(Petition).to receive(:find).with(petition.to_param).and_return(petition)
+            expect(Archived::Petition).to receive(:find).with(petition.to_param).and_return(petition)
             expect(petition).to receive(:remove).and_call_original
 
             patch :update, params: { petition_id: petition.id }
           end
 
           it "redirects to the petition show page" do
-            expect(response).to redirect_to("https://moderate.petition.parliament.uk/admin/petitions/#{petition.id}")
+            expect(response).to redirect_to("https://moderate.petition.parliament.uk/admin/archived/petitions/#{petition.id}")
           end
 
           it "sets the flash notice message" do
