@@ -162,7 +162,7 @@ RSpec.shared_examples_for "a job to send an signatory email" do
       end
 
       before do
-        expect(job).to receive(:create_email).and_raise(exception_class)
+        expect(job).to receive(:create_email).and_raise(exception_class, "Error message")
       end
 
       context "with a fatal SMTP error" do

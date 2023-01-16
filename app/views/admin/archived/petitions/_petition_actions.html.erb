@@ -38,6 +38,12 @@
           <%= render 'petition_action_email_petitioners', petition: @petition %>
         </li>
       <% end %>
+
+      <% if current_user.can_remove_petitions? && @petition.visible? %>
+        <li class="petition-action">
+          <%= render 'petition_action_remove_petition', petition: @petition %>
+        </li>
+      <% end %>
     <% end %>
   </ul>
 </nav>

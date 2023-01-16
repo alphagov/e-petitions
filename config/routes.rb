@@ -141,7 +141,7 @@ Rails.application.routes.draw do
       resource :moderation_delay, only: %i[new create], path: 'moderation-delay'
 
       resources :petitions, only: %i[show index] do
-        post :resend, on: :member
+        post :resend, :remove, on: :member
 
         resources :emails, controller: 'petition_emails', except: %i[index show]
         resource  :lock, only: %i[show create update destroy]
@@ -160,6 +160,7 @@ Rails.application.routes.draw do
           resource :take_down, path: 'take-down', controller: 'take_down'
           resource :departments, controller: 'petition_departments'
           resource :topics, controller: 'petition_topics'
+          resource :removal, controller: 'petition_removals'
         end
 
         resources :signatures, only: %i[index destroy] do
@@ -219,6 +220,7 @@ Rails.application.routes.draw do
             resource :tags, controller: 'petition_tags'
             resource :departments, controller: 'petition_departments'
             resource :topics, controller: 'petition_topics'
+            resource :removal, controller: 'petition_removals'
           end
         end
 

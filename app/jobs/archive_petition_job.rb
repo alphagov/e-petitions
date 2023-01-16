@@ -42,6 +42,10 @@ class ArchivePetitionJob < ApplicationJob
         p.created_at = petition.created_at
         p.updated_at = petition.updated_at
 
+        p.reason_for_removal = petition.reason_for_removal
+        p.state_at_removal = petition.state_at_removal
+        p.removed_at = petition.removed_at
+
         if receipt = petition.email_requested_receipt
           p.email_requested_for_government_response_at = receipt.government_response
           p.email_requested_for_debate_scheduled_at = receipt.debate_scheduled

@@ -45,7 +45,7 @@ RSpec.describe EmailJob, type: :job do
     end
 
     before do
-      expect(mailer).to receive(:email).and_raise(exception_class)
+      expect(mailer).to receive(:email).and_raise(exception_class, "Error message")
     end
 
     context "with a fatal SMTP error" do

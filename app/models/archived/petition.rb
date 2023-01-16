@@ -7,7 +7,8 @@ module Archived
     CLOSED_STATE = 'closed'
     HIDDEN_STATE = 'hidden'
     REJECTED_STATE = 'rejected'
-    STATES = [STOPPED_STATE, CLOSED_STATE, HIDDEN_STATE, REJECTED_STATE]
+    REMOVED_STATE = 'removed'
+    STATES = [STOPPED_STATE, CLOSED_STATE, HIDDEN_STATE, REJECTED_STATE, REMOVED_STATE]
     PUBLISHED_STATES = [CLOSED_STATE]
     VISIBLE_STATES = [CLOSED_STATE, REJECTED_STATE]
     MODERATED_STATES = [CLOSED_STATE, HIDDEN_STATE, REJECTED_STATE]
@@ -48,12 +49,15 @@ module Archived
     # Validate associated models so that archive petition job fails if they're not valid.
     validates_associated :debate_outcome, :government_response, :note, :rejection
 
+    # Validate a reason has been given only when a petition is being removed
+    validates :reason_for_removal, presence: true, length: { maximum: 300 }, on: :removal
+
     before_save :update_debate_state, if: :scheduled_debate_date_changed?
 
     extend Searchable(:action, :background, :additional_details)
     include Browseable, Taggable, Departments, Topics, Anonymization
 
-    facet :all, -> { visible.by_most_signatures }
+    facet :all, -> { by_most_signatures }
     facet :awaiting_response, -> { awaiting_response.by_waiting_for_response_longest }
     facet :awaiting_debate_date, -> { awaiting_debate_date.by_waiting_for_debate_longest }
     facet :with_debate_outcome, -> { with_debate_outcome.by_most_recent_debate_outcome }
@@ -210,11 +214,15 @@ module Archived
       end
 
       def removed
+        where(state: REMOVED_STATE)
+      end
+
+      def hidden_after_publishing
         where(state: HIDDEN_STATE).where.not(opened_at: nil)
       end
 
       def removed?(id)
-        removed.exists?(id)
+        removed.or(hidden_after_publishing).exists?(id)
       end
 
       def can_anonymize?
@@ -274,6 +282,24 @@ module Archived
 
     def visible?
       state.in?(VISIBLE_STATES)
+    end
+
+    def removed?
+      state == REMOVED_STATE
+    end
+
+    def remove(params, time = Time.current)
+      return false if removed?
+
+      self.attributes = params
+
+      if valid?(:removal)
+        update(
+          state: REMOVED_STATE,
+          state_at_removal: state,
+          removed_at: time
+        )
+      end
     end
 
     def duration

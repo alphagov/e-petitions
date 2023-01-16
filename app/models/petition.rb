@@ -13,8 +13,9 @@ class Petition < ActiveRecord::Base
   REJECTED_STATE    = 'rejected'
   HIDDEN_STATE      = 'hidden'
   STOPPED_STATE     = 'stopped'
+  REMOVED_STATE     = 'removed'
 
-  STATES            = %w[pending validated sponsored flagged dormant open closed rejected hidden stopped]
+  STATES            = %w[pending validated sponsored flagged dormant open closed rejected hidden stopped removed]
   DEBATABLE_STATES  = %w[open closed]
   VISIBLE_STATES    = %w[open closed rejected]
   SHOW_STATES       = %w[pending validated sponsored flagged open closed rejected stopped]
@@ -123,6 +124,9 @@ class Petition < ActiveRecord::Base
   validates :open_at, presence: true, if: :open?
   validates :creator, presence: true
   validates :state, inclusion: { in: STATES }
+
+  # Validate a reason has been given only when a petition is being removed
+  validates :reason_for_removal, presence: true, length: { maximum: 300 }, on: :removal
 
   with_options allow_nil: true, prefix: true do
     delegate :name, :email, to: :creator
@@ -445,11 +449,15 @@ class Petition < ActiveRecord::Base
     end
 
     def removed
-      where(state: HIDDEN_STATE).where.not(opened_at: nil)
+      where(state: REMOVED_STATE)
+    end
+
+    def hidden_after_publishing
+      where(state: HIDDEN_STATE).where.not(open_at: nil)
     end
 
     def removed?(id)
-      removed.exists?(id)
+      removed.or(hidden_after_publishing).exists?(id)
     end
 
     private
@@ -884,6 +892,24 @@ class Petition < ActiveRecord::Base
 
   def previously_published?(now = Time.current)
     open_at && open_at < now
+  end
+
+  def removed?
+    state == REMOVED_STATE
+  end
+
+  def remove(params, time = Time.current)
+    return false if removed?
+
+    self.attributes = params
+
+    if valid?(:removal)
+      update(
+        state: REMOVED_STATE,
+        state_at_removal: state,
+        removed_at: time
+      )
+    end
   end
 
   def update_lock!(user, now = Time.current)

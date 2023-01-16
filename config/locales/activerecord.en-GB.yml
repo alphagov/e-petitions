@@ -53,6 +53,9 @@ en-GB:
               invalid: "The submitted topics were invalid - please reselect and try again"
             scheduled_debate_date:
               invalid: "Please enter a valid date for when the debate will happen"
+            reason_for_removal:
+              blank: "Please enter a reason for the removal of this petition"
+              too_long: "Reason for removal is too long (maximum is %{count} characters)"
 
         archived/petition/email:
           attributes:
@@ -87,6 +90,9 @@ en-GB:
               invalid: "The submitted topics were invalid - please reselect and try again"
             scheduled_debate_date:
               invalid: "Please enter a valid date for when the debate will happen"
+            reason_for_removal:
+              blank: "Please enter a reason for the removal of this petition"
+              too_long: "Reason for removal is too long (maximum is %{count} characters)"
 
         petition/email:
           attributes:

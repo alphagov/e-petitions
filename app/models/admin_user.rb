@@ -113,6 +113,10 @@ class AdminUser < ActiveRecord::Base
     is_a_sysadmin? || is_a_moderator?
   end
 
+  def can_remove_petitions?
+    is_a_sysadmin?
+  end
+
   def can_edit_responses?
     is_a_sysadmin? || is_a_moderator?
   end

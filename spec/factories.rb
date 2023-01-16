@@ -199,6 +199,13 @@ FactoryBot.define do
         end
       end
     end
+
+    trait :removed do
+      state { "removed" }
+      reason_for_removal { "Removed at the request of the creator" }
+      state_at_removal { "closed" }
+      removed_at { 1.hour.ago}
+    end
   end
 
   factory :archived_rejection, class: "Archived::Rejection" do
@@ -407,6 +414,13 @@ FactoryBot.define do
   factory :stopped_petition, :parent => :petition do
     state { Petition::STOPPED_STATE }
     stopped_at { 1.day.ago }
+  end
+
+  factory :removed_petition, :parent => :closed_petition do
+    state { Petition::REMOVED_STATE }
+    reason_for_removal { "Removed at the request of the creator" }
+    state_at_removal { "closed" }
+    removed_at { 1.hour.ago }
   end
 
   factory :anonymized_petition, :parent => :closed_petition do
