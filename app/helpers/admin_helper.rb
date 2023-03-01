@@ -72,10 +72,10 @@ module AdminHelper
 
     html_options = {
       name: 'save_and_email', class: 'button',
-      data: { confirm: t(:email_confirm, i18n_options) }
+      data: { confirm: t(:email_confirm, **i18n_options) }
     }.merge(options)
 
-    form.submit(t(:email_button, i18n_options), html_options)
+    form.submit(t(:email_button, **i18n_options), html_options)
   end
 
   def fraudulent_domains?(since: 1.hour.ago, limit: 10)

@@ -1,10 +1,10 @@
 version: "3.7"
 
 x-application: &application
-  image: unboxed/epetitions
-  entrypoint: ./docker-entrypoint.sh
+  image: e-petitions/ruby
+  build: docker/ruby
   environment:
-    - DATABASE_URL=postgres://postgres@postgres:5432
+    - DATABASE_URL=postgres://postgres:ZW4IvOPrXcbp2hyp@postgres:5432
     - MEMCACHE_SERVERS=memcached:11211
     - SMTP_HOST=mailcatcher
     - SMTP_PORT=1025
@@ -20,21 +20,26 @@ x-application: &application
 
 services:
   postgres:
-    image: postgres:10.16
+    image: postgres:12
     restart: always
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=ZW4IvOPrXcbp2hyp
+      - POSTGRES_DB=postgres
     ports:
       - "5432:5432"
     volumes:
       - db:/var/lib/postgresql/data
 
   mailcatcher:
-    image: unboxed/mailcatcher
+    image: e-petitions/mailcatcher
+    build: docker/mailcatcher
     ports:
       - "1025:1025"
       - "1080:1080"
 
   memcached:
-    image: memcached:1.5.16
+    image: memcached:1.5
     ports:
       - "11211:11211"
 

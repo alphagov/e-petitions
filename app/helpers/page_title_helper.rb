@@ -18,7 +18,7 @@ module PageTitleHelper
     end
 
     def build
-      translate key, options
+      translate key, **options
     end
 
     private

@@ -59,7 +59,7 @@ group :test do
   gem 'factory_bot_rails'
   gem 'email_spec'
   gem 'launchy'
-  gem 'webdrivers', '~> 3.8.1'
+  gem 'webdrivers'
   gem 'webmock'
   gem 'rails-controller-testing'
 end
