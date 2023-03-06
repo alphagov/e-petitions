@@ -3,6 +3,34 @@ require 'rspec/core/pending'
 require 'rspec/mocks'
 require 'multi_test'
 require 'faker'
+require 'webdrivers/chromedriver'
+
+# Monkey patch the webdrivers gem to handle name change as
+# dependencies elsewhere prevent us from upgrading selenium
+# https://github.com/titusfortner/webdrivers/issues/237
+module Webdrivers
+  Chromedriver.class_eval do
+    def self.apple_filename(driver_version)
+      if apple_m1_compatible?(driver_version)
+        driver_version >= normalize_version('106.0.5249.61') ? 'mac_arm64' : 'mac64_m1'
+      else
+        'mac64'
+      end
+    end
+
+    def self.driver_filename(driver_version)
+      if System.platform == 'win' || System.wsl_v1?
+        'win32'
+      elsif System.platform == 'linux'
+        'linux64'
+      elsif System.platform == 'mac'
+        apple_filename(driver_version)
+      else
+        raise 'Failed to determine driver filename to download for your OS.'
+      end
+    end
+  end
+end
 
 MultiTest.disable_autorun
 
