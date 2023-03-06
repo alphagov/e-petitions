@@ -10,9 +10,9 @@ Feature: Moderator users password change
     When I go to the admin home page
     And I follow "John Moderator"
     Then I should be on the admin edit profile page
-    And I should see a "Current password" text field
-    And I should see a "New password" text field
-    And I should see a "Password confirmation" text field
+    And I should see a "Current password" password field
+    And I should see a "New password" password field
+    And I should see a "Password confirmation" password field
     And I should be connected to the server via an ssl connection
     And the markup should be valid
 

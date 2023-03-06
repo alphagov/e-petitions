@@ -31,11 +31,11 @@ Then /^"([^"]*)" should be selected for "([^"]*)"$/ do |value, field|
 end
 
 Then /^I should see an? "([^\"]*)" (\S+) field$/ do |name, type|
-  field = find_field(name)
+  expect(page).to have_field(name, type: type)
 end
 
 Then /^I should not see an? "([^\"]*)" (\S+) field$/ do |name, type|
-  expect(page).not_to have_xpath(XPath::HTML.field(name).to_xpath)
+  expect(page).not_to have_field(name, type: type)
 end
 
 Then /^I should see an? "([^\"]*)" select field with the following options:$/ do |name, options|
