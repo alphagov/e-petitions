@@ -10,8 +10,8 @@ module SearchHelper
     }
 
     capture do
-      concat t(:previous_html, options) unless petitions.first_page?
-      concat t(:next_html, options) unless petitions.last_page?
+      concat t(:previous_html, **options) unless petitions.first_page?
+      concat t(:next_html, **options) unless petitions.last_page?
     end
   end
 

@@ -679,7 +679,7 @@ class Signature < ActiveRecord::Base
     update seen_signed_confirmation_page: true
   end
 
-  def save(*args)
+  def save(**options)
     super
   rescue ActiveRecord::RecordNotUnique => e
     if creator?
