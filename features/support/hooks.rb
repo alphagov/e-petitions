@@ -4,6 +4,7 @@ end
 
 Before do
   Location.create!(code: 'GB', name: 'United Kingdom')
+  Location.create!(code: 'US', name: 'United States')
 end
 
 Before do

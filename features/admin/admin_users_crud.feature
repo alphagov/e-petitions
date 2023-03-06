@@ -40,7 +40,7 @@ Feature: Admin users index and crud
     And I should be connected to the server via an ssl connection
     And I should see a "First name" text field
     And I should see a "Last name" text field
-    And I should see a "Email" text field
+    And I should see a "Email" email field
     And I should see a "sysadmin" radio field
     And I should see a "moderator" radio field
     And I should see a "Force password reset" checkbox field
