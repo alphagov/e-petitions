@@ -66,7 +66,7 @@ class Admin::PetitionsController < Admin::AdminController
   end
 
   def preload_scope(current)
-    current.preload(:creator, :rejection, :government_response, :debate_outcome, :note)
+    current.preload(:creator, :rejection, :government_response, :debate_outcome, :note, :statistics)
   end
 
   def scope

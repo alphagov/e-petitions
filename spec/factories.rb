@@ -359,6 +359,12 @@ FactoryBot.define do
         petition.tags = [tag.id]
       end
     end
+
+    trait :with_statistics do
+      after(:create) do |petition, evaluator|
+        petition.statistics.refresh!
+      end
+    end
   end
 
   factory :pending_petition, :parent => :petition do

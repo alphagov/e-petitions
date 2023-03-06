@@ -125,6 +125,10 @@ class Signature < ActiveRecord::Base
       (Rational(pending.count, total.count) * 100).to_d(2)
     end
 
+    def subscribers
+      validated.subscribed.count
+    end
+
     def similar(id, email)
       where(canonical_email: email).where.not(id: id)
     end

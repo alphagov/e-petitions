@@ -6,7 +6,7 @@ class PetitionCSVPresenter
   include Rails.application.routes.url_helpers
 
   def self.fields
-    urls + attributes + timestamps + [:notes]
+    urls + attributes + timestamps + [:notes, :subscriber_count, :subscription_rate]
   end
 
   def initialize(petition)
@@ -56,6 +56,18 @@ class PetitionCSVPresenter
 
   def notes
     petition.note.details if petition.note
+  end
+
+  def subscriber_count
+    if petition.statistics.refreshed?
+      csv_escape petition.statistics.subscriber_count
+    end
+  end
+
+  def subscription_rate
+    if petition.statistics.refreshed?
+      csv_escape petition.statistics.subscription_rate
+    end
   end
 
   attributes.each do |attribute|

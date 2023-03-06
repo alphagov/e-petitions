@@ -21,7 +21,7 @@ RSpec.describe PetitionCSVPresenter do
 
     Petition::STATES.each do |state_name|
       context "with a #{state_name} petition" do
-        let!(:petition) { FactoryBot.create "#{state_name}_petition" }
+        let!(:petition) { FactoryBot.create "#{state_name}_petition", :with_statistics }
 
         specify { is_expected.to eq(csvd_petition petition) }
       end
@@ -62,7 +62,9 @@ RSpec.describe PetitionCSVPresenter do
       timestampify(petition.moderation_threshold_reached_at),
       timestampify(petition.government_response_created_at),
       timestampify(petition.government_response_updated_at),
-      petition.note.try(:details)
+      petition.note.try(:details),
+      petition.statistics.subscribers,
+      petition.statistics.subscription_rate
     ].join(",") + "\n"
   end
 end

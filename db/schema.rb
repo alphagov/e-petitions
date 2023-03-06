@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_01_13_172652) do
+ActiveRecord::Schema.define(version: 2023_03_06_174959) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "intarray"
@@ -495,6 +495,7 @@ ActiveRecord::Schema.define(version: 2023_01_13_172652) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.decimal "pending_rate"
+    t.integer "subscribers"
     t.index ["petition_id"], name: "index_petition_statistics_on_petition_id", unique: true
   end
 
