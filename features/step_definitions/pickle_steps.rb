@@ -134,6 +134,10 @@ Then(/^a signature should exist with email: "([^"]*)", state: "([^"]*)"$/) do |e
   expect(Signature.where(email: email, state: state)).to exist
 end
 
+Then(/^a signature should exist with email: "([^"]*)", state: "([^"]*)", location_code: "([^"]*)", postcode: "([^"]*)"$/) do |email, state, location_code, postcode|
+  expect(Signature.where(email: email, state: state, location_code: location_code, postcode: postcode)).to exist
+end
+
 Then(/^a petition should not exist with action: "([^"]*)", state: "([^"]*)"$/) do |action, state|
   expect(Petition.where(action: action, state: state)).not_to exist
 end

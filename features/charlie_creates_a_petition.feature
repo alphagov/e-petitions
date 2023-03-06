@@ -218,3 +218,21 @@ Scenario: Charlie creates a petition when his IP address is rate limited
   When I press "Yes – this is my email address"
   Then a petition should not exist with action: "The wombats of wimbledon rock.", state: "pending"
   And a signature should not exist with email: "womboid@wimbledon.com", state: "pending"
+
+@javascript
+Scenario: Charlie creates a petition from overseas
+  When I start a new petition
+  And I fill in the petition details
+  And I press "Preview petition"
+  And I press "This looks good"
+  Then I should see a "Postcode" text field
+  When I select "United States" from "Location"
+  Then I should not see a "Postcode" text field
+  When I check "I am a British citizen or UK resident"
+  And I fill in "Name" with "Womboid Wibbledon"
+  And I fill in "Email" with "womboid@wimbledon.com"
+  And I press "Continue"
+  Then I should see "Make sure this is right"
+  When I press "Yes – this is my email address"
+  Then a petition should exist with action: "The wombats of wimbledon rock.", state: "pending"
+  And a signature should exist with email: "womboid@wimbledon.com", state: "pending", location_code: "US", postcode: ""

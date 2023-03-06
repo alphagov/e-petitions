@@ -284,3 +284,17 @@ Feature: Suzie signs a petition
     When I confirm my email address
     Then I should see "We've added your signature to the petition"
     And a signature should exist with email: "suzie@gmial.com", state: "validated"
+
+  @javascript
+  Scenario: Suzie signs a petition from overseas
+    Given I am on the new signature page
+    Then I should see a "Postcode" text field
+    When I select "United States" from "Location"
+    Then I should not see a "Postcode" text field
+    When I check "I am a British citizen or UK resident"
+    And I fill in "Name" with "Womboid Wibbledon"
+    And I fill in "Email" with "womboid@wimbledon.com"
+    And I press "Continue"
+    Then I should see "Make sure this is right"
+    When I press "Yes – this is my email address"
+    Then a signature should exist with email: "womboid@wimbledon.com", state: "pending", location_code: "US", postcode: ""
