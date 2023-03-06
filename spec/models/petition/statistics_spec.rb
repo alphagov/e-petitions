@@ -54,7 +54,7 @@ RSpec.describe Petition::Statistics, type: :model do
   end
 
   describe "#refresh!" do
-    let!(:petition) { FactoryBot.create(:open_petition) }
+    let!(:petition) { FactoryBot.create(:open_petition, creator_attributes: { notify_by_email: false }) }
     let!(:statistics) { FactoryBot.create(:petition_statistics, petition: petition, refreshed_at: nil) }
 
     it "updates the refreshed_at timestamp" do
@@ -118,6 +118,34 @@ RSpec.describe Petition::Statistics, type: :model do
         }.to change {
           statistics.reload.pending_rate
         }.from(nil).to(50)
+      end
+    end
+
+    context "when there are no subscribed signatures" do
+      before do
+        FactoryBot.create(:validated_signature, petition: petition, notify_by_email: false)
+      end
+
+      it "updates the subscribers value" do
+        expect {
+          statistics.refresh!
+        }.to change {
+          statistics.reload.subscribers
+        }.from(nil).to(0)
+      end
+    end
+
+    context "when there are subscribed signatures" do
+      before do
+        FactoryBot.create(:validated_signature, petition: petition, notify_by_email: true)
+      end
+
+      it "updates the subscribers value" do
+        expect {
+          statistics.refresh!
+        }.to change {
+          statistics.reload.subscribers
+        }.from(nil).to(1)
       end
     end
   end

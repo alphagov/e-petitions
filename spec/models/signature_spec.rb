@@ -1133,6 +1133,30 @@ RSpec.describe Signature, type: :model do
     end
   end
 
+  describe ".subscribers" do
+    let!(:petition) { FactoryBot.create(:open_petition, creator_attributes: { notify_by_email: false }) }
+
+    context "when there are no subscribed signatures" do
+      before do
+        FactoryBot.create(:validated_signature, petition: petition, notify_by_email: false)
+      end
+
+      it "returns zero" do
+        expect(petition.signatures.subscribers).to eq(0)
+      end
+    end
+
+    context "when there are subscribed signatures" do
+      before do
+        FactoryBot.create(:validated_signature, petition: petition, notify_by_email: true)
+      end
+
+      it "returns the number of duplicate emails" do
+        expect(petition.signatures.subscribers).to eq(1)
+      end
+    end
+  end
+
   describe ".not_anonymized" do
     subject do
       described_class.not_anonymized

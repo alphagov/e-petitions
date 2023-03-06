@@ -101,6 +101,14 @@
           –
         <% end %>
       </dd>
+      <dt>Subscribers</dt>
+      <dd>
+        <% if @petition.statistics.subscribers? %>
+          <%= @petition.statistics.subscriber_count %> / <%= @petition.statistics.subscription_rate %>
+        <% else %>
+          –
+        <% end %>
+      </dd>
     <% end %>
 
     <dt>Trending IP addresses</dt>
