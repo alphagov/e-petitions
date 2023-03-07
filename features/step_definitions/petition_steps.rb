@@ -18,6 +18,10 @@ Given(/^an? ?(pending|validated|sponsored|flagged|dormant|open|closed|rejected)?
   @petition = FactoryBot.create(:"#{state || 'open'}_petition", action: action)
 end
 
+Given(/^a (validated|sponsored) petition "(.*?)" with (\d+) supporters$/) do |state, action, sponsor_count|
+  @petition = FactoryBot.create(:"#{state}_petition", action: action, sponsor_count: sponsor_count, sponsors_signed: true)
+end
+
 Given(/^a (sponsored|flagged) petition "(.*?)" reached threshold (\d+) days? ago$/) do |state, action, age|
   @petition = FactoryBot.create(:petition, action: action, state: state, moderation_threshold_reached_at: age.days.ago)
 end
