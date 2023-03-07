@@ -5,6 +5,17 @@ end
 Before do
   Location.create!(code: 'GB', name: 'United Kingdom')
   Location.create!(code: 'US', name: 'United States')
+
+  Region.create!(external_id: "113", name: "London", ons_code: "H")
+
+  Constituency.create!(
+    name: "Cities of London and Westminster",
+    slug: "cities-of-london-and-westminster",
+    external_id: "3415", ons_code: "E14000639",
+    mp_id: "1405", mp_name: "Rt Hon Mark Field MP",
+    mp_date: "2001-06-07", party: "Conservative",
+    example_postcode: "W1H5TN", region_id: "113"
+  )
 end
 
 Before do

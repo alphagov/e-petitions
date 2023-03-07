@@ -12,12 +12,24 @@
 <% if @petition.anonymized? %>
   <dt>Anonymized</dt>
   <dd><%= date_time_format(@petition.anonymized_at) %></dd>
-<% else %>
+<% elsif creator = @petition.creator %>
   <dt>Creator</dt>
   <dd>
-    <%=  @petition.creator.name %><br />
-    <%= auto_link(@petition.creator.email) %>
+    <span class="creator-name"><%= creator.name %></span><br />
+    <%= link_to(creator.email, admin_signatures_path(q: creator.email), class: "creator-email") %><br />
+    <% if creator.united_kingdom? %>
+      <%= link_to(creator.formatted_postcode, admin_signatures_path(q: creator.formatted_postcode), class: "creator-postcode") %><br />
+    <% end %>
+    <%= link_to(creator.ip_address, admin_signatures_path(q: creator.ip_address), class: "creator-ip-address") %>
   </dd>
+
+  <% if constituency = creator.constituency %>
+    <dt>Constituency</dt>
+    <dd>
+      <span class="creator-constituency"><%= constituency.name %></span><br />
+      <small class="creator-constituency-region"><%= constituency.region.name %></small>
+    </dd>
+  <% end %>
 <% end %>
 
 <% if @petition.removed? %>
