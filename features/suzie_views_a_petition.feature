@@ -4,15 +4,26 @@ Feature: Suzie views a petition
   I want to view a petition of my choice from a list, seeing the vote count, closed and open dates, along with the reason for rejection if applicable
 
   Scenario: Suzie views a petition gathering sponsors
-    Given a validated petition "Spend more money on Defence"
+    Given a validated petition "Spend more money on Defence" with 2 supporters
     When I view the petition
     Then I should see "This petition is gathering support"
+    And I should see "This petition needs 3 supporters before we will check that it meets the petition standards"
     And I should see a link called "petition standards" linking to "/help#standards"
 
   Scenario: Suzie views a petition waiting to be moderated
-    Given a sponsored petition "Spend more money on Defence"
+    Given a sponsored petition "Spend more money on Defence" with 5 supporters
     When I view the petition
     Then I should see "We’re checking this petition"
+    And I should see "5 people have already supported this petition"
+    And I should not see "No more people can sign this petition until it has been approved"
+    And I should see a link called "petition standards" linking to "/help#standards"
+
+  Scenario: Suzie views a petition with the maximum number of supporters waiting to be moderated
+    Given a sponsored petition "Spend more money on Defence" with 20 supporters
+    When I view the petition
+    Then I should see "We’re checking this petition"
+    And I should see "20 people have already supported this petition"
+    And I should see "No more people can sign this petition until it has been approved"
     And I should see a link called "petition standards" linking to "/help#standards"
 
   @allow-rescue

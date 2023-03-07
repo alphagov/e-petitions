@@ -1364,6 +1364,74 @@ RSpec.describe Petition, type: :model do
     end
   end
 
+  describe "#sponsor_count" do
+    it "caches the query result" do
+      petition = FactoryBot.create(:sponsored_petition)
+
+      expect {
+        2.times { petition.sponsor_count }
+      }.not_to exceed_query_limit(1)
+    end
+
+    context "when the petition is pending" do
+      let(:petition) { FactoryBot.create(:pending_petition) }
+
+      it "returns zero" do
+        expect(petition.sponsor_count).to eq(0)
+      end
+    end
+
+    context "when the petition is validated" do
+      let(:petition) { FactoryBot.create(:validated_petition, sponsor_count: 3, sponsors_signed: true) }
+
+      it "returns the number of sponsors" do
+        expect(petition.sponsor_count).to eq(3)
+      end
+    end
+
+    context "when the petition is sponsored" do
+      let(:petition) { FactoryBot.create(:sponsored_petition, sponsor_count: 5, sponsors_signed: true) }
+
+      it "returns the number of sponsors" do
+        expect(petition.sponsor_count).to eq(5)
+      end
+    end
+  end
+
+  describe "#sponsors_required" do
+    context "when the petition has no sponsors" do
+      let(:petition) { FactoryBot.create(:pending_petition) }
+
+      it "returns the number of sponsors required" do
+        expect(petition.sponsors_required).to eq(5)
+      end
+    end
+
+    context "when the petition has some sponsors" do
+      let(:petition) { FactoryBot.create(:validated_petition, sponsor_count: 3, sponsors_signed: true) }
+
+      it "returns the number of sponsors required" do
+        expect(petition.sponsors_required).to eq(2)
+      end
+    end
+
+    context "when the petition has enough sponsors" do
+      let(:petition) { FactoryBot.create(:sponsored_petition, sponsor_count: 5, sponsors_signed: true) }
+
+      it "returns zero" do
+        expect(petition.sponsors_required).to eq(0)
+      end
+    end
+
+    context "when the petition has more than enough sponsors" do
+      let(:petition) { FactoryBot.create(:sponsored_petition, sponsor_count: 6, sponsors_signed: true) }
+
+      it "returns zero" do
+        expect(petition.sponsors_required).to eq(0)
+      end
+    end
+  end
+
   describe "#can_be_signed?" do
     context "when the petition is in the open state" do
       let(:petition) { FactoryBot.build(:petition, state: Petition::OPEN_STATE) }
@@ -3207,11 +3275,11 @@ RSpec.describe Petition, type: :model do
 
   describe '#has_maximum_sponsors?' do
     %w[pending validated sponsored flagged dormant].each do |state|
-      let(:petition) { FactoryBot.create(:"#{state}_petition", sponsor_count: sponor_count, sponsors_signed: sponsors_signed) }
+      let(:petition) { FactoryBot.create(:"#{state}_petition", sponsor_count: sponsor_count, sponsors_signed: sponsors_signed) }
 
       context "when petition is #{state}" do
         context "and has less than the maximum number of sponsors" do
-          let(:sponor_count) { Site.maximum_number_of_sponsors - 1 }
+          let(:sponsor_count) { Site.maximum_number_of_sponsors - 1 }
           let(:sponsors_signed) { true }
 
           it "returns false" do
@@ -3220,7 +3288,7 @@ RSpec.describe Petition, type: :model do
         end
 
         context "and has the maximum number of sponsors, but none have signed" do
-          let(:sponor_count) { Site.maximum_number_of_sponsors }
+          let(:sponsor_count) { Site.maximum_number_of_sponsors }
           let(:sponsors_signed) { false }
 
           it "returns false" do
@@ -3229,7 +3297,7 @@ RSpec.describe Petition, type: :model do
         end
 
         context "and has more than the maximum number of sponsors, but none have signed" do
-          let(:sponor_count) { Site.maximum_number_of_sponsors + 1 }
+          let(:sponsor_count) { Site.maximum_number_of_sponsors + 1 }
           let(:sponsors_signed) { false }
 
           it "returns false" do
@@ -3238,7 +3306,7 @@ RSpec.describe Petition, type: :model do
         end
 
         context "and has the maximum number of sponsors and they have signed" do
-          let(:sponor_count) { Site.maximum_number_of_sponsors }
+          let(:sponsor_count) { Site.maximum_number_of_sponsors }
           let(:sponsors_signed) { true }
 
           it "returns true" do
@@ -3247,7 +3315,7 @@ RSpec.describe Petition, type: :model do
         end
 
         context "and has more than the maximum number of sponsors and they have signed" do
-          let(:sponor_count) { Site.maximum_number_of_sponsors + 1 }
+          let(:sponsor_count) { Site.maximum_number_of_sponsors + 1 }
           let(:sponsors_signed) { true }
 
           it "returns true" do
