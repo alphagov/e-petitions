@@ -651,6 +651,14 @@ class Petition < ActiveRecord::Base
     end
   end
 
+  def sponsor_count
+    @sponsor_count ||= sponsors.validated.count
+  end
+
+  def sponsors_required
+    [(Site.minimum_number_of_sponsors - sponsor_count), 0].max
+  end
+
   def signatures_by_country
     super.sort_by(&:name)
   end

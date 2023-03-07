@@ -1364,6 +1364,74 @@ RSpec.describe Petition, type: :model do
     end
   end
 
+  describe "#sponsor_count" do
+    it "caches the query result" do
+      petition = FactoryBot.create(:sponsored_petition)
+
+      expect {
+        2.times { petition.sponsor_count }
+      }.not_to exceed_query_limit(1)
+    end
+
+    context "when the petition is pending" do
+      let(:petition) { FactoryBot.create(:pending_petition) }
+
+      it "returns zero" do
+        expect(petition.sponsor_count).to eq(0)
+      end
+    end
+
+    context "when the petition is validated" do
+      let(:petition) { FactoryBot.create(:validated_petition, sponsor_count: 3, sponsors_signed: true) }
+
+      it "returns the number of sponsors" do
+        expect(petition.sponsor_count).to eq(3)
+      end
+    end
+
+    context "when the petition is sponsored" do
+      let(:petition) { FactoryBot.create(:sponsored_petition, sponsor_count: 5, sponsors_signed: true) }
+
+      it "returns the number of sponsors" do
+        expect(petition.sponsor_count).to eq(5)
+      end
+    end
+  end
+
+  describe "#sponsors_required" do
+    context "when the petition has no sponsors" do
+      let(:petition) { FactoryBot.create(:pending_petition) }
+
+      it "returns the number of sponsors required" do
+        expect(petition.sponsors_required).to eq(5)
+      end
+    end
+
+    context "when the petition has some sponsors" do
+      let(:petition) { FactoryBot.create(:validated_petition, sponsor_count: 3, sponsors_signed: true) }
+
+      it "returns the number of sponsors required" do
+        expect(petition.sponsors_required).to eq(2)
+      end
+    end
+
+    context "when the petition has enough sponsors" do
+      let(:petition) { FactoryBot.create(:sponsored_petition, sponsor_count: 5, sponsors_signed: true) }
+
+      it "returns zero" do
+        expect(petition.sponsors_required).to eq(0)
+      end
+    end
+
+    context "when the petition has more than enough sponsors" do
+      let(:petition) { FactoryBot.create(:sponsored_petition, sponsor_count: 6, sponsors_signed: true) }
+
+      it "returns zero" do
+        expect(petition.sponsors_required).to eq(0)
+      end
+    end
+  end
+
   describe "#can_be_signed?" do
     context "when the petition is in the open state" do
       let(:petition) { FactoryBot.build(:petition, state: Petition::OPEN_STATE) }
