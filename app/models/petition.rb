@@ -986,7 +986,7 @@ class Petition < ActiveRecord::Base
   end
 
   def has_maximum_sponsors?
-    sponsors.validated.count >= Site.maximum_number_of_sponsors
+    sponsor_count >= Site.maximum_number_of_sponsors
   end
 
   def update_all(updates)

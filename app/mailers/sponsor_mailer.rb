@@ -1,7 +1,7 @@
 class SponsorMailer < ApplicationMailer
   def sponsor_signed_email_below_threshold(sponsor)
     @petition, @sponsor = sponsor.petition, sponsor
-    @sponsor_count = @petition.sponsors.validated.count
+    @sponsor_count = @petition.sponsor_count
 
     mail(
       subject: "#{@sponsor.name} supported your petition",
@@ -11,7 +11,7 @@ class SponsorMailer < ApplicationMailer
 
   def sponsor_signed_email_on_threshold(sponsor)
     @petition, @sponsor = sponsor.petition, sponsor
-    @sponsor_count = @petition.sponsors.validated.count
+    @sponsor_count = @petition.sponsor_count
 
     mail(
       subject: "We’re checking your petition",
