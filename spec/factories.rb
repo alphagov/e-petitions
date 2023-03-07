@@ -217,6 +217,7 @@ FactoryBot.define do
     sequence(:email) { |n| "jo#{n}@public.com" }
     postcode { "SW1A 1AA" }
     location_code { "GB" }
+    ip_address { Faker::Internet.public_ip_v4_address }
     state { Archived::Signature::VALIDATED_STATE }
     unsubscribe_token { Authlogic::Random.friendly_token }
     notify_by_email { true }
@@ -523,6 +524,7 @@ FactoryBot.define do
     sequence(:email) { |n| "jo#{n}@public.com" }
     postcode { "SW1A 1AA" }
     location_code { "GB" }
+    ip_address { Faker::Internet.public_ip_v4_address }
     uk_citizenship { "1" }
     notify_by_email { "1" }
     state { Signature::VALIDATED_STATE }
