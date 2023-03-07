@@ -3207,11 +3207,11 @@ RSpec.describe Petition, type: :model do
 
   describe '#has_maximum_sponsors?' do
     %w[pending validated sponsored flagged dormant].each do |state|
-      let(:petition) { FactoryBot.create(:"#{state}_petition", sponsor_count: sponor_count, sponsors_signed: sponsors_signed) }
+      let(:petition) { FactoryBot.create(:"#{state}_petition", sponsor_count: sponsor_count, sponsors_signed: sponsors_signed) }
 
       context "when petition is #{state}" do
         context "and has less than the maximum number of sponsors" do
-          let(:sponor_count) { Site.maximum_number_of_sponsors - 1 }
+          let(:sponsor_count) { Site.maximum_number_of_sponsors - 1 }
           let(:sponsors_signed) { true }
 
           it "returns false" do
@@ -3220,7 +3220,7 @@ RSpec.describe Petition, type: :model do
         end
 
         context "and has the maximum number of sponsors, but none have signed" do
-          let(:sponor_count) { Site.maximum_number_of_sponsors }
+          let(:sponsor_count) { Site.maximum_number_of_sponsors }
           let(:sponsors_signed) { false }
 
           it "returns false" do
@@ -3229,7 +3229,7 @@ RSpec.describe Petition, type: :model do
         end
 
         context "and has more than the maximum number of sponsors, but none have signed" do
-          let(:sponor_count) { Site.maximum_number_of_sponsors + 1 }
+          let(:sponsor_count) { Site.maximum_number_of_sponsors + 1 }
           let(:sponsors_signed) { false }
 
           it "returns false" do
@@ -3238,7 +3238,7 @@ RSpec.describe Petition, type: :model do
         end
 
         context "and has the maximum number of sponsors and they have signed" do
-          let(:sponor_count) { Site.maximum_number_of_sponsors }
+          let(:sponsor_count) { Site.maximum_number_of_sponsors }
           let(:sponsors_signed) { true }
 
           it "returns true" do
@@ -3247,7 +3247,7 @@ RSpec.describe Petition, type: :model do
         end
 
         context "and has more than the maximum number of sponsors and they have signed" do
-          let(:sponor_count) { Site.maximum_number_of_sponsors + 1 }
+          let(:sponsor_count) { Site.maximum_number_of_sponsors + 1 }
           let(:sponsors_signed) { true }
 
           it "returns true" do
