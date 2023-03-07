@@ -221,3 +221,7 @@ Then /^the signature count (?:stays at|goes up to) (\d+)$/ do |number|
   signatures = @petition.signatures
   expect(signatures.count).to eq number
 end
+
+Given(/^a creator with name: "([^"]*)", email: "([^"]*)", postcode: "([^"]*)", ip_address: "([^"]*)"$/) do |name, email, postcode, ip_address|
+  @petition.creator.update!(name: name, email: email, postcode: postcode, ip_address: ip_address)
+end

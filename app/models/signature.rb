@@ -789,8 +789,6 @@ class Signature < ActiveRecord::Base
     end
   end
 
-  private
-
   def formatted_postcode
     if united_kingdom?
       postcode.gsub(/\A([A-Z0-9]+?)([A-Z0-9]{3})\z/, "\\1 \\2")
@@ -798,6 +796,8 @@ class Signature < ActiveRecord::Base
       postcode
     end
   end
+
+  private
 
   def normalize_email(value)
     return value unless value.present?
