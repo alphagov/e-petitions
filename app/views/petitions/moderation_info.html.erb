@@ -1,7 +1,7 @@
 <h1>We’re checking this petition</h1>
 
 <p>
-  <%= @petition.sponsor_count %> people have already supported this petition.
+  <%= pluralize(@petition.sponsor_count, "person has", plural: "people have", locale: :en) %> already supported this petition.
 
   <% if @petition.has_maximum_sponsors? %>
     No more people can sign this petition until it has been approved.
