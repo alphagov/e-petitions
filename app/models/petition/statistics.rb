@@ -40,7 +40,7 @@ class Petition < ActiveRecord::Base
     end
 
     def subscription_rate
-      if refreshed? && petition.published?
+      if subscribers?
         number_to_percentage(Rational(subscribers, petition.signature_count) * 100, precision: 1)
       end
     end
