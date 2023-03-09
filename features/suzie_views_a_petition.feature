@@ -7,14 +7,14 @@ Feature: Suzie views a petition
     Given a validated petition "Spend more money on Defence" with 2 supporters
     When I view the petition
     Then I should see "This petition is gathering support"
-    And I should see "This petition needs 3 supporters before we will check that it meets the petition standards"
+    And I should see "This petition needs 3 more supporters before we will check that it meets the petition standards"
     And I should see a link called "petition standards" linking to "/help#standards"
 
   Scenario: Suzie views a petition gathering sponsors with 4 supporters
     Given a validated petition "Spend more money on Defence" with 4 supporters
     When I view the petition
     Then I should see "This petition is gathering support"
-    And I should see "This petition needs 1 supporter before we will check that it meets the petition standards"
+    And I should see "This petition needs 1 more supporter before we will check that it meets the petition standards"
     And I should see a link called "petition standards" linking to "/help#standards"
 
   Scenario: Suzie views a petition waiting to be moderated
