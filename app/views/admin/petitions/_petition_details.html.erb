@@ -16,10 +16,16 @@
   <dt>Creator</dt>
   <dd>
     <span class="creator-name"><%= creator.name %></span><br />
-    <%= link_to(creator.email, admin_signatures_path(q: creator.email), class: "creator-email") %><br />
-    <% if creator.united_kingdom? %>
-      <%= link_to(creator.formatted_postcode, admin_signatures_path(q: creator.formatted_postcode), class: "creator-postcode") %><br />
-    <% end %>
+    <%= link_to(creator.email, admin_signatures_path(q: creator.email), class: "creator-email") %>
+  </dd>
+  <% if creator.united_kingdom? %>
+    <dt>Postcode</dt>
+    <dd>
+      <%= link_to(creator.formatted_postcode, admin_signatures_path(q: creator.formatted_postcode), class: "creator-postcode") %>
+    </dd>
+  <% end %>
+  <dt>IP address</dt>
+  <dd>
     <%= link_to(creator.ip_address, admin_signatures_path(q: creator.ip_address), class: "creator-ip-address") %>
   </dd>
 
