@@ -26,7 +26,7 @@ class Petition < ActiveRecord::Base
     end
 
     def subscriber_count
-      if subscribers?
+      if subscribers? && petition.signature_count?
         number_to_delimited(subscribers)
       end
     end

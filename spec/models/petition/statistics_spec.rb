@@ -211,6 +211,19 @@ RSpec.describe Petition::Statistics, type: :model do
       end
     end
 
+    context "when the subscriber count is zero and the signature count is zero" do
+      subject { FactoryBot.create(:petition_statistics, :refreshed, subscribers: 0) }
+
+      before do
+        expect(subject.petition).to receive(:signature_count?).and_return(false)
+        expect(subject.petition).not_to receive(:signature_count)
+      end
+
+      it "returns nil" do
+        expect(subject.subscriber_count).to be_nil
+      end
+    end
+
     context "when the subscriber count is not nil" do
       subject { FactoryBot.create(:petition_statistics, :refreshed, subscribers: 1234) }
 
@@ -242,7 +255,7 @@ RSpec.describe Petition::Statistics, type: :model do
         expect(subject.petition).not_to receive(:signature_count)
       end
 
-      it "returns a formatted percentage" do
+      it "returns nil" do
         expect(subject.subscription_rate).to be_nil
       end
     end
