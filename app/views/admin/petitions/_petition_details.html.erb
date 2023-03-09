@@ -121,7 +121,7 @@
       </dd>
       <dt>Subscribers</dt>
       <dd>
-        <% if @petition.statistics.subscribers? %>
+        <% if @petition.statistics.subscribers? && @petition.signature_count? %>
           <%= @petition.statistics.subscriber_count %> / <%= @petition.statistics.subscription_rate %>
         <% else %>
           –
