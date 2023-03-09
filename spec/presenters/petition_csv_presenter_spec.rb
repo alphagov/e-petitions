@@ -63,7 +63,7 @@ RSpec.describe PetitionCSVPresenter do
       timestampify(petition.government_response_created_at),
       timestampify(petition.government_response_updated_at),
       petition.note.try(:details),
-      petition.statistics.subscribers,
+      petition.statistics.subscriber_count,
       petition.statistics.subscription_rate
     ].join(",") + "\n"
   end
