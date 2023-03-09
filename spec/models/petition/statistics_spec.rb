@@ -149,4 +149,128 @@ RSpec.describe Petition::Statistics, type: :model do
       end
     end
   end
+
+  describe "#subscribers?" do
+    context "when the subscriber count is nil" do
+      subject { FactoryBot.create(:petition_statistics, :refreshed, subscribers: nil) }
+
+      it "returns false" do
+        expect(subject.subscribers?).to eq(false)
+      end
+    end
+
+    context "when the subscriber count is zero" do
+      subject { FactoryBot.create(:petition_statistics, :refreshed, subscribers: 0) }
+
+      it "returns true" do
+        expect(subject.subscribers?).to eq(true)
+      end
+    end
+
+    context "when the subscriber count is more than zero" do
+      subject { FactoryBot.create(:petition_statistics, :refreshed, subscribers: 1) }
+
+      it "returns true" do
+        expect(subject.subscribers?).to eq(true)
+      end
+    end
+  end
+
+  describe "#subscribers?" do
+    context "when the subscriber count is nil" do
+      subject { FactoryBot.create(:petition_statistics, :refreshed, subscribers: nil) }
+
+      it "returns false" do
+        expect(subject.subscribers?).to eq(false)
+      end
+    end
+
+    context "when the subscriber count is zero" do
+      subject { FactoryBot.create(:petition_statistics, :refreshed, subscribers: 0) }
+
+      it "returns true" do
+        expect(subject.subscribers?).to eq(true)
+      end
+    end
+
+    context "when the subscriber count is more than zero" do
+      subject { FactoryBot.create(:petition_statistics, :refreshed, subscribers: 1) }
+
+      it "returns true" do
+        expect(subject.subscribers?).to eq(true)
+      end
+    end
+  end
+
+  describe "#subscriber_count" do
+    context "when the subscriber count is nil" do
+      subject { FactoryBot.create(:petition_statistics, :refreshed, subscribers: nil) }
+
+      it "returns nil" do
+        expect(subject.subscriber_count).to be_nil
+      end
+    end
+
+    context "when the subscriber count is not nil" do
+      subject { FactoryBot.create(:petition_statistics, :refreshed, subscribers: 1234) }
+
+      it "returns a formatted count" do
+        expect(subject.subscriber_count).to eq("1,234")
+      end
+    end
+  end
+
+  describe "#subscription_rate" do
+    context "when the subscriber count is nil" do
+      subject { FactoryBot.create(:petition_statistics, :refreshed, subscribers: nil) }
+
+      before do
+        expect(subject.petition).not_to receive(:signature_count?)
+        expect(subject.petition).not_to receive(:signature_count)
+      end
+
+      it "returns nil" do
+        expect(subject.subscription_rate).to be_nil
+      end
+    end
+
+    context "when the subscriber count is zero and the signature count is zero" do
+      subject { FactoryBot.create(:petition_statistics, :refreshed, subscribers: 0) }
+
+      before do
+        expect(subject.petition).to receive(:signature_count?).and_return(false)
+        expect(subject.petition).not_to receive(:signature_count)
+      end
+
+      it "returns a formatted percentage" do
+        expect(subject.subscription_rate).to be_nil
+      end
+    end
+
+    context "when the subscriber count is zero" do
+      subject { FactoryBot.create(:petition_statistics, :refreshed, subscribers: 0) }
+
+      before do
+        expect(subject.petition).to receive(:signature_count?).and_return(true)
+        expect(subject.petition).to receive(:signature_count).and_return(99)
+      end
+
+      it "returns a formatted percentage" do
+        expect(subject.subscription_rate).to eq("0.0%")
+      end
+    end
+
+    context "when the subscriber count is more than zero" do
+      subject { FactoryBot.create(:petition_statistics, :refreshed, subscribers: 66) }
+
+      before do
+        expect(subject.petition).to receive(:signature_count?).and_return(true)
+        expect(subject.petition).to receive(:signature_count).and_return(99)
+      end
+
+      it "returns a formatted percentage" do
+        expect(subject.subscription_rate).to eq("66.7%")
+      end
+    end
+  end
 end
