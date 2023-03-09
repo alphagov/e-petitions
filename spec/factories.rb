@@ -749,6 +749,10 @@ FactoryBot.define do
 
   factory :petition_statistics, class: "Petition::Statistics" do
     association :petition, factory: :open_petition
+
+    trait :refreshed do
+      refreshed_at { 5.minutes.ago }
+    end
   end
 
   factory :rejection do
