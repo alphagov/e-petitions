@@ -114,7 +114,7 @@ GEM
     chunky_png (1.4.0)
     coderay (1.1.2)
     concurrent-ruby (1.1.10)
-    connection_pool (2.2.1)
+    connection_pool (2.3.0)
     crack (0.4.5)
       rexml
     crass (1.0.6)
@@ -229,7 +229,7 @@ GEM
     multi_json (1.14.1)
     multi_test (0.1.2)
     multipart-post (2.0.0)
-    net-http-persistent (3.0.0)
+    net-http-persistent (4.0.1)
       connection_pool (~> 2.2)
     net-imap (0.3.4)
       date
