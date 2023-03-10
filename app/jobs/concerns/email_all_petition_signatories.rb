@@ -46,7 +46,7 @@ module EmailAllPetitionSignatories
     end
   end
 
-  def perform(**args)
+  def perform(args)
     @petition, @requested_at = args[:petition], args[:requested_at]
 
     # If the petition has been updated since the job

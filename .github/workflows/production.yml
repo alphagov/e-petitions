@@ -6,7 +6,7 @@ on:
 
 jobs:
   deploy:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
 
     environment:
       name: welsh-petitions-production
@@ -14,29 +14,30 @@ jobs:
 
     steps:
     - name: Checkout code
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
 
     - name: Setup ruby
       uses: ruby/setup-ruby@v1
       with:
-        ruby-version: 2.7
+        ruby-version: "3.0"
 
     - name: Install postgres client
       run: |
         sudo apt-get -yqq install libpq-dev
 
     - name: Setup gem cache
-      uses: actions/cache@v1
+      uses: actions/cache@v3
       with:
         path: vendor/bundle
-        key: ubuntu-20.04-gems-${{ hashFiles('/Gemfile.lock') }}
+        key: ubuntu-22.04-gems-${{ hashFiles('/Gemfile.lock') }}
         restore-keys: |
-          ubuntu-20.04-gems-
+          ubuntu-22.04-gems-
 
     - name: Install gems
       run: |
-        gem install bundler -v 1.17.3
-        bundle install --jobs 4 --retry 3 --path vendor/bundle
+        gem install bundler -v 2.3.26
+        bundle config set --local path 'vendor/bundle'
+        bundle install --jobs 4 --retry 3
 
     - name: Configure AWS credentials
       uses: aws-actions/configure-aws-credentials@v1

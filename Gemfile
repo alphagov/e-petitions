@@ -39,6 +39,7 @@ gem 'activerecord-postgis-adapter'
 gem 'rgeo-geojson'
 gem 'rgeo-proj4'
 gem 'chunky_png'
+gem 'webrick'
 
 gem 'aws-sdk-codedeploy'
 gem 'aws-sdk-cloudwatchlogs'
