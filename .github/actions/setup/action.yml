@@ -16,7 +16,7 @@ runs:
     - name: Install gems
       shell: bash
       run: |
-        gem install bundler -v 1.17.3
+        gem install bundler -v 2.3.5
         bundle install --jobs 4 --retry 3 --path vendor/bundle
 
     - name: Setup database
