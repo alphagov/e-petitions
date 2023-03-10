@@ -52,6 +52,7 @@ group :development, :test do
   gem 'jasmine'
   gem 'jasmine_selenium_runner', require: false
   gem 'pry'
+  gem 'webrick'
 end
 
 group :test do
