@@ -39,6 +39,7 @@ gem 'activerecord-postgis-adapter'
 gem 'rgeo-geojson'
 gem 'rgeo-proj4'
 gem 'chunky_png'
+gem 'webrick'
 
 gem 'aws-sdk-codedeploy'
 gem 'aws-sdk-cloudwatchlogs'
@@ -52,7 +53,6 @@ group :development, :test do
   gem 'jasmine'
   gem 'jasmine_selenium_runner', require: false
   gem 'pry'
-  gem 'webrick'
 end
 
 group :test do
