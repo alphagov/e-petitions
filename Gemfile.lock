@@ -113,7 +113,7 @@ GEM
     chronic (0.10.2)
     chunky_png (1.4.0)
     coderay (1.1.2)
-    concurrent-ruby (1.1.10)
+    concurrent-ruby (1.2.2)
     connection_pool (2.3.0)
     crack (0.4.5)
       rexml
@@ -191,7 +191,8 @@ GEM
     jasmine_selenium_runner (3.0.0)
       jasmine (~> 3.0)
       selenium-webdriver (~> 3.8)
-    jbuilder (2.10.0)
+    jbuilder (2.11.5)
+      actionview (>= 5.0.0)
       activesupport (>= 5.0.0)
     jmespath (1.6.1)
     jquery-rails (4.4.0)
@@ -225,7 +226,7 @@ GEM
     mini_magick (4.11.0)
     mini_mime (1.1.2)
     mini_portile2 (2.8.1)
-    minitest (5.17.0)
+    minitest (5.18.0)
     multi_json (1.14.1)
     multi_test (0.1.2)
     multipart-post (2.3.0)
@@ -369,7 +370,7 @@ GEM
     thor (1.2.1)
     tilt (2.0.10)
     timeout (0.3.1)
-    tzinfo (2.0.5)
+    tzinfo (2.0.6)
       concurrent-ruby (~> 1.0)
     webdrivers (4.7.0)
       nokogiri (~> 1.6)
@@ -388,7 +389,7 @@ GEM
     will_paginate (3.3.1)
     xpath (3.2.0)
       nokogiri (~> 1.8)
-    zeitwerk (2.6.6)
+    zeitwerk (2.6.7)
 
 PLATFORMS
   arm64-darwin
