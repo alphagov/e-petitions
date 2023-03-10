@@ -19,7 +19,7 @@ jobs:
     - name: Setup ruby
       uses: ruby/setup-ruby@v1
       with:
-        ruby-version: 3.0
+        ruby-version: "3.0"
 
     - name: Install postgres client
       run: |
