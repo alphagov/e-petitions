@@ -52,7 +52,7 @@ module TranslationHelper
   end
 
   if Site.translation_enabled?
-    def t(key, options = {})
+    def t(key, **options)
       keys = I18n.normalize_keys(I18n.locale, key, options[:scope])
       scope = keys[1]
 

@@ -24,7 +24,7 @@ module WelshPets
           @parent || self
         end
 
-        def merge(**options)
+        def merge(options)
           {}.tap do |scope|
             OPTIONS.each do |option|
               value = if @options.key?(option)
@@ -46,7 +46,7 @@ module WelshPets
           end
         end
 
-        def route(**options)
+        def route(options)
           Route.new(options, self)
         end
 
