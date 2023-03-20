@@ -9,10 +9,13 @@ x-application: &application
     - SMTP_HOST=mailcatcher
     - SMTP_PORT=1025
     - SPROCKETS_CACHE=/cache
+    - PIDFILE=/tmp/pids/server.pid
   volumes:
     - .:/app
     - bundle:/bundle
     - cache:/cache
+  tmpfs:
+    - /tmp/pids/
   depends_on:
     - postgres
     - mailcatcher
