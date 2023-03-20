@@ -18,4 +18,8 @@ if [ ${SERVER_TYPE} = "worker" ] ; then cd /home/deploy/epetitions/current && bu
 EOF
 
 # Enable services if they have not been previously enabled
-/lib/systemd/systemd-sysv-install is-enabled epetitions || /lib/systemd/systemd-sysv-install enable epetitions
+if [ -f "/etc/init.d/epetitions" ]; then
+  /lib/systemd/systemd-sysv-install is-enabled epetitions || /lib/systemd/systemd-sysv-install enable epetitions
+else
+  systemctl is-active --quiet epetitions.service || systemctl enable epetitions.service
+fi
