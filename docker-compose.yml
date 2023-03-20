@@ -34,14 +34,15 @@ services:
   mailcatcher:
     image: e-petitions/mailcatcher
     build: docker/mailcatcher
+    expose:
+      - "1025"
     ports:
-      - "1025:1025"
       - "1080:1080"
 
   memcached:
     image: memcached:1.5
-    ports:
-      - "11211:11211"
+    expose:
+      - "11121"
 
   web:
     <<: *application
