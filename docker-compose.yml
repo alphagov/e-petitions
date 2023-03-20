@@ -9,10 +9,13 @@ x-application: &application
     - SMTP_HOST=mailcatcher
     - SMTP_PORT=1025
     - SPROCKETS_CACHE=/cache
+    - PIDFILE=/tmp/pids/server.pid
   volumes:
     - .:/app
     - bundle:/bundle
     - cache:/cache
+  tmpfs:
+    - /tmp/pids/
   depends_on:
     - postgres
     - mailcatcher
@@ -27,21 +30,22 @@ services:
       - POSTGRES_PASSWORD=ZW4IvOPrXcbp2hyp
       - POSTGRES_DB=postgres
     ports:
-      - "5432:5432"
+      - "127.0.0.1:5432:5432"
     volumes:
       - db:/var/lib/postgresql/data
 
   mailcatcher:
     image: e-petitions/mailcatcher
     build: docker/mailcatcher
+    expose:
+      - "1025"
     ports:
-      - "1025:1025"
-      - "1080:1080"
+      - "127.0.0.1:1080:1080"
 
   memcached:
     image: memcached:1.5
-    ports:
-      - "11211:11211"
+    expose:
+      - "11121"
 
   web:
     <<: *application
@@ -51,7 +55,7 @@ services:
       "-p", "3000"
     ]
     ports:
-      - "3000:3000"
+      - "127.0.0.1:3000:3000"
     stdin_open: true
     tty: true
 
