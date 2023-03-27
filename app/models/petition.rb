@@ -52,6 +52,7 @@ class Petition < ActiveRecord::Base
 
   facet :all,      -> { by_most_popular }
   facet :open,     -> { open_state.by_most_popular }
+  facet :recent,   -> { open_state.by_most_recently_published }
   facet :rejected, -> { rejected_state.by_most_recent }
   facet :closed,   -> { closed_state.by_most_popular }
   facet :hidden,   -> { hidden_state.by_most_recent }
@@ -150,6 +151,10 @@ class Petition < ActiveRecord::Base
 
     def by_most_recent
       reorder(created_at: :desc)
+    end
+
+    def by_most_recently_published
+      reorder(open_at: :desc)
     end
 
     def by_most_recent_debate_outcome

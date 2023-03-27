@@ -47,3 +47,19 @@
     @include bold-24();
   }
 }
+
+.list-header {
+  .text-secondary {
+    margin-top: -$gutter-one-quarter;
+    @include core-16;
+
+    @media (max-width: 280px){
+      // The Samsung Galaxy Fold is super narrow when folded
+      @include core-14;
+    }
+
+    a {
+      white-space: nowrap;
+    }
+  }
+}

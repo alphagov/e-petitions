@@ -16,7 +16,9 @@
 <h1 class="page-title"><%= t(@petitions.scope, scope: :"petitions.page_titles") %></h1>
 
 <% if petition_list_header? %>
-  <p class="text-secondary"><%= petition_list_header %></p>
+  <div class="list-header">
+    <%= petition_list_header %>
+  </div>
 <% end %>
 
 <%= form_tag petitions_path, method: 'get', enforce_utf8: false do %>
