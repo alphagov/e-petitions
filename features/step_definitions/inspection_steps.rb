@@ -63,9 +63,11 @@ end
 ### Tables...
 
 Then(/^I should see the following search results:$/) do |values_table|
-  values_table.raw.each do |row|
-    row.each do |column|
-      expect(page).to have_content(column)
+  values_table.raw.each_with_index do |row, idx|
+    expect(page).to have_selector(:css, ".search-results ol li:nth-child(#{idx+1}) h2", text: row[0]);
+
+    if row[1].present?
+      expect(page).to have_selector(:css, ".search-results ol li:nth-child(#{idx+1}) p", text: row[1]);
     end
   end
 end

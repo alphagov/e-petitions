@@ -10,6 +10,7 @@ en-GB:
     page_titles:
       all: "All petitions"
       open: "Open petitions"
+      recent: "Recent petitions"
       closed: "Closed petitions"
       rejected: "Rejected petitions"
       published: "Published petitions"
@@ -34,6 +35,7 @@ en-GB:
     lists:
       all: "All petitions (%{quantity})"
       open: "Open petitions (%{quantity})"
+      recent: "Recent petitions (%{quantity})"
       closed: "Closed petitions (%{quantity})"
       published: "Published petitions (%{quantity})"
       rejected: "Rejected petitions (%{quantity})"
@@ -44,7 +46,20 @@ en-GB:
       awaiting_debate: "Awaiting a debate in Parliament (%{quantity})"
 
     list_headers:
-      not_debated: "The Petitions Committee decided not to debate these petitions"
+      open_html: |-
+        <p class="text-secondary">
+          These petitions are sorted by popularity.
+          <a href="/petitions?state=recent&amp;q=%{query}">Sort them by date of publishing</a>.
+        </p>
+      recent_html: |-
+        <p class="text-secondary">
+          These petitions are sorted by date of publishing.
+          <a href="/petitions?state=open&amp;q=%{query}">Sort them by popularity</a>.
+        </p>
+      not_debated_html: |-
+        <p class="text-secondary">
+          The Petitions Committee decided not to debate these petitions
+        </p>
 
     facets:
       archived:
@@ -57,6 +72,7 @@ en-GB:
       public:
         - :all
         - :open
+        - :recent
         - :closed
         - :rejected
         - :awaiting_response

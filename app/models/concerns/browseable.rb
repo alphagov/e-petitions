@@ -160,6 +160,10 @@ module Browseable
       @query ||= params[:q].to_s
     end
 
+    def url_safe_query
+      Rack::Utils.escape(query)
+    end
+
     def page_size
       @page_size ||= [[sanitized_page_size, max_page_size].min, 1].max
     end
