@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_03_06_174959) do
+ActiveRecord::Schema.define(version: 2023_03_27_145255) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "intarray"
@@ -558,6 +558,8 @@ ActiveRecord::Schema.define(version: 2023_03_06_174959) do
     t.index ["response_threshold_reached_at"], name: "index_petitions_on_response_threshold_reached_at"
     t.index ["signature_count", "created_at"], name: "index_petitions_on_signature_count_and_created_at", order: :desc
     t.index ["signature_count", "state"], name: "index_petitions_on_signature_count_and_state"
+    t.index ["state", "open_at", "created_at"], name: "index_petitions_on_state_and_open_at_and_created_at", order: { open_at: :desc, created_at: :desc }
+    t.index ["state", "signature_count", "created_at"], name: "index_petitions_on_state_and_signature_count_and_created_at", order: { signature_count: :desc, created_at: :desc }
     t.index ["state"], name: "index_petitions_on_state"
     t.index ["tags"], name: "index_petitions_on_tags", opclass: :gin__int_ops, using: :gin
     t.index ["topics"], name: "index_petitions_on_topics", opclass: :gin__int_ops, using: :gin
