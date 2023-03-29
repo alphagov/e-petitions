@@ -1,0 +1,22 @@
+<div class="grid-row">
+  <div class="grid-column">
+    <%= form_row for: [form.object, :parliament_id] do %>
+      <%= form.label :parliament_id, "Parliament", class: "form-label" %>
+      <%= error_messages_for_field form.object, :parliament_id %>
+      <%= form.select :parliament_id, form.object.parliaments, {}, class: "form-control form-control-1-2" %>
+    <% end %>
+
+    <%= form_row for: [form.object, :period], class: "inline" do %>
+      <%= form.label :period, "Period", class: "form-label" %>
+      <%= error_messages_for_field form.object, :period %>
+      <div class="multiple-choice">
+        <%= form.radio_button :period, "week" %>
+        <%= form.label :period, "By week", for: "report_period_week" %>
+      </div>
+      <div class="multiple-choice">
+        <%= form.radio_button :period, "month" %>
+        <%= form.label :period, "By month", for: "report_period_month" %>
+      </div>
+    <% end %>
+  </div>
+</div>

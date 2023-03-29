@@ -9,6 +9,14 @@ en-GB:
             email:
               invalid: "Email not recognised."
 
+        statistics/moderation_performance/form:
+          attributes:
+            parliament_id:
+              inclusion: "Select a parliament from the list below"
+            period:
+              blank: "Select a period over which to measure performance"
+              inclusion: "Select a period over which to measure performance"
+
   activerecord:
     errors:
       models:

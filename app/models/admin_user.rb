@@ -93,6 +93,10 @@ class AdminUser < ActiveRecord::Base
     "#{first_name} #{last_name}"
   end
 
+  def rfc822
+    %Q["#{first_name} #{last_name}" <#{email}>]
+  end
+
   def is_a_sysadmin?
     self.role == 'sysadmin'
   end

@@ -97,6 +97,7 @@ en-GB:
       petition_already_removed: "Petition has already been removed"
       preview_email_sent: "Preview email successfully sent"
       rate_limits_updated: "Rate limits updated successfully"
+      report_request_submitted: "Request has been submitted - please check your email in a few minutes"
       rejection_reason_created: "Rejection reason created successfully"
       rejection_reason_updated: "Rejection reason updated successfully"
       rejection_reason_deleted: "Rejection reason removed successfully"
