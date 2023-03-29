@@ -21,8 +21,17 @@ class Admin::StatisticsController < Admin::AdminController
 
   private
 
+  def tab_param
+    case params[:tab]
+    when 'signature_counts'
+      'signature_counts'
+    else
+      'moderation_performance'
+    end
+  end
+
   def set_form
-    @form = Statistics[params[:tab]].build(params)
+    @form = Statistics[tab_param].build(params)
   end
 
   def index_url

@@ -1,6 +1,37 @@
 {
   "ignored_warnings": [
     {
+      "warning_type": "Dynamic Render Path",
+      "warning_code": 15,
+      "fingerprint": "02b75494d25669bf3aba7642f476287cc2d5514897e5bcfeea09aaefcaaf5621",
+      "check_name": "Render",
+      "message": "Render path contains parameter value",
+      "file": "app/views/admin/statistics/index.html.erb",
+      "line": 10,
+      "link": "https://brakemanscanner.org/docs/warning_types/dynamic_render_path/",
+      "code": "render(partial => Statistics[tab_param].build(params).tab, { :locals => ({ :form => FormBuilder.new }) })",
+      "render_path": [
+        {
+          "type": "controller",
+          "class": "Admin::StatisticsController",
+          "method": "create",
+          "line": 17,
+          "file": "app/controllers/admin/statistics_controller.rb",
+          "rendered": {
+            "name": "admin/statistics/index",
+            "file": "app/views/admin/statistics/index.html.erb"
+          }
+        }
+      ],
+      "location": {
+        "type": "template",
+        "template": "admin/statistics/index"
+      },
+      "user_input": "params",
+      "confidence": "Weak",
+      "note": ""
+    },
+    {
       "warning_type": "Cross-Site Scripting",
       "warning_code": 4,
       "fingerprint": "07b7188ce44b7041f5729077eea749b2def4b8e62736ba248267e3c96c1ca927",
@@ -119,6 +150,6 @@
       "note": ""
     }
   ],
-  "updated": "2021-07-05 07:34:53 +0100",
-  "brakeman_version": "5.0.4"
+  "updated": "2023-03-30 00:48:36 +0100",
+  "brakeman_version": "5.1.1"
 }
