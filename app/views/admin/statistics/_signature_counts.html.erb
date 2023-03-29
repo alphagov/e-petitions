@@ -1,0 +1,42 @@
+<div class="grid-row">
+  <div class="grid-column">
+    <%= form_row for: [form.object, :parliament_id] do %>
+      <%= form.label :parliament_id, "Parliament", class: "form-label" %>
+      <%= error_messages_for_field form.object, :parliament_id %>
+      <%= form.select :parliament_id, form.object.parliaments, {}, class: "form-control form-control-1-2" %>
+    <% end %>
+
+    <%= form_row for: [form.object, :breakdown], class: "inline" do %>
+      <%= form.label :breakdown, "Geographical Breakdown", class: "form-label" %>
+      <%= error_messages_for_field form.object, :breakdown %>
+      <div class="multiple-choice">
+        <%= form.radio_button :breakdown, "none" %>
+        <%= form.label :breakdown, "None", for: "report_breakdown_none" %>
+      </div>
+      <div class="multiple-choice">
+        <%= form.radio_button :breakdown, "country" %>
+        <%= form.label :breakdown, "Country", for: "report_breakdown_country" %>
+      </div>
+      <div class="multiple-choice">
+        <%= form.radio_button :breakdown, "region" %>
+        <%= form.label :breakdown, "Region", for: "report_breakdown_region" %>
+      </div>
+      <div class="multiple-choice">
+        <%= form.radio_button :breakdown, "constituency" %>
+        <%= form.label :breakdown, "Constituency", for: "report_breakdown_constituency" %>
+      </div>
+    <% end %>
+  </div>
+</div>
+
+<div class="grid-row">
+  <div class="grid-column">
+    <%= form_row for: [form.object, %i[start finish]] do %>
+      <%= form.label :start, "Signatures validated between", class: 'form-label' %>
+      <%= error_messages_for_field form.object, %i[start finish] %>
+      <%= form.date_field :start, class: 'form-control form-control-1-4' %>
+      <%= form.date_field :finish, class: 'form-control form-control-1-4' %>
+      <small class="form-hint">This is the date on which the signature is validated by clicking the link in the email</small>
+    <% end %>
+  </div>
+</div>

@@ -29,6 +29,7 @@ module Statistics
 
       include ActiveModel::Model
       include ActiveModel::Attributes
+      include ActiveRecord::AttributeMethods::BeforeTypeCast
 
       attr_reader :params
 

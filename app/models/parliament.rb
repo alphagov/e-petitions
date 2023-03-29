@@ -162,6 +162,14 @@ class Parliament < ActiveRecord::Base
     dissolved?(now) || !opened?(now)
   end
 
+  def sitting?(time)
+    if dissolution_at?
+      return false if time.after?(dissolution_at)
+    end
+
+    opening_at? && time.after?(opening_at)
+  end
+
   def period
     if opening_at? && dissolution_at?
       "#{opening_at.year}–#{dissolution_at.year}"

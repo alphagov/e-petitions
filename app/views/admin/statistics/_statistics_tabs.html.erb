@@ -1,3 +1,9 @@
 <p class="tabs" style="margin: 0 0 30px 0">
-  <strong>Moderation Performance</strong>
+  <% if @form.tab == "signature_counts" %>
+    <%= link_to "Moderation Performance", admin_stats_path %> |
+    <strong>Signature Counts</strong>
+  <% else %>
+    <strong>Moderation Performance</strong> |
+    <%= link_to "Signature Counts", admin_stats_path(tab: 'signature_counts') %>
+  <% end %>
 </p>
