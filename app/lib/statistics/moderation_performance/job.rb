@@ -3,7 +3,7 @@ module Statistics
     class Job < Base::Job
       self.report_class = ModerationPerformance::Report
 
-      def perform(user, parliament_id, period)
+      def perform(user, scope, parliament_id, period)
         report.validate!
 
         StatisticsMailer.moderation_performance(user, report).deliver_now

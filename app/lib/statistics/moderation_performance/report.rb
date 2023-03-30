@@ -1,18 +1,21 @@
 module Statistics
   module ModerationPerformance
     class Report < Base::Report
-      attr_reader :parliament_id, :period
+      attr_reader :scope, :parliament_id, :period
 
+      validates :scope, presence: true, inclusion: { in: %w[current archived] }
       validate :parliament_exists, if: :parliament_id?
       validates :period, presence: true, inclusion: { in: %w[week month] }
 
-      def initialize(parliament_id, period)
-        @parliament_id, @period = parliament_id, period
+      def initialize(scope, parliament_id, period)
+        @scope, @parliament_id, @period = scope, parliament_id, period
       end
 
       def filename
         if parliament
           "moderation-performance-#{parliament.period}-by-#{period}.csv"
+        elsif scope == "archived"
+          "moderation-performance-archived-by-#{period}.csv"
         else
           "moderation-performance-by-#{period}.csv"
         end
@@ -47,7 +50,7 @@ module Statistics
       end
 
       def table_name
-        parliament ? "archived_petitions" : "petitions"
+        scope == "current" ? "petitions" : "archived_petitions"
       end
 
       def date_trunc
