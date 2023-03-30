@@ -88,6 +88,7 @@ module Statistics
               c.name AS constituency,
               c.external_id AS id,
               c.ons_code,
+              c.mp_name,
               COALESCE(q.total_signatures, 0) AS total_signatures,
               COALESCE(q.unique_emails, 0) AS unique_emails
             FROM constituencies AS c
@@ -165,7 +166,7 @@ module Statistics
         when 'region'
           return ['Region', 'ID', 'ONS Code', 'Total Signatures', 'Unique Email Addresses']
         when 'constituency'
-          return ['Constituency', 'ID', 'ONS Code', 'Total Signatures', 'Unique Email Addresses']
+          return ['Constituency', 'ID', 'ONS Code', 'MP Name', 'Total Signatures', 'Unique Email Addresses']
         else
           raise RuntimeError, "Unexpected geographical breakdown: #{breakdown}"
         end
