@@ -1,13 +1,14 @@
 module Statistics
   module SignatureCounts
     class Report < Base::Report
-      attr_reader :parliament_id, :breakdown
-      attr_reader :start, :finish
+      attr_reader :scope, :parliament_id
+      attr_reader :breakdown, :start, :finish
 
       validate :parliament_exists, if: :parliament_id?
       validates :breakdown, presence: true, inclusion: { in: %w[none country region constituency] }
 
-      def initialize(parliament_id, breakdown, start, finish)
+      def initialize(scope, parliament_id, breakdown, start, finish)
+        @scope = scope
         @parliament_id = parliament_id
         @breakdown = breakdown
         @start = start
@@ -171,11 +172,11 @@ module Statistics
       end
 
       def petitions
-        parliament ? 'archived_petitions' : 'petitions'
+        scope == 'current' ? 'petitions' : 'archived_petitions'
       end
 
       def signatures
-        parliament ? 'archived_signatures' : 'signatures'
+        scope == 'current' ? 'signatures' : 'archived_signatures'
       end
 
       def breakdown?
@@ -192,7 +193,7 @@ module Statistics
 
       def filename_parts
         [].tap do |f|
-          f << 'signatures'
+          f << (scope == 'current' ? 'signatures' : 'archived-signatures')
           f << "by-#{breakdown}" if breakdown?
           f << "for-#{parliament.period}-parliament" if parliament_id?
           f << "from-#{start.iso8601}" if start?

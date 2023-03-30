@@ -3,12 +3,14 @@ module Statistics
     class Form < Base::Form
       self.job_class = SignatureCounts::Job
 
+      attribute :scope, :string, default: "current"
       attribute :parliament_id, :integer
-      attribute :breakdown, :string
+      attribute :breakdown, :string, default: "none"
       attribute :start, :date
       attribute :finish, :date
 
-      validates :parliament_id, inclusion: { in: :parliament_ids }
+      validates :scope, presence: true, inclusion: { in: %w[current archived] }
+      validates :parliament_id, inclusion: { in: :parliament_ids }, allow_blank: true
       validates :breakdown, presence: true, inclusion: { in: %w[none country region constituency] }
       validates :start, date: true
       validates :finish, date: true
@@ -19,7 +21,7 @@ module Statistics
       validate :finish_is_after_start
 
       def parliaments
-        current_parliament + archived_parliaments
+        @parliaments ||= Parliament.archived.map { |p| [p.name, p.id] }
       end
 
       private
@@ -73,19 +75,11 @@ module Statistics
       end
 
       def job_arguments
-        [parliament_id, breakdown, start, finish]
+        [scope, parliament_id, breakdown, start, finish]
       end
 
       def parliament_ids
         parliaments.map(&:last)
-      end
-
-      def current_parliament
-        [["Current Parliament", nil]]
-      end
-
-      def archived_parliaments
-        @archived_parliaments ||= Parliament.archived.map { |p| [p.name, p.id] }
       end
     end
   end
