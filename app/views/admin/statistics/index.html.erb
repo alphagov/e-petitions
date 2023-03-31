@@ -1,23 +1,20 @@
 <h1>Statistics</h1>
 
-<h2>Moderation performance</h2>
+<div class="grid-row">
+  <div class="grid-column">
+    <%= render "statistics_tabs" %>
+  </div>
+</div>
 
-<ul>
-  <li>
-    <p>
-      Current parliament<br />
-      <%= link_to 'By week', admin_moderation_stats_path(format: :csv, period: 'week') %> |
-      <%= link_to 'By month', admin_moderation_stats_path(format: :csv, period: 'month') %>
-    </p>
-  </li>
+<%= form_for @form, url: [:admin, :stats, tab: @form.tab], as: :report, enforce_utf8: false, method: "post" do |form| %>
+  <%= render partial: @form.tab, locals: { form: form } %>
 
-  <% archived_parliaments.each do |parliament| %>
-    <li>
-      <p>
-        <%= parliament.name %><br />
-        <%= link_to 'By week', admin_moderation_stats_path(format: :csv, period: 'week', parliament: parliament) %> |
-        <%= link_to 'By month', admin_moderation_stats_path(format: :csv, period: 'month', parliament: parliament) %>
-      </p>
-    </li>
-  <% end %>
-</ul>
+  <div class="grid-row" style="margin-top: 30px;">
+    <div class="grid-column">
+      <div>
+        <%= form.submit "Submit request", class: "button" %>
+        <%= link_to "Cancel", admin_root_path, class: "button-secondary" %>
+      </div>
+    </div>
+  </div>
+<% end %>

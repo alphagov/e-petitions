@@ -236,8 +236,8 @@ Rails.application.routes.draw do
       end
 
       scope 'stats', controller: 'statistics' do
-        get '/', action: 'index', as: :stats
-        get '/moderation/:period', action: 'moderation', as: :moderation_stats, period: /week|month/
+        get  '/', action: 'index', as: :stats
+        post '/', action: 'create', as: nil
       end
 
       controller 'user_sessions' do

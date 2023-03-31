@@ -9,6 +9,28 @@ en-GB:
             email:
               invalid: "Email not recognised."
 
+        statistics/moderation_performance/form:
+          attributes:
+            parliament_id:
+              inclusion: "Select a parliament from the list below"
+            period:
+              blank: "Select a period over which to measure performance"
+              inclusion: "Select a period over which to measure performance"
+
+        statistics/signature_counts/form:
+          attributes:
+            parliament_id:
+              inclusion: "Select a parliament from the list below"
+            breakdown:
+              blank: "Select a geographical breakdown over which to measure signature counts"
+              inclusion: "Select a geographical breakdown over which to measure signature counts"
+            start:
+              invalid: "Choose a start date before the finish date"
+              before: "Choose a start date in the past"
+              within: "Choose a start date within the period of the selected parliament"
+            finish:
+              before: "Choose a finish date in the past"
+
   activerecord:
     errors:
       models:

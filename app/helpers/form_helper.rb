@@ -4,7 +4,10 @@ module FormHelper
     classes.push options.delete(:class) if options.key?(:class)
 
     object, field = options.delete(:for)
-    classes.push 'error' if object && object.errors[field].any?
+
+    if object && (object.errors.attribute_names & Array(field)).present?
+      classes.push 'error'
+    end
 
     options[:class] = classes.join(' ')
     content_tag(:div, capture(&block), options)
@@ -14,9 +17,13 @@ module FormHelper
     Location.menu
   end
 
-  def error_messages_for_field(object, field_name, options = {})
-    if errors = object && object.errors[field_name].presence
-      content_tag :span, errors.first, { class: 'error-message' }.merge(options)
+  def error_messages_for_field(object, field, options = {})
+    if object
+      errors = Array(field).map { |f| object.errors[f] }.compact.flatten(1)
+
+      if errors.present?
+        content_tag :span, errors.first, { class: 'error-message' }.merge(options)
+      end
     end
   end
 end

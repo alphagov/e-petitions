@@ -1,0 +1,61 @@
+<div class="grid-row">
+  <div class="grid-column">
+    <%= form_row for: [form.object, :scope], class: "inline" do %>
+      <%= form.label :scope, "Parliament", class: "form-label" %>
+      <%= error_messages_for_field form.object, :scope %>
+      <div class="multiple-choice">
+        <%= form.radio_button :scope, "current" %>
+        <%= form.label :scope, "Current", for: "report_scope_current" %>
+      </div>
+      <div class="multiple-choice">
+        <%= form.radio_button :scope, "archived" %>
+        <%= form.label :scope, "Archived", for: "report_scope_archived" %>
+      </div>
+    <% end %>
+
+    <%= form_row for: [form.object, :parliament_id], style: "display: none;", id: "parliament-menu" do %>
+      <%= error_messages_for_field form.object, :parliament_id %>
+      <%= form.select :parliament_id, form.object.parliaments, { prompt: "-- All archived parliaments --" }, class: "form-control form-control-1-2" %>
+    <% end %>
+
+    <%= form_row for: [form.object, :period], class: "inline" do %>
+      <%= form.label :period, "Period", class: "form-label" %>
+      <%= error_messages_for_field form.object, :period %>
+      <div class="multiple-choice">
+        <%= form.radio_button :period, "week" %>
+        <%= form.label :period, "By week", for: "report_period_week" %>
+      </div>
+      <div class="multiple-choice">
+        <%= form.radio_button :period, "month" %>
+        <%= form.label :period, "By month", for: "report_period_month" %>
+      </div>
+    <% end %>
+  </div>
+</div>
+
+<%= javascript_tag do %>
+  $().ready(function() {
+    var $scope = $('input[name="report[scope]"]');
+    var $archivedScope = $('input[name="report[scope]"][value="archived"]');
+    var $parliamentMenu = $('#parliament-menu');
+
+    var blurAndFocus = function() {
+      this.blur();
+      this.focus();
+    }
+
+    var toggleParliamentMenu = function() {
+      if ($archivedScope.is(':checked')) {
+        $parliamentMenu.show();
+      } else {
+        $parliamentMenu.hide();
+      }
+    }
+
+    $scope.keyup(blurAndFocus).change(function() {
+      toggleParliamentMenu();
+    });
+
+    toggleParliamentMenu();
+  });
+<% end -%>
