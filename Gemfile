@@ -22,7 +22,6 @@ gem 'terser'
 gem 'bcrypt'
 gem 'faker', require: false
 gem 'slack-notifier'
-gem 'daemons'
 gem 'jquery-rails'
 gem 'delayed-web'
 gem 'dalli'

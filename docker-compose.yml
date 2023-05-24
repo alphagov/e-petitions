@@ -3,10 +3,6 @@ version: "3.7"
 x-application: &application
   image: welsh-petitions/ruby
   build: docker/ruby
-  environment:
-    - DATABASE_URL=postgres://postgres:fUG1DnZpy1rNkxiO@postgres:5432
-    - MEMCACHE_SERVERS=memcached:11211
-    - SPROCKETS_CACHE=/cache
   volumes:
     - .:/app
     - bundle:/bundle
@@ -14,6 +10,11 @@ x-application: &application
   depends_on:
     - postgres
     - memcached
+
+x-environment: &environment
+  DATABASE_URL: "postgres://postgres:fUG1DnZpy1rNkxiO@postgres:5432"
+  MEMCACHE_SERVERS: "memcached:11211"
+  SPROCKETS_CACHE: "/cache"
 
 services:
   postgres:
@@ -36,6 +37,8 @@ services:
 
   web:
     <<: *application
+    environment:
+      <<: *environment
     command: [
       "rails", "server",
       "-b", "0.0.0.0",
@@ -48,21 +51,17 @@ services:
 
   worker:
     <<: *application
-    command: [
-      "bin/delayed_job", "start",
-      "-p", "worker",
-      "--min-priority", "10",
-      "--daemon_options", "-t"
-    ]
+    environment:
+      <<: *environment
+      MIN_PRIORITY: "10"
+    command: [ "rake", "jobs:work" ]
 
   counter:
     <<: *application
-    command: [
-      "bin/delayed_job", "start",
-      "-p", "counter",
-      "--max-priority", "5",
-      "--daemon_options", "-t"
-    ]
+    environment:
+      <<: *environment
+      MAX_PRIORITY: "5"
+    command: [ "rake", "jobs:work" ]
 
 volumes:
   bundle:
