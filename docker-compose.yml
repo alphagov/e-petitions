@@ -7,6 +7,8 @@ x-application: &application
     - .:/app
     - bundle:/bundle
     - cache:/cache
+  tmpfs:
+    - /tmp/pids/
   depends_on:
     - postgres
     - memcached
@@ -15,6 +17,7 @@ x-environment: &environment
   DATABASE_URL: "postgres://postgres:fUG1DnZpy1rNkxiO@postgres:5432"
   MEMCACHE_SERVERS: "memcached:11211"
   SPROCKETS_CACHE: "/cache"
+  PIDFILE: "/tmp/pids/server.pid"
 
 services:
   postgres:
