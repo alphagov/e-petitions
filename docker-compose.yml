@@ -26,14 +26,14 @@ services:
       - POSTGRES_PASSWORD=fUG1DnZpy1rNkxiO
       - POSTGRES_DB=postgres
     ports:
-      - "5432:5432"
+      - "127.0.0.1:5432:5432"
     volumes:
       - db:/var/lib/postgresql/data
 
   memcached:
     image: memcached:1.5
-    ports:
-      - "11211:11211"
+    expose:
+      - "11211"
 
   web:
     <<: *application
@@ -45,7 +45,7 @@ services:
       "-p", "3000"
     ]
     ports:
-      - "3000:3000"
+      - "127.0.0.1:3000:3000"
     stdin_open: true
     tty: true
 
