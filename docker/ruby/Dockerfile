@@ -29,6 +29,9 @@ RUN mkdir -p /root/.webdrivers && \
    ln -nfs /usr/bin/chromedriver /root/.webdrivers/chromedriver && \
    /usr/bin/chromedriver --version | cut -d ' ' -f 2 | cat > /root/.webdrivers/chromedriver.version
 
+# Create the crash reports directory - without it Chromium complains on startup
+RUN mkdir -p "/root/.config/chromium/Crash Reports/pending/"
+
 WORKDIR /app
 
 COPY ./docker-entrypoint.sh /docker-entrypoint.sh
