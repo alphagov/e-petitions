@@ -1,7 +1,4 @@
-//= require modules/character-counter
-
 describe('Character counter', function() {
-
   var $ = window.jQuery,
       $textbox,
       $counter;
@@ -97,6 +94,4 @@ describe('Character counter', function() {
       expect($counter.text()).toEqual('-2');
     });
   });
-
 });
-
