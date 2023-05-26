@@ -1,4 +1,4 @@
-FROM ruby:2.7
+FROM ruby:3.0
 
 ENV BUNDLE_PATH=/bundle
 
