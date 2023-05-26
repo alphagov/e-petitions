@@ -16,6 +16,9 @@
 /public/assets
 
 # Ignore build packages
+/node_modules/*
+
+# Ignore build packages
 /pkg
 
 # Ignore generated error files
