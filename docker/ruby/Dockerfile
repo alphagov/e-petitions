@@ -1,4 +1,4 @@
-FROM ruby:2.7
+FROM ruby:3.0
 
 ENV BUNDLE_PATH=/bundle
 
@@ -13,8 +13,10 @@ RUN echo 'deb http://apt.postgresql.org/pub/repos/apt/ bullseye-pgdg main' \
 RUN apt-get install -y libgeos-dev libproj-dev gdal-bin
 
 # Install NodeJS
-RUN curl -sL https://deb.nodesource.com/setup_14.x | bash - && \
-    apt-get install -y nodejs
+ENV PATH=/usr/local/node/bin:$PATH
+RUN curl -sL https://github.com/nodenv/node-build/archive/master.tar.gz | tar xz -C /tmp/ && \
+    /tmp/node-build-master/bin/node-build "14.21.3" /usr/local/node && \
+    rm -rf /tmp/node-build-master
 
 # Install Bundler
 RUN gem install bundler -v 2.3.26
@@ -26,6 +28,9 @@ RUN apt-get install -y chromium chromium-driver
 RUN mkdir -p /root/.webdrivers && \
    ln -nfs /usr/bin/chromedriver /root/.webdrivers/chromedriver && \
    /usr/bin/chromedriver --version | cut -d ' ' -f 2 | cat > /root/.webdrivers/chromedriver.version
+
+# Create the crash reports directory - without it Chromium complains on startup
+RUN mkdir -p "/root/.config/chromium/Crash Reports/pending/"
 
 WORKDIR /app
 
