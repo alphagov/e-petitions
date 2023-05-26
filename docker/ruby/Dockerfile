@@ -13,8 +13,10 @@ RUN echo 'deb http://apt.postgresql.org/pub/repos/apt/ bullseye-pgdg main' \
 RUN apt-get install -y libgeos-dev libproj-dev gdal-bin
 
 # Install NodeJS
-RUN curl -sL https://deb.nodesource.com/setup_14.x | bash - && \
-    apt-get install -y nodejs
+ENV PATH=/usr/local/node/bin:$PATH
+RUN curl -sL https://github.com/nodenv/node-build/archive/master.tar.gz | tar xz -C /tmp/ && \
+    /tmp/node-build-master/bin/node-build "14.21.3" /usr/local/node && \
+    rm -rf /tmp/node-build-master
 
 # Install Bundler
 RUN gem install bundler -v 2.3.26
