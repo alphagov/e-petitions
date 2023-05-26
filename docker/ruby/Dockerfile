@@ -17,7 +17,7 @@ RUN curl -sL https://deb.nodesource.com/setup_14.x | bash - && \
     apt-get install -y nodejs
 
 # Install Bundler
-RUN gem install bundler -v 1.17.3
+RUN gem install bundler -v 2.3.26
 
 # Install Chromium and Chromium-Driver
 RUN apt-get install -y chromium chromium-driver
