@@ -39,6 +39,17 @@ namespace :errors do
       f.write context.render(template: "errors/error", layout: false)
     end
   end
+
+  task :clobber => :environment do
+    %w[400 403 404 406 410 422 500 503].each do |status|
+      html_file = Rails.public_path.join("#{status}.html")
+      File.unlink(html_file) if File.exist?(html_file)
+    end
+
+    css_file = Rails.public_path.join("error.css")
+    File.unlink(css_file) if File.exist?(css_file)
+  end
 end
 
 task 'assets:precompile' => 'errors:precompile'
+task 'assets:clobber' => 'errors:clobber'
