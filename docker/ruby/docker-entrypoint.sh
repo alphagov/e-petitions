@@ -10,5 +10,9 @@ done
 
 echo 'Connected to postgres...'
 
-bundle check || bundle install
-bundle exec "$@"
+if [ "$1" = "bash" ]; then
+  exec "$@"
+else
+  bundle check || bundle install
+  bundle exec "$@"
+fi
