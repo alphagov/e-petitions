@@ -1,3 +1,4 @@
 /log/*
 /pkg/*
 /tmp/*
+/node_modules/*

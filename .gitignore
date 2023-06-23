@@ -15,6 +15,9 @@
 # Ignore precompiled assets
 /public/assets
 
+# Ignore npm packages
+/node_modules/*
+
 # Ignore generated error files
 /public/4*.html
 /public/5*.html

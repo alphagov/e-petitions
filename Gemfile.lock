@@ -178,15 +178,6 @@ GEM
     image_processing (1.12.2)
       mini_magick (>= 4.9.5, < 5)
       ruby-vips (>= 2.0.17, < 3)
-    jasmine (3.7.0)
-      jasmine-core (~> 3.7.0)
-      phantomjs
-      rack (>= 1.2.1)
-      rake
-    jasmine-core (3.7.1)
-    jasmine_selenium_runner (3.0.0)
-      jasmine (~> 3.0)
-      selenium-webdriver (~> 3.8)
     jbuilder (2.10.0)
       activesupport (>= 5.0.0)
     jmespath (1.6.1)
@@ -246,7 +237,6 @@ GEM
     nokogiri (1.14.3-x86_64-linux)
       racc (~> 1.4)
     pg (1.2.3)
-    phantomjs (2.1.1.0)
     pry (0.13.1)
       coderay (~> 1.1)
       method_source (~> 1.0)
@@ -405,8 +395,6 @@ DEPENDENCIES
   faraday
   faraday_middleware
   image_processing
-  jasmine
-  jasmine_selenium_runner
   jbuilder
   jquery-rails
   json
