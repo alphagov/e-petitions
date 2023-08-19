@@ -241,7 +241,7 @@ GEM
       coderay (~> 1.1)
       method_source (~> 1.0)
     public_suffix (5.0.1)
-    puma (4.3.12)
+    puma (5.6.7)
       nio4r (~> 2.0)
     racc (1.7.1)
     rack (2.2.7)
@@ -407,7 +407,7 @@ DEPENDENCIES
   nokogiri
   pg
   pry
-  puma (~> 4.3)
+  puma (~> 5.6)
   rails (= 6.1.7.4)
   rails-controller-testing
   rake
