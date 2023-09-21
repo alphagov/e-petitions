@@ -18,6 +18,7 @@ class ApplicationController < ActionController::Base
     connect_src = %w[connect-src 'self']
     connect_src << "https://apikeys.civiccomputing.com"
     connect_src << "https://www.google-analytics.com"
+    connect_src << "https://region1.google-analytics.com"
 
     script_src = %w[script-src 'self' 'unsafe-inline']
     script_src << "https://cc.cdn.civiccomputing.com"

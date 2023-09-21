@@ -18,9 +18,9 @@ RSpec.describe "Content Security Policy header", type: :request do
     expect(subject).to match(/img-src 'self' data: https:\/\/www\.google-analytics\.com;/)
   end
 
-  it "sets connect-src to 'self' https://apikeys.civiccomputing.com https://www.google-analytics.com" do
+  it "sets connect-src to 'self' https://apikeys.civiccomputing.com https://www.google-analytics.com https://region1.google-analytics.com" do
     get "/"
-    expect(subject).to match(/connect-src 'self' https:\/\/apikeys\.civiccomputing\.com https:\/\/www\.google-analytics\.com;/)
+    expect(subject).to match(/connect-src 'self' https:\/\/apikeys\.civiccomputing\.com https:\/\/www\.google-analytics\.com https:\/\/region1\.google-analytics\.com;/)
   end
 
   it "sets script-src to 'self' 'unsafe-inline' https://cc.cdn.civiccomputing.com https://www.googletagmanager.com https://www.google-analytics.com" do
