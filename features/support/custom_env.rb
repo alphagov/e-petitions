@@ -16,40 +16,40 @@ Capybara.default_selector = :xpath
 Capybara.automatic_label_click = true
 
 Capybara.register_driver :chrome do |app|
-  capabilities = Selenium::WebDriver::Remote::Capabilities.chrome(
-    chromeOptions: {
-      args: [
-        "allow-insecure-localhost",
-        "window-size=1280,960",
-        "proxy-server=127.0.0.1:8443"
-      ],
-      w3c: false
-    },
-    accept_insecure_certs: true
-  )
+  options = Selenium::WebDriver::Chrome::Options.new.tap do |opts|
+    opts.accept_insecure_certs = true
 
-  Capybara::Selenium::Driver.new(app, browser: :chrome, desired_capabilities: capabilities)
-end
+    opts.add_argument('--allow-insecure-localhost')
+    opts.add_argument('--window-size=1280,960')
+    opts.add_argument('--proxy-server=127.0.0.1:8443')
 
-chromeArguments = %w[
-  headless
-  allow-insecure-localhost
-  window-size=1280,960
-  proxy-server=127.0.0.1:8443
-]
+    # Workaround https://bugs.chromium.org/p/chromedriver/issues/detail?id=2650&q=load&sort=-id&colspec=ID%20Status%20Pri%20Owner%20Summary
+    opts.add_argument('--disable-site-isolation-trials')
+  end
 
-if File.exist?("/.dockerenv")
-  # Running as root inside Docker
-  chromeArguments += %w[no-sandbox disable-gpu]
+  Capybara::Selenium::Driver.new(app, browser: :chrome, options: options)
 end
 
 Capybara.register_driver :chrome_headless do |app|
-  capabilities = Selenium::WebDriver::Remote::Capabilities.chrome(
-    chromeOptions: { args: chromeArguments, w3c: false },
-    accept_insecure_certs: true
-  )
+  options = Selenium::WebDriver::Chrome::Options.new.tap do |opts|
+    opts.accept_insecure_certs = true
 
-  Capybara::Selenium::Driver.new(app, browser: :chrome, desired_capabilities: capabilities)
+    opts.add_argument('--headless')
+    opts.add_argument('--allow-insecure-localhost')
+    opts.add_argument('--window-size=1280,960')
+    opts.add_argument('--proxy-server=127.0.0.1:8443')
+
+    if File.exist?("/.dockerenv")
+      # Running as root inside Docker
+      opts.add_argument('--no-sandbox')
+      opts.add_argument('--disable-gpu')
+    end
+
+    # Workaround https://bugs.chromium.org/p/chromedriver/issues/detail?id=2650&q=load&sort=-id&colspec=ID%20Status%20Pri%20Owner%20Summary
+    opts.add_argument('--disable-site-isolation-trials')
+  end
+
+  Capybara::Selenium::Driver.new(app, browser: :chrome, options: options)
 end
 
 Capybara.register_server :wpets do |app, port|

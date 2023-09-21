@@ -3,7 +3,7 @@ source 'https://rubygems.org'
 # Load environment variables
 gem 'dotenv-rails', require: 'dotenv/rails-now'
 
-gem 'rails', '6.1.7.4'
+gem 'rails', '6.1.7.6'
 
 gem 'rake'
 gem 'pg'
@@ -62,11 +62,11 @@ group :test do
   gem 'factory_bot_rails'
   gem 'email_spec'
   gem 'launchy'
-  gem 'webdrivers'
+  gem 'selenium-webdriver'
   gem 'webmock'
   gem 'rails-controller-testing'
 end
 
 group :production do
-  gem 'puma'
+  gem 'puma', '< 6'
 end
