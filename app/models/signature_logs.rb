@@ -3,7 +3,7 @@ require 'ipaddr'
 
 class SignatureLogs
   class Log
-    PATTERN = /(?<ip>\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})(?:, (\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}))* - .{0}- \[(?<day>[\d]{2})\/(?<month>[\w]+)\/(?<year>[\d]{4})\:(?<hour>[\d]{2})\:(?<min>[\d]{2})\:(?<sec>[\d]{2}) [^$]+\] "(?<method>GET|POST|PUT|DELETE) (?<uri>[^\s]+?) HTTP\/1\.1" (?<response>[\d]+) [\d]+ "(?<referrer>[^\s]+?)" "(?<agent>[^\"]+?)"/
+    PATTERN = /\A(?<ip>[^\s,]+)(?:, [^\s]+)* - .{0}- \[(?<day>[\d]{2})\/(?<month>[\w]+)\/(?<year>[\d]{4})\:(?<hour>[\d]{2})\:(?<min>[\d]{2})\:(?<sec>[\d]{2}) [^$]+\] "(?<method>GET|POST|PUT|DELETE) (?<uri>[^\s]+?) HTTP\/1\.1" (?<response>[\d]+) [\d]+ "(?<referrer>[^\s]+?)" "(?<agent>[^\"]+?)"/
     MONTHS = %w[Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec]
     attr_reader :message, :data
 
@@ -126,7 +126,7 @@ class SignatureLogs
       log_group_name: log_group_name,
       start_time: ms(created_at - 5.minutes),
       end_time: ms(created_at + 5.minutes),
-      filter_pattern: ip_address,
+      filter_pattern: ip_address.inspect,
       interleaved: true
     }
 
@@ -144,7 +144,7 @@ class SignatureLogs
       log_group_name: log_group_name,
       start_time: ms(validated_at - 5.minutes),
       end_time: ms(validated_at + 5.minutes),
-      filter_pattern: validated_ip,
+      filter_pattern: validated_ip.inspect,
       interleaved: true
     }
 
@@ -159,7 +159,7 @@ class SignatureLogs
       log_group_name: log_group_name,
       start_time: ms(created_at - 5.minutes),
       end_time: ms(validated_at + 5.minutes),
-      filter_pattern: ip_address,
+      filter_pattern: ip_address.inspect,
       interleaved: true
     }
 

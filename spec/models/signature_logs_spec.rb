@@ -20,6 +20,18 @@ RSpec.describe SignatureLogs do
         expect(log.uri).to eq("/petitions/200000/signatures/new")
         expect(log.agent).to eq("Mozilla/5.0")
       end
+
+      context "and the ip address is a IPv6 address" do
+        let(:ip) { "2001:db8:3a3a:4b4b:5c5c:6d6d:7e7e:8f8f" }
+
+        it "parses a log line" do
+          expect(log.ip_address).to eq("2001:db8:3a3a:4b4b:5c5c:6d6d:7e7e:8f8f")
+          expect(log.timestamp).to eq(Time.utc(2019, 4, 9, 23, 0, 16))
+          expect(log.method).to eq("GET")
+          expect(log.uri).to eq("/petitions/200000/signatures/new")
+          expect(log.agent).to eq("Mozilla/5.0")
+        end
+      end
     end
 
     context "when running behind CloudFront" do
@@ -31,6 +43,18 @@ RSpec.describe SignatureLogs do
         expect(log.method).to eq("GET")
         expect(log.uri).to eq("/petitions/200000/signatures/new")
         expect(log.agent).to eq("Mozilla/5.0")
+      end
+
+      context "and the ip address is a IPv6 address" do
+        let(:ip) { "2001:db8:3a3a:4b4b:5c5c:6d6d:7e7e:8f8f" }
+
+        it "parses a log line" do
+          expect(log.ip_address).to eq("2001:db8:3a3a:4b4b:5c5c:6d6d:7e7e:8f8f")
+          expect(log.timestamp).to eq(Time.utc(2019, 4, 9, 23, 0, 16))
+          expect(log.method).to eq("GET")
+          expect(log.uri).to eq("/petitions/200000/signatures/new")
+          expect(log.agent).to eq("Mozilla/5.0")
+        end
       end
     end
 
@@ -74,7 +98,7 @@ RSpec.describe SignatureLogs do
         log_group_name: "petitions.senedd.wales-nginx-access-logs",
         start_time: 1554850516000,
         end_time: 1554851116000,
-        filter_pattern: "192.168.1.1",
+        filter_pattern: %["192.168.1.1"],
         interleaved: true
       }
     end
@@ -88,7 +112,7 @@ RSpec.describe SignatureLogs do
         log_group_name: "petitions.senedd.wales-nginx-access-logs",
         start_time: 1554851116000,
         end_time: 1554851716000,
-        filter_pattern: "192.168.1.2",
+        filter_pattern: %["192.168.1.2"],
         interleaved: true
       }
     end
