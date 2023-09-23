@@ -10,7 +10,7 @@ You’ll need to have a recent PostgreSQL and PostGIS version installed on your 
 2. [ONS Postcode Directory][2]
 3. [Welsh Output Area to Constituency to Region Lookup][3]
 4. [Constituency Boundaries (Ultra Generalised)][5]
-5. [Region Boundaries (Super Generalised)][6]
+5. [Region Boundaries (Ultra Generalised)][6]
 6. [Country Boundaries (Ultra Generalised)][8]
 7. [Population statistics for Senedd Cymru constituencies][7]
 8. [Population estimates for England, Wales, Scotland and Northern Ireland][9]
@@ -25,7 +25,7 @@ First, ensure the PostGIS extension is enabled in your database:
 CREATE EXTENSION postgis;
 ```
 
-Next, import the constituency boundary line data use the `ogr2ogr` tool. 
+Next, import the constituency boundary line data use the `ogr2ogr` tool.
 
 ``` sh
 ogr2ogr -nlt PROMOTE_TO_MULTI -f "PostgreSQL" PG:"host=localhost dbname=<your-local-database>" scotland_and_wales_const_region.shp
@@ -52,18 +52,18 @@ Whilst the OS data is fine for generating the lookups we need something with les
 First, import the generalised data:
 
 ``` sh
-ogr2ogr -nlt PROMOTE_TO_MULTI -f "PostgreSQL" PG:"host=localhost dbname=<your-local-database>" -nln welsh_constituency_boundaries -unsetFieldWidth 'National_Assembly_for_Wales_Constituencies_(December_2018)_WA_BUC.shp'
+ogr2ogr -nlt PROMOTE_TO_MULTI -f "PostgreSQL" PG:"host=localhost dbname=<your-local-database>" -nln welsh_constituency_boundaries -unsetFieldWidth 'SENC_DEC_2022_WA_BUC.shp'
 ```
 
 Then create an index to optimise performance:
 
 ``` sql
-CREATE UNIQUE INDEX index_welsh_constituency_boundaries_on_nawc18cd ON welsh_constituency_boundaries(nawc18cd);
+CREATE UNIQUE INDEX index_welsh_constituency_boundaries_on_senc22cd ON welsh_constituency_boundaries(senc22cd);
 ```
 
 That completes the import of constituency data.
 
-Next, import the region boundary line data use the `ogr2ogr` tool. 
+Next, import the region boundary line data use the `ogr2ogr` tool.
 
 ``` sh
 ogr2ogr -nlt PROMOTE_TO_MULTI -f "PostgreSQL" PG:"host=localhost dbname=<your-local-database>" scotland_and_wales_region.shp
@@ -84,13 +84,13 @@ The views also do some housekeeping on the names to remove the unnecessary suffi
 Again, we need to use generalised boundary data for interactive performance so import the ONS data for regions:
 
 ``` sh
-ogr2ogr -nlt PROMOTE_TO_MULTI -f "PostgreSQL" PG:"host=localhost dbname=<your-local-database>" -nln welsh_region_boundaries -unsetFieldWidth 'National_Assembly_for_Wales_Electoral_Regions_(December_2018)_Boundaries_WA_BSC.shp'
+ogr2ogr -nlt PROMOTE_TO_MULTI -f "PostgreSQL" PG:"host=localhost dbname=<your-local-database>" -nln welsh_region_boundaries -unsetFieldWidth 'SENER_DEC_2022_WA_BUC.shp'
 ```
 
 Then create an index to optimise performance:
 
 ``` sql
-CREATE UNIQUE INDEX index_welsh_region_boundaries_on_nawer18cd ON welsh_region_boundaries(nawer18cd);
+CREATE UNIQUE INDEX index_welsh_region_boundaries_on_sener22cd ON welsh_region_boundaries(sener22cd);
 ```
 
 That completes the import of region data.
@@ -99,12 +99,12 @@ Next you’ll need to import the output area to constituency to region lookup. S
 
 ``` sql
 CREATE TABLE welsh_oa_to_constituency_to_region_lookup (
-  OA11CD character(9),
-  NAWC18CD character(9),
-  NAWC18NM character varying(100),
-  NAWER18CD character(9),
-  NAWER18NM character varying(100),
-  FID integer PRIMARY KEY
+  OA21CD character(9),
+  SENC21CD character(9),
+  SENC21NM character varying(100),
+  SENER22CD character(9),
+  SENER22NM character varying(100),
+  ObjectId integer PRIMARY KEY
 );
 ```
 
@@ -120,16 +120,16 @@ We need to filter this down to just a constituency to region lookup which we’l
 
 ``` sql
 CREATE MATERIALIZED VIEW welsh_constituency_to_region_lookup AS
-SELECT nawc18cd, nawer18cd
+SELECT senc21cd, sener22cd
 FROM welsh_oa_to_constituency_to_region_lookup
-GROUP BY nawc18cd, nawer18cd
-ORDER BY nawc18cd;
+GROUP BY senc21cd, sener22cd
+ORDER BY senc21cd;
 ```
 
 Also create an index on the constituency code column to make the join more efficient later on:
 
 ``` sql
-CREATE INDEX index_welsh_constituency_to_region_lookup_on_nawc18cd ON welsh_constituency_to_region_lookup(nawc18cd);
+CREATE INDEX index_welsh_constituency_to_region_lookup_on_senc21cd ON welsh_constituency_to_region_lookup(senc21cd);
 ```
 
 Next you’ll need to import the ONS Postcode Directory. This file is very large (in excess of 1GB) but we only need a subset of the data so create the following table to import into:
@@ -159,7 +159,7 @@ This is the meaning of each of the columns:
 To do the import you can use the `COPY` SQL command to read the data but you’ll need to process the CSV file through `cut` first:
 
 ``` sh
-cut -d, -f3,4,5,12,13,17 ONSPD_NOV_2020_UK.csv > ONSPD_REDUCED.csv
+cut -d, -f3,4,5,12,13,17 ONSPD_AUG_2023_UK.csv > ONSPD_REDUCED.csv
 ```
 
 This reduces the data down to a more manageable ~150MB.
@@ -174,8 +174,8 @@ We now need to created materialized views for just the Welsh postcodes:
 
 ``` sql
 CREATE MATERIALIZED VIEW welsh_postcodes AS
-SELECT REPLACE(pcds, ' ', '') AS postcode, 
-ST_SetSRID(ST_MakePoint(oseast1m::integer, osnrth1m::integer), 27700) AS location 
+SELECT REPLACE(pcds, ' ', '') AS postcode,
+ST_SetSRID(ST_MakePoint(oseast1m::integer, osnrth1m::integer), 27700) AS location
 FROM postcodes WHERE ctry = 'W92000004' AND oseast1m != '' AND osnrth1m != '';
 ```
 
@@ -216,10 +216,10 @@ This stage is the core of the processing - for each postcode we need to run a `s
 
 ``` sql
 CREATE MATERIALIZED VIEW welsh_postcode_lookup AS
-SELECT p.postcode, r.spr20cd AS region_id, c.code AS constituency_id
+SELECT p.postcode, r.sener22cd AS region_id, c.code AS constituency_id
 FROM welsh_postcodes p
 JOIN welsh_constituencies c ON st_within(p.location, c.boundary)
-JOIN welsh_constituency_to_region_lookup AS r ON c.code = r.spc20cd;
+JOIN welsh_constituency_to_region_lookup AS r ON c.code = r.senc21cd;
 ```
 
 This is the final table we need to generate our constituency and region geography CSV files - export using the following `COPY` commands:
@@ -227,10 +227,10 @@ This is the final table we need to generate our constituency and region geograph
 ``` sql
 # regions.csv
 COPY (
-  SELECT r.code AS id, r.name AS name_en, '' AS name_cy, u.population,
+  SELECT r.code AS id, b.sener22nm AS name_en, b.sener22nmw AS name_cy, u.population,
   ST_AsEWKT(ST_ReducePrecision(ST_Transform(b.wkb_geometry, 4326), 0.0001)) AS boundary
-  FROM welsh_regions AS r 
-  INNER JOIN welsh_region_boundaries AS b ON r.code = b.nawer18cd
+  FROM welsh_regions AS r
+  INNER JOIN welsh_region_boundaries AS b ON r.code = b.sener22cd
   INNER JOIN welsh_population_by_region AS u ON r.code = u.code
   ORDER BY r.code
 ) TO '/path/to/regions.csv' WITH CSV HEADER FORCE QUOTE *;
@@ -244,16 +244,16 @@ COPY (
     FROM welsh_postcode_lookup AS r
     WHERE r.constituency_id = c.code LIMIT 1
   ) AS region_id,
-  c.name AS name_en, '' AS name_cy, (
-    SELECT p.postcode 
-    FROM welsh_postcode_lookup AS p 
+  b.senc22nm AS name_en, b.senc22nmw AS name_cy, (
+    SELECT p.postcode
+    FROM welsh_postcode_lookup AS p
     WHERE p.constituency_id = c.code
     ORDER BY random() LIMIT 1
   ) AS example_postcode,
   u.population,
   ST_AsEWKT(ST_ReducePrecision(ST_Transform(b.wkb_geometry, 4326), 0.0001)) AS boundary
   FROM welsh_constituencies AS c
-  INNER JOIN welsh_constituency_boundaries AS b ON c.code = b.nawc18cd
+  INNER JOIN welsh_constituency_boundaries AS b ON c.code = b.senc22cd
   INNER JOIN welsh_population_by_constituency AS u ON c.code = u.code
   ORDER BY c.code
 ) TO '/path/to/constituencies.csv' WITH CSV HEADER FORCE QUOTE *;
@@ -308,11 +308,11 @@ COPY (
 ```
 
 [1]: https://osdatahub.os.uk/downloads/open/BoundaryLine
-[2]: https://geoportal.statistics.gov.uk/datasets/ons-postcode-directory-november-2021
-[3]: https://geoportal.statistics.gov.uk/datasets/ons::output-area-to-national-assembly-for-wales-constituency-to-national-assembly-for-wales-electoral-region-december-2018-lookup-in-wales/explore
-[4]: https://www.postgresql.org/docs/10/sql-creatematerializedview.html
-[5]: https://geoportal.statistics.gov.uk/datasets/ons::national-assembly-for-wales-constituencies-december-2018-wa-buc
-[6]: https://geoportal.statistics.gov.uk/datasets/ons::national-assembly-for-wales-electoral-regions-december-2018-boundaries-wa-bsc
+[2]: https://geoportal.statistics.gov.uk/datasets/ons-postcode-directory-august-2023/about
+[3]: https://geoportal.statistics.gov.uk/datasets/ons::output-area-2021-to-senedd-cymru-constituency-to-senedd-cymru-electoral-region-december-2022-lookup-in-wales/explore
+[4]: https://www.postgresql.org/docs/11/sql-creatematerializedview.html
+[5]: https://geoportal.statistics.gov.uk/datasets/ons::senedd-cymru-constituencies-december-2022-boundaries-wa-buc-2/explore
+[6]: https://geoportal.statistics.gov.uk/datasets/ons::senedd-cymru-electoral-regions-december-2022-wa-buc-2/explore
 [7]: https://gov.wales/data-senedd-cymru-constituency-areas-2021
 [8]: https://geoportal.statistics.gov.uk/datasets/ons::countries-december-2021-uk-buc/about
 [9]: https://www.ons.gov.uk/peoplepopulationandcommunity/populationandmigration/populationestimates/datasets/populationestimatesforukenglandandwalesscotlandandnorthernireland
