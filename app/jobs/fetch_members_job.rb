@@ -26,6 +26,8 @@ class FetchMembersJob < ApplicationJob
   end
 
   def perform
+    return if @translated_members.empty?
+
     Member.transaction do
       Member.update_all(region_id: nil, constituency_id: nil)
 

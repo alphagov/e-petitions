@@ -170,8 +170,9 @@ RSpec.describe FetchMembersJob, type: :job do
         stub_members_cy_api.to_timeout
       end
 
-      it "doesn't import any members" do
-        expect { described_class.perform_now }.not_to change { Member.count }
+      it "doesn't reset the members" do
+        expect(Member).not_to receive(:update_all).with(region_id: nil, constituency_id: nil)
+        described_class.perform_now
       end
     end
 
@@ -181,8 +182,9 @@ RSpec.describe FetchMembersJob, type: :job do
         stub_members_cy_api.to_return(xml_response(:proxy_authentication_required))
       end
 
-      it "doesn't import any members" do
-        expect { described_class.perform_now }.not_to change { Member.count }
+      it "doesn't reset the members" do
+        expect(Member).not_to receive(:update_all).with(region_id: nil, constituency_id: nil)
+        described_class.perform_now
       end
     end
 
@@ -192,8 +194,9 @@ RSpec.describe FetchMembersJob, type: :job do
         stub_members_cy_api.to_return(xml_response(:not_found))
       end
 
-      it "doesn't import any members" do
-        expect { described_class.perform_now }.not_to change { Member.count }
+      it "doesn't reset the members" do
+        expect(Member).not_to receive(:update_all).with(region_id: nil, constituency_id: nil)
+        described_class.perform_now
       end
     end
 
@@ -203,8 +206,9 @@ RSpec.describe FetchMembersJob, type: :job do
         stub_members_cy_api.to_return(xml_response(:not_acceptable))
       end
 
-      it "doesn't import any members" do
-        expect { described_class.perform_now }.not_to change { Member.count }
+      it "doesn't reset the members" do
+        expect(Member).not_to receive(:update_all).with(region_id: nil, constituency_id: nil)
+        described_class.perform_now
       end
     end
 
@@ -214,8 +218,9 @@ RSpec.describe FetchMembersJob, type: :job do
         stub_members_cy_api.to_return(xml_response(:internal_server_error))
       end
 
-      it "doesn't import any members" do
-        expect { described_class.perform_now }.not_to change { Member.count }
+      it "doesn't reset the members" do
+        expect(Member).not_to receive(:update_all).with(region_id: nil, constituency_id: nil)
+        described_class.perform_now
       end
     end
   end
