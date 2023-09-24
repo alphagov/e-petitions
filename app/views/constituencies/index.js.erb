@@ -14,7 +14,10 @@
       properties.totalSignatures = petition.signature_count;
       properties.percentageOfSignatures = properties.signatures / properties.totalSignatures;
       properties.percentageOfPopulation = properties.signatures / properties.population;
-      properties.partyColour = properties.member.colour;
+
+      if (properties.member) {
+        properties.partyColour = properties.member.colour;
+      }
 
       maxSignatures = Math.max(maxSignatures, properties.percentageOfSignatures);
       maxPopulation = Math.max(maxPopulation, properties.percentageOfPopulation);
