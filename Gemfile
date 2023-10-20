@@ -57,7 +57,7 @@ group :test do
   gem 'factory_bot_rails'
   gem 'email_spec'
   gem 'launchy'
-  gem 'webdrivers'
+  gem 'selenium-webdriver'
   gem 'webmock'
   gem 'rails-controller-testing'
 end
