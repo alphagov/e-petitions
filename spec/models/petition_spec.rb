@@ -2356,6 +2356,7 @@ RSpec.describe Petition, type: :model do
         signature_count: signature_count,
         last_signed_at: 2.days.ago,
         updated_at: 2.days.ago,
+        moderation_threshold_reached_at: 5.days.ago.floor,
         response_threshold_reached_at: 2.days.ago,
         debate_threshold_reached_at: 2.days.ago,
         debate_state: debate_state
@@ -2379,7 +2380,60 @@ RSpec.describe Petition, type: :model do
       it "does nothing" do
         expect{
           petition.decrement_signature_count!
-        }.not_to change{ petition.signature_count }
+        }.not_to change {
+          petition.signature_count
+        }
+      end
+    end
+
+    context "when the signature count crosses below the threshold for a debate" do
+      let(:signature_count) { 6 }
+
+      before do
+        expect(Site).to receive(:threshold_for_moderation).and_return(5)
+      end
+
+      it "doesn't reset the timestamp" do
+        expect {
+          petition.decrement_signature_count!
+        }.not_to change {
+          petition.moderation_threshold_reached_at
+        }
+      end
+
+      it "doesn't reset the state" do
+        expect {
+          petition.decrement_signature_count!
+        }.not_to change {
+          petition.state
+        }
+      end
+
+      context "and the petition has not been moderated" do
+        let(:petition) do
+          FactoryBot.create(:sponsored_petition, {
+            signature_count: signature_count,
+            last_signed_at: 2.days.ago,
+            updated_at: 2.days.ago,
+            moderation_threshold_reached_at: 5.days.ago.floor
+          })
+        end
+
+        it "resets the timestamp" do
+          expect {
+            petition.decrement_signature_count!
+          }.to change {
+            petition.moderation_threshold_reached_at
+          }.to(nil)
+        end
+
+        it "resets the state" do
+          expect {
+            petition.decrement_signature_count!
+          }.to change {
+            petition.state
+          }.to("validated")
+        end
       end
     end
 
