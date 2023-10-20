@@ -367,8 +367,12 @@ RSpec.describe PetitionMailer, type: :mailer do
       expect(mail).to have_body_text(%r[Once you’ve gained the required number of supporters])
     end
 
+    it "includes information about how long the moderation will take" do
+      expect(mail).to have_body_text(%r[This usually takes a week or less])
+    end
+
     it "doesn't include information about delayed moderation" do
-      expect(mail).not_to have_body_text(%r[we have a very large number of petitions to check])
+      expect(mail).not_to have_body_text(%r[We have a very large number of petitions to check])
     end
 
     context "during Christmas" do
@@ -384,11 +388,28 @@ RSpec.describe PetitionMailer, type: :mailer do
         let(:moderation_queue) { 500 }
 
         it "includes information about delayed moderation" do
-          expect(mail).to have_body_text(%r[we have a very large number of petitions to check])
+          expect(mail).to have_body_text(%r[We have a very large number of petitions to check])
         end
 
         it "doesn't include information about Christmas" do
           expect(mail).not_to have_body_text(%r[but over the Christmas period it will take us a little longer])
+        end
+
+        context "and the moderation delay message has been customized" do
+          before do
+            allow(Site).to receive(:moderation_delay_message).and_return <<~MESSAGE.squish
+              Due to recent world events we have a very large number of petitions to
+              check at the moment so it may take a few weeks. Thank you for your patience.
+            MESSAGE
+          end
+
+          it "includes the custom message" do
+            expect(mail).to have_body_text(%r[Due to recent world events])
+          end
+
+          it "doesn't include the normal message" do
+            expect(mail).not_to have_body_text(%r[This usually takes a week or less])
+          end
         end
       end
     end
@@ -406,11 +427,28 @@ RSpec.describe PetitionMailer, type: :mailer do
         let(:moderation_queue) { 500 }
 
         it "includes information about delayed moderation" do
-          expect(mail).to have_body_text(%r[we have a very large number of petitions to check])
+          expect(mail).to have_body_text(%r[We have a very large number of petitions to check])
         end
 
         it "doesn't include information about Christmas" do
           expect(mail).not_to have_body_text(%r[but over the Easter period it will take us a little longer])
+        end
+
+        context "and the moderation delay message has been customized" do
+          before do
+            allow(Site).to receive(:moderation_delay_message).and_return <<~MESSAGE.squish
+              Due to recent world events we have a very large number of petitions to
+              check at the moment so it may take a few weeks. Thank you for your patience.
+            MESSAGE
+          end
+
+          it "includes the custom message" do
+            expect(mail).to have_body_text(%r[Due to recent world events])
+          end
+
+          it "doesn't include the normal message" do
+            expect(mail).not_to have_body_text(%r[This usually takes a week or less])
+          end
         end
       end
     end
@@ -419,7 +457,24 @@ RSpec.describe PetitionMailer, type: :mailer do
       let(:moderation_queue) { 500 }
 
       it "includes information about delayed moderation" do
-        expect(mail).to have_body_text(%r[we have a very large number of petitions to check])
+        expect(mail).to have_body_text(%r[We have a very large number of petitions to check])
+      end
+
+      context "and the moderation delay message has been customized" do
+        before do
+          allow(Site).to receive(:moderation_delay_message).and_return <<~MESSAGE.squish
+            Due to recent world events we have a very large number of petitions to
+            check at the moment so it may take a few weeks. Thank you for your patience.
+          MESSAGE
+        end
+
+        it "includes the custom message" do
+          expect(mail).to have_body_text(%r[Due to recent world events])
+        end
+
+        it "doesn't include the normal message" do
+          expect(mail).not_to have_body_text(%r[This usually takes a week or less])
+        end
       end
     end
 

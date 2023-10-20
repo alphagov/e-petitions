@@ -164,6 +164,10 @@ class Site < ActiveRecord::Base
       instance.show_feedback_page_message?
     end
 
+    def moderation_delay_message
+      instance.moderation_delay_message
+    end
+
     def disable_signature_counts!
       instance.update!(update_signature_counts: false)
     end
@@ -371,6 +375,7 @@ class Site < ActiveRecord::Base
   store_accessor :feature_flags, :feedback_page_message
   store_accessor :feature_flags, :feedback_page_message_colour
   store_accessor :feature_flags, :show_feedback_page_message
+  store_accessor :feature_flags, :moderation_delay_message
 
   attr_reader :password
 
@@ -408,6 +413,17 @@ class Site < ActiveRecord::Base
 
   def show_feedback_page_message=(value)
     super(type_cast_feature_flag(value))
+  end
+
+  def moderation_delay_message
+    super.presence || <<~MESSAGE.squish
+      We have a very large number of petitions to check at the moment so it may take
+      us longer than usual to check your petition. Thank you for your patience.
+    MESSAGE
+  end
+
+  def moderation_delay_message=(value)
+    super(value.to_s.squish.presence)
   end
 
   def authenticate(username, password)
@@ -528,6 +544,7 @@ class Site < ActiveRecord::Base
   validates :feedback_page_message, presence: true, if: -> { show_feedback_page_message? }
   validates :feedback_page_message, length: { maximum: 800 }
   validates :feedback_page_message_colour, inclusion: { in: MESSAGE_COLOURS }, allow_blank: true
+  validates :moderation_delay_message, presence: true, length: { maximum: 500 }
 
   validate if: :protected? do
     errors.add(:password, :blank) unless password_digest?
