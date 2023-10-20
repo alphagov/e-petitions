@@ -129,6 +129,35 @@ RSpec.describe SponsorMailer, type: :mailer do
       it "tells the creator that the petition is being checked" do
         expect(mail).to have_body_text(%r[We’re checking your petition to make sure it meets the petition standards])
       end
+
+      context "when there is a moderation delay" do
+        let(:moderation_queue) { 500 }
+
+        it "includes information about delayed moderation" do
+          expect(mail).to have_body_text(%r[We have a very large number of petitions to check])
+        end
+
+        it "doesn't include the normal message" do
+          expect(mail).not_to have_body_text(%r[This usually takes a week or less])
+        end
+
+        context "and the moderation delay message has been customized" do
+          before do
+            allow(Site).to receive(:moderation_delay_message).and_return <<~MESSAGE.squish
+              Due to recent world events we have a very large number of petitions to
+              check at the moment so it may take a few weeks. Thank you for your patience.
+            MESSAGE
+          end
+
+          it "includes the custom message" do
+            expect(mail).to have_body_text(%r[Due to recent world events])
+          end
+
+          it "doesn't include the normal message" do
+            expect(mail).not_to have_body_text(%r[This usually takes a week or less])
+          end
+        end
+      end
     end
 
     context "before the Christmas period" do
@@ -140,18 +169,6 @@ RSpec.describe SponsorMailer, type: :mailer do
 
       it "doesn't include the moderation delay message" do
         expect(mail).not_to have_body_text(%r[over the Christmas period it will take us a little longer than usual])
-      end
-
-      context "when there is a moderation delay" do
-        let(:moderation_queue) { 500 }
-
-        it "includes information about delayed moderation" do
-          expect(mail).to have_body_text(%r[we have a very large number of petitions to check])
-        end
-
-        it "doesn't include the normal message" do
-          expect(mail).not_to have_body_text(%r[This usually takes a week or less])
-        end
       end
     end
 
@@ -169,10 +186,6 @@ RSpec.describe SponsorMailer, type: :mailer do
       context "when there is a moderation delay" do
         let(:moderation_queue) { 500 }
 
-        it "includes information about delayed moderation" do
-          expect(mail).to have_body_text(%r[we have a very large number of petitions to check])
-        end
-
         it "doesn't include information about Christmas" do
           expect(mail).not_to have_body_text(%r[over the Christmas period it will take us a little longer])
         end
@@ -189,18 +202,6 @@ RSpec.describe SponsorMailer, type: :mailer do
       it "doesn't include the moderation delay message" do
         expect(mail).not_to have_body_text(%r[over the Christmas period it will take us a little longer than usual])
       end
-
-      context "when there is a moderation delay" do
-        let(:moderation_queue) { 500 }
-
-        it "includes information about delayed moderation" do
-          expect(mail).to have_body_text(%r[we have a very large number of petitions to check])
-        end
-
-        it "doesn't include the normal message" do
-          expect(mail).not_to have_body_text(%r[This usually takes a week or less])
-        end
-      end
     end
 
     context "before the Easter period" do
@@ -212,18 +213,6 @@ RSpec.describe SponsorMailer, type: :mailer do
 
       it "doesn't include the moderation delay message" do
         expect(mail).not_to have_body_text(%r[over the Easter period it will take us a little longer than usual])
-      end
-
-      context "when there is a moderation delay" do
-        let(:moderation_queue) { 500 }
-
-        it "includes information about delayed moderation" do
-          expect(mail).to have_body_text(%r[we have a very large number of petitions to check])
-        end
-
-        it "doesn't include the normal message" do
-          expect(mail).not_to have_body_text(%r[This usually takes a week or less])
-        end
       end
     end
 
@@ -241,10 +230,6 @@ RSpec.describe SponsorMailer, type: :mailer do
       context "when there is a moderation delay" do
         let(:moderation_queue) { 500 }
 
-        it "includes information about delayed moderation" do
-          expect(mail).to have_body_text(%r[we have a very large number of petitions to check])
-        end
-
         it "doesn't include information about Easter" do
           expect(mail).not_to have_body_text(%r[over the Easter period it will take us a little longer than usual])
         end
@@ -260,18 +245,6 @@ RSpec.describe SponsorMailer, type: :mailer do
 
       it "doesn't include the moderation delay message" do
         expect(mail).not_to have_body_text(%r[over the Easter period it will take us a little longer than usual])
-      end
-
-      context "when there is a moderation delay" do
-        let(:moderation_queue) { 500 }
-
-        it "includes information about delayed moderation" do
-          expect(mail).to have_body_text(%r[we have a very large number of petitions to check])
-        end
-
-        it "doesn't include the normal message" do
-          expect(mail).not_to have_body_text(%r[This usually takes a week or less])
-        end
       end
     end
   end

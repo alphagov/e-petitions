@@ -65,6 +65,8 @@ RSpec.describe Site, type: :model do
     it { is_expected.to validate_inclusion_of(:petition_page_message_colour).in_array(Site::MESSAGE_COLOURS).allow_blank }
     it { is_expected.to validate_inclusion_of(:feedback_page_message_colour).in_array(Site::MESSAGE_COLOURS).allow_blank }
 
+    it { is_expected.to validate_length_of(:moderation_delay_message).is_at_most(500) }
+
     %w[
       petition_duration minimum_number_of_sponsors maximum_number_of_sponsors threshold_for_moderation
       threshold_for_moderation_delay threshold_for_response threshold_for_debate login_timeout
@@ -317,6 +319,11 @@ RSpec.describe Site, type: :model do
     it "delegates feedback_page_message_colour to the instance" do
       expect(site).to receive(:feedback_page_message_colour).and_return("black")
       expect(Site.feedback_page_message_colour).to eq("black")
+    end
+
+    it "delegates moderation_delay_message to the instance" do
+      expect(site).to receive(:moderation_delay_message).and_return("message")
+      expect(Site.moderation_delay_message).to eq("message")
     end
   end
 

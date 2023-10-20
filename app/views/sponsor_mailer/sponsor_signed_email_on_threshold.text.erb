@@ -5,7 +5,7 @@ Your petition is nearly ready to go.
 <%= @sponsor.name %> supported your petition – "<%= @petition.action %>".
 
 <% if moderation_delay? %>
-<%= @sponsor_count %> people have supported your petition so far. We’re checking your petition to make sure it meets the petition standards. If it does, we’ll publish it. Because of Coronavirus we have a very large number of petitions to check at the moment so it may take a few weeks. Thank you for your patience.
+<%= @sponsor_count %> people have supported your petition so far. We’re checking your petition to make sure it meets the petition standards. If it does, we’ll publish it. <%= moderation_delay_message %>
 <% elsif christmas_period? %>
 <%= @sponsor_count %> people have supported your petition so far. We’re checking your petition to make sure it meets the petition standards. If it does, we’ll publish it. This usually takes a week or less but over the Christmas period it will take us a little longer than usual. We’ll check your petition as quickly as we can.
 <% elsif easter_period? %>

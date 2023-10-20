@@ -3,34 +3,6 @@ require 'rspec/core/pending'
 require 'rspec/mocks'
 require 'multi_test'
 require 'faker'
-require 'webdrivers/chromedriver'
-
-# Monkey patch the webdrivers gem to handle name change as
-# dependencies elsewhere prevent us from upgrading selenium
-# https://github.com/titusfortner/webdrivers/issues/237
-module Webdrivers
-  Chromedriver.class_eval do
-    def self.apple_filename(driver_version)
-      if apple_m1_compatible?(driver_version)
-        driver_version >= normalize_version('106.0.5249.61') ? 'mac_arm64' : 'mac64_m1'
-      else
-        'mac64'
-      end
-    end
-
-    def self.driver_filename(driver_version)
-      if System.platform == 'win' || System.wsl_v1?
-        'win32'
-      elsif System.platform == 'linux'
-        'linux64'
-      elsif System.platform == 'mac'
-        apple_filename(driver_version)
-      else
-        raise 'Failed to determine driver filename to download for your OS.'
-      end
-    end
-  end
-end
 
 MultiTest.disable_autorun
 
@@ -43,40 +15,40 @@ Capybara.default_selector = :xpath
 Capybara.automatic_label_click = true
 
 Capybara.register_driver :chrome do |app|
-  capabilities = Selenium::WebDriver::Remote::Capabilities.chrome(
-    chromeOptions: {
-      args: [
-        "allow-insecure-localhost",
-        "window-size=1280,960",
-        "proxy-server=127.0.0.1:8443"
-      ],
-      w3c: false
-    },
-    accept_insecure_certs: true
-  )
+  options = Selenium::WebDriver::Chrome::Options.new.tap do |opts|
+    opts.accept_insecure_certs = true
 
-  Capybara::Selenium::Driver.new(app, browser: :chrome, desired_capabilities: capabilities)
-end
+    opts.add_argument('--allow-insecure-localhost')
+    opts.add_argument('--window-size=1280,960')
+    opts.add_argument('--proxy-server=127.0.0.1:8443')
 
-chromeArguments = %w[
-  headless
-  allow-insecure-localhost
-  window-size=1280,960
-  proxy-server=127.0.0.1:8443
-]
+    # Workaround https://bugs.chromium.org/p/chromedriver/issues/detail?id=2650&q=load&sort=-id&colspec=ID%20Status%20Pri%20Owner%20Summary
+    opts.add_argument('--disable-site-isolation-trials')
+  end
 
-if File.exist?("/.dockerenv")
-  # Running as root inside Docker
-  chromeArguments += %w[no-sandbox disable-gpu]
+  Capybara::Selenium::Driver.new(app, browser: :chrome, options: options)
 end
 
 Capybara.register_driver :chrome_headless do |app|
-  capabilities = Selenium::WebDriver::Remote::Capabilities.chrome(
-    chromeOptions: { args: chromeArguments, w3c: false },
-    accept_insecure_certs: true
-  )
+  options = Selenium::WebDriver::Chrome::Options.new.tap do |opts|
+    opts.accept_insecure_certs = true
 
-  Capybara::Selenium::Driver.new(app, browser: :chrome, desired_capabilities: capabilities)
+    opts.add_argument('--headless')
+    opts.add_argument('--allow-insecure-localhost')
+    opts.add_argument('--window-size=1280,960')
+    opts.add_argument('--proxy-server=127.0.0.1:8443')
+
+    if File.exist?("/.dockerenv")
+      # Running as root inside Docker
+      opts.add_argument('--no-sandbox')
+      opts.add_argument('--disable-gpu')
+    end
+
+    # Workaround https://bugs.chromium.org/p/chromedriver/issues/detail?id=2650&q=load&sort=-id&colspec=ID%20Status%20Pri%20Owner%20Summary
+    opts.add_argument('--disable-site-isolation-trials')
+  end
+
+  Capybara::Selenium::Driver.new(app, browser: :chrome, options: options)
 end
 
 Capybara.register_server :epets do |app, port|

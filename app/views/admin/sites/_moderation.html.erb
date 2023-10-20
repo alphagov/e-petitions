@@ -13,6 +13,12 @@
       <%= error_messages_for_field @site, :threshold_for_moderation_delay %>
       <%= form.text_field :threshold_for_moderation_delay, tabindex: increment, maxlength: 10, class: "form-control form-control-1-2" %>
     <% end %>
+
+    <%= form_row for: [form.object, :moderation_delay_message], id: "moderation-delay-message" do %>
+      <%= form.label :moderation_delay_message, "Moderation delayed message", class: "form-label" %>
+      <%= error_messages_for_field @site, :moderation_delay_message %>
+      <%= form.text_area :moderation_delay_message, tabindex: increment, rows: 5, class: 'form-control' %>
+    <% end %>
   </div>
   <div class="column-half extra-gutter">
     <%= form_row for: [form.object, :minimum_number_of_sponsors] do %>
