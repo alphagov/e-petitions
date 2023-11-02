@@ -153,8 +153,10 @@ module Archived
           scope = scope.for_postcode(query)
         elsif sector_search?(query)
           scope = scope.for_sector(query)
-        else
+        elsif query.present?
           scope = scope.for_name(query)
+        else
+          scope = scope.none
         end
 
         scope.paginate(page: page, per_page: 50)
