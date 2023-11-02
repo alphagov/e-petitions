@@ -16,5 +16,5 @@ else
   yarn install
   bundle check || bundle install
 
-  bundle exec "$@"
+  exec bundle exec "$@"
 fi

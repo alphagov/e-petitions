@@ -58,14 +58,18 @@ class PetitionCSVPresenter
     petition.note.details if petition.note
   end
 
+  def statistics
+    petition.respond_to?(:statistics) && petition.statistics
+  end
+
   def subscriber_count
-    if petition.statistics.refreshed?
+    if statistics && statistics.refreshed?
       csv_escape petition.statistics.subscriber_count
     end
   end
 
   def subscription_rate
-    if petition.statistics.refreshed?
+    if statistics && statistics.refreshed?
       csv_escape petition.statistics.subscription_rate
     end
   end
