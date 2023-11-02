@@ -3,13 +3,6 @@ version: "3.7"
 x-application: &application
   image: e-petitions/ruby
   build: docker/ruby
-  environment:
-    - DATABASE_URL=postgres://postgres:ZW4IvOPrXcbp2hyp@postgres:5432
-    - MEMCACHE_SERVERS=memcached:11211
-    - SMTP_HOST=mailcatcher
-    - SMTP_PORT=1025
-    - SPROCKETS_CACHE=/cache
-    - PIDFILE=/tmp/pids/server.pid
   volumes:
     - .:/app
     - bundle:/bundle
@@ -21,6 +14,14 @@ x-application: &application
     - postgres
     - mailcatcher
     - memcached
+
+x-environment: &environment
+  DATABASE_URL: "postgres://postgres:ZW4IvOPrXcbp2hyp@postgres:5432"
+  MEMCACHE_SERVERS: "memcached:11211"
+  SMTP_HOST: "mailcatcher"
+  SMTP_PORT: "1025"
+  SPROCKETS_CACHE: "/cache"
+  PIDFILE: "/tmp/pids/server.pid"
 
 services:
   postgres:
@@ -50,6 +51,8 @@ services:
 
   web:
     <<: *application
+    environment:
+      <<: *environment
     command: [
       "rails", "server",
       "-b", "0.0.0.0",
@@ -62,21 +65,17 @@ services:
 
   worker:
     <<: *application
-    command: [
-      "bin/delayed_job", "start",
-      "-p", "worker",
-      "--min-priority", "10",
-      "--daemon_options", "-t"
-    ]
+    environment:
+      <<: *environment
+      MIN_PRIORITY: "10"
+    command: [ "rake", "jobs:work" ]
 
   counter:
     <<: *application
-    command: [
-      "bin/delayed_job", "start",
-      "-p", "counter",
-      "--max-priority", "5",
-      "--daemon_options", "-t"
-    ]
+    environment:
+      <<: *environment
+      MAX_PRIORITY: "5"
+    command: [ "rake", "jobs:work" ]
 
 volumes:
   bundle:
