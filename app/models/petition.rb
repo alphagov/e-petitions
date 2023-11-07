@@ -33,7 +33,7 @@ class Petition < ActiveRecord::Base
   COLLECTING_SPONSORS_STATES = %w[pending validated]
   STOP_COLLECTING_STATES     = %w[pending validated sponsored flagged dormant]
 
-  RESTORABLE_STATES = %w[flagged dormant rejected]
+  RESTORABLE_STATES = %w[flagged dormant rejected hidden]
   REJECTABLE_STATES = %w[pending validated sponsored flagged dormant]
   FLAGGABLE_STATES  = %w[pending validated sponsored]
 
