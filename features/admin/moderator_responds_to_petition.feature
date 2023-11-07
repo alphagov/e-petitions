@@ -189,3 +189,41 @@ Feature: Moderator respond to petition
     Then the creator should not receive a notification email
     And the petition is not available for searching or viewing
     But the petition will still show up in the back-end reporting
+
+  @javascript
+  Scenario: Moderator publishes a hidden petition
+    Given I am logged in as a sysadmin named "Ben Macintosh"
+    When I look at the next petition on my list
+    And I reject the petition with a reason code "Confidential, libellous, false, defamatory or references a court case"
+    Then I should see "Hidden by Ben Macintosh"
+    And the creator should receive a libel/profanity rejection notification email
+    And the petition is not available for searching or viewing
+    Given no emails have been sent
+    When I revisit the petition
+    Then the petition can no longer be rejected
+    And the petition can no longer be marked as dormant
+    But it can still be approved
+    And it can still be restored
+    When I publish the petition
+    Then I should see "Published by Ben Macintosh"
+    And the petition should be visible on the site for signing
+    And the creator should receive a notification email
+
+  @javascript
+  Scenario: Moderator restores a hidden petition
+    Given I am logged in as a sysadmin named "Ben Macintosh"
+    When I look at the next petition on my list
+    And I reject the petition with a reason code "Confidential, libellous, false, defamatory or references a court case"
+    Then I should see "Hidden by Ben Macintosh"
+    And the creator should receive a libel/profanity rejection notification email
+    And the petition is not available for searching or viewing
+    Given no emails have been sent
+    When I revisit the petition
+    Then the petition can no longer be rejected
+    And the petition can no longer be marked as dormant
+    But it can still be approved
+    And it can still be restored
+    When I restore to a sponsored state
+    Then the creator should not receive a notification email
+    And the petition is not available for searching or viewing
+    But the petition will still show up in the back-end reporting
