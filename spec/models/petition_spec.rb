@@ -2781,6 +2781,102 @@ RSpec.describe Petition, type: :model do
         }.from('rejected').to('open')
       end
     end
+
+    context "when restoring a petition" do
+      shared_examples "restoring a rejected petition" do
+        it "restores it to the 'sponsored' state" do
+          expect {
+            petition.moderate(params)
+          }.to change {
+            petition.reload.state
+          }.from('rejected').to('sponsored')
+        end
+
+        it "removes the rejection" do
+          expect {
+            petition.moderate(params)
+          }.to change {
+            petition.reload.rejection
+          }.from(an_instance_of(Rejection)).to(nil)
+        end
+
+        it "resets the rejected_at timestamp" do
+          expect {
+            petition.moderate(params)
+          }.to change {
+            petition.reload.rejected_at
+          }.from(within(1.minute).of(rejected_at)).to(nil)
+        end
+      end
+
+      let(:params) do
+        { moderation: "restore" }
+      end
+
+      let(:rejected_at) do
+        2.weeks.ago
+      end
+
+      context "that was previously rejected" do
+        let(:petition) do
+          FactoryBot.create(
+            :rejected_petition,
+            rejected_at: rejected_at
+          )
+        end
+
+        it_behaves_like "restoring a rejected petition"
+      end
+
+      context "that was previously published and taken down" do
+        let(:petition) do
+          FactoryBot.create(
+            :rejected_petition,
+            rejected_at: rejected_at,
+            open_at: 5.months.ago
+          )
+        end
+
+        it_behaves_like "restoring a rejected petition"
+
+        it "resets the open_at timestamp" do
+          expect {
+            petition.moderate(params)
+          }.to change {
+            petition.reload.open_at
+          }.from(within(1.minute).of(5.months.ago)).to(nil)
+        end
+      end
+
+      context "that was previously published, closed and taken down" do
+        let(:petition) do
+          FactoryBot.create(
+            :rejected_petition,
+            rejected_at: rejected_at,
+            open_at: 7.months.ago,
+            closed_at: 1.month.ago
+          )
+        end
+
+        it_behaves_like "restoring a rejected petition"
+
+        it "resets the open_at timestamp" do
+          expect {
+            petition.moderate(params)
+          }.to change {
+            petition.reload.open_at
+          }.from(within(1.minute).of(7.months.ago)).to(nil)
+        end
+
+        it "resets the closed_at timestamp" do
+          expect {
+            petition.moderate(params)
+          }.to change {
+            petition.reload.closed_at
+          }.from(within(1.minute).of(1.month.ago)).to(nil)
+        end
+      end
+    end
   end
 
   describe '#publish!' do

@@ -104,7 +104,7 @@ Then(/^the petition can no longer be marked as dormant$/) do
   expect(page).to have_no_field('Dormant', visible: false)
 end
 
-When(/^I revisit the petition$/) do
+When(/^I (?:re)?visit the petition$/) do
   visit admin_petition_url(@petition)
 end
 
@@ -203,4 +203,22 @@ end
 
 Then /^the petition should still be unmoderated$/ do
   expect(@petition).not_to be_visible
+end
+
+Given(/^a published petition has been taken down$/) do
+  steps %Q(
+    When I view all petitions
+    And I follow "Mistakenly published petition"
+    And I take down the petition with a reason code "Offensive or a joke"
+    Then the petition is not available for searching or viewing
+    And I should not be able to take down the petition
+  )
+end
+
+Then(/^there are no moderation options$/) do
+  expect(page).to have_no_field('Approve', visible: false)
+  expect(page).to have_no_field('Reject', visible: false)
+  expect(page).to have_no_field('Restore', visible: false)
+  expect(page).to have_no_field('Flag', visible: false)
+  expect(page).to have_no_field('Dormant', visible: false)
 end
