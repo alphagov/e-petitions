@@ -18,22 +18,22 @@
           <%= f.label :moderation_reject, "Reject", for: "petition_moderation_reject" %>
         </div>
       <% end %>
-      <% if f.object.restorable? %>
-        <div class="multiple-choice">
-          <%= f.radio_button :moderation, 'restore' %>
-          <%= f.label :moderation_restore, "Restore", for: "petition_moderation_restore" %>
-        </div>
-      <% end %>
-      <% if f.object.flaggable? %>
-        <div class="multiple-choice">
-          <%= f.radio_button :moderation, 'flag' %>
-          <%= f.label :moderation_flag, "Flag", for: "petition_moderation_flag" %>
-        </div>
-        <div class="multiple-choice">
-          <%= f.radio_button :moderation, 'dormant' %>
-          <%= f.label :moderation_dormant, "Dormant", for: "petition_moderation_dormant" %>
-        </div>
-      <% end %>
+    <% end %>
+    <% if f.object.restorable? %>
+      <div class="multiple-choice">
+        <%= f.radio_button :moderation, 'restore' %>
+        <%= f.label :moderation_restore, "Restore", for: "petition_moderation_restore" %>
+      </div>
+    <% end %>
+    <% if f.object.flaggable? %>
+      <div class="multiple-choice">
+        <%= f.radio_button :moderation, 'flag' %>
+        <%= f.label :moderation_flag, "Flag", for: "petition_moderation_flag" %>
+      </div>
+      <div class="multiple-choice">
+        <%= f.radio_button :moderation, 'dormant' %>
+        <%= f.label :moderation_dormant, "Dormant", for: "petition_moderation_dormant" %>
+      </div>
     <% end %>
   <% end %>
 

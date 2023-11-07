@@ -720,7 +720,7 @@ class Petition < ActiveRecord::Base
       when 'dormant'
         update!(state: DORMANT_STATE)
       when 'restore'
-        update!(state: SPONSORED_STATE)
+        update!(state: SPONSORED_STATE, open_at: nil, closed_at: nil)
       else
         errors.add :moderation, :blank
         raise ActiveRecord::RecordNotSaved, "Unable to moderate petition"
