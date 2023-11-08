@@ -36,7 +36,7 @@ Feature: User sends feedback
   Scenario: User is blocked by IP address rate limiting
     Given the feedback rate limit is 1 per hour
     And there are no allowed IPs
-    And the domain "example.com" is allowed
+    And there are no allowed domains
     And there are 2 feedbacks created from this IP address
     And I am on the feedback page
     When I fill in "Comments" with "I must protest"

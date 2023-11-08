@@ -205,7 +205,7 @@ Scenario: Charlie creates a petition when blocked
 Scenario: Charlie creates a petition when his IP address is rate limited
   Given the creator rate limit is 1 per hour
   And there are no allowed IPs
-  And the domain "wimbledon.com" is allowed
+  And there are no blocked IPs
   And there are 2 petitions created from this IP address
   And I start a new petition
   And I fill in the petition details

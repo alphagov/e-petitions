@@ -758,10 +758,6 @@ class Signature < ActiveRecord::Base
     end
   end
 
-  def allowed_domains?
-    !(creator? || sponsor?)
-  end
-
   def update_uuid
     update_column(:uuid, generate_uuid)
   end
