@@ -34,6 +34,10 @@ class Feedback < ActiveRecord::Base
     nil
   end
 
+  def allowed_domains?
+    false
+  end
+
   private
 
   def rate_limit
