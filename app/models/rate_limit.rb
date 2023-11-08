@@ -93,7 +93,10 @@ class RateLimit < ActiveRecord::Base
     return true if ip_geoblocked?(signature.ip_address)
     return true if domain_blocked?(signature.domain)
     return false if ip_allowed?(signature.ip_address)
-    return false if domain_allowed?(signature.domain)
+
+    if signature.allowed_domains?
+      return false if domain_allowed?(signature.domain)
+    end
 
     if signature.is_a?(Feedback)
       feedback_rate_exceeded?(signature)

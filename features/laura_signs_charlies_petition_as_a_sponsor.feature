@@ -90,7 +90,7 @@ Feature: As Laura, a sponsor of my friend Charlie's petition
   Scenario: Laura does not get an email when IP address is rate limited
     Given the sponsor rate limit is 1 per hour
     And there are no allowed IPs
-    And there are no allowed domains
+    And the domain "example.com" is allowed
     And there is a sponsor already from this IP address
     When I visit the "sponsor this petition" url I was given
     And I fill in my details as a sponsor
