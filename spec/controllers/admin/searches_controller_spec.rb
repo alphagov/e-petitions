@@ -10,18 +10,6 @@ RSpec.describe Admin::SearchesController, type: :controller, admin: true do
     end
   end
 
-  context "when logged in as a moderator but need to reset password" do
-    let(:user) { FactoryBot.create(:moderator_user, force_password_reset: true) }
-    before { login_as(user) }
-
-    describe "GET /admin/search" do
-      it "redirects to the edit profile page" do
-        get :show, params: { type: "petition", q: "foo" }
-        expect(response).to redirect_to("https://moderate.petition.parliament.uk/admin/profile/#{user.id}/edit")
-      end
-    end
-  end
-
   context "when logged in as a moderator" do
     let(:user) { FactoryBot.create(:moderator_user) }
     before { login_as(user) }

@@ -3,7 +3,6 @@ module Authentication
 
   included do
     before_action :require_admin
-    before_action :check_for_password_change
 
     alias_method :logged_in?, :user_signed_in?
     helper_method :logged_in?
@@ -12,12 +11,6 @@ module Authentication
   def require_admin
     unless current_user
       redirect_to admin_login_url, alert: :admin_required
-    end
-  end
-
-  def check_for_password_change
-    if current_user.has_to_change_password?
-      redirect_to edit_admin_profile_url(current_user), alert: :change_password
     end
   end
 

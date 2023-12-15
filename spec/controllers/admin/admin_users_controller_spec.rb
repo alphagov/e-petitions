@@ -31,19 +31,6 @@ RSpec.describe Admin::AdminUsersController, type: :controller, admin: true do
     end
   end
 
-  context "logged in as sysadmin but need to reset password" do
-    let(:user) { FactoryBot.create(:sysadmin_user, :force_password_reset => true) }
-    before :each do
-      login_as(user)
-    end
-
-    it "should redirect to edit profile page" do
-      expect(user.has_to_change_password?).to be_truthy
-      get :index
-      expect(response).to redirect_to("https://moderate.petition.parliament.uk/admin/profile/#{user.id}/edit")
-    end
-  end
-
   describe "logged in as sysadmin user" do
     let(:user) { FactoryBot.create(:sysadmin_user, :first_name => 'Sys', :last_name => 'Admin') }
     before :each do

@@ -18,26 +18,6 @@ RSpec.describe Admin::ModerationDelaysController, type: :controller, admin: true
     end
   end
 
-  context "when logged in as a moderator requiring a password reset" do
-    let(:moderator) { FactoryBot.create(:moderator_user, force_password_reset: true) }
-    before { login_as(moderator) }
-
-    [
-      ["GET", "/admin/moderation-delay/new", :new, {}],
-      ["POST", "/admin/moderation-delay", :create, {}]
-    ].each do |method, path, action, params|
-
-      describe "#{method} #{path}" do
-        before { process action, method: method, params: params }
-
-        it "redirects to the admin profile page" do
-          expect(response).to redirect_to("https://moderate.petition.parliament.uk/admin/profile/#{moderator.id}/edit")
-        end
-      end
-
-    end
-  end
-
   context "when logged in as a moderator" do
     let(:moderator) { FactoryBot.create(:moderator_user) }
     before { login_as(moderator) }

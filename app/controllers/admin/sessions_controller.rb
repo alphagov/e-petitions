@@ -1,7 +1,5 @@
 class Admin::SessionsController < Devise::SessionsController
   skip_before_action :require_admin, except: :continue
-  skip_before_action :check_for_password_change
-
   prepend_before_action :skip_timeout, only: :status
 
   helper_method :last_request_at

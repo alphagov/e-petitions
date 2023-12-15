@@ -72,31 +72,3 @@ Feature: Restricted access to the admin console
     And I fill in "Password" with "Letmein1!"
     And I press "Sign in"
     Then I should be on the admin home page
-
-  Scenario: Login as a user who hasn't changed their password for over 9 months
-    Given a moderator user exists with email: "admin@example.com", password: "Letmein1!", password_confirmation: "Letmein1!"
-    And the password was changed 10 months ago
-    When I go to the admin login page
-    And I fill in "Email" with "admin@example.com"
-    And I fill in "Password" with "Letmein1!"
-    And I press "Sign in"
-    Then I should be on the admin edit profile page for "admin@example.com"
-    And I should be connected to the server via an ssl connection
-    And I fill in "Current password" with "Letmein1!"
-    And I fill in "New password" with "Letmeout1!"
-    And I fill in "Password confirmation" with "Letmeout1!"
-    And I press "Save"
-    Then I should be on the admin home page
-
-  Scenario: Login as a user who is logging in for the first time
-    Given a moderator user exists with email: "admin@example.com", password: "Letmein1!", password_confirmation: "Letmein1!", force_password_reset: true
-    When I go to the admin login page
-    And I fill in "Email" with "admin@example.com"
-    And I fill in "Password" with "Letmein1!"
-    And I press "Sign in"
-    Then I should be on the admin edit profile page for "admin@example.com"
-    And I fill in "Current password" with "Letmein1!"
-    And I fill in "New password" with "Letmeout1!"
-    And I fill in "Password confirmation" with "Letmeout1!"
-    And I press "Save"
-    Then I should be on the admin home page
