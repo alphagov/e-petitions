@@ -233,7 +233,7 @@ FactoryBot.define do
     location_code { "GB" }
     ip_address { Faker::Internet.public_ip_v4_address }
     state { Archived::Signature::VALIDATED_STATE }
-    unsubscribe_token { Authlogic::Random.friendly_token }
+    unsubscribe_token { SecureRandom.base58(20) }
     notify_by_email { true }
 
     trait :creator do

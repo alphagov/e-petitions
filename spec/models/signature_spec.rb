@@ -2086,7 +2086,7 @@ RSpec.describe Signature, type: :model do
     end
 
     context "when another process has updated the column" do
-      let(:token) { Authlogic::Random.friendly_token }
+      let(:token) { SecureRandom.base58(20) }
 
       before do
         signature.update_column(:signed_token, nil)
