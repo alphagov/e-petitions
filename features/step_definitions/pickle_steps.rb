@@ -18,6 +18,10 @@ Given(/^a moderator user exists with email: "([^"]*)", first_name: "([^"]*)", la
   @user = FactoryBot.create(:moderator_user, first_name: first_name, last_name: last_name, email: email)
 end
 
+Given(/^a moderator user exists with email: "([^"]*)", first_name: "([^"]*)", last_name: "([^"]*)", current_sign_in_at: "([^"]*)"$/) do |email, first_name, last_name, current_sign_in_at|
+  @user = FactoryBot.create(:moderator_user, first_name: first_name, last_name: last_name, email: email, current_sign_in_at: current_sign_in_at)
+end
+
 Given(/^a moderator user exists with email: "([^"]*)", first_name: "([^"]*)", last_name: "([^"]*)", failed_attempts: (\d+)$/) do |email, first_name, last_name, failed_attempts|
   @user = FactoryBot.create(:moderator_user, first_name: first_name, last_name: last_name, email: email, failed_attempts: failed_attempts)
 end

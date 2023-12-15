@@ -131,7 +131,7 @@ Rails.application.routes.draw do
       resource :parliament, only: %i[show update]
       resource :search, only: %i[show]
 
-      resources :admin_users
+      resources :admin_users, only: %[index]
       resources :profile, only: %i[edit update]
 
       resources :invalidations, except: %i[show] do
