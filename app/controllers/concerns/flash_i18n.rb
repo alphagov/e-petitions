@@ -1,6 +1,4 @@
 module FlashI18n
-  protected
-
   def redirect_to(url, options = {})
     self.class._flash_types.each do |flash_type|
       if options.key?(flash_type)
@@ -16,6 +14,8 @@ module FlashI18n
 
     super(url, options)
   end
+
+  protected
 
   def translate_flash(key)
     if admin_request?

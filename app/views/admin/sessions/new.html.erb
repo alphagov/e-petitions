@@ -1,7 +1,7 @@
 <h1>Sign in</h1>
 <div class="grid-row">
   <div class="column-half">
-    <%= form_for @user_session do |f| %>
+    <%= form_for(resource, as: resource_name, url: admin_login_path) do |f| %>
       <div class="form-group">
         <%= f.label :email, "Email", class: "form-label" %>
         <%= f.text_field :email, :class => 'form-control', :type => 'email', :autofocus => 'autofocus' %>

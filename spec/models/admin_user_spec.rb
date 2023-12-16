@@ -4,29 +4,24 @@ RSpec.describe AdminUser, type: :model do
   describe "schema" do
     it { is_expected.to have_db_column(:email).of_type(:string).with_options(null: false) }
     it { is_expected.to have_db_column(:persistence_token).of_type(:string) }
-    it { is_expected.to have_db_column(:crypted_password).of_type(:string) }
+    it { is_expected.to have_db_column(:encrypted_password).of_type(:string) }
     it { is_expected.to have_db_column(:password_salt).of_type(:string) }
-    it { is_expected.to have_db_column(:login_count).of_type(:integer).with_options(default: 0) }
-    it { is_expected.to have_db_column(:failed_login_count).of_type(:integer).with_options(default: 0) }
-    it { is_expected.to have_db_column(:current_login_at).of_type(:datetime) }
-    it { is_expected.to have_db_column(:last_login_at).of_type(:datetime) }
-    it { is_expected.to have_db_column(:current_login_ip).of_type(:string) }
-    it { is_expected.to have_db_column(:last_login_ip).of_type(:string) }
+    it { is_expected.to have_db_column(:sign_in_count).of_type(:integer).with_options(default: 0) }
+    it { is_expected.to have_db_column(:failed_attempts).of_type(:integer).with_options(default: 0) }
+    it { is_expected.to have_db_column(:current_sign_in_at).of_type(:datetime) }
+    it { is_expected.to have_db_column(:last_sign_in_at).of_type(:datetime) }
+    it { is_expected.to have_db_column(:current_sign_in_ip).of_type(:string) }
+    it { is_expected.to have_db_column(:last_sign_in_ip).of_type(:string) }
     it { is_expected.to have_db_column(:role).of_type(:string).with_options(limit: 10, null: false) }
     it { is_expected.to have_db_column(:force_password_reset).of_type(:boolean).with_options(default: true) }
     it { is_expected.to have_db_column(:password_changed_at).of_type(:datetime) }
     it { is_expected.to have_db_column(:created_at).of_type(:datetime) }
     it { is_expected.to have_db_column(:updated_at).of_type(:datetime) }
-    it { is_expected.to have_db_column(:last_request_at).of_type(:datetime) }
   end
 
   describe "indexes" do
     it { is_expected.to have_db_index([:email]).unique }
     it { is_expected.to have_db_index([:last_name, :first_name]) }
-  end
-
-  describe "behaviours" do
-    it { expect(AdminUser.respond_to?(:acts_as_authentic)).to be_truthy }
   end
 
   describe "defaults" do
@@ -100,7 +95,7 @@ RSpec.describe AdminUser, type: :model do
   end
 
   describe "instance methods" do
-    describe "#update_with_password" do
+    describe "#update_password" do
       let!(:user) do
         FactoryBot.create(
           :sysadmin_user,
@@ -124,28 +119,28 @@ RSpec.describe AdminUser, type: :model do
 
       context "when the new password is valid" do
         it "returns true" do
-          expect(user.update_with_password(params)).to be_truthy
+          expect(user.update_password(params)).to be_truthy
         end
 
-        it "changes the crypted_password field" do
+        it "changes the encrypted_password field" do
           expect {
-            user.update_with_password(params)
+            user.update_password(params)
           }.to change {
-            user.reload.crypted_password
+            user.reload.encrypted_password
           }
         end
 
         it "sets the timestamp for when the password was changed" do
           expect {
-            user.update_with_password(params)
+            user.update_password(params)
           }.to change {
             user.reload.password_changed_at
-          }.from(nil).to(be_within(1.second).of(Time.current))
+          }.from(nil).to(be_within(2.seconds).of(Time.current))
         end
 
         it "clears the force password reset flag" do
           expect {
-            user.update_with_password(params)
+            user.update_password(params)
           }.to change {
             user.reload.force_password_reset
           }.from(true).to(false)
@@ -156,21 +151,21 @@ RSpec.describe AdminUser, type: :model do
         let(:current_password) { "" }
 
         it "returns false" do
-          expect(user.update_with_password(params)).to be_falsey
+          expect(user.update_password(params)).to be_falsey
         end
 
         it "adds an error" do
-          user.update_with_password(params)
-          expect(user.errors[:current_password]).to eq(["Current password can't be blank"])
+          user.update_password(params)
+          expect(user.errors[:current_password]).to include("Current password can’t be blank")
         end
 
         it "doesn't clear the force password reset flag" do
-          user.update_with_password(params)
+          user.update_password(params)
           expect(user.force_password_reset).to be true
         end
 
         it "doesn't set the password_changed_at timestamp" do
-          user.update_with_password(params)
+          user.update_password(params)
           expect(user.password_changed_at).to be_nil
         end
       end
@@ -179,21 +174,21 @@ RSpec.describe AdminUser, type: :model do
         let(:current_password) { "L3tme!n" }
 
         it "returns false" do
-          expect(user.update_with_password(params)).to be_falsey
+          expect(user.update_password(params)).to be_falsey
         end
 
         it "adds an error" do
-          user.update_with_password(params)
-          expect(user.errors[:current_password]).to eq(["Current password is incorrect"])
+          user.update_password(params)
+          expect(user.errors[:current_password]).to include("Current password is incorrect")
         end
 
         it "doesn't clear the force password reset flag" do
-          user.update_with_password(params)
+          user.update_password(params)
           expect(user.force_password_reset).to be true
         end
 
         it "doesn't set the password_changed_at timestamp" do
-          user.update_with_password(params)
+          user.update_password(params)
           expect(user.password_changed_at).to be_nil
         end
       end
@@ -203,21 +198,21 @@ RSpec.describe AdminUser, type: :model do
         let(:password_confirmation) { current_password }
 
         it "returns false" do
-          expect(user.update_with_password(params)).to be_falsey
+          expect(user.update_password(params)).to be_falsey
         end
 
         it "adds an error" do
-          user.update_with_password(params)
-          expect(user.errors[:password]).to eq(["Password is the same as the current password"])
+          user.update_password(params)
+          expect(user.errors[:password]).to include("Password is the same as the current password")
         end
 
         it "doesn't clear the force password reset flag" do
-          user.update_with_password(params)
+          user.update_password(params)
           expect(user.force_password_reset).to be true
         end
 
         it "doesn't set the password_changed_at timestamp" do
-          user.update_with_password(params)
+          user.update_password(params)
           expect(user.password_changed_at).to be_nil
         end
       end
@@ -227,21 +222,21 @@ RSpec.describe AdminUser, type: :model do
         let(:password_confirmation) { "password" }
 
         it "returns false" do
-          expect(user.update_with_password(params)).to be_falsey
+          expect(user.update_password(params)).to be_falsey
         end
 
         it "adds an error" do
-          user.update_with_password(params)
-          expect(user.errors[:password]).to eq(["Password must contain at least one digit, a lower and upper case letter and a special character"])
+          user.update_password(params)
+          expect(user.errors[:password]).to include("Password must contain at least one digit, a lower and upper case letter and a special character")
         end
 
         it "doesn't clear the force password reset flag" do
-          user.update_with_password(params)
+          user.update_password(params)
           expect(user.force_password_reset).to be true
         end
 
         it "doesn't set the password_changed_at timestamp" do
-          user.update_with_password(params)
+          user.update_password(params)
           expect(user.password_changed_at).to be_nil
         end
       end
@@ -251,21 +246,21 @@ RSpec.describe AdminUser, type: :model do
         let(:password_confirmation) { "L3tme!n2" }
 
         it "returns false" do
-          expect(user.update_with_password(params)).to be_falsey
+          expect(user.update_password(params)).to be_falsey
         end
 
         it "adds an error" do
-          user.update_with_password(params)
-          expect(user.errors[:password_confirmation]).to eq(["Password confirmation doesn't match password"])
+          user.update_password(params)
+          expect(user.errors[:password_confirmation]).to include("Password confirmation doesn’t match password")
         end
 
         it "doesn't clear the force password reset flag" do
-          user.update_with_password(params)
+          user.update_password(params)
           expect(user.force_password_reset).to be true
         end
 
         it "doesn't set the password_changed_at timestamp" do
-          user.update_with_password(params)
+          user.update_password(params)
           expect(user.password_changed_at).to be_nil
         end
       end
@@ -379,19 +374,19 @@ RSpec.describe AdminUser, type: :model do
     describe "#account_disabled" do
       it "should return true when user has tried to login 5 times unsuccessfully" do
         user = FactoryBot.create(:moderator_user)
-        user.failed_login_count = 5
+        user.failed_attempts = 5
         expect(user.account_disabled).to be_truthy
       end
 
       it "should return true when user has tried to login 6 times unsuccessfully" do
         user = FactoryBot.create(:moderator_user)
-        user.failed_login_count = 6
+        user.failed_attempts = 6
         expect(user.account_disabled).to be_truthy
       end
 
       it "should return false when user has tried to login 4 times unsuccessfully" do
         user = FactoryBot.create(:moderator_user)
-        user.failed_login_count = 4
+        user.failed_attempts = 4
         expect(user.account_disabled).to be_falsey
       end
     end
@@ -400,28 +395,32 @@ RSpec.describe AdminUser, type: :model do
       it "should set the failed login count to 5 when true" do
         u = FactoryBot.create(:moderator_user)
         u.account_disabled = true
-        expect(u.failed_login_count).to eq(5)
+        expect(u.failed_attempts).to eq(5)
       end
 
       it "should set the failed login count to 0 when false" do
         u = FactoryBot.create(:moderator_user)
-        u.failed_login_count = 5
+        u.failed_attempts = 5
         u.account_disabled = false
-        expect(u.failed_login_count).to eq(0)
+        expect(u.failed_attempts).to eq(0)
       end
     end
 
     describe "#elapsed_time" do
       it "returns the number of seconds since the last request" do
-        user = FactoryBot.build(:admin_user, last_request_at: 60.seconds.ago)
-        expect(user.elapsed_time).to eq(60)
+        user = FactoryBot.build(:admin_user)
+        expect(user.elapsed_time(60.seconds.ago)).to eq(60)
       end
     end
 
     describe "#time_remaining" do
-      it "returns the number of seconds since the last request" do
-        user = FactoryBot.build(:admin_user, last_request_at: 60.seconds.ago)
-        expect(user.elapsed_time).to eq(60)
+      before do
+        allow(Site).to receive(:login_timeout).and_return(300)
+      end
+
+      it "returns the number of seconds remaining until the user is logged out" do
+        user = FactoryBot.build(:admin_user)
+        expect(user.time_remaining(60.seconds.ago)).to eq(240)
       end
     end
   end

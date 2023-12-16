@@ -9,19 +9,7 @@ class AdminUser < ActiveRecord::Base
   class CannotDeleteCurrentUser < RuntimeError; end
   class MustBeAtLeastOneAdminUser < RuntimeError; end
 
-  acts_as_authentic do |config|
-    config.crypto_provider = ::Authlogic::CryptoProviders::SCrypt
-
-    config.check_passwords_against_database = true
-    config.ignore_blank_passwords = true
-    config.logged_in_timeout = Site.login_timeout
-    config.require_password_confirmation = true
-
-    config.validates_length_of :password, minimum: 8, unless: ->(u) { u.password.blank? }
-    config.validates_confirmation_of :password, unless: ->(u) { u.password.blank? }
-    config.validates :email, email: true, uniqueness: { case_sensitive: false }
-    config.validates_uniqueness_of :email, uniqueness: { case_sensitive: false }
-  end
+  devise :database_authenticatable, :encryptable, :trackable, :timeoutable, :lockable
 
   with_options dependent: :restrict_with_exception do
     with_options foreign_key: :moderated_by_id do
@@ -31,22 +19,53 @@ class AdminUser < ActiveRecord::Base
   end
 
   # = Validations =
-  validates_presence_of :email, :first_name, :last_name
-  validates_presence_of :password, on: :create
-  validates_format_of :password, with: PASSWORD_REGEX, allow_blank: true
-  validates_inclusion_of :role, in: ROLES
+  validates :first_name, :last_name, presence: true
+  validates :email, presence: true, email: true
+  validates :email, uniqueness: { case_sensitive: false }
+  validates :password, presence: true, on: [:create, :update_password]
+  validates :password, length: { minimum: 8, allow_blank: true }
+  validates :password, format: { with: PASSWORD_REGEX, allow_blank: true }
+  validates :password, confirmation: true, on: :update_password
+  validates :role, inclusion: { in: ROLES }
+
+  validate on: :update_password do
+    errors.add(:current_password, :blank) if current_password.blank?
+    errors.add(:current_password, :invalid) unless valid_password?(current_password)
+    errors.add(:password, :taken) if valid_password?(password)
+  end
 
   # = Callbacks =
-  before_update if: :crypted_password_changed? do
-    self.force_password_reset = false
-    self.password_changed_at = Time.current
-  end
+  before_save :clear_locked_at, if: :enabling_account?
+  before_save :set_locked_at, if: :disabling_account?
+  before_save :reset_persistence_token, unless: :persistence_token?
+  before_update :reset_password_tracking, if: :encrypted_password_changed?
 
   # = Finders =
   scope :by_name, -> { order(:last_name, :first_name) }
   scope :by_role, ->(role) { where(role: role).order(:id) }
 
   # = Methods =
+  def self.timeout_in
+    Site.login_timeout.seconds
+  end
+
+  def reset_password_tracking
+    self.force_password_reset = false
+    self.password_changed_at = Time.current
+  end
+
+  def reset_persistence_token
+    self.persistence_token = SecureRandom.hex(64)
+  end
+
+  def reset_persistence_token!
+    SecureRandom.hex(64).tap { |token| update_column(:persistence_token, token) }
+  end
+
+  def valid_persistence_token?(token)
+    persistence_token == token
+  end
+
   def current_password
     defined?(@current_password) ? @current_password : nil
   end
@@ -55,24 +74,18 @@ class AdminUser < ActiveRecord::Base
     @current_password = value
   end
 
-  def update_with_password(attrs)
-    if attrs[:password].blank?
-      attrs.delete(:password)
-      attrs.delete(:password_confirmation) if attrs[:password_confirmation].blank?
+  def valid_password?(password)
+    encryptor_class.compare(encrypted_password_in_database, password, nil, password_salt_in_database, nil)
+  end
+
+  def update_password(params)
+    assign_attributes(params)
+
+    save(context: :update_password).tap do
+      self.current_password = nil
+      self.password = nil
+      self.password_confirmation = nil
     end
-
-    self.attributes = attrs
-    self.valid?
-
-    if current_password.blank?
-      errors.add(:current_password, :blank)
-    elsif !valid_password?(current_password)
-      errors.add(:current_password, :invalid)
-    elsif current_password == password
-      errors.add(:password, :taken)
-    end
-
-    errors.empty? && save(validate: false)
   end
 
   def destroy(current_user: nil)
@@ -130,18 +143,34 @@ class AdminUser < ActiveRecord::Base
   end
 
   def account_disabled
-    self.failed_login_count >= DISABLED_LOGIN_COUNT
+    self.failed_attempts >= DISABLED_LOGIN_COUNT
   end
 
   def account_disabled=(flag)
-    self.failed_login_count = (flag == "0" or !flag) ? 0 : DISABLED_LOGIN_COUNT
+    self.failed_attempts = (flag == "0" or !flag) ? 0 : DISABLED_LOGIN_COUNT
   end
 
-  def elapsed_time(now = Time.current)
+  def enabling_account?
+    failed_attempts_changed? && failed_attempts.zero?
+  end
+
+  def disabling_account?
+    failed_attempts_changed? && failed_attempts >= DISABLED_LOGIN_COUNT
+  end
+
+  def clear_locked_at
+    self.locked_at = nil
+  end
+
+  def set_locked_at(now = Time.current)
+    self.locked_at = now
+  end
+
+  def elapsed_time(last_request_at, now = Time.current)
     (now - last_request_at).floor
   end
 
-  def time_remaining(now = Time.current)
-    [Site.login_timeout - elapsed_time(now), 0].max
+  def time_remaining(last_request_at, now = Time.current)
+    [Site.login_timeout - elapsed_time(last_request_at, now), 0].max
   end
 end

@@ -47,14 +47,14 @@ ActiveRecord::Schema.define(version: 2024_01_29_152626) do
   create_table "admin_users", id: :serial, force: :cascade do |t|
     t.string "email", limit: 255, null: false
     t.string "persistence_token", limit: 255
-    t.string "crypted_password", limit: 255
+    t.string "encrypted_password", limit: 255
     t.string "password_salt", limit: 255
-    t.integer "login_count", default: 0
-    t.integer "failed_login_count", default: 0
-    t.datetime "current_login_at"
-    t.datetime "last_login_at"
-    t.string "current_login_ip", limit: 255
-    t.string "last_login_ip", limit: 255
+    t.integer "sign_in_count", default: 0
+    t.integer "failed_attempts", default: 0
+    t.datetime "current_sign_in_at"
+    t.datetime "last_sign_in_at"
+    t.string "current_sign_in_ip", limit: 255
+    t.string "last_sign_in_ip", limit: 255
     t.string "first_name", limit: 255
     t.string "last_name", limit: 255
     t.string "role", limit: 10, null: false
@@ -62,7 +62,7 @@ ActiveRecord::Schema.define(version: 2024_01_29_152626) do
     t.datetime "password_changed_at"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.datetime "last_request_at"
+    t.datetime "locked_at"
     t.index ["email"], name: "index_admin_users_on_email", unique: true
     t.index ["last_name", "first_name"], name: "index_admin_users_on_last_name_and_first_name"
   end

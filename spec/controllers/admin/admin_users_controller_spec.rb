@@ -151,7 +151,7 @@ RSpec.describe Admin::AdminUsersController, type: :controller, admin: true do
     end
 
     describe "PUT 'update'" do
-      let(:edit_user) { FactoryBot.create(:moderator_user, :email => "admin@example.com", :failed_login_count => 5) }
+      let(:edit_user) { FactoryBot.create(:moderator_user, :email => "admin@example.com", :failed_attempts => 5) }
 
       def do_update
         patch :update, params: {
@@ -178,7 +178,7 @@ RSpec.describe Admin::AdminUsersController, type: :controller, admin: true do
         it "should reset the failed login count to 0" do
           do_update
           edit_user.reload
-          expect(edit_user.failed_login_count).to eq(0)
+          expect(edit_user.failed_attempts).to eq(0)
         end
       end
 

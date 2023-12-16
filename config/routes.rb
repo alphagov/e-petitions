@@ -133,7 +133,6 @@ Rails.application.routes.draw do
 
       resources :admin_users
       resources :profile, only: %i[edit update]
-      resources :user_sessions, only: %i[create]
 
       resources :invalidations, except: %i[show] do
         post :cancel, :count, :start, on: :member
@@ -247,14 +246,23 @@ Rails.application.routes.draw do
         post '/', action: 'create', as: nil
       end
 
-      controller 'user_sessions' do
-        get '/logout',   action: 'destroy'
-        get '/login',    action: 'new'
-        get '/continue', action: 'continue'
-        get '/status',   action: 'status'
+    end
+
+    devise_for :users, class_name: 'AdminUser', skip: %i[sessions]
+
+    as :user do
+      controller 'admin/sessions' do
+        get  '/admin/login',    action: 'new'
+        post '/admin/login',    action: 'create', as: nil
+        get  '/admin/logout',   action: 'destroy'
+        get  '/admin/continue', action: 'continue'
+        get  '/admin/status',   action: 'status'
       end
     end
   end
+
+  # Devise needs a `new_user_session_url` helper for its failure app
+  direct(:new_user_session) { route_for(:admin_login) }
 
   get 'ping', to: 'ping#ping'
 end

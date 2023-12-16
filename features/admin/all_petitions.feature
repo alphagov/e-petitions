@@ -107,19 +107,19 @@ Feature: A moderator user views all petitions
      | My open petition with debate outcome |
 
   Scenario: A sysadmin can view all petitions
-    Given I am logged in as a sysadmin
+    Given I log out and login back in as a sysadmin
     And an open petition exists with action: "Simply the best"
     When I view all petitions
     Then I should see "Simply the best"
 
   Scenario: A moderator user can view all petitions
-    Given I am logged in as a moderator
+    Given I log out and login back in as a moderator
     And an open petition exists with action: "Simply the best"
     When I view all petitions
     Then I should see "Simply the best"
 
   Scenario: A moderator can download petitions as CSV
-    Given I am logged in as a moderator
+    Given I log out and login back in as a moderator
     And the time is "2015-08-21 06:00:00"
     When I view all petitions
     And I follow "Download CSV"

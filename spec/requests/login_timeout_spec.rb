@@ -26,7 +26,7 @@ RSpec.describe "login timeout", type: :request, csrf: false do
     Site.instance.update(login_timeout: 600)
 
     travel_to 2.minutes.ago do
-      post "/admin/user_sessions", params: { admin_user_session: login_params }
+      post "/admin/login", params: { user: login_params }
       expect(response).to redirect_to("/admin")
     end
 

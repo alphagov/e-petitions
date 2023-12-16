@@ -5,7 +5,8 @@ class Admin::ProfileController < Admin::AdminController
   end
 
   def update
-    if current_user.update_with_password(admin_user_params)
+    if current_user.update_password(admin_user_params)
+      bypass_sign_in(current_user, scope: :user)
       redirect_to admin_root_url, notice: :password_updated
     else
       render :edit

@@ -1,0 +1,16 @@
+# Additional translations at https://github.com/heartcombo/devise/wiki/I18n
+
+en:
+  devise:
+    failure:
+      already_authenticated: "You are already logged in"
+      invalid: "Invalid email/password combination"
+      locked: "Failed login limit exceeded, your account has been temporarily disabled"
+      last_attempt: "You have one more attempt before your account is temporarily disabled"
+      other_login: "You have been logged out"
+      not_found_in_database: "Invalid email/password combination"
+      timedout: "Your session expired. Please log in again to continue"
+    sessions:
+      signed_in: "Logged in successfully"
+      signed_out: "You have been logged out"
+      already_signed_out: "You have been logged out"

@@ -8,6 +8,24 @@ Given /^I am logged in as a moderator$/ do
   step "the admin user is logged in"
 end
 
+Given(/^I log out and login back in as a sysadmin$/) do
+  @user = FactoryBot.create(:sysadmin_user)
+
+  steps %q[
+    the admin user is logged out
+    the admin user is logged in
+  ]
+end
+
+Given(/^I log out and login back in as a moderator$/) do
+  @user = FactoryBot.create(:moderator_user)
+
+  steps %q[
+    the admin user is logged out
+    the admin user is logged in
+  ]
+end
+
 Given /^I am logged in as a moderator named "([^\"]*)"$/ do |name|
   first_name, last_name = name.split
   @user = FactoryBot.create(:moderator_user, first_name: first_name, last_name: last_name)
@@ -41,4 +59,8 @@ Given /^the admin user is logged in$/ do
   fill_in("Email", :with => @user.email)
   fill_in("Password", :with => "Letmein1!")
   click_button("Sign in")
+end
+
+Given /^the admin user is logged out$/ do
+  visit admin_logout_url
 end

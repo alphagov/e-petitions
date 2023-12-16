@@ -15,7 +15,7 @@ Feature: Admin users index and crud
 
   Scenario: Ordering of the users index
     Given a moderator user exists with email: "derek@example.com", first_name: "Derek", last_name: "Jacobi"
-    And a moderator user exists with email: "helen@example.com", first_name: "Helen", last_name: "Hunt", failed_login_count: 5
+    And a moderator user exists with email: "helen@example.com", first_name: "Helen", last_name: "Hunt", failed_attempts: 5
     When I go to the admin users index page
     Then I should see the following admin user table:
       | Name            | Email             | Role      | Disabled |
@@ -76,11 +76,11 @@ Feature: Admin users index and crud
     When I follow "Campbell, Nolene"
     And the "Email" field should contain "helen@example.com"
     And the "Account disabled" checkbox should be checked
-    And a moderator user should exist with email: "helen@example.com", failed_login_count: "5"
+    And a moderator user should exist with email: "helen@example.com", failed_attempts: "5"
     And I should be connected to the server via an ssl connection
 
   Scenario: Enabling a user's disabled account
-    Given a moderator user exists with email: "derek@example.com", first_name: "Derek", last_name: "Jacobi", failed_login_count: "5"
+    Given a moderator user exists with email: "derek@example.com", first_name: "Derek", last_name: "Jacobi", failed_attempts: "5"
     When I go to the admin users index page
     And I follow "Jacobi, Derek"
     And the "Account disabled" checkbox should be checked
@@ -89,7 +89,7 @@ Feature: Admin users index and crud
     Then I should be on the admin users index page
     When I follow "Jacobi, Derek"
     And the "Account disabled" checkbox should not be checked
-    And a moderator user should exist with email: "derek@example.com", failed_login_count: "0"
+    And a moderator user should exist with email: "derek@example.com", failed_attempts: "0"
 
   Scenario: Deleting a user
     When I go to the admin users index page
