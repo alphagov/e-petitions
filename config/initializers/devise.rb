@@ -1,5 +1,3 @@
-require 'devise/encryptable/encryptors/authlogic_scrypt'
-
 Devise.setup do |config|
   # ==> Controller configuration
   config.parent_controller = 'Admin::AdminController'
@@ -17,28 +15,16 @@ Devise.setup do |config|
   config.case_insensitive_keys = [:email]
   config.strip_whitespace_keys = [:email]
 
-  # ==> Configuration for :database_authenticatable
-  config.stretches = Rails.env.test? ? 1 : 12
-
-  # ==> Configuration for :validatable
-  config.password_length = 6..128
-  config.email_regexp = /\A[^@\s]+@[^@\s]+\z/
-
   # ==> Configuration for :timeoutable
   # This is overidden on the AdminUser model to use Site.login_timeout
   config.timeout_in = 24.hours
 
-  # ==> Configuration for :lockable
-  config.lock_strategy = :failed_attempts
-  config.unlock_strategy = :none
-  config.maximum_attempts = 5
-  config.last_attempt_warning = true
-
-  # ==> Configuration for :encryptable
-  config.encryptor = :authlogic_scrypt
-
   # ==> Navigation configuration
   config.sign_out_via = :get
+
+  # ==> Omniauth configuration
+  config.omniauth_path_prefix = '/admin/auth'
+  config.omniauth :developer, fields: %i[email]
 
   # ==> Warden configuration
   # Reset the token after logging in so that other sessions are logged out

@@ -5,14 +5,12 @@ RSpec.describe 'token', type: :request do
     {
       first_name: "System",
       last_name: "Administrator",
-      email: "admin@petition.parliament.uk",
-      password: "L3tme1n!",
-      password_confirmation: "L3tme1n!"
+      email: "admin@petition.parliament.uk"
     }
   end
 
   let(:login_params) do
-    { email: "admin@petition.parliament.uk", password: "L3tme1n!" }
+    { email: "admin@petition.parliament.uk" }
   end
 
   let(:encrypted_csrf_token) do
@@ -36,7 +34,7 @@ RSpec.describe 'token', type: :request do
   context "when a new session is created" do
     it "resets the csrf token" do
       expect {
-        post "/admin/login", params: { user: login_params, authenticity_token: authenticity_token }
+        post "/admin/auth/developer/callback", params: login_params
       }.to change {
         session[:_csrf_token]
       }.from(be_present).to(be_nil)
@@ -45,7 +43,7 @@ RSpec.describe 'token', type: :request do
 
   context "when a session is destroyed" do
     before do
-      post "/admin/login", params: { user: login_params, authenticity_token: authenticity_token }
+      post "/admin/auth/developer/callback", params: login_params
       follow_redirect!
     end
 
@@ -63,7 +61,7 @@ RSpec.describe 'token', type: :request do
       Site.instance.update(login_timeout: 600)
 
       travel_to 5.minutes.ago do
-        post "/admin/login", params: { user: login_params, authenticity_token: authenticity_token }
+        post "/admin/auth/developer/callback", params: login_params
         expect(response).to redirect_to("/admin")
       end
 

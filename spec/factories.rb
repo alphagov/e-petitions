@@ -4,11 +4,8 @@ require 'active_support/core_ext/digest/uuid'
 FactoryBot.define do
   factory :admin_user do
     sequence(:email) { |n| "admin#{n}@example.com" }
-    password { "Letmein1!" }
-    password_confirmation { "Letmein1!" }
     sequence(:first_name) { |n| "AdminUser#{n}" }
     sequence(:last_name) { |n| "AdminUser#{n}" }
-    force_password_reset { false }
   end
 
   factory :sysadmin_user, :parent => :admin_user do

@@ -5,14 +5,12 @@ RSpec.describe "login timeout", type: :request, csrf: false do
     {
       first_name: "System",
       last_name: "Administrator",
-      email: "admin@petition.parliament.uk",
-      password: "L3tme1n!",
-      password_confirmation: "L3tme1n!"
+      email: "admin@petition.parliament.uk"
     }
   end
 
   let(:login_params) do
-    { email: "admin@petition.parliament.uk", password: "L3tme1n!" }
+    { email: "admin@petition.parliament.uk" }
   end
 
   let!(:user) { FactoryBot.create(:sysadmin_user, user_attributes) }
@@ -26,7 +24,7 @@ RSpec.describe "login timeout", type: :request, csrf: false do
     Site.instance.update(login_timeout: 600)
 
     travel_to 2.minutes.ago do
-      post "/admin/login", params: { user: login_params }
+      post "/admin/auth/developer/callback", params: login_params
       expect(response).to redirect_to("/admin")
     end
 

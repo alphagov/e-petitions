@@ -36,14 +36,6 @@ en-GB:
       models:
         admin_user:
           attributes:
-            current_password:
-              blank: "Current password can’t be blank"
-              invalid: "Current password is incorrect"
-            password:
-              invalid: "Password must contain at least one digit, a lower and upper case letter and a special character"
-              taken: "Password is the same as the current password"
-            password_confirmation:
-              confirmation: "Password confirmation doesn’t match password"
             role:
               inclusion: "Role '%{value}' is invalid"
 

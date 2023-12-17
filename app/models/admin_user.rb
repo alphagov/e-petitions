@@ -1,15 +1,20 @@
 class AdminUser < ActiveRecord::Base
-  DISABLED_LOGIN_COUNT = 5
   SYSADMIN_ROLE = 'sysadmin'
   MODERATOR_ROLE = 'moderator'
   REVIEWER_ROLE = 'reviewer'
   ROLES = [SYSADMIN_ROLE, MODERATOR_ROLE, REVIEWER_ROLE]
-  PASSWORD_REGEX = /\A.*(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[\W_]).*\z/
 
   class CannotDeleteCurrentUser < RuntimeError; end
   class MustBeAtLeastOneAdminUser < RuntimeError; end
 
-  devise :database_authenticatable, :encryptable, :trackable, :timeoutable, :lockable
+  devise :trackable, :timeoutable, :omniauthable, omniauth_providers: %i[developer]
+
+  # TODO: Drop these columns once rollout of SSO has been completed
+  self.ignored_columns = %i[
+    encrypted_password password_salt
+    force_password_reset password_changed_at
+    failed_attempts locked_at
+  ]
 
   with_options dependent: :restrict_with_exception do
     with_options foreign_key: :moderated_by_id do
@@ -22,23 +27,10 @@ class AdminUser < ActiveRecord::Base
   validates :first_name, :last_name, presence: true
   validates :email, presence: true, email: true
   validates :email, uniqueness: { case_sensitive: false }
-  validates :password, presence: true, on: [:create, :update_password]
-  validates :password, length: { minimum: 8, allow_blank: true }
-  validates :password, format: { with: PASSWORD_REGEX, allow_blank: true }
-  validates :password, confirmation: true, on: :update_password
   validates :role, inclusion: { in: ROLES }
 
-  validate on: :update_password do
-    errors.add(:current_password, :blank) if current_password.blank?
-    errors.add(:current_password, :invalid) unless valid_password?(current_password)
-    errors.add(:password, :taken) if valid_password?(password)
-  end
-
   # = Callbacks =
-  before_save :clear_locked_at, if: :enabling_account?
-  before_save :set_locked_at, if: :disabling_account?
   before_save :reset_persistence_token, unless: :persistence_token?
-  before_update :reset_password_tracking, if: :encrypted_password_changed?
 
   # = Finders =
   scope :by_name, -> { order(:last_name, :first_name) }
@@ -47,11 +39,6 @@ class AdminUser < ActiveRecord::Base
   # = Methods =
   def self.timeout_in
     Site.login_timeout.seconds
-  end
-
-  def reset_password_tracking
-    self.force_password_reset = false
-    self.password_changed_at = Time.current
   end
 
   def reset_persistence_token
@@ -64,28 +51,6 @@ class AdminUser < ActiveRecord::Base
 
   def valid_persistence_token?(token)
     persistence_token == token
-  end
-
-  def current_password
-    defined?(@current_password) ? @current_password : nil
-  end
-
-  def current_password=(value)
-    @current_password = value
-  end
-
-  def valid_password?(password)
-    encryptor_class.compare(encrypted_password_in_database, password, nil, password_salt_in_database, nil)
-  end
-
-  def update_password(params)
-    assign_attributes(params)
-
-    save(context: :update_password).tap do
-      self.current_password = nil
-      self.password = nil
-      self.password_confirmation = nil
-    end
   end
 
   def destroy(current_user: nil)
@@ -122,10 +87,6 @@ class AdminUser < ActiveRecord::Base
     self.role == 'reviewer'
   end
 
-  def has_to_change_password?
-    self.force_password_reset or (self.password_changed_at and self.password_changed_at < 9.months.ago)
-  end
-
   def can_take_petitions_down?
     is_a_sysadmin? || is_a_moderator?
   end
@@ -140,30 +101,6 @@ class AdminUser < ActiveRecord::Base
 
   def can_moderate_petitions?
     is_a_sysadmin? || is_a_moderator?
-  end
-
-  def account_disabled
-    self.failed_attempts >= DISABLED_LOGIN_COUNT
-  end
-
-  def account_disabled=(flag)
-    self.failed_attempts = (flag == "0" or !flag) ? 0 : DISABLED_LOGIN_COUNT
-  end
-
-  def enabling_account?
-    failed_attempts_changed? && failed_attempts.zero?
-  end
-
-  def disabling_account?
-    failed_attempts_changed? && failed_attempts >= DISABLED_LOGIN_COUNT
-  end
-
-  def clear_locked_at
-    self.locked_at = nil
-  end
-
-  def set_locked_at(now = Time.current)
-    self.locked_at = now
   end
 
   def elapsed_time(last_request_at, now = Time.current)

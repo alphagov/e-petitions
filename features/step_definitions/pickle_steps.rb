@@ -1,17 +1,5 @@
-Given(/^a sysadmin user exists with first_name: "([^"]*)", last_name: "([^"]*)", email: "([^"]*)", password: "([^"]*)", password_confirmation: "([^"]*)"$/) do |first_name, last_name, email, password, password_confirmation|
-  @user = FactoryBot.create(:sysadmin_user, first_name: first_name, last_name: last_name, email: email, password: password, password_confirmation: password_confirmation)
-end
-
-Given(/^a moderator user exists with first_name: "([^"]*)", last_name: "([^"]*)", email: "([^"]*)", password: "([^"]*)", password_confirmation: "([^"]*)"$/) do |first_name, last_name, email, password, password_confirmation|
-  @user = FactoryBot.create(:moderator_user, first_name: first_name, last_name: last_name, email: email, password: password, password_confirmation: password_confirmation)
-end
-
-Given(/^a moderator user exists with email: "([^"]*)", password: "([^"]*)", password_confirmation: "([^"]*)"$/) do |email, password, password_confirmation|
-  @user = FactoryBot.create(:moderator_user, email: email, password: password, password_confirmation: password_confirmation)
-end
-
-Given(/^a moderator user exists with email: "([^"]*)", password: "([^"]*)", password_confirmation: "([^"]*)", force_password_reset: true$/) do |email, password, password_confirmation|
-  @user = FactoryBot.create(:moderator_user, email: email, password: password, password_confirmation: password_confirmation, force_password_reset: true)
+Given(/^a sysadmin user exists with email: "([^"]*)", first_name: "([^"]*)", last_name: "([^"]*)"$/) do |email, first_name, last_name|
+  @user = FactoryBot.create(:sysadmin_user, first_name: first_name, last_name: last_name, email: email)
 end
 
 Given(/^a moderator user exists with email: "([^"]*)", first_name: "([^"]*)", last_name: "([^"]*)"$/) do |email, first_name, last_name|
@@ -20,10 +8,6 @@ end
 
 Given(/^a moderator user exists with email: "([^"]*)", first_name: "([^"]*)", last_name: "([^"]*)", current_sign_in_at: "([^"]*)"$/) do |email, first_name, last_name, current_sign_in_at|
   @user = FactoryBot.create(:moderator_user, first_name: first_name, last_name: last_name, email: email, current_sign_in_at: current_sign_in_at)
-end
-
-Given(/^a moderator user exists with email: "([^"]*)", first_name: "([^"]*)", last_name: "([^"]*)", failed_attempts: (\d+)$/) do |email, first_name, last_name, failed_attempts|
-  @user = FactoryBot.create(:moderator_user, first_name: first_name, last_name: last_name, email: email, failed_attempts: failed_attempts)
 end
 
 Given(/^(\d+) moderator users exist$/) do |number|
@@ -36,14 +20,6 @@ Given(/^(\d+) petitions exist with state: "([^"]*)"$/) do |number, state|
   number.times do |count|
     FactoryBot.create(:petition, state: state)
   end
-end
-
-When(/^a moderator user should exist with email: "([^"]*)", failed_attempts: "([^"]*)"$/) do |email, failed_attempts|
-  expect(AdminUser.where(email: email, failed_attempts: failed_attempts)).to exist
-end
-
-Given(/^a moderator user exists with email: "([^"]*)", first_name: "([^"]*)", last_name: "([^"]*)", failed_attempts: "([^"]*)"$/) do |email, first_name, last_name, failed_attempts|
-  @user = FactoryBot.create(:moderator_user, email: email, first_name: first_name, last_name: last_name, failed_attempts: failed_attempts)
 end
 
 Then(/^a admin user should not exist with email: "([^"]*)"$/) do |email|

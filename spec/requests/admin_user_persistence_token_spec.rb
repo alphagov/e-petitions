@@ -5,14 +5,12 @@ RSpec.describe "admin user persistence token", type: :request, csrf: false do
     {
       first_name: "System",
       last_name: "Administrator",
-      email: "admin@petition.parliament.uk",
-      password: "L3tme1n!",
-      password_confirmation: "L3tme1n!"
+      email: "admin@petition.parliament.uk"
     }
   end
 
   let(:login_params) do
-    { email: "admin@petition.parliament.uk", password: "L3tme1n!" }
+    { email: "admin@petition.parliament.uk" }
   end
 
   before do
@@ -30,13 +28,13 @@ RSpec.describe "admin user persistence token", type: :request, csrf: false do
   context "when a new session is created" do
     it "logs out existing sessions" do
       s1 = new_browser
-      s1.post "/admin/login", params: { user: login_params }
+      s1.post "/admin/auth/developer/callback", params: login_params
 
       expect(s1.response.status).to eq(302)
       expect(s1.response.location).to eq("https://moderate.petition.parliament.uk/admin")
 
       s2 = new_browser
-      s2.post "/admin/login", params: { user: login_params }
+      s2.post "/admin/auth/developer/callback", params: login_params
 
       expect(s2.response.status).to eq(302)
       expect(s2.response.location).to eq("https://moderate.petition.parliament.uk/admin")
@@ -51,7 +49,7 @@ RSpec.describe "admin user persistence token", type: :request, csrf: false do
   context "when a session is destroyed" do
     it "resets the persistence token" do
       s1 = new_browser
-      s1.post "/admin/login", params: { user: login_params }
+      s1.post "/admin/auth/developer/callback", params: login_params
 
       expect(s1.response.status).to eq(302)
       expect(s1.response.location).to eq("https://moderate.petition.parliament.uk/admin")
@@ -81,7 +79,7 @@ RSpec.describe "admin user persistence token", type: :request, csrf: false do
       Site.instance.update(login_timeout: 600)
 
       travel_to 5.minutes.ago do
-        post "/admin/login", params: { user: login_params }
+        post "/admin/auth/developer/callback", params: login_params
         expect(response).to redirect_to("/admin")
       end
 
