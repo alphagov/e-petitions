@@ -12,12 +12,6 @@ We recommend using [Docker Desktop][2] to get setup quickly. If you'd prefer not
 docker compose run --rm web rake db:setup
 ```
 
-### Create an admin user
-
-```
-docker compose run --rm web rake epets:add_sysadmin_user
-```
-
 ### Load the country list
 
 ```

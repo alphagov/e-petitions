@@ -1,8 +1,13 @@
 <h1>Sign in</h1>
 <div class="grid-row">
   <div class="column-half">
-    <%= form_tag(admin_auth_developer_path, method: :post) do %>
-      <button type="submit" class="button">Login with developer strategy</button>
+    <%= form_for(@user, as: :user, url: admin_login_path, authenticity_token: form_authenticity_token) do |form| %>
+      <div class="form-group">
+        <%= form.label :email, "Email", class: "form-label" %>
+        <%= form.text_field :email, class: "form-control", type: "email", autofocus: "autofocus" %>
+      </div>
+
+      <%= form.submit "Sign in", class: "button" %>
     <% end %>
   </div>
 </div>

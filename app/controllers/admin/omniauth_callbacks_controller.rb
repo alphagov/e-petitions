@@ -1,16 +1,28 @@
 class Admin::OmniauthCallbacksController < Devise::OmniauthCallbacksController
   skip_before_action :require_admin
-  skip_before_action :verify_authenticity_token, only: %i[developer]
+  skip_before_action :verify_authenticity_token, only: %i[saml]
 
-  def developer
-    @user = AdminUser.find_by(email: omniauth_hash["uid"])
+  rescue_from ActiveRecord::RecordNotFound do
+    redirect_to admin_login_url, alert: :login_failed
+  end
+
+  def saml
+    @user = AdminUser.find_or_create_from!(provider, auth_data)
 
     if @user.present?
-      sign_in_and_redirect @user, event: :authentication
-      set_flash_message(:notice, :signed_in) if is_navigational_format?
+      sign_in @user, event: :authentication
+
+      set_flash_message(:notice, :signed_in)
+      set_refresh_header
+
+      render "admin/admin/index"
     else
       redirect_to admin_login_url, alert: :invalid_login
     end
+  end
+
+  def failure
+    redirect_to admin_login_url, alert: :login_failed
   end
 
   private
@@ -19,7 +31,15 @@ class Admin::OmniauthCallbacksController < Devise::OmniauthCallbacksController
     admin_login_url
   end
 
-  def omniauth_hash
+  def auth_data
     request.env["omniauth.auth"]
+  end
+
+  def provider
+    IdentityProvider.find_by!(name: auth_data.provider)
+  end
+
+  def set_refresh_header
+    headers['Refresh'] = "0; url=#{admin_root_url}"
   end
 end

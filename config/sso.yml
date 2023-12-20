@@ -1,0 +1,13 @@
+development: []
+
+test:
+  - name: "example"
+    idp_sso_service_url: "http://localhost:3000/sso"
+    domains:
+      - "example.com"
+    sysadmins:
+      - "sysadmins"
+    moderators:
+      - "moderators"
+    reviewers:
+      - "reviewers"

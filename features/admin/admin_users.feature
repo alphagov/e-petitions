@@ -5,7 +5,7 @@ Feature: Admin users index and crud
 
   Background:
     Given the time is "Sun, 17 Dec 2023 08:28:41 +0000"
-    And I am logged in as a sysadmin with the email "muddy@fox.com", first_name "Sys", last_name "Admin"
+    And I am logged in as a sysadmin with the email "muddy@example.com", first_name "Sys", last_name "Admin"
     And a moderator user exists with email: "naomi@example.com", first_name: "Naomi", last_name: "Campbell"
 
   Scenario: Accessing the admin users index
@@ -20,7 +20,7 @@ Feature: Admin users index and crud
     When I go to the admin users index page
     Then I should see the following admin user table:
       | Name            | Email             | Role      | Last login                  |
-      | Admin, Sys      | muddy@fox.com     | sysadmin  | 08:28am on 17 December 2023 |
+      | Admin, Sys      | muddy@example.com | sysadmin  | 08:28am on 17 December 2023 |
       | Campbell, Naomi | naomi@example.com | moderator |                             |
       | Hunt, Helen     | helen@example.com | moderator | 10:09am on 15 December 2023 |
       | Jacobi, Derek   | derek@example.com | moderator | 14:27pm on 11 December 2023 |

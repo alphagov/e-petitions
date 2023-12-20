@@ -74,6 +74,7 @@ en-GB:
       invalidation_started: "Enqueued the invalidation %{summary}"
       invalidation_updated: "Invalidation updated successfully"
       invalid_login: "Invalid login details"
+      login_failed: "There was a problem logging in - please contact support"
       logged_out: "You have been logged out"
       moderator_required: "You must be logged in as a moderator or system administrator to view this page"
       moderation_delay_sent: "An email has been sent to creators that moderation has been delayed"

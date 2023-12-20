@@ -5,6 +5,7 @@ set -o pipefail
 chown -R deploy:deploy /home/deploy/epetitions/releases/<%= release %>
 
 su - deploy <<'EOF'
+ln -nfs /home/deploy/epetitions/shared/config/sso.yml /home/deploy/epetitions/releases/<%= release %>/config/sso.yml
 ln -nfs /home/deploy/epetitions/shared/tmp /home/deploy/epetitions/releases/<%= release %>/tmp
 ln -nfs /home/deploy/epetitions/shared/log /home/deploy/epetitions/releases/<%= release %>/log
 ln -nfs /home/deploy/epetitions/shared/bundle /home/deploy/epetitions/releases/<%= release %>/vendor/bundle

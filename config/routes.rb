@@ -245,7 +245,6 @@ Rails.application.routes.draw do
         get  '/', action: 'index', as: :stats
         post '/', action: 'create', as: nil
       end
-
     end
 
     devise_for :users, class_name: 'AdminUser', module: 'admin', skip: %i[sessions]
@@ -253,19 +252,25 @@ Rails.application.routes.draw do
     as :user do
       controller 'admin/sessions' do
         get  '/admin/login',    action: 'new'
+        post '/admin/login',    action: 'create', as: nil
         get  '/admin/logout',   action: 'destroy'
         get  '/admin/continue', action: 'continue'
         get  '/admin/status',   action: 'status'
+      end
+
+      controller 'admin/omniauth_callbacks' do
+        get '/admin/auth/failure', action: 'failure'
+
+        scope '/admin/auth/:provider', via: %i[get post] do
+          match '/',         action: 'passthru', as: :sso_provider
+          match '/callback', action: 'saml',     as: :sso_provider_callback
+        end
       end
     end
   end
 
   # Devise needs a `new_user_session_url` helper for its failure app
   direct(:new_user_session) { route_for(:admin_login) }
-
-  # Friendly url helpers for Omniauth
-  direct(:admin_auth_developer) { route_for(:user_developer_omniauth_authorize) }
-  direct(:admin_auth_developer_callback) { route_for(:user_developer_omniauth_callback) }
 
   get 'ping', to: 'ping#ping'
 end

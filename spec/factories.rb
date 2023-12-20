@@ -1014,4 +1014,82 @@ FactoryBot.define do
       )
     end
   end
+
+  factory :sso_user, class: Hash do
+    transient do
+      email { "admin@example.com" }
+      first_name { "Sys" }
+      last_name { "Admin" }
+      groups { %w[sysadmins] }
+    end
+
+    provider { "example" }
+    uid { email }
+
+    info do
+      {
+        name: "#{first_name} #{last_name}",
+        email: email,
+        first_name: first_name,
+        last_name: last_name,
+        groups: groups
+      }
+    end
+
+    credentials do
+      {}
+    end
+
+    extra do
+      {
+        raw_info: {
+          name: "#{first_name} #{last_name}",
+          email: email,
+          first_name: first_name,
+          last_name: last_name,
+          groups: groups
+        }
+      }
+    end
+
+    skip_create
+
+    initialize_with { OmniAuth::AuthHash.new(attributes) }
+  end
+
+  factory :sysadmin_sso_user, parent: :sso_user do
+    transient do
+      email { "sysadmin@example.com" }
+      first_name { "John" }
+      last_name { "Admin" }
+      groups { %w[sysadmins] }
+    end
+  end
+
+  factory :moderator_sso_user, parent: :sso_user do
+    transient do
+      email { "moderator@example.com" }
+      first_name { "John" }
+      last_name { "Moderator" }
+      groups { %w[moderators] }
+    end
+  end
+
+  factory :reviewer_sso_user, parent: :sso_user do
+    transient do
+      email { "reviewer@example.com" }
+      first_name { "John" }
+      last_name { "Reviewer" }
+      groups { %w[reviewers] }
+    end
+  end
+
+  factory :norole_sso_user, parent: :sso_user do
+    transient do
+      email { "norole@example.com" }
+      first_name { "No" }
+      last_name { "Role" }
+      groups { %w[] }
+    end
+  end
 end

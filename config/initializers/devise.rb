@@ -22,10 +22,6 @@ Devise.setup do |config|
   # ==> Navigation configuration
   config.sign_out_via = :get
 
-  # ==> Omniauth configuration
-  config.omniauth_path_prefix = '/admin/auth'
-  config.omniauth :developer, fields: %i[email]
-
   # ==> Warden configuration
   # Reset the token after logging in so that other sessions are logged out
   Warden::Manager.after_set_user except: :fetch do |user, warden, options|

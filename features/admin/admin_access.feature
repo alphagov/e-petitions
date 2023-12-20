@@ -15,12 +15,12 @@ Feature: Restricted access to the admin console
     And I should be connected to the server via an ssl connection
     And the markup should be valid
 
+  @javascript
   Scenario: Login and logout to the admin console as a sysadmin
-    Given a sysadmin user exists with email: "admin@example.com", first_name: "John", last_name: "Admin"
+    Given a sysadmin SSO user exists
     When I go to the admin login page
-    And I press "Login with developer strategy"
-    And I fill in "Email" with "admin@example.com"
-    And I press "Sign In"
+    And I fill in "Email" with "sysadmin@example.com"
+    And I press "Sign in"
     Then I should be on the admin home page
     And I should be connected to the server via an ssl connection
     And the markup should be valid
@@ -29,22 +29,54 @@ Feature: Restricted access to the admin console
     And I follow "Logout"
     And I should be on the admin login page
 
-  Scenario: Login and logout to the admin console as a moderator user
-    Given a moderator user exists with email: "admin@example.com", first_name: "John", last_name: "Moderator"
+  @javascript
+  Scenario: Login and logout to the admin console as a moderator
+    Given a moderator SSO user exists
     When I go to the admin login page
-    And I press "Login with developer strategy"
-    And I fill in "Email" with "admin@example.com"
-    And I press "Sign In"
+    And I fill in "Email" with "moderator@example.com"
+    And I press "Sign in"
     Then I should be on the admin home page
-    And I should see "John Moderator"
+    And I should be connected to the server via an ssl connection
+    And the markup should be valid
     And I should not see "Users"
+    And I should see "John Moderator"
     And I follow "Logout"
     And I should be on the admin login page
 
-  Scenario: Invalid login
-    Given I go to the admin login page
-    And I press "Login with developer strategy"
-    And I fill in "Email" with "admin@example.com"
-    And I press "Sign In"
+  @javascript
+  Scenario: Login and logout to the admin console as a reviewer
+    Given a reviewer SSO user exists
+    When I go to the admin login page
+    And I fill in "Email" with "reviewer@example.com"
+    And I press "Sign in"
+    Then I should be on the admin home page
+    And I should be connected to the server via an ssl connection
+    And the markup should be valid
+    And I should not see "Users"
+    And I should see "John Reviewer"
+    And I follow "Logout"
+    And I should be on the admin login page
+
+  Scenario: Invalid domain
+    When I go to the admin login page
+    And I fill in "Email" with "admin@example.org"
+    And I press "Sign in"
     Then I should see "Invalid login details"
     And should not see "Logout"
+
+  Scenario: Invalid login
+    Given an invalid SSO login
+    When I go to the admin login page
+    And I fill in "Email" with "admin@example.com"
+    And I press "Sign in"
+    Then I should see "There was a problem logging in - please contact support"
+    And should not see "Logout"
+
+  Scenario: Valid login but no role
+    Given a valid SSO login with no roles
+    When I go to the admin login page
+    And I fill in "Email" with "norole@example.com"
+    And I press "Sign in"
+    Then I should see "Invalid login details"
+    And should not see "Logout"
+
