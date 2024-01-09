@@ -116,6 +116,42 @@ RSpec.describe Admin::GovernmentResponseController, type: :controller, admin: tr
       end
     end
 
+    describe 'DELETE /destroy' do
+      let(:government_response_attributes) do
+        {
+          responded_on: Date.civil(2022, 1, 9),
+          summary: 'The government disagrees',
+          details: 'Your petition lacks clarity and will not become law.'
+        }
+      end
+
+      def add_response(overrides = {})
+        login_as(user)
+
+        params = {
+          petition_id: petition.id,
+          government_response: government_response_attributes,
+          save: "Save"
+        }
+        patch :update, params: params.merge(overrides)
+      end
+
+      context 'when deleting a government response' do
+        it 'deletes the response and responds with success' do
+          add_response 
+          government_response_id = petition.government_response.id
+          
+          delete :destroy, params: { petition_id: petition.id }
+        
+          expect(response).to have_http_status(302) 
+          expect(GovernmentResponse.exists?(government_response_id)).to be_falsey
+          expect(flash[:notice]).to eq "Deleted government response successfully"
+          expect(petition.get_email_requested_at_for('government_response')).to be_within(1.second).of(Time.zone.now)
+          expect(response).to redirect_to "https://moderate.petition.parliament.uk/admin/petitions/#{petition.id}/government-response"  
+        end
+      end
+    end
+
     describe 'PATCH /update' do
       let(:government_response_attributes) do
         {

@@ -26,6 +26,16 @@ class Admin::Archived::GovernmentResponseController < Admin::AdminController
     end
   end
 
+  def destroy
+    if @government_response.destroy
+      message = :government_response_destroyed
+    else
+      message = :government_response_not_destroyed
+    end
+
+    redirect_to admin_archived_petition_government_response_path(@petition), notice: message
+  end
+
   private
 
   def fetch_petition

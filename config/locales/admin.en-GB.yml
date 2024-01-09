@@ -55,6 +55,8 @@ en-GB:
       email_sent_overnight: "Email will be sent overnight"
       enqueued_petition_statistics_update: "Updating the petition statistics - please wait a few minutes and then refresh this page"
       government_response_updated: "Updated government response successfully"
+      government_response_destroyed: "Deleted government response successfully"
+      government_response_not_destroyed: "Government response was not deleted - please contact support"
       failed_tasks: "There was a problem starting the tasks - please contact support"
       invalidation_cant_be_cancelled: "Can't cancel invalidations that have completed"
       invalidation_cant_be_counted: "Can't count invalidations that aren't pending"
