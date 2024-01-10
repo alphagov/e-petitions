@@ -137,12 +137,11 @@ RSpec.describe Admin::GovernmentResponseController, type: :controller, admin: tr
       end
 
       context 'when attempting to delete a government response that does not exist' do
-        it 'states that the response was not deleted' do
-          expect(government_response_id = petition.government_response).to be_nil          
+        it 'still responds with success' do
+          expect(government_response_id = petition.government_response).to be_nil
           delete :destroy, params: { petition_id: petition.id }
-
           expect(response).to have_http_status(302) 
-          expect(flash[:notice]).to eq "Government response was not deleted - please contact support"
+          expect(flash[:notice]).to eq "Deleted government response successfully"
           expect(response).to redirect_to "https://moderate.petition.parliament.uk/admin/petitions/#{petition.id}/government-response"  
         end
       end
@@ -158,6 +157,23 @@ RSpec.describe Admin::GovernmentResponseController, type: :controller, admin: tr
           expect(flash[:notice]).to eq "Deleted government response successfully"
           expect(petition.get_email_requested_at_for('government_response')).to be_within(1.second).of(Time.zone.now)
           expect(response).to redirect_to "https://moderate.petition.parliament.uk/admin/petitions/#{petition.id}/government-response"  
+        end
+      end
+
+      context 'when deleting a government response fails' do       
+
+        let(:petition) { FactoryBot.create(:responded_petition) }
+        let(:government_response) { petition.government_response }
+        let(:petition_id) { petition.id.to_s }
+
+        before do
+          allow(Petition).to receive_message_chain(:moderated, :find).with(petition_id).and_return(petition)
+          allow(government_response).to receive(:destroy).and_return(false)
+          allow(government_response).to receive(:destroyed?).and_return(false)
+        end
+        it 'responds with a failure message' do
+          delete :destroy, params: { petition_id: petition.id }
+          expect(flash[:notice]).to eq "Government response was not deleted - please contact support"
         end
       end
     end

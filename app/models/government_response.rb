@@ -13,7 +13,11 @@ class GovernmentResponse < ActiveRecord::Base
 
   after_destroy do
     # this will prevent EmailThresholdResponseJob from sending out emails for the deleted response
-    petition.set_email_requested_at_for('government_response') 
+    # TODO 'check that email requested at breaks here'
+    unless petition.archived? 
+      petition.set_email_requested_at_for('government_response')
+      petition.update(government_response_at: nil)
+    end
   end
 
   def responded_on

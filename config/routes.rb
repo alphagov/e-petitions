@@ -163,10 +163,7 @@ Rails.application.routes.draw do
         end
 
         scope only: %i[show update destroy] do
-          resource :government_response, path: 'government-response', controller: 'government_response' # show update and destroy - do the same for archive
-          member do
-            delete :destroy
-          end
+          resource :government_response, path: 'government-response', controller: 'government_response'
         end
 
         resources :signatures, only: %i[index destroy] do
@@ -229,9 +226,6 @@ Rails.application.routes.draw do
           end
           scope only: %i[show update destroy] do
             resource :government_response, path: 'government-response', controller: 'government_response'
-            member do
-              delete :destroy
-            end
           end
         end
 

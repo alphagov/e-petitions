@@ -7,7 +7,7 @@ RSpec.describe DeletePetitionJob, type: :job do
   end
 
   context "with a stopped petition" do
-    let!(:petition) { FactoryBot.create(:stopped_petition) }
+    let!(:petition) { FactoryBot.create(:stopped_petition, :archived) }
 
     it "destroys the petition" do
       expect {
@@ -19,7 +19,7 @@ RSpec.describe DeletePetitionJob, type: :job do
   end
 
   context "with a closed petition" do
-    let!(:petition) { FactoryBot.create(:validated_petition, sponsors_signed: true, state: "closed", closed_at: 4.weeks.ago) }
+    let!(:petition) { FactoryBot.create(:closed_petition, :archived, sponsors_signed: true, closed_at: 4.weeks.ago) }
     let!(:country_petition_journal) { FactoryBot.create(:country_petition_journal, petition: petition) }
     let!(:constituency_petition_journal) { FactoryBot.create(:constituency_petition_journal, petition: petition) }
 
@@ -136,7 +136,7 @@ RSpec.describe DeletePetitionJob, type: :job do
   end
 
   context "with a rejected petition" do
-    let!(:petition) { FactoryBot.create(:rejected_petition) }
+    let!(:petition) { FactoryBot.create(:rejected_petition, :archived) }
 
     it "destroys the petition" do
       expect {
@@ -157,7 +157,7 @@ RSpec.describe DeletePetitionJob, type: :job do
 
   context "with a hidden petition" do
     let!(:user) { FactoryBot.create(:moderator_user) }
-    let!(:petition) { FactoryBot.create(:rejected_petition, rejection_code: "libellous", moderated_by: user) }
+    let!(:petition) { FactoryBot.create(:rejected_petition, :archived, rejection_code: "libellous", moderated_by: user) }
 
     it "destroys the petition" do
       expect {
