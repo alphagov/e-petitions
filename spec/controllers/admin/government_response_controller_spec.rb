@@ -136,11 +136,21 @@ RSpec.describe Admin::GovernmentResponseController, type: :controller, admin: tr
         patch :update, params: params.merge(overrides)
       end
 
+      context 'when attempting to delete a government response that does not exist' do
+        it 'states that the response was not deleted' do
+          expect(government_response_id = petition.government_response).to be_nil          
+          delete :destroy, params: { petition_id: petition.id }
+
+          expect(response).to have_http_status(302) 
+          expect(flash[:notice]).to eq "Government response was not deleted - please contact support"
+          expect(response).to redirect_to "https://moderate.petition.parliament.uk/admin/petitions/#{petition.id}/government-response"  
+        end
+      end
+
       context 'when deleting a government response' do
         it 'deletes the response and responds with success' do
           add_response 
-          government_response_id = petition.government_response.id
-          
+          government_response_id = petition.government_response.id 
           delete :destroy, params: { petition_id: petition.id }
         
           expect(response).to have_http_status(302) 

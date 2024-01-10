@@ -27,10 +27,14 @@ class Admin::GovernmentResponseController < Admin::AdminController
   end
 
   def destroy
-    if @government_response.destroy
-      message = :government_response_destroyed
-    else
+    if @government_response.id.nil?
       message = :government_response_not_destroyed
+    else
+      if @government_response.destroy
+        message = :government_response_destroyed
+      else
+        message = :government_response_not_destroyed
+      end
     end
 
     redirect_to admin_petition_government_response_path(@petition), notice: message
