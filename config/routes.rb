@@ -152,7 +152,6 @@ Rails.application.routes.draw do
 
         scope only: %i[show update] do
           resource :debate_outcome, path: 'debate-outcome'
-          resource :government_response, path: 'government-response', controller: 'government_response'
           resource :notes
           resource :details, controller: 'petition_details'
           resource :schedule_debate, path: 'schedule-debate', controller: 'schedule_debate'
@@ -161,6 +160,10 @@ Rails.application.routes.draw do
           resource :departments, controller: 'petition_departments'
           resource :topics, controller: 'petition_topics'
           resource :removal, controller: 'petition_removals'
+        end
+
+        scope only: %i[show update destroy] do
+          resource :government_response, path: 'government-response', controller: 'government_response'
         end
 
         resources :signatures, only: %i[index destroy] do
@@ -213,7 +216,6 @@ Rails.application.routes.draw do
 
           scope only: %i[show update] do
             resource :debate_outcome, path: 'debate-outcome'
-            resource :government_response, path: 'government-response', controller: 'government_response'
             resource :notes
             resource :details, controller: 'petition_details'
             resource :schedule_debate, path: 'schedule-debate', controller: 'schedule_debate'
@@ -221,6 +223,10 @@ Rails.application.routes.draw do
             resource :departments, controller: 'petition_departments'
             resource :topics, controller: 'petition_topics'
             resource :removal, controller: 'petition_removals'
+          end
+
+          scope only: %i[show update destroy] do
+            resource :government_response, path: 'government-response', controller: 'government_response'
           end
         end
 

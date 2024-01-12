@@ -21,8 +21,11 @@
   <% end %>
 
   <%= email_petitioners_with_count_submit_button(f, petition, disabled: @petition.editing_disabled?) %>
-  <%= f.submit "Save", name: 'save', class: 'button-secondary', disabled: @petition.editing_disabled? %>
-  <%= link_to 'Cancel', admin_petition_path(@petition), class: 'button-secondary' %>
+  <% if @government_response.persisted? %>
+    <%= link_to "Delete", admin_petition_government_response_path(@petition), class: "button-warning", method: :delete, data: { confirm: "Are you sure you want to delete the government response?" } %>
+  <% end %>
+  <%= f.submit "Save", name: "save", class: "button-secondary", disabled: @petition.editing_disabled? %>
+  <%= link_to "Cancel", admin_petition_path(@petition), class: "button-secondary" %>
 <% end %>
 
 <%= javascript_include_tag 'character-counter' %>

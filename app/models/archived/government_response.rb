@@ -13,6 +13,14 @@ module Archived
       petition.touch(:government_response_at) unless petition.government_response_at?
     end
 
+    after_destroy do
+      # This prevents any enqueued email jobs from being sent
+      petition.set_email_requested_at_for("government_response")
+
+      # This removes the petition from the 'Government response' list
+      petition.update_columns(government_response_at: nil)
+    end
+
     def responded_on
       super || default_responded_on
     end

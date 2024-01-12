@@ -11,6 +11,18 @@ class GovernmentResponse < ActiveRecord::Base
     petition.touch(:government_response_at) unless petition.government_response_at?
   end
 
+  after_destroy do
+    unless petition.archived?
+      Appsignal.increment_counter("petition.responded", -1)
+
+      # This prevents any enqueued email jobs from being sent
+      petition.set_email_requested_at_for("government_response")
+
+      # This removes the petition from the 'Government response' list
+      petition.update_columns(government_response_at: nil)
+    end
+  end
+
   def responded_on
     super || default_responded_on
   end

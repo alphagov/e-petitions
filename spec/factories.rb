@@ -317,6 +317,11 @@ FactoryBot.define do
       end
     end
 
+    trait :archived do
+      archived_at { 3.day.ago }
+      archiving_started_at { 4.days.ago } 
+    end
+
     trait :with_additional_details do
       additional_details { "Petition additional details" }
     end
