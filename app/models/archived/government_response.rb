@@ -15,7 +15,8 @@ module Archived
 
     after_destroy do
       # this will prevent EmailThresholdResponseJob from sending out emails for the deleted response
-      petition.set_email_requested_at_for('government_response') 
+      petition.set_email_requested_at_for('government_response')
+      petition.update_columns(government_response_at: nil)
     end  
 
     def responded_on
