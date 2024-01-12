@@ -224,6 +224,7 @@ Rails.application.routes.draw do
             resource :topics, controller: 'petition_topics'
             resource :removal, controller: 'petition_removals'
           end
+
           scope only: %i[show update destroy] do
             resource :government_response, path: 'government-response', controller: 'government_response'
           end

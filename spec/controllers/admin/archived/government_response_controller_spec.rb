@@ -610,5 +610,78 @@ RSpec.describe Admin::Archived::GovernmentResponseController, type: :controller,
         end
       end
     end
+
+    describe 'DELETE /destroy' do
+      before do
+        expect(Archived::Petition).to receive_message_chain(:moderated, :find).with(petition.to_param).and_return(petition)
+      end
+
+      context "when the petition has a government response" do
+        let!(:petition) { FactoryBot.create(:archived_petition, :response) }
+
+        before do
+          expect(petition).to receive(:government_response).and_return(government_response)
+        end
+
+        context "when the government response is succcessfully deleted" do
+          it "redirects to the petition page and displays a notice" do
+            delete :destroy, params: { petition_id: petition.id }
+
+            expect(response).to redirect_to("https://moderate.petition.parliament.uk/admin/archived/petitions/#{petition.id}")
+            expect(controller).to set_flash[:notice].to("Deleted government response successfully")
+          end
+
+          it "updates the email_requested_at timestamp for 'government_response'" do
+            email_requested_at = 1.hour.ago
+            petition.set_email_requested_at_for("government_response", to: email_requested_at)
+
+            expect {
+              delete :destroy, params: { petition_id: petition.id }
+            }.to change {
+              petition.get_email_requested_at_for("government_response")
+            }.from(email_requested_at).to(be_within(1.second).of(Time.current))
+          end
+
+          it "updates the government_response_at timestamp to be nil" do
+            expect {
+              delete :destroy, params: { petition_id: petition.id }
+            }.to change {
+              petition.government_response_at
+            }.from(be_present).to(be_nil)
+          end
+        end
+
+        context "when the government response is not successfully deleted" do
+          before do
+            expect(government_response).to receive(:destroy).and_return(false)
+            expect(government_response).to receive(:destroyed?).and_return(false)
+          end
+
+          it "redirects to the government response page and displays an alert" do
+            delete :destroy, params: { petition_id: petition.id }
+
+            expect(response).to redirect_to("https://moderate.petition.parliament.uk/admin/archived/petitions/#{petition.id}/government-response")
+            expect(controller).to set_flash[:alert].to("Unable to delete government response - please contact support")
+          end
+        end
+      end
+
+      context "when the petition has no government response" do
+        let!(:petition) { FactoryBot.create(:archived_petition) }
+        let(:new_government_response) { petition.build_government_response }
+
+        before do
+          expect(petition).to receive(:government_response).and_return(nil)
+          expect(petition).to receive(:build_government_response).and_return(new_government_response)
+        end
+
+        it "redirects to the petition page and displays a notice" do
+          delete :destroy, params: { petition_id: petition.id }
+
+          expect(response).to redirect_to("https://moderate.petition.parliament.uk/admin/archived/petitions/#{petition.id}")
+          expect(controller).to set_flash[:notice].to("Deleted government response successfully")
+        end
+      end
+    end
   end
 end

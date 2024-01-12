@@ -21,7 +21,7 @@ RSpec.describe "routes for admin petition government response", type: :routes, a
     expect(patch("/admin/petitions/1/government-response")).to route_to('admin/government_response#update', petition_id: '1')
   end
 
-  it "does route DELETE /admin/petitions/1/government-response" do
+  it "routes DELETE /admin/petitions/1/government-response to admin/government_response#destroy" do
     expect(delete("/admin/petitions/1/government-response")).to route_to('admin/government_response#destroy', petition_id: '1')
   end
 end

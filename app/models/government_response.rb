@@ -12,9 +12,13 @@ class GovernmentResponse < ActiveRecord::Base
   end
 
   after_destroy do
-    # this will prevent EmailThresholdResponseJob from sending out emails for the deleted response
-    unless petition.archived? 
-      petition.set_email_requested_at_for('government_response')
+    unless petition.archived?
+      Appsignal.increment_counter("petition.responded", -1)
+
+      # This prevents any enqueued email jobs from being sent
+      petition.set_email_requested_at_for("government_response")
+
+      # This removes the petition from the 'Government response' list
       petition.update_columns(government_response_at: nil)
     end
   end
