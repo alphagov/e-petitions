@@ -13,6 +13,10 @@ module EmailAllPetitionSignatories
     attr_reader :petition, :requested_at, :scope
 
     queue_as :high_priority
+
+    with_options(skip_after_callbacks_if_terminated: true) do
+      define_callbacks :enqueue_send_email_jobs
+    end
   end
 
   module ClassMethods
@@ -21,6 +25,14 @@ module EmailAllPetitionSignatories
 
       petition.set_email_requested_at_for(timestamp_name, to: requested_at)
       set(wait_until: later_tonight).perform_later(**args.merge(requested_at: requested_at_iso8601))
+    end
+
+    def before_enqueue_send_email_jobs(*filters, &blk)
+      set_callback(:enqueue_send_email_jobs, :before, *filters, &blk)
+    end
+
+    def after_enqueue_send_email_jobs(*filters, &blk)
+      set_callback(:enqueue_send_email_jobs, :after, *filters, &blk)
     end
 
     private
@@ -64,8 +76,10 @@ module EmailAllPetitionSignatories
   # and enqueues a job to do the actual sending
   def enqueue_send_email_jobs
     Appsignal.without_instrumentation do
-      signatures_to_email.find_each do |signature|
-        email_delivery_job_class.perform_later(**mailer_arguments(signature))
+      run_callbacks :enqueue_send_email_jobs do
+        signatures_to_email.find_each do |signature|
+          email_delivery_job_class.perform_later(**mailer_arguments(signature))
+        end
       end
     end
   end

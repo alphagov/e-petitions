@@ -5,6 +5,8 @@
     <thead>
       <tr>
         <th>Subject</th>
+        <th>Count</th>
+        <th>Sent</th>
         <th>Actions</th>
       </tr>
     </thead>
@@ -14,6 +16,8 @@
           <td><%= email.subject %></td>
           <td>
             <%= button_to 'Edit', edit_admin_archived_petition_email_path(petition, email), method: :get, class: 'button' %>
+            <td><%= number_with_delimiter(email.email_count) || "–" %></td>
+            <td><%= date_format(email.emails_enqueued_at) || "–" %></td>
             <%= button_to 'Delete', admin_archived_petition_email_path(petition, email), method: :delete, class: 'button-warning', data: { confirm: 'Delete other parliamentary business?' } %>
           </td>
         </tr>
