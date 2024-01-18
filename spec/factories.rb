@@ -80,6 +80,10 @@ FactoryBot.define do
     opened_at { 2.years.ago }
     closed_at { 1.year.ago }
 
+    trait :creator do
+      association :creator, :validated, :creator, factory: :archived_signature
+    end
+
     after(:build) do |petition, evaluator|
       petition.parliament ||= Parliament.archived.first || FactoryBot.create(:parliament, :archived)
 
