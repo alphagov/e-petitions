@@ -1,9 +1,11 @@
-RSpec.shared_examples_for "job to enqueue signatory mailing jobs" do
+RSpec.shared_examples_for "job to enqueue signatory mailing jobs" do |work_proc|
   let(:requested_at) { Time.current.change(usec: 0) }
   let(:requested_at_as_string) { requested_at.getutc.iso8601(6) }
 
-  def do_work
-    subject.perform(petition: petition, requested_at: requested_at_as_string)
+  unless work_proc.present?
+    work_proc = -> {
+      subject.perform(petition: petition, requested_at: requested_at_as_string)
+    }
   end
 
   describe '.run_later_tonight' do
@@ -47,18 +49,18 @@ RSpec.shared_examples_for "job to enqueue signatory mailing jobs" do
 
   context "when the petition has not been updated" do
     it "enqueues a job to send an email to each signatory" do
-      do_work
+      instance_exec(&work_proc)
       expect(enqueued_jobs.size).to eq(1)
     end
 
     it "the job is the correct type for the type of notification" do
-      do_work
+      instance_exec(&work_proc)
       job = enqueued_jobs.first
       expect(job[:job]).to eq(subject.email_delivery_job_class)
     end
 
     it "the job has the expected arguments" do
-      do_work
+      instance_exec(&work_proc)
       args = enqueued_jobs.first[:args].first
 
       expect(args["timestamp_name"]).to eq(subject.timestamp_name)
@@ -72,7 +74,7 @@ RSpec.shared_examples_for "job to enqueue signatory mailing jobs" do
     end
 
     it "does not enqueue any jobs to send emails" do
-      do_work
+      instance_exec(&work_proc)
       expect(enqueued_jobs).to be_empty
     end
   end

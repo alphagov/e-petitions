@@ -108,6 +108,10 @@ module Archived
         where(notify_by_email: true)
       end
 
+      def subscribers
+        validated.subscribed.count
+      end
+
       def validated
         where(state: VALIDATED_STATE)
       end

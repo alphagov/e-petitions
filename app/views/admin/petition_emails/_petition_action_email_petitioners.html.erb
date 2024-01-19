@@ -5,6 +5,8 @@
     <thead>
       <tr>
         <th>Subject</th>
+        <th>Count</th>
+        <th>Sent</th>
         <th>Actions</th>
       </tr>
     </thead>
@@ -12,6 +14,8 @@
       <% petition.emails.select(&:persisted?).each do |email| %>
         <tr>
           <td><%= email.subject %></td>
+          <td><%= number_with_delimiter(email.email_count) || "–" %></td>
+          <td><%= date_format(email.emails_enqueued_at) || "–" %></td>
           <td>
             <%= button_to 'Edit', edit_admin_petition_email_path(petition, email), method: :get, class: 'button', disabled: @petition.editing_disabled? %>
             <%= button_to 'Delete', admin_petition_email_path(petition, email), method: :delete, class: 'button-warning', disabled: @petition.editing_disabled?, data: { confirm: 'Delete other parliamentary business?' } %>

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_03_27_145255) do
+ActiveRecord::Schema.define(version: 2024_01_17_150804) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "intarray"
@@ -112,6 +112,8 @@ ActiveRecord::Schema.define(version: 2023_03_27_145255) do
     t.string "sent_by"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "email_count"
+    t.datetime "emails_enqueued_at"
     t.index ["petition_id"], name: "index_archived_petition_emails_on_petition_id"
   end
 
@@ -475,6 +477,8 @@ ActiveRecord::Schema.define(version: 2023_03_27_145255) do
     t.string "sent_by"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "email_count"
+    t.datetime "emails_enqueued_at"
     t.index ["petition_id"], name: "index_petition_emails_on_petition_id"
   end
 

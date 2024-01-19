@@ -287,7 +287,7 @@ RSpec.describe ArchivePetitionJob, type: :job do
     end
   end
 
-  context "with a petition that has an government_response email scheduled" do
+  context "with a petition that has a government_response email scheduled" do
     let(:petition) do
       FactoryBot.create(:closed_petition, :email_requested, email_requested_for_government_response_at: Time.current)
     end
@@ -297,7 +297,7 @@ RSpec.describe ArchivePetitionJob, type: :job do
     end
   end
 
-  context "with a petition that has an debate_scheduled email scheduled" do
+  context "with a petition that has a debate_scheduled email scheduled" do
     let(:petition) do
       FactoryBot.create(:closed_petition, :email_requested, email_requested_for_debate_scheduled_at: Time.current)
     end
@@ -307,7 +307,7 @@ RSpec.describe ArchivePetitionJob, type: :job do
     end
   end
 
-  context "with a petition that has an debate_outcome email scheduled" do
+  context "with a petition that has a debate_outcome email scheduled" do
     let(:petition) do
       FactoryBot.create(:closed_petition, :email_requested, email_requested_for_debate_outcome_at: Time.current)
     end
@@ -317,7 +317,7 @@ RSpec.describe ArchivePetitionJob, type: :job do
     end
   end
 
-  context "with a petition that has an petition_email email scheduled" do
+  context "with a petition that has a petition_email email scheduled" do
     let(:petition) do
       FactoryBot.create(:closed_petition, :email_requested, email_requested_for_petition_email_at: Time.current)
     end
@@ -327,7 +327,24 @@ RSpec.describe ArchivePetitionJob, type: :job do
     end
   end
 
-  context "with a petition that has an petition_mailshot email scheduled" do
+  context "with a petition that has a petition_email email that has been sent" do
+    let(:petition) do
+      FactoryBot.create(:closed_petition, email_attributes: { email_count: 216, emails_enqueued_at: 6.months.ago })
+    end
+
+    let(:email) { petition.emails.first }
+    let(:archived_email) { archived_petition.emails.first }
+
+    it "copies the email count to the archived petition email" do
+      expect(archived_email.email_count).to eq(email.email_count)
+    end
+
+    it "copies the emails enqueued timestamp to the archived petition email" do
+      expect(archived_email.emails_enqueued_at).to be_usec_precise_with(email.emails_enqueued_at)
+    end
+  end
+
+  context "with a petition that has a petition_mailshot email scheduled" do
     let(:petition) do
       FactoryBot.create(:closed_petition, :email_requested, email_requested_for_petition_mailshot_at: Time.current)
     end

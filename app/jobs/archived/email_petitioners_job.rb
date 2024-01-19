@@ -12,6 +12,13 @@ module Archived
       log_exception(exception)
     end
 
+    after_enqueue_send_email_jobs do
+      email.update_columns(
+        email_count: petition.signatures.subscribers,
+        emails_enqueued_at: Time.current
+      )
+    end
+
     def perform(**args)
       @email = args[:email]
       super
