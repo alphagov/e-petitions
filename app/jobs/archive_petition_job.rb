@@ -75,6 +75,8 @@ class ArchivePetitionJob < ApplicationJob
             e.subject = email.subject
             e.body = email.body
             e.sent_by = email.sent_by
+            e.email_count = email.email_count
+            e.emails_enqueued_at = email.emails_enqueued_at
             e.created_at = email.created_at
             e.updated_at = email.updated_at
           end

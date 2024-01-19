@@ -262,6 +262,7 @@ FactoryBot.define do
       creator_name { nil }
       creator_email { nil }
       creator_attributes { {} }
+      email_attributes { nil }
       sponsors_signed { nil }
       sponsor_count { Site.minimum_number_of_sponsors }
       increment { true }
@@ -298,6 +299,10 @@ FactoryBot.define do
       if evaluator.admin_notes
         petition.build_note details: evaluator.admin_notes
       end
+
+      if evaluator.email_attributes
+        petition.emails << build(:petition_email, petition: petition, **evaluator.email_attributes)
+      end
     end
 
     after(:create) do |petition, evaluator|
@@ -323,7 +328,7 @@ FactoryBot.define do
 
     trait :archived do
       archived_at { 3.day.ago }
-      archiving_started_at { 4.days.ago } 
+      archiving_started_at { 4.days.ago }
     end
 
     trait :with_additional_details do
