@@ -9,7 +9,7 @@ Feature: Emailing petitioner supporters
     And I am logged in as a sysadmin with the email "admin@example.com", first_name "Admin", last_name "User"
     When I am on the admin all petitions page
     And I follow "Ban Badger Baiting"
-    And I follow "Other parliamentary business"
+    And I follow "Updates"
     Then I should be on the admin email petitioners form page for "Ban Badger Baiting"
     And the markup should be valid
     When I press "Email 6 petitioners"
@@ -27,7 +27,7 @@ Feature: Emailing petitioner supporters
     And I am logged in as a sysadmin with the email "admin@example.com", first_name "Admin", last_name "User"
     When I am on the admin all petitions page
     And I follow "Ban Badger Baiting"
-    And I follow "Other parliamentary business"
+    And I follow "Updates"
     Then I should be on the admin email petitioners form page for "Ban Badger Baiting"
     And the markup should be valid
     When I press "Save"
@@ -45,7 +45,7 @@ Feature: Emailing petitioner supporters
     And I am logged in as a sysadmin with the email "admin@example.com", first_name "Admin", last_name "User"
     When I am on the admin all petitions page
     And I follow "Ban Badger Baiting"
-    And I follow "Other parliamentary business"
+    And I follow "Updates"
     Then I should be on the admin email petitioners form page for "Ban Badger Baiting"
     And the markup should be valid
     When I press "Save"
@@ -64,16 +64,16 @@ Feature: Emailing petitioner supporters
     And I am logged in as a sysadmin with the email "admin@example.com", first_name "Admin", last_name "User"
     When I am on the admin all petitions page
     And I follow "Ban Badger Baiting"
-    And I follow "Other parliamentary business"
+    And I follow "Updates"
     Then I should be on the admin email petitioners form page for "Ban Badger Baiting"
     And the markup should be valid
     And I should see "This will be debated"
     When I press "Edit"
-    Then I should see "Edit other parliamentary business"
+    Then I should see "Edit update"
     When I fill in "Subject" with "This will not be debated"
     And I press "Save"
-    Then I should see "Updated other parliamentary business successfully"
-    When I follow "Other parliamentary business"
+    Then I should see "Updated petition update successfully"
+    When I follow "Updates"
     Then I should see "This will not be debated"
 
   Scenario: Deleting an email to all petitioners
@@ -82,11 +82,11 @@ Feature: Emailing petitioner supporters
     And I am logged in as a sysadmin with the email "admin@example.com", first_name "Admin", last_name "User"
     When I am on the admin all petitions page
     And I follow "Ban Badger Baiting"
-    And I follow "Other parliamentary business"
+    And I follow "Updates"
     Then I should be on the admin email petitioners form page for "Ban Badger Baiting"
     And the markup should be valid
     And I should see "This will be debated"
     When I press "Delete"
-    Then I should see "Deleted other parliamentary business successfully"
-    When I follow "Other parliamentary business"
+    Then I should see "Deleted petition update successfully"
+    When I follow "Updates"
     Then I should not see "This will be debated"

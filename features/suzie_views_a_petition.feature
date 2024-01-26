@@ -132,15 +132,15 @@ Feature: Suzie views a petition
     When I view the petition
     Then I should not see the petition creator
 
-  Scenario: Suzie does not see information about other parliamentary business when there is none
+  Scenario: Suzie does not see information about petition updates when there is none
     Given an open petition "Ban Badger Baiting"
     When I view the petition
-    Then I should not see "Other parliamentary business"
+    Then I should not see "Updates"
 
-  Scenario: Suzie sees information about other parliamentary business when there is some
-    Given a petition "Ban Badger Baiting" has other parliamentary business
+  Scenario: Suzie sees information about petition updates when there is some
+    Given a petition "Ban Badger Baiting" has updates
     When I view the petition
-    Then I should see the other business items
+    Then I should see the updates
 
   Scenario: Suzie sees information about the outcomes when viewing a debated petition
     Given a petition "Ban Badger Baiting" has been debated 2 days ago
