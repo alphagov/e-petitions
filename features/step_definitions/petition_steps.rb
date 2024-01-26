@@ -484,7 +484,7 @@ Given(/^there are (\d+) petitions with enough signatures to require a debate$/) 
   end
 end
 
-Given(/^a petition "(.*?)" has other parliamentary business$/) do |petition_action|
+Given(/^a petition "(.*?)" has updates$/) do |petition_action|
   @petition = FactoryBot.create(:open_petition, action: petition_action)
   @email = FactoryBot.create(:petition_email,
     petition: @petition,
@@ -493,7 +493,7 @@ Given(/^a petition "(.*?)" has other parliamentary business$/) do |petition_acti
   )
 end
 
-Given(/^an archived petition "(.*?)" has other parliamentary business$/) do |petition_action|
+Given(/^an archived petition "(.*?)" has updates$/) do |petition_action|
   @petition = FactoryBot.create(:archived_petition, action: petition_action)
   @email = FactoryBot.create(:archived_petition_email,
     petition: @petition,
@@ -502,9 +502,9 @@ Given(/^an archived petition "(.*?)" has other parliamentary business$/) do |pet
   )
 end
 
-Then(/^I should see the other business items$/) do
+Then(/^I should see the petition updates$/) do
   steps %Q(
-    Then I should see "Other parliamentary business"
+    Then I should see "Updates"
     And I should see "Committee to discuss #{@petition.action}"
     And I should see "The Petition Committee will discuss #{@petition.action} on the #{Date.tomorrow}"
   )

@@ -17,7 +17,7 @@ RSpec.describe Archived::EmailPetitionersJob, type: :job do
     subject.perform(petition: petition, email: email, requested_at: requested_at_as_string)
   }
 
-  context "when sending other parliamentary business emails" do
+  context "when sending update emails" do
     it "records the number of emails sent" do
       expect {
         perform_enqueued_jobs {
@@ -38,7 +38,6 @@ RSpec.describe Archived::EmailPetitionersJob, type: :job do
       }.from(nil).to(be_within(1.second).of(Time.current))
     end
   end
-  
   context "when the petition email has been deleted" do
     before do
       email.destroy
