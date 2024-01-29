@@ -140,7 +140,7 @@ Feature: Suzie views a petition
   Scenario: Suzie sees information about petition updates when there is some
     Given a petition "Ban Badger Baiting" has updates
     When I view the petition
-    Then I should see the updates
+    Then I should see the petition updates
 
   Scenario: Suzie sees information about the outcomes when viewing a debated petition
     Given a petition "Ban Badger Baiting" has been debated 2 days ago

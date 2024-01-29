@@ -502,7 +502,7 @@ Given(/^an archived petition "(.*?)" has updates$/) do |petition_action|
   )
 end
 
-Then(/^I should see the updates$/) do
+Then(/^I should see the petition updates$/) do
   steps %Q(
     Then I should see "Updates"
     And I should see "Committee to discuss #{@petition.action}"

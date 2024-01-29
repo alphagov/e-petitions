@@ -87,7 +87,7 @@ Feature: Joe views an archived petition
   Scenario: Joe sees information about petition update when there is some
     Given an archived petition "Ban Badger Baiting" has updates
     When I view the petition
-    Then I should see the updates
+    Then I should see the petition updates
 
   @allow-rescue
   Scenario: Joe tries to see a stopped archived petition
