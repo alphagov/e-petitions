@@ -493,22 +493,6 @@ RSpec.describe Petition, type: :model do
       end
     end
 
-    context "awaiting_debate_date" do
-      before do
-        @p1 = FactoryBot.create(:open_petition)
-        @p2 = FactoryBot.create(:awaiting_debate_petition)
-        @p3 = FactoryBot.create(:debated_petition)
-      end
-
-      it "returns only petitions that reached the debate threshold" do
-        expect(Petition.awaiting_debate_date).to include(@p2)
-      end
-
-      it "doesn't include petitions that has the debate date" do
-        expect(Petition.awaiting_debate_date).not_to include(@p3)
-      end
-    end
-
     context "selectable" do
       before :each do
         @non_selectable_petition_1 = FactoryBot.create(:petition, :state => Petition::PENDING_STATE)
@@ -543,25 +527,6 @@ RSpec.describe Petition, type: :model do
 
       it "returns only stoppable petitions" do
         expect(Petition.stoppable).to include(*stoppable_petitions)
-      end
-    end
-
-    context 'in_debate_queue' do
-      let!(:petition_1) { FactoryBot.create(:open_petition, debate_threshold_reached_at: 1.day.ago) }
-      let!(:petition_2) { FactoryBot.create(:open_petition, debate_threshold_reached_at: nil) }
-      let!(:petition_3) { FactoryBot.create(:open_petition, debate_threshold_reached_at: nil, scheduled_debate_date: 3.days.from_now) }
-      let!(:petition_4) { FactoryBot.create(:open_petition, debate_threshold_reached_at: nil, scheduled_debate_date: nil) }
-
-      subject { described_class.in_debate_queue }
-
-      it 'includes petitions that have reached the debate threshold' do
-        expect(subject).to include(petition_1)
-        expect(subject).not_to include(petition_2)
-      end
-
-      it 'includes petitions that have not reached the debate threshold if they have been scheduled for debate' do
-        expect(subject).to include(petition_3)
-        expect(subject).not_to include(petition_4)
       end
     end
 
