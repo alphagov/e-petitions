@@ -69,7 +69,7 @@ Feature: Emailing petitioner supporters
     And the markup should be valid
     And I should see "This will be debated"
     When I press "Edit"
-    Then I should see "Edit update"
+    Then I should see "Edit petition update"
     When I fill in "Subject" with "This will not be debated"
     And I press "Save"
     Then I should see "Updated petition update successfully"
