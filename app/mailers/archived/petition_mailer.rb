@@ -7,7 +7,8 @@ module Archived
 
       mail to: @signature.email,
         subject: subject_for(:email_signer),
-        list_unsubscribe: unsubscribe_url
+        list_unsubscribe: unsubscribe_url,
+        list_unsubscribe_post: one_click_unsubscribe
     end
 
     def email_creator(petition, signature, email)
@@ -15,7 +16,8 @@ module Archived
 
       mail to: @signature.email,
         subject: subject_for(:email_creator),
-        list_unsubscribe: unsubscribe_url
+        list_unsubscribe: unsubscribe_url,
+        list_unsubscribe_post: one_click_unsubscribe
     end
 
     def mailshot_for_signer(petition, signature, mailshot)
@@ -23,7 +25,8 @@ module Archived
 
       mail to: @signature.email,
         subject: subject_for(:mailshot_for_signer),
-        list_unsubscribe: unsubscribe_url
+        list_unsubscribe: unsubscribe_url,
+        list_unsubscribe_post: one_click_unsubscribe
     end
 
     def mailshot_for_creator(petition, signature, mailshot)
@@ -31,7 +34,8 @@ module Archived
 
       mail to: @signature.email,
         subject: subject_for(:mailshot_for_creator),
-        list_unsubscribe: unsubscribe_url
+        list_unsubscribe: unsubscribe_url,
+        list_unsubscribe_post: one_click_unsubscribe
     end
 
     def notify_signer_of_threshold_response(petition, signature)
@@ -40,7 +44,8 @@ module Archived
 
       mail to: @signature.email,
         subject: subject_for(:notify_signer_of_threshold_response),
-        list_unsubscribe: unsubscribe_url
+        list_unsubscribe: unsubscribe_url,
+        list_unsubscribe_post: one_click_unsubscribe
     end
 
     def notify_creator_of_threshold_response(petition, signature)
@@ -49,7 +54,8 @@ module Archived
 
       mail to: @signature.email,
         subject: subject_for(:notify_creator_of_threshold_response),
-        list_unsubscribe: unsubscribe_url
+        list_unsubscribe: unsubscribe_url,
+        list_unsubscribe_post: one_click_unsubscribe
     end
 
     def notify_signer_of_debate_scheduled(petition, signature)
@@ -57,14 +63,16 @@ module Archived
 
       mail to: @signature.email,
         subject: subject_for(:notify_signer_of_debate_scheduled),
-        list_unsubscribe: unsubscribe_url
+        list_unsubscribe: unsubscribe_url,
+        list_unsubscribe_post: one_click_unsubscribe
     end
 
     def notify_creator_of_debate_scheduled(petition, signature)
       @petition, @signature = petition, signature
       mail to: @signature.email,
         subject: subject_for(:notify_creator_of_debate_scheduled),
-        list_unsubscribe: unsubscribe_url
+        list_unsubscribe: unsubscribe_url,
+        list_unsubscribe_post: one_click_unsubscribe
     end
 
     def notify_signer_of_debate_outcome(petition, signature)
@@ -76,7 +84,9 @@ module Archived
         subject = subject_for(:notify_signer_of_negative_debate_outcome)
       end
 
-      mail to: @signature.email, subject: subject, list_unsubscribe: unsubscribe_url
+      mail to: @signature.email, subject: subject,
+        list_unsubscribe: unsubscribe_url,
+        list_unsubscribe_post: one_click_unsubscribe
     end
 
     def notify_creator_of_debate_outcome(petition, signature)
@@ -88,7 +98,9 @@ module Archived
         subject = subject_for(:notify_creator_of_negative_debate_outcome)
       end
 
-      mail to: @signature.email, subject: subject, list_unsubscribe: unsubscribe_url
+      mail to: @signature.email, subject: subject,
+        list_unsubscribe: unsubscribe_url,
+        list_unsubscribe_post: one_click_unsubscribe
     end
 
     private
@@ -123,6 +135,10 @@ module Archived
 
     def unsubscribe_url
       "<#{unsubscribe_archived_signature_url(@signature, token: @signature.unsubscribe_token)}>"
+    end
+
+    def one_click_unsubscribe
+      "List-Unsubscribe=One-Click"
     end
   end
 end
