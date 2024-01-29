@@ -46,10 +46,8 @@
       <%= number_with_delimiter(current_threshold(petition)) %>
     </p>
   </div>
-
   <%= render 'threshold_details', petition: petition %>
-  <%= render 'other_business_details', petition: petition %>
-
+  <%= render 'update_details', petition: petition %>
   <ul class="petition-meta">
     <li>
       <span class="label">Date closed</span> <%= short_date_format petition.closed_at %>
