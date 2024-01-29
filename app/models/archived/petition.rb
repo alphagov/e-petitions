@@ -83,7 +83,7 @@ module Archived
       delegate :name, :email, to: :creator
       delegate :code, :details, to: :rejection
       delegate :summary, :details, :created_at, :updated_at, to: :government_response
-      delegate :date, :transcript_url, :video_url, :overview, to: :debate_outcome, prefix: :debate
+      delegate :date, :transcript_url, :video_url, :public_engagement_url, :debate_summary_url, :overview, to: :debate_outcome, prefix: :debate
       delegate :debate_pack_url, to: :debate_outcome, prefix: false
     end
 

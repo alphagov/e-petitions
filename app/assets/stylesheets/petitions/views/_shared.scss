@@ -385,6 +385,7 @@ input.back-page {
 
   li {
     margin: em(5, 16) 0;
+    white-space: nowrap;
 
     @include media(tablet) {
       display: inline;

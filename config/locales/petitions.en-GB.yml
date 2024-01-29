@@ -287,6 +287,8 @@ en-GB:
         video_url: "Watch the debate"
         transcript_url: "Read the transcript"
         debate_pack_url: "Read the research"
+        public_engagement_url: "Read what the public said"
+        debate_summary_url: "Read a summary of the debate"
 
     pagination:
       previous_html: |-

@@ -223,7 +223,9 @@ RSpec.describe ArchivePetitionJob, type: :job do
           overview: "Debate on kids TV",
           transcript_url: "https://hansard.parliament.uk/commons/2017-04-24/debates/123456/KidsTV",
           video_url: "http://www.parliamentlive.tv/Event/Index/123456",
-          debate_pack_url: "http://researchbriefings.parliament.uk/ResearchBriefing/Summary/CDP-2015-0001"
+          debate_pack_url: "http://researchbriefings.parliament.uk/ResearchBriefing/Summary/CDP-2015-0001",
+          public_engagement_url: "https://www.parliament.uk/public-engagement",
+          debate_summary_url: "https://www.parliament.uk/summary-debates",
         )
       end
 
@@ -238,6 +240,8 @@ RSpec.describe ArchivePetitionJob, type: :job do
         expect(archived_debate_outcome.transcript_url).to eq(debate_outcome.transcript_url)
         expect(archived_debate_outcome.video_url).to eq(debate_outcome.video_url)
         expect(archived_debate_outcome.debate_pack_url).to eq(debate_outcome.debate_pack_url)
+        expect(petition.debate_outcome.public_engagement_url).to eq debate_outcome[:public_engagement_url]
+        expect(petition.debate_outcome.debate_summary_url).to eq debate_outcome[:debate_summary_url]
         expect(archived_debate_outcome.created_at).to be_usec_precise_with(debate_outcome.created_at)
         expect(archived_debate_outcome.updated_at).to be_usec_precise_with(debate_outcome.updated_at)
       end
@@ -258,7 +262,7 @@ RSpec.describe ArchivePetitionJob, type: :job do
           transcript_url: "https://hansard.parliament.uk/commons/2017-04-24/debates/123456/KidsTV",
           video_url: "http://www.parliamentlive.tv/Event/Index/123456",
           debate_pack_url: "http://researchbriefings.parliament.uk/ResearchBriefing/Summary/CDP-2015-0001",
-          debate_image: fixture_file_upload("debate_outcome/commons_image-2x.jpg")
+          debate_image: fixture_file_upload("debate_outcome/commons_image-2x.jpg"),
         )
       end
 

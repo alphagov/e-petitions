@@ -564,7 +564,9 @@ RSpec.describe PetitionMailer, type: :mailer do
               transcript_url: "http://www.publications.parliament.uk/pa/cm201509/cmhansrd/cm20150924/debtext/20150924-0003.htm#2015092449#000001",
               video_url: "http://parliamentlive.tv/event/index/20150924000001",
               debate_pack_url: "http://researchbriefings.parliament.uk/ResearchBriefing/Summary/CDP-2015-0001",
-              petition: petition
+              public_engagement_url: "https://www.parliament.uk/public-engagement",
+              debate_summary_url: "https://www.parliament.uk/summary-debates",
+              petition: petition,
             )
           end
 
@@ -688,7 +690,9 @@ RSpec.describe PetitionMailer, type: :mailer do
               transcript_url: "http://www.publications.parliament.uk/pa/cm201509/cmhansrd/cm20150924/debtext/20150924-0003.htm#2015092449#000001",
               video_url: "http://parliamentlive.tv/event/index/20150924000001",
               debate_pack_url: "http://researchbriefings.parliament.uk/ResearchBriefing/Summary/CDP-2015-0001",
-              petition: petition
+              public_engagement_url: "https://www.parliament.uk/public-engagement",
+              debate_summary_url: "https://www.parliament.uk/summary-debates",
+              petition: petition,
             )
           end
 

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2024_01_17_150804) do
+ActiveRecord::Schema.define(version: 2024_01_29_152626) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "intarray"
@@ -81,6 +81,8 @@ ActiveRecord::Schema.define(version: 2024_01_17_150804) do
     t.integer "commons_image_file_size"
     t.datetime "commons_image_updated_at"
     t.string "debate_pack_url", limit: 500
+    t.string "public_engagement_url", limit: 500
+    t.string "debate_summary_url", limit: 500
     t.index ["petition_id", "debated_on"], name: "index_archived_debate_outcomes_on_petition_id_and_debated_on"
     t.index ["petition_id"], name: "index_archived_debate_outcomes_on_petition_id", unique: true
     t.index ["updated_at"], name: "index_archived_debate_outcomes_on_updated_at"
@@ -301,6 +303,8 @@ ActiveRecord::Schema.define(version: 2024_01_17_150804) do
     t.integer "commons_image_file_size"
     t.datetime "commons_image_updated_at"
     t.string "debate_pack_url", limit: 500
+    t.string "public_engagement_url", limit: 500
+    t.string "debate_summary_url", limit: 500
     t.index ["petition_id", "debated_on"], name: "index_debate_outcomes_on_petition_id_and_debated_on"
     t.index ["petition_id"], name: "index_debate_outcomes_on_petition_id", unique: true
     t.index ["updated_at"], name: "index_debate_outcomes_on_updated_at"
