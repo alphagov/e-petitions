@@ -1215,4 +1215,159 @@ RSpec.describe SignaturesController, type: :controller do
       end
     end
   end
+
+  describe "POST /signatures/:id/unsubscribe" do
+    context "when the signature doesn't exist" do
+      it "raises an ActiveRecord::RecordNotFound exception" do
+        expect {
+          post :unsubscribe, params: { id: 1, token: "token" }
+        }.to raise_exception(ActiveRecord::RecordNotFound)
+      end
+    end
+
+    context "when the signature token is invalid" do
+      let(:petition) { FactoryBot.create(:open_petition) }
+      let(:signature) { FactoryBot.create(:pending_signature, petition: petition) }
+
+      it "redirects to the petition page" do
+        post :unsubscribe, params: { id: signature.id, token: "token" }
+        expect(response).to redirect_to("/petitions/#{petition.id}")
+      end
+    end
+
+    context "when the signature is fraudulent" do
+      let(:petition) { FactoryBot.create(:open_petition) }
+      let(:signature) { FactoryBot.create(:fraudulent_signature, petition: petition) }
+
+      it "doesn't raise an ActiveRecord::RecordNotFound exception" do
+        expect {
+          post :unsubscribe, params: { id: signature.id, token: signature.unsubscribe_token }
+        }.not_to raise_error
+      end
+    end
+
+    context "when the signature is invalidated" do
+      let(:petition) { FactoryBot.create(:open_petition) }
+      let(:signature) { FactoryBot.create(:invalidated_signature, petition: petition) }
+
+      it "doesn't raise an ActiveRecord::RecordNotFound exception" do
+        expect {
+          post :unsubscribe, params: { id: signature.id, token: signature.unsubscribe_token }
+        }.not_to raise_error
+      end
+    end
+
+    %w[pending validated sponsored flagged dormant hidden stopped].each do |state|
+      context "when the petition is #{state}" do
+        let(:petition) { FactoryBot.create(:"#{state}_petition") }
+        let(:signature) { FactoryBot.create(:pending_signature, petition: petition) }
+
+        it "raises an ActiveRecord::RecordNotFound exception" do
+          expect {
+            post :unsubscribe, params: { id: signature.id, token: signature.unsubscribe_token }
+          }.to raise_exception(ActiveRecord::RecordNotFound)
+        end
+      end
+    end
+
+    context "when the petition was rejected" do
+      let(:petition) { FactoryBot.create(:rejected_petition) }
+      let(:signature) { FactoryBot.create(:validated_signature, petition: petition) }
+
+      before do
+        post :unsubscribe, params: { id: signature.id, token: signature.unsubscribe_token }
+      end
+
+      it "assigns the @signature instance variable" do
+        expect(assigns[:signature]).to eq(signature)
+      end
+
+      it "assigns the @petition instance variable" do
+        expect(assigns[:petition]).to eq(petition)
+      end
+
+      it "unsubscribes from email updates" do
+        expect(assigns[:signature].notify_by_email).to eq(false)
+      end
+
+      it "renders the signatures/unsubscribe template" do
+        expect(response).to render_template("signatures/unsubscribe")
+      end
+    end
+
+    context "when the petition was closed more than 24 hours ago" do
+      let(:petition) { FactoryBot.create(:closed_petition, closed_at: 36.hours.ago) }
+      let(:signature) { FactoryBot.create(:validated_signature, petition: petition) }
+
+      before do
+        post :unsubscribe, params: { id: signature.id, token: signature.unsubscribe_token }
+      end
+
+      it "assigns the @signature instance variable" do
+        expect(assigns[:signature]).to eq(signature)
+      end
+
+      it "assigns the @petition instance variable" do
+        expect(assigns[:petition]).to eq(petition)
+      end
+
+      it "unsubscribes from email updates" do
+        expect(assigns[:signature].notify_by_email).to eq(false)
+      end
+
+      it "renders the signatures/unsubscribe template" do
+        expect(response).to render_template("signatures/unsubscribe")
+      end
+    end
+
+    context "when the petition was closed less than 24 hours ago" do
+      let(:petition) { FactoryBot.create(:closed_petition, closed_at: 12.hours.ago) }
+      let(:signature) { FactoryBot.create(:validated_signature, :just_signed, petition: petition) }
+
+      before do
+        post :unsubscribe, params: { id: signature.id, token: signature.unsubscribe_token }
+      end
+
+      it "assigns the @signature instance variable" do
+        expect(assigns[:signature]).to eq(signature)
+      end
+
+      it "assigns the @petition instance variable" do
+        expect(assigns[:petition]).to eq(petition)
+      end
+
+      it "unsubscribes from email updates" do
+        expect(assigns[:signature].notify_by_email).to eq(false)
+      end
+
+      it "renders the signatures/unsubscribe template" do
+        expect(response).to render_template("signatures/unsubscribe")
+      end
+    end
+
+    context "when the petition is open" do
+      let(:petition) { FactoryBot.create(:open_petition) }
+      let(:signature) { FactoryBot.create(:validated_signature, :just_signed, petition: petition) }
+
+      before do
+        post :unsubscribe, params: { id: signature.id, token: signature.unsubscribe_token }
+      end
+
+      it "assigns the @signature instance variable" do
+        expect(assigns[:signature]).to eq(signature)
+      end
+
+      it "assigns the @petition instance variable" do
+        expect(assigns[:petition]).to eq(petition)
+      end
+
+      it "unsubscribes from email updates" do
+        expect(assigns[:signature].notify_by_email).to eq(false)
+      end
+
+      it "renders the signatures/unsubscribe template" do
+        expect(response).to render_template("signatures/unsubscribe")
+      end
+    end
+  end
 end

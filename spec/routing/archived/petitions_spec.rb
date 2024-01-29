@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe "routes for Archived Petitions", type: :routes do
+RSpec.describe "routes for archived petitions", type: :routes do
   it "routes GET /archived/petitions to archived/petitions#index" do
     expect(get("/archived/petitions")).to route_to("archived/petitions#index")
   end

@@ -520,6 +520,10 @@ RSpec.describe PetitionMailer, type: :mailer do
         it "has a List-Unsubscribe header" do
           expect(mail).to have_header("List-Unsubscribe", "<https://petition.parliament.uk/signatures/#{signature.id}/unsubscribe?token=#{signature.unsubscribe_token}>")
         end
+
+        it "has a List-Unsubscribe-Post header" do
+          expect(mail).to have_header("List-Unsubscribe-Post", "List-Unsubscribe=One-Click")
+        end
       end
 
       shared_examples_for "a positive debate outcome email" do
@@ -640,6 +644,10 @@ RSpec.describe PetitionMailer, type: :mailer do
         it "has a List-Unsubscribe header" do
           expect(mail).to have_header("List-Unsubscribe", "<https://petition.parliament.uk/signatures/#{signature.id}/unsubscribe?token=#{signature.unsubscribe_token}>")
         end
+
+        it "has a List-Unsubscribe-Post header" do
+          expect(mail).to have_header("List-Unsubscribe-Post", "List-Unsubscribe=One-Click")
+        end
       end
 
       shared_examples_for "a positive debate outcome email" do
@@ -756,6 +764,10 @@ RSpec.describe PetitionMailer, type: :mailer do
       it "has a List-Unsubscribe header" do
         expect(mail).to have_header("List-Unsubscribe", "<https://petition.parliament.uk/signatures/#{signature.id}/unsubscribe?token=#{signature.unsubscribe_token}>")
       end
+
+      it "has a List-Unsubscribe-Post header" do
+        expect(mail).to have_header("List-Unsubscribe-Post", "List-Unsubscribe=One-Click")
+      end
     end
 
     context "when the signature is the creator" do
@@ -820,6 +832,10 @@ RSpec.describe PetitionMailer, type: :mailer do
         expect(mail).to have_header("List-Unsubscribe", "<https://petition.parliament.uk/signatures/#{signature.id}/unsubscribe?token=#{signature.unsubscribe_token}>")
       end
 
+      it "has a List-Unsubscribe-Post header" do
+        expect(mail).to have_header("List-Unsubscribe-Post", "List-Unsubscribe=One-Click")
+      end
+
       it "includes the message body" do
         expect(mail).to have_body_text(%r[Message body from the petition committee])
       end
@@ -877,6 +893,10 @@ RSpec.describe PetitionMailer, type: :mailer do
 
       it "has a List-Unsubscribe header" do
         expect(mail).to have_header("List-Unsubscribe", "<https://petition.parliament.uk/signatures/#{signature.id}/unsubscribe?token=#{signature.unsubscribe_token}>")
+      end
+
+      it "has a List-Unsubscribe-Post header" do
+        expect(mail).to have_header("List-Unsubscribe-Post", "List-Unsubscribe=One-Click")
       end
 
       it "includes the message body" do
