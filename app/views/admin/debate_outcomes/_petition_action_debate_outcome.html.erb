@@ -46,6 +46,18 @@
       <%= f.url_field :debate_pack_url, tabindex: increment, class: 'form-control', disabled: @petition.editing_disabled? %>
     <% end %>
 
+    <%= form_row for: [f.object, :public_engagement_url] do %>
+      <%= f.label :public_engagement_url, 'Public Engagement URL', class: 'form-label' %>
+      <%= error_messages_for_field f.object, :public_engagement_url %>
+      <%= f.url_field :public_engagement_url, tabindex: increment, class: 'form-control', disabled: @petition.editing_disabled? %>
+    <% end %>
+
+    <%= form_row for: [f.object, :debate_summary_url] do %>
+      <%= f.label :debate_summary_url, 'Debate Summary URL', class: 'form-label' %>
+      <%= error_messages_for_field f.object, :debate_summary_url %>
+      <%= f.url_field :debate_summary_url, tabindex: increment, class: 'form-control', disabled: @petition.editing_disabled? %>
+    <% end %>
+
     <%= form_row for: [f.object, :image] do %>
       <%= f.label :image, 'Debate Image', class: 'form-label' %>
       <%= error_messages_for_field f.object, :image %>

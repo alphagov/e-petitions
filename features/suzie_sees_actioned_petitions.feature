@@ -44,6 +44,8 @@ Feature: Suzie sees actioned petitions
     Then I should see 2 debated petition video links
     And I should see 3 debated petition transcript links
     And I should see 1 debated petition debate pack links
+    And I should see 1 debated petition public engagement links
+    And I should see 1 debated petition debate summary links
     And I should see 3 petitions counted in the debate threshold section
     And I should see 3 petitions listed in the debate threshold section
 

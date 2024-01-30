@@ -11,6 +11,8 @@ RSpec.describe Archived::DebateOutcome, type: :model do
     it { is_expected.to have_db_column(:transcript_url).of_type(:string).with_options(limit: 500) }
     it { is_expected.to have_db_column(:video_url).of_type(:string).with_options(limit: 500) }
     it { is_expected.to have_db_column(:debate_pack_url).of_type(:string).with_options(limit: 500) }
+    it { is_expected.to have_db_column(:public_engagement_url).of_type(:string).with_options(limit: 500) }
+    it { is_expected.to have_db_column(:debate_summary_url).of_type(:string).with_options(limit: 500) }
     it { is_expected.to have_db_column(:overview).of_type(:text) }
     it { is_expected.to have_db_column(:created_at).of_type(:datetime).with_options(null: false) }
     it { is_expected.to have_db_column(:updated_at).of_type(:datetime).with_options(null: false) }

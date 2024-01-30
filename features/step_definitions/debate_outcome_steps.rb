@@ -5,7 +5,9 @@ Given(/^a petition "(.*?)" has been debated (\d+) days ago?$/) do |petition_acti
     overview: 'Everyone was in agreement, this petition must be made law!',
     transcript_url: 'https://hansard.parliament.uk/path/to/transcript',
     video_url: 'https://www.youtube.com?v=1234abcd',
-    debate_pack_url: 'https://researchbriefings.parliament.uk/path/to/briefing'
+    debate_pack_url: 'https://researchbriefings.parliament.uk/path/to/briefing',
+    public_engagement_url: "https://www.parliament.uk/public-engagement",
+    debate_summary_url: "https://www.parliament.uk/summary-debates"
   )
   @petition.update(debate_outcome_at: debated_days_ago.days.ago)
 end
@@ -18,7 +20,9 @@ Given(/^an archived petition "(.*?)" has been debated (\d+) days ago?$/) do |pet
     overview: 'Everyone was in agreement, this petition must be made law!',
     transcript_url: 'https://hansard.parliament.uk/path/to/transcript',
     video_url: 'https://www.youtube.com?v=1234abcd',
-    debate_pack_url: 'https://researchbriefings.parliament.uk/path/to/briefing'
+    debate_pack_url: 'https://researchbriefings.parliament.uk/path/to/briefing',
+    public_engagement_url: "https://www.parliament.uk/public-engagement",
+    debate_summary_url: "https://www.parliament.uk/summary-debates"
   )
 end
 
@@ -49,6 +53,8 @@ Then(/^I should see links to the transcript, video and research$/) do
     expect(page).to have_link('Watch the debate', href: 'https://www.youtube.com?v=1234abcd')
     expect(page).to have_link('Read the transcript', href: 'https://hansard.parliament.uk/path/to/transcript')
     expect(page).to have_link('Read the research', href: 'https://researchbriefings.parliament.uk/path/to/briefing')
+    expect(page).to have_link('Read what the public said', href: 'https://www.parliament.uk/public-engagement')
+    expect(page).to have_link('Read a summary of the debate', href: 'https://www.parliament.uk/summary-debates')
   end
 end
 
@@ -69,6 +75,8 @@ When(/^I fill in the debate outcome details$/) do
   fill_in 'Transcript URL', with: 'https://hansard.parliament.uk/path/to/transcript'
   fill_in 'Video URL', with: 'https://www.youtube.com/watch?v=1234abcd'
   fill_in 'Debate Pack URL', with: 'https://researchbriefings.parliament.uk/path/to/briefing'
+  fill_in 'Public Engagement URL', with: 'https://www.parliament.uk/public-engagement'
+  fill_in 'Debate Summary URL', with: 'https://www.parliament.uk/summary-debates'
 end
 
 Then(/^the petition should have the debate details I provided$/) do
@@ -80,6 +88,8 @@ Then(/^the petition should have the debate details I provided$/) do
   expect(@petition.debate_outcome.transcript_url).to eq 'https://hansard.parliament.uk/path/to/transcript'
   expect(@petition.debate_outcome.video_url).to eq 'https://www.youtube.com/watch?v=1234abcd'
   expect(@petition.debate_outcome.debate_pack_url).to eq 'https://researchbriefings.parliament.uk/path/to/briefing'
+  expect(@petition.debate_outcome.public_engagement_url).to eq "https://www.parliament.uk/public-engagement"
+  expect(@petition.debate_outcome.debate_summary_url).to eq "https://www.parliament.uk/summary-debates"
 end
 
 Then(/^the petition creator should have been emailed about the debate$/) do

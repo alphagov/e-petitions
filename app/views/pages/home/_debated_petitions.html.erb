@@ -23,6 +23,12 @@
         <% if petition.debate_outcome.debate_pack_url.present? %>
           <p>Read the research <span class="visuallyhidden">for the ‘<%= petition.action %>’ petition</span> at <%= link_to "parliament.uk", petition.debate_outcome.debate_pack_url, rel: "external" %></p>
         <% end %>
+        <% if petition.debate_outcome.public_engagement_url.present? %>
+          <p>Read what the public said <span class="visuallyhidden">for the ‘<%= petition.action %>’ petition</span> at <%= link_to "parliament.uk", petition.debate_outcome.public_engagement_url, rel: "external" %></p>
+        <% end %>
+        <% if petition.debate_outcome.debate_summary_url.present? %>
+          <p>Read a summary of the debate <span class="visuallyhidden">for the ‘<%= petition.action %>’ petition</span> at <%= link_to "parliament.uk", petition.debate_outcome.debate_summary_url, rel: "external" %></p>
+        <% end %>
       </li>
     <% end -%>
   </ol>

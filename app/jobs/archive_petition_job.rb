@@ -109,6 +109,8 @@ class ArchivePetitionJob < ApplicationJob
             o.transcript_url = debate_outcome.transcript_url
             o.video_url = debate_outcome.video_url
             o.debate_pack_url = debate_outcome.debate_pack_url
+            o.public_engagement_url = debate_outcome.public_engagement_url
+            o.debate_summary_url = debate_outcome.debate_summary_url
             o.overview = debate_outcome.overview
             o.created_at = debate_outcome.created_at
             o.updated_at = debate_outcome.updated_at

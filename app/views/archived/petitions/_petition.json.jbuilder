@@ -53,6 +53,8 @@ json.attributes do
       json.video_url debate_outcome.video_url
       json.debate_pack_url debate_outcome.debate_pack_url
       json.overview debate_outcome.overview
+      json.public_engagement_url debate_outcome.public_engagement_url
+      json.debate_summary_url debate_outcome.debate_summary_url
     end
   else
     json.debate nil
