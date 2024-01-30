@@ -240,6 +240,8 @@ RSpec.describe ArchivePetitionJob, type: :job do
         expect(archived_debate_outcome.transcript_url).to eq(debate_outcome.transcript_url)
         expect(archived_debate_outcome.video_url).to eq(debate_outcome.video_url)
         expect(archived_debate_outcome.debate_pack_url).to eq(debate_outcome.debate_pack_url)
+        expect(archived_debate_outcome.public_engagement_url).to eq(debate_outcome.public_engagement_url)
+        expect(archived_debate_outcome.debate_summary_url).to eq(debate_outcome.debate_summary_url)
         expect(petition.debate_outcome.public_engagement_url).to eq debate_outcome[:public_engagement_url]
         expect(petition.debate_outcome.debate_summary_url).to eq debate_outcome[:debate_summary_url]
         expect(archived_debate_outcome.created_at).to be_usec_precise_with(debate_outcome.created_at)
