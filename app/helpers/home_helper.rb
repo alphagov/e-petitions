@@ -5,6 +5,7 @@ module HomeHelper
       :with_response,
       :awaiting_debate,
       :with_debated_outcome,
+      :debated,
       :not_debated
     ]
 

@@ -31,11 +31,12 @@ Feature: A moderator user views all petitions
     And a rejected petition exists with action: "My rejected petition"
     And a hidden petition exists with action: "My hidden petition"
 
+    And a petition "My open petition that was not debated" with a negative debate outcome
     And a petition "My open petition with debate outcome" exists with a debate outcome
-    And a petition "My open petition awaiting debate date" exists awaiting debate date
+    And a petition "My open petition awaiting debate date" passed the threshold for a debate 7 days ago and has no debate date set
     And a petition "My open petition with government response" exists with government response
     And a petition "My open petition awaiting government response" exists awaiting government response
-    And a petition "My open petition with scheduled debate date" with scheduled debate date of "23/10/2010"
+    And a petition "My open petition with scheduled debate date" passed the threshold for a debate 14 days ago and has a debate in 7 days
 
     When I view all petitions
     Then I should see the following list of petitions:
@@ -44,6 +45,7 @@ Feature: A moderator user views all petitions
      | My open petition with government response     |
      | My open petition awaiting debate date         |
      | My open petition with debate outcome          |
+     | My open petition that was not debated         |
      | My hidden petition                            |
      | My rejected petition                          |
      | My closed petition                            |
@@ -72,6 +74,7 @@ Feature: A moderator user views all petitions
      | My open petition with government response     |
      | My open petition awaiting debate date         |
      | My open petition with debate outcome          |
+     | My open petition that was not debated         |
      | My open petition                              |
 
     And I filter the list to show "Closed" petitions
@@ -96,16 +99,12 @@ Feature: A moderator user views all petitions
 
     And I filter the list to show "Awaiting a debate in parliament" petitions
     Then I should see the following list of petitions:
+     | My open petition with scheduled debate date |
      | My open petition awaiting debate date |
 
     And I filter the list to show "Has been debated in parliament" petitions
     Then I should see the following list of petitions:
      | My open petition with debate outcome |
-
-    And I filter the list to show "In debate queue" petitions
-    Then I should see the following list of petitions:
-     | My open petition awaiting debate date       |
-     | My open petition with scheduled debate date |
 
   Scenario: A sysadmin can view all petitions
     Given I am logged in as a sysadmin

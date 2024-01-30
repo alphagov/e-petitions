@@ -62,7 +62,6 @@ class Petition < ActiveRecord::Base
   facet :with_response,        -> { with_response.by_most_recent_response }
 
   facet :awaiting_debate,      -> { awaiting_debate.by_most_relevant_debate_date }
-  facet :awaiting_debate_date, -> { awaiting_debate_date.by_waiting_for_debate_longest }
   facet :with_debate_outcome,  -> { with_debate_outcome.by_most_recent_debate_outcome }
   facet :with_debated_outcome, -> { with_debated_outcome.by_most_recent_debate_outcome }
   facet :debated,              -> { debated.by_most_recent_debate_outcome }
@@ -70,7 +69,6 @@ class Petition < ActiveRecord::Base
 
   facet :collecting_sponsors,  -> { collecting_sponsors.by_most_recent }
   facet :in_moderation,        -> { in_moderation.by_most_recent_moderation_threshold_reached }
-  facet :in_debate_queue,      -> { in_debate_queue.by_waiting_for_debate_longest }
 
   facet :recently_in_moderation,       -> { recently_in_moderation.by_most_recent_moderation_threshold_reached }
   facet :nearly_overdue_in_moderation, -> { nearly_overdue_in_moderation.by_most_recent_moderation_threshold_reached }
@@ -225,10 +223,6 @@ class Petition < ActiveRecord::Base
       where(debate_state: %w[awaiting scheduled])
     end
 
-    def awaiting_debate_date
-      debate_threshold_reached.not_scheduled
-    end
-
     def awaiting_response
       response_threshold_reached.not_responded
     end
@@ -251,10 +245,6 @@ class Petition < ActiveRecord::Base
 
     def for_state(state)
       where(state: state)
-    end
-
-    def in_debate_queue
-      where(threshold_for_debate_reached.or(scheduled_for_debate))
     end
 
     def in_moderation(from: nil, to: nil)

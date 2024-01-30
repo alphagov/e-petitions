@@ -65,7 +65,7 @@ module AdminHubHelper
     def generate_counts
       counts = []
       counts << [:awaiting_response, Petition.visible.awaiting_response.count]
-      counts << [:in_debate_queue, Petition.in_debate_queue.count]
+      counts << [:awaiting_debate, Petition.awaiting_debate.count]
     end
   end
 

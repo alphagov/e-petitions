@@ -10,15 +10,15 @@ RSpec.describe AdminHelper, type: :helper do
         recently_in_moderation: 6, nearly_overdue_in_moderation: 7,
         overdue_in_moderation: 8, tagged_in_moderation: 9, untagged_in_moderation: 10,
         open: 11, closed: 12, rejected: 13, hidden: 14, stopped: 15,
-        awaiting_response: 16, with_response: 17, awaiting_debate_date: 18,
-        with_debate_outcome: 19, in_debate_queue: 20
+        awaiting_response: 16, with_response: 17, awaiting_debate: 18,
+        debated: 19
       }
     end
 
     subject { helper.admin_petition_facets_for_select(facets, selected) }
 
     it "generates the correct number of options" do
-      expect(subject).to have_css("option", count: 20)
+      expect(subject).to have_css("option", count: 19)
     end
 
     it "generates the correct option for 'all'" do
@@ -89,16 +89,12 @@ RSpec.describe AdminHelper, type: :helper do
       expect(subject).to have_css("option:nth-of-type(17)[value='with_response']", text: "With a government response (17)")
     end
 
-    it "generates the correct option for 'awaiting_debate_date'" do
-      expect(subject).to have_css("option:nth-of-type(18)[value='awaiting_debate_date']", text: "Awaiting a debate in parliament (18)")
+    it "generates the correct option for 'awaiting_debate'" do
+      expect(subject).to have_css("option:nth-of-type(18)[value='awaiting_debate']", text: "Awaiting a debate in parliament (18)")
     end
 
-    it "generates the correct option for 'with_debate_outcome'" do
-      expect(subject).to have_css("option:nth-of-type(19)[value='with_debate_outcome']", text: "Has been debated in parliament (19)")
-    end
-
-    it "generates the correct option for 'in_debate_queue'" do
-      expect(subject).to have_css("option:nth-of-type(20)[value='in_debate_queue']", text: "In debate queue (20)")
+    it "generates the correct option for 'debated'" do
+      expect(subject).to have_css("option:nth-of-type(19)[value='debated']", text: "Has been debated in parliament (19)")
     end
 
     it "marks the correct option as selected" do
