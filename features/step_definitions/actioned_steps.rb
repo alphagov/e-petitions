@@ -10,16 +10,16 @@ Given(/^there (?:are|is) (\d+) petitions? debated in parliament(.+)?$/) do |deba
     transcript_url = "https://hansard.parliament.uk/path/to/transcript"
   elsif links_command == " with a debate pack url"
     debate_pack_url = "https://researchbriefings.parliament.uk/path/to/briefing"
+  elsif links_command == " with a public engagement url"
+    public_engagement_url = "https://committees.parliament.uk/public-engagement"
   elsif links_command == " with a debate summary url"
-    public_engagement_url = "https://www.parliament.uk/public-engagement"
-  elsif links_command == " with a debate summary url"
-    debate_summary_url = "https://www.parliament.uk/summary-debates"
+    debate_summary_url = "https://ukparliament.shorthandstories.com/about-a-petition"
   elsif links_command == " with all debate outcome urls"
     video_url = "https://www.youtube.com/watch?v=1234abcd"
     transcript_url = "https://hansard.parliament.uk/path/to/transcript"
     debate_pack_url = "https://researchbriefings.parliament.uk/path/to/briefing"
-    public_engagement_url = "https://www.parliament.uk/public-engagement"
-    debate_summary_url = "https://www.parliament.uk/summary-debates"
+    public_engagement_url = "https://committees.parliament.uk/public-engagement"
+    debate_summary_url = "https://ukparliament.shorthandstories.com/about-a-petition"
   end
 
   debated_count.times do |count|

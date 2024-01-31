@@ -125,8 +125,8 @@ RSpec.describe Admin::Archived::DebateOutcomesController, type: :controller, adm
           transcript_url: 'http://www.publications.parliament.uk/pa/cm201415/cmhansrd/cm141218/debtext/141218-0003.htm#14121849000001',
           video_url: 'http://parliamentlive.tv/event/index/f9eb68af-6a5c-4a94-95d3-6108aa87e9d7?in=13:57:00',
           debate_pack_url: "http://researchbriefings.parliament.uk/ResearchBriefing/Summary/CDP-2014-1234",
-          public_engagement_url: "https://www.parliament.uk/public-engagement",
-          debate_summary_url: "https://www.parliament.uk/summary-debates",
+          public_engagement_url: "https://committees.parliament.uk/public-engagement",
+          debate_summary_url: "https://ukparliament.shorthandstories.com/about-a-petition",
         }
       end
 

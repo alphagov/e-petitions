@@ -224,8 +224,8 @@ RSpec.describe ArchivePetitionJob, type: :job do
           transcript_url: "https://hansard.parliament.uk/commons/2017-04-24/debates/123456/KidsTV",
           video_url: "http://www.parliamentlive.tv/Event/Index/123456",
           debate_pack_url: "http://researchbriefings.parliament.uk/ResearchBriefing/Summary/CDP-2015-0001",
-          public_engagement_url: "https://www.parliament.uk/public-engagement",
-          debate_summary_url: "https://www.parliament.uk/summary-debates",
+          public_engagement_url: "https://committees.parliament.uk/public-engagement",
+          debate_summary_url: "https://ukparliament.shorthandstories.com/about-a-petition",
         )
       end
 
