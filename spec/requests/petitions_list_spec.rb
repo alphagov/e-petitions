@@ -242,8 +242,8 @@ RSpec.describe "API request to list petitions", type: :request, show_exceptions:
           transcript_url: "http://www.publications.parliament.uk/pa/cm201212/cmhansrd/cm120313/debtext/120313-0001.htm#12031360000001",
           video_url: "http://parliamentlive.tv/event/index/da084e18-0e48-4d0a-9aa5-be27f57d5a71?in=16:31:00",
           debate_pack_url: "http://researchbriefings.parliament.uk/ResearchBriefing/Summary/CDP-2014-1234",
-          public_engagement_url: "https://www.parliament.uk/public-engagement",
-          debate_summary_url: "https://www.parliament.uk/summary-debates"
+          public_engagement_url: "https://committees.parliament.uk/public-engagement",
+          debate_summary_url: "https://ukparliament.shorthandstories.com/about-a-petition"
 
       get "/petitions.json"
       expect(response).to be_successful
@@ -258,8 +258,8 @@ RSpec.describe "API request to list petitions", type: :request, show_exceptions:
                 "transcript_url" => "http://www.publications.parliament.uk/pa/cm201212/cmhansrd/cm120313/debtext/120313-0001.htm#12031360000001",
                 "video_url" => "http://parliamentlive.tv/event/index/da084e18-0e48-4d0a-9aa5-be27f57d5a71?in=16:31:00",
                 "debate_pack_url" => "http://researchbriefings.parliament.uk/ResearchBriefing/Summary/CDP-2014-1234",
-                "public_engagement_url" => "https://www.parliament.uk/public-engagement",
-                "debate_summary_url" => "https://www.parliament.uk/summary-debates"
+                "public_engagement_url" => "https://committees.parliament.uk/public-engagement",
+                "debate_summary_url" => "https://ukparliament.shorthandstories.com/about-a-petition"
               )
             )
           )

@@ -4,18 +4,36 @@ module Archived
   class DebateOutcome < ActiveRecord::Base
     VALID_OTHER_URLS = /\Ahttps?:\/\/(?:[a-z][\-\.a-z0-9]{0,63}\.parliament\.uk|www\.youtube\.com).*\z/
     VALID_VIDEO_URLS = /\Ahttps?:\/\/(?:(?:www\.)?parliamentlive\.tv|www\.youtube\.com).*\z/
+    VALID_PUBLIC_ENGAGEMENT_URLS = /\Ahttps?:\/\/(?:committees\.parliament\.uk|ukparliament\.shorthandstories\.com).*\z/
+    VALID_DEBATE_SUMMARY_URLS = /\Ahttps?:\/\/ukparliament\.shorthandstories\.com.*\z/
 
     belongs_to :petition, touch: true
 
     validates :petition, presence: true
     validates :debated_on, presence: true, if: :debated?
-    validates :transcript_url, :video_url, :debate_pack_url, :public_engagement_url, :debate_summary_url, length: { maximum: 500 }
 
-    validates :debate_pack_url, format: { with: VALID_OTHER_URLS }, allow_blank: true
-    validates :transcript_url, format: { with: VALID_OTHER_URLS }, allow_blank: true
-    validates :video_url, format: { with: VALID_VIDEO_URLS }, allow_blank: true
-    validates :public_engagement_url, format: { with: VALID_OTHER_URLS }, allow_blank: true
-    validates :debate_summary_url, format: { with: VALID_OTHER_URLS }, allow_blank: true
+    with_options length: { maximum: 500 } do
+      validates :transcript_url, :video_url, :debate_pack_url
+      validates :public_engagement_url, :debate_summary_url
+    end
+
+    with_options allow_blank: true do
+      with_options format: { with: VALID_OTHER_URLS } do
+        validates :debate_pack_url, :transcript_url
+      end
+
+      with_options format: { with: VALID_VIDEO_URLS } do
+        validates :video_url
+      end
+
+      with_options format: { with: VALID_PUBLIC_ENGAGEMENT_URLS } do
+        validates :public_engagement_url
+      end
+
+      with_options format: { with: VALID_DEBATE_SUMMARY_URLS } do
+        validates :debate_summary_url
+      end
+    end
 
     has_one_attached :image
 

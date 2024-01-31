@@ -40,10 +40,10 @@ FactoryBot.define do
         "http://researchbriefings.parliament.uk/ResearchBriefing/Summary/CDP-#{debated_on.strftime('%Y')}-#{ '%04d' % n }"
       }
       public_engagement_url {
-        "https://www.parliament.uk/public-engagement"
+        "https://committees.parliament.uk/public-engagement"
       }
       debate_summary_url {
-        "https://www.parliament.uk/summary-debates"
+        "https://ukparliament.shorthandstories.com/about-a-petition"
       }
     end
   end
@@ -771,10 +771,10 @@ FactoryBot.define do
         "http://researchbriefings.parliament.uk/ResearchBriefing/Summary/CDP-#{debated_on.strftime('%Y')}-#{ '%04d' % n }"
       }
       public_engagement_url {
-        "https://www.parliament.uk/public-engagement"
+        "https://committees.parliament.uk/public-engagement"
       }
       debate_summary_url {
-        "https://www.parliament.uk/summary-debates"
+        "https://ukparliament.shorthandstories.com/about-a-petition"
       }
     end
   end

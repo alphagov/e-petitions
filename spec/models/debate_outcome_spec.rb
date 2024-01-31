@@ -40,10 +40,15 @@ RSpec.describe DebateOutcome, type: :model do
     it { is_expected.to allow_value("https://hansard.parliament.uk/").for(:transcript_url) }
     it { is_expected.to allow_value("https://parliamentlive.tv/").for(:video_url) }
     it { is_expected.to allow_value("https://www.youtube.com/").for(:video_url) }
+    it { is_expected.to allow_value("https://committees.parliament.uk/").for(:public_engagement_url) }
+    it { is_expected.to allow_value("https://ukparliament.shorthandstories.com/").for(:public_engagement_url) }
+    it { is_expected.to allow_value("https://ukparliament.shorthandstories.com/").for(:debate_summary_url) }
 
     it { is_expected.not_to allow_value("https://www.example.com/").for(:debate_pack_url) }
     it { is_expected.not_to allow_value("https://www.example.com/").for(:transcript_url) }
     it { is_expected.not_to allow_value("https://www.example.com/").for(:video_url) }
+    it { is_expected.not_to allow_value("https://www.example.com/").for(:public_engagement_url) }
+    it { is_expected.not_to allow_value("https://www.example.com/").for(:debate_summary_url) }
 
     context "when then petition was debated" do
       subject { described_class.new(debated: true) }
