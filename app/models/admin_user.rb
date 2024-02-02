@@ -47,11 +47,11 @@ class AdminUser < ActiveRecord::Base
       user.last_name = auth_data.info.fetch(:last_name)
       groups = Array.wrap(auth_data.info.fetch(:groups))
 
-      if (groups & provider.sysadmins).any?
+      if (groups & provider.sysadmin).any?
         user.role = SYSADMIN_ROLE
-      elsif (groups & provider.moderators).any?
+      elsif (groups & provider.moderator).any?
         user.role = MODERATOR_ROLE
-      elsif (groups & provider.reviewers).any?
+      elsif (groups & provider.reviewer).any?
         user.role = REVIEWER_ROLE
       end
     end
