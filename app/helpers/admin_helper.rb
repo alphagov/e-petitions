@@ -147,6 +147,18 @@ module AdminHelper
     end
   end
 
+  def show_closing_column?(scope)
+    scope.in?(%i[open closed])
+  end
+
+  def show_rejection_column?(scope)
+    scope.in?(%i[rejected hidden])
+  end
+
+  def short_rejection_reason(rejection)
+    t(rejection.code, scope: :"rejection.reasons.short", default: rejection.code.titleize)
+  end
+
   private
 
   def admin_petition_facets

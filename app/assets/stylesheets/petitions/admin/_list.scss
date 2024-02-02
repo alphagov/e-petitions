@@ -31,11 +31,11 @@
       padding-right: $gutter;
     }
 
-    .creator {
+    .creator, .rejection {
       text-align: left;
     }
 
-    .petition-id, .state, .tags {
+    .petition-id, .state, .notes, .tags {
       text-align: center;
     }
 

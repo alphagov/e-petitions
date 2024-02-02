@@ -502,6 +502,18 @@ FactoryBot.define do
 
   factory :hidden_petition, :parent => :petition do
     state { Petition::HIDDEN_STATE }
+
+    transient do
+      rejection_code { "libellous" }
+      rejection_details { nil }
+    end
+
+    after(:create) do |petition, evaluator|
+      petition.create_rejection! do |r|
+        r.code = evaluator.rejection_code
+        r.details = evaluator.rejection_details
+      end
+    end
   end
 
   factory :awaiting_petition, :parent => :open_petition do
