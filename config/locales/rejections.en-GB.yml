@@ -1,0 +1,22 @@
+en-GB:
+  rejection:
+    reasons:
+      short:
+        duplicate: "Duplicate"
+        irrelevant: "Irrelevant"
+        no-action: "No Action"
+        honours: "Honours"
+        fake-name: "Fake Name"
+        foi: "FOI"
+        libellous: "Libellous"
+        offensive: "Offensive"
+        advert: "Advert"
+        removed: "Removed"
+        already-happening: "Already Happening"
+        no-reply: "No Reply"
+        individual: "Individual"
+        personal: "Personal"
+        fraudulent: "Fraudulent"
+        operational: "Operational"
+        local: "Local"
+        joke: "Joke"
