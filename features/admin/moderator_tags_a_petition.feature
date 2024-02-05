@@ -54,3 +54,18 @@ Feature: A moderator user updates records notes
     And I should see "Petition has been successfully updated"
     When I follow "Tags"
     Then the "DWP" checkbox should not be checked
+
+  @javascript
+  Scenario: Adding tags to an open petition
+    Given an open petition exists with action: "Solidarity with the Unions"
+    And a tag exists with name: "DWP"
+    When I am on the admin all petitions page
+    And I follow "Solidarity with the Unions"
+    And I follow "Tags"
+    Then I leave the form alone for 1000ms
+    Then the "DWP" checkbox should not be checked
+    When I check "DWP"
+    Then I leave the form alone for 1000ms
+    And I wait for the petition tags to save
+    Then I reload the page
+    Then the "DWP" checkbox should be checked
