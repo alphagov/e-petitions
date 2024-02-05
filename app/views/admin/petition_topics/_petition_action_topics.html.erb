@@ -5,7 +5,7 @@
     <% if Topic.any? %>
       <%= collection_check_boxes(:petition, :topics, Topic.by_name, :id, :name) do |b| %>
         <div class="multiple-choice">
-          <%= b.check_box disabled: @petition.editing_disabled? %>
+          <%= b.check_box disabled: @petition.editing_disabled?, data: { autosave: true } %>
           <%= b.label title: b.object.name %>
         </div>
       <% end %>
@@ -14,8 +14,17 @@
       <p>No topics have been created</p>
     <% end %>
   <% end %>
-  <%= f.submit 'Save topics', class: 'button', disabled: @petition.editing_disabled? %>
-  <%= link_to 'Cancel', admin_petition_path(petition), class: 'button-secondary' %>
+
+  <%= link_to 'Done', admin_petition_path(petition), class: 'button-secondary js-only' %>
+
+  <noscript>
+    <%= f.submit 'Save topics', class: 'button', disabled: @petition.editing_disabled? %>
+    <%= link_to 'Cancel', admin_petition_path(petition), class: 'button-secondary' %>
+  </noscript>
 <% end %>
 
 <%= render 'edit_lock' %>
+
+<% content_for :admin_scripts do %>
+  <%= javascript_include_tag "admin-actions-autosave" %>
+<% end %>

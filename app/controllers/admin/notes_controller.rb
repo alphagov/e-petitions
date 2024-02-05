@@ -12,9 +12,15 @@ class Admin::NotesController < Admin::AdminController
 
   def update
     if @note.update(note_params)
-      redirect_to [:admin, @petition]
+      respond_to do |format|
+        format.html { redirect_to [:admin, @petition] }
+        format.json { render json: { updated: true } }
+      end
     else
-      render 'admin/petitions/show', alert: :petition_not_updated
+      respond_to do |format|
+        format.html { render 'admin/petitions/show', alert: :petition_not_updated }
+        format.json { render json: { updated: false } }
+      end
     end
   end
 

@@ -244,6 +244,10 @@ module Archived
       end
     end
 
+    def notes?
+      note && note.details.present?
+    end
+
     def moderated?
       state.in?(MODERATED_STATES)
     end

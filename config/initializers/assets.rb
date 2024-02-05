@@ -16,6 +16,7 @@ Rails.application.config.assets.precompile += %w(
   delayed/web/application.css
   ie.js
   admin.js
+  admin-actions-autosave.js
   character-counter.js
   auto-updater.js
   details.js
