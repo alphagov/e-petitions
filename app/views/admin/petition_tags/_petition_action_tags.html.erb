@@ -5,7 +5,7 @@
     <% if Tag.any? %>
       <%= collection_check_boxes(:petition, :tags, Tag.by_name, :id, :name) do |b| %>
         <div class="multiple-choice">
-          <%= b.check_box disabled: @petition.editing_disabled? %>
+          <%= b.check_box disabled: @petition.editing_disabled?, data: { autosave: true } %>
           <%= b.label title: b.object.description %>
         </div>
       <% end %>
@@ -24,3 +24,7 @@
 <% end %>
 
 <%= render 'edit_lock' %>
+
+<% content_for :admin_scripts do %>
+    <%= javascript_include_tag "admin-actions-autosave" %>
+<% end %>

@@ -1,3 +1,11 @@
+@keyframes spinner {
+  to {transform: rotate(360deg);}
+}
+@keyframes fadeOut {
+  from {opacity: 1;}
+  to {opacity: 0;}
+}
+
 .admin {
   .petition-actions {
     margin-top: $gutter*2;
@@ -7,12 +15,64 @@
       padding: $gutter-two-thirds 0;
       border-top: 1px solid $border-colour;
       @extend %contain-floats;
+
+      .saving::after {
+        content: "";
+        box-sizing: border-box;
+        display: inline-block;
+        top: 50%;
+        left: 50%;
+        width: 12px;
+        height: 12px;
+        margin-top: -10px;
+        margin-left: 8px;
+        border-radius: 50%;
+        border: 2px solid rgba($caution, 0.5);
+        border-top-color: $caution;
+        background: rgba($caution, 0.5);
+        animation: spinner .6s linear infinite;
+        vertical-align: 3px;
+      }
+
+      .saved::after {
+        background-color: $caution;
+        border-radius: 6px;
+        content: "";
+        display: inline-block;
+        height: 12px;
+        margin-left: 8px;
+        width: 12px;
+        vertical-align: 3px;
+        animation-name: fadeOut;
+        animation-duration: 2s;
+        animation-fill-mode: forwards;
+      }
     }
 
     .petition-action-heading {
       @include bold-24;
       &:first-child {
         margin-top: 0;
+      }
+
+      .saving-status {
+        height: 20px;
+        width: 20px;
+
+        &.saving-status-saving {
+          background-image: url(assets/icons/icon_saving.svg);
+          height: 26px;
+          width: 26px;
+        }
+        &.saving-status-saved {
+          background-image: url(assets/icons/icon_saved.svg);
+          height: 26px;
+          width: 26px;
+        }
+        .saving-info {
+          display: none;
+        }
+        
       }
     }
 

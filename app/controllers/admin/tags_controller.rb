@@ -35,7 +35,10 @@ class Admin::TagsController < Admin::AdminController
 
   def update
     if @tag.update(tag_params)
-      redirect_to_index_url notice: :tag_updated
+      respond_to do |format|
+        format.html { redirect_to_index_url notice: :tag_updated }
+        format.json { render json: { updated: true } }
+      end
     else
       respond_to do |format|
         format.html { render :edit }
