@@ -1,6 +1,11 @@
 $(function() {
     if (typeof $ === 'undefined') { return; }
 
+    $(document).on({
+        ajaxStart: function() { $('body').addClass('ajax-active'); },
+        ajaxStop: function() { $('body').removeClass('ajax-active'); }
+    });
+
     function debounce(f, delay) {
         var debounceTimer = 0;
         return function() {
