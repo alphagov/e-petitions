@@ -29,7 +29,7 @@ $(function() {
     }
 
     var debouncedSubmitForm = debounce(function() {
-var form = $(this).closest('form');
+        var form = $(this).closest('form');
         var headerOrLabel = form.prevAll('h2');
         if(!headerOrLabel.length) {
             headerOrLabel = $("label[for='" + $(this).attr('id') + "']");

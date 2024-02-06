@@ -54,26 +54,6 @@
       &:first-child {
         margin-top: 0;
       }
-
-      .saving-status {
-        height: 20px;
-        width: 20px;
-
-        &.saving-status-saving {
-          background-image: url(assets/icons/icon_saving.svg);
-          height: 26px;
-          width: 26px;
-        }
-        &.saving-status-saved {
-          background-image: url(assets/icons/icon_saved.svg);
-          height: 26px;
-          width: 26px;
-        }
-        .saving-info {
-          display: none;
-        }
-        
-      }
     }
 
     .present::after {
