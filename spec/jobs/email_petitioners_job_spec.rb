@@ -17,7 +17,7 @@ RSpec.describe EmailPetitionersJob, type: :job do
     subject.perform(petition: petition, email: email, requested_at: requested_at_as_string)
   }
 
-  context "when sending update emails" do
+  context "when sending related activity emails" do
     it "records the number of emails sent" do
       expect {
         perform_enqueued_jobs {

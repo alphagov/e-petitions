@@ -79,15 +79,15 @@ Feature: Joe views an archived petition
     Then I should see "Parliament debated this petition on 26 October 2015"
     And I should see "Waiting for 1 day for Parliament to publish the debate outcome"
 
-  Scenario: Joe does not see information about petition update when there is none
+  Scenario: Joe does not see information about related activity when there is none
     Given an archived petition "Ban Badger Baiting"
     When I view the petition
-    Then I should not see "Petition updates"
+    Then I should not see "Related activity"
 
-  Scenario: Joe sees information about petition update when there is some
-    Given an archived petition "Ban Badger Baiting" has updates
+  Scenario: Joe sees information about related activity when there is some
+    Given an archived petition "Ban Badger Baiting" has related activity
     When I view the petition
-    Then I should see the petition updates
+    Then I should see the related activity
 
   @allow-rescue
   Scenario: Joe tries to see a stopped archived petition
