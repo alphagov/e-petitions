@@ -1,5 +1,5 @@
 <% if @petition.is_a?(::Archived::Petition) %>
-  <%= link_to 'Updates', new_admin_archived_petition_email_path(@petition), class: 'petition-action-heading' %>
+  <%= link_to 'Related activity', new_admin_archived_petition_email_path(@petition), class: 'petition-action-heading' %>
 <% else %>
-  <%= link_to 'Updates', new_admin_petition_email_path(@petition), class: 'petition-action-heading' %>
+  <%= link_to 'Related activity', new_admin_petition_email_path(@petition), class: 'petition-action-heading' %>
 <% end %>

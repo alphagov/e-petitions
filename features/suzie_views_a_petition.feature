@@ -132,15 +132,15 @@ Feature: Suzie views a petition
     When I view the petition
     Then I should not see the petition creator
 
-  Scenario: Suzie does not see information about petition updates when there is none
+  Scenario: Suzie does not see information about related activity when there is none
     Given an open petition "Ban Badger Baiting"
     When I view the petition
-    Then I should not see "Updates"
+    Then I should not see "Related activity"
 
-  Scenario: Suzie sees information about petition updates when there is some
-    Given a petition "Ban Badger Baiting" has updates
+  Scenario: Suzie sees information about related activity when there is some
+    Given a petition "Ban Badger Baiting" has related activity
     When I view the petition
-    Then I should see the petition updates
+    Then I should see the related activity
 
   Scenario: Suzie sees information about the outcomes when viewing a debated petition
     Given a petition "Ban Badger Baiting" has been debated 2 days ago
