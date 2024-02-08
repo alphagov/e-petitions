@@ -85,7 +85,7 @@ Feature: Joe views an archived petition
     Then I should not see "Related activity"
 
   Scenario: Joe sees information about related activity when there is some
-    Given an archived petition "Ban Badger Baiting" has updates
+    Given an archived petition "Ban Badger Baiting" has related activity
     When I view the petition
     Then I should see the related activity
 
