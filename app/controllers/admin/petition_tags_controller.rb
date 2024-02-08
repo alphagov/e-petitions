@@ -8,7 +8,7 @@ class Admin::PetitionTagsController < Admin::AdminController
   def update
     if @petition.update(petition_params)
       respond_to do |format|
-        format.html { redirect_to [:admin, @petition], notice: :petition_updated }
+        format.html { redirect_to admin_petition_url(@petition), notice: :petition_updated }
         format.json { render json: { updated: true } }
       end
     else
