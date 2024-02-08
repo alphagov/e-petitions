@@ -82,10 +82,13 @@
       <th class="creator">Creator</th>
       <th class="petition-id">ID</th>
       <th class="state">State</th>
-      <% if show_tags_column?(@petitions.scope) %>
-        <th class="tags">Tags</th>
-      <% else %>
+      <th class="notes">Notes</th>
+      <th class="tags">Tags</th>
+      <% if show_closing_column?(@petitions.scope) %>
         <th class="date">Closing</th>
+      <% end %>
+      <% if show_rejection_column?(@petitions.scope) %>
+        <th class="rejection">Reason</th>
       <% end %>
       <th class="numeric last">Signatures</th>
     </tr>
@@ -103,10 +106,13 @@
         </td>
         <td class="petition-id"><%= petition.id %></td>
         <td class="state"><%= petition.state.humanize %></td>
-        <% if show_tags_column?(@petitions.scope) %>
-          <td class="tags"><%= tag_names(petition.tags) %></td>
-        <% else %>
+        <td class="notes"><%= petition.notes? ? "Yes" : " " %></td>
+        <td class="tags"><%= tag_names(petition.tags) %></td>
+        <% if show_closing_column?(@petitions.scope) %>
           <td class="date"><%= date_format(petition.closing) || "–" %></td>
+        <% end %>
+        <% if show_rejection_column?(@petitions.scope) %>
+          <td class="rejection"><%= short_rejection_reason(petition.rejection) %></td>
         <% end %>
         <td class="numeric last"><%= number_with_delimiter(petition.signature_count) %></td>
       </tr>

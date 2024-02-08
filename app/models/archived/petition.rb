@@ -56,7 +56,7 @@ module Archived
 
     facet :all, -> { by_most_signatures }
     facet :awaiting_response, -> { awaiting_response.by_waiting_for_response_longest }
-    facet :awaiting_debate_date, -> { awaiting_debate_date.by_waiting_for_debate_longest }
+    facet :awaiting_debate, -> { awaiting_debate.by_most_relevant_debate_date }
     facet :with_debate_outcome, -> { with_debate_outcome.by_most_recent_debate_outcome }
     facet :with_debated_outcome, -> { with_debated_outcome.by_most_recent_debate_outcome }
     facet :published, -> { published.by_most_signatures }
@@ -69,7 +69,6 @@ module Archived
     facet :not_debated, -> { not_debated.by_most_recent_debate_outcome }
     facet :by_most_signatures, -> { by_most_signatures }
     facet :by_created_at, -> { by_created_at }
-    facet :in_debate_queue, -> { in_debate_queue.by_waiting_for_debate_longest }
 
     filter :parliament, ->(id) { where(parliament_id: id) }
     filter :topic, ->(code) { topic(code) }
@@ -83,7 +82,7 @@ module Archived
       delegate :name, :email, to: :creator
       delegate :code, :details, to: :rejection
       delegate :summary, :details, :created_at, :updated_at, to: :government_response
-      delegate :date, :transcript_url, :video_url, :overview, to: :debate_outcome, prefix: :debate
+      delegate :date, :transcript_url, :video_url, :public_engagement_url, :debate_summary_url, :overview, to: :debate_outcome, prefix: :debate
       delegate :debate_pack_url, to: :debate_outcome, prefix: false
     end
 
@@ -102,6 +101,10 @@ module Archived
         reorder(debate_outcome_at: :desc, created_at: :desc)
       end
 
+      def by_most_relevant_debate_date
+        reorder('scheduled_debate_date ASC NULLS LAST, debate_threshold_reached_at ASC NULLS FIRST')
+      end
+
       def by_waiting_for_debate_longest
         reorder(debate_threshold_reached_at: :asc, created_at: :desc)
       end
@@ -116,10 +119,6 @@ module Archived
 
       def by_waiting_for_response_longest
         reorder(response_threshold_reached_at: :asc, created_at: :desc)
-      end
-
-      def awaiting_debate_date
-        debate_threshold_reached.not_scheduled
       end
 
       def awaiting_response
@@ -166,6 +165,10 @@ module Archived
         where(state: DEBATABLE_STATES)
       end
 
+      def awaiting_debate
+        where(debate_state: %w[awaiting scheduled])
+      end
+
       def debated
         where(debate_state: 'debated').preload(:debate_outcome)
       end
@@ -204,10 +207,6 @@ module Archived
 
       def mark_petitions_as_debated!(date = Date.current)
         in_need_of_marking_as_debated(date).update_all(debate_state: 'debated')
-      end
-
-      def in_debate_queue
-        where(threshold_for_debate_reached.or(scheduled_for_debate))
       end
 
       def removed

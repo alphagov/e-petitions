@@ -57,6 +57,11 @@ RSpec.describe "routes for signatures", type: :routes do
     expect(unsubscribe_signature_path("1", token: "abcdef1234567890")).to eq("/signatures/1/unsubscribe?token=abcdef1234567890")
   end
 
+  it "routes POST /signatures/:id/unsubscribe to signatures#unsubscribe" do
+    expect(post("/signatures/1/unsubscribe?token=abcdef1234567890")).
+      to route_to("signatures#unsubscribe", id: "1", token: "abcdef1234567890")
+  end
+
   it "routes GET /signatures/:id/signed to signatures#signed" do
     expect(get("/signatures/1/signed?token=abcdef1234567890")).
       to route_to("signatures#signed", id: "1", token: "abcdef1234567890")

@@ -5,7 +5,16 @@ RSpec.describe FeedbackMailer, type: :mailer do
     let(:email) { "foo@example.com" }
     let(:comment) { "I love your site!" }
     let(:title) { nil }
-    let(:feedback) { Feedback.new(email: email, comment: comment, petition_link_or_title: title) }
+
+    let(:feedback) do
+      Feedback.new(
+        email: email,
+        comment: comment,
+        petition_link_or_title: title,
+        user_agent: "Mozilla/5.0",
+        ip_address: "192.168.12.34"
+      )
+    end
 
     subject(:mail) { FeedbackMailer.send_feedback(feedback) }
 
@@ -19,6 +28,14 @@ RSpec.describe FeedbackMailer, type: :mailer do
 
     it "sets the reply-to to be the email address" do
       expect(mail.reply_to).to eq(["foo@example.com"])
+    end
+
+    it "renders the browser user agent string" do
+      expect(mail).to have_body_text("Mozilla/5.0")
+    end
+
+    it "renders the remote ip address" do
+      expect(mail).to have_body_text("192.168.12.34")
     end
 
     context "when the comment field contains line breaks" do

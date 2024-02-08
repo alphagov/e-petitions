@@ -136,7 +136,9 @@ RSpec.describe Admin::DebateOutcomesController, type: :controller, admin: true d
           overview: 'Discussion of the 2014 Christmas Adjournment - has the house considered everything it needs to before it closes for the festive period?',
           transcript_url: 'http://www.publications.parliament.uk/pa/cm201415/cmhansrd/cm141218/debtext/141218-0003.htm#14121849000001',
           video_url: 'http://parliamentlive.tv/event/index/f9eb68af-6a5c-4a94-95d3-6108aa87e9d7?in=13:57:00',
-          debate_pack_url: "http://researchbriefings.parliament.uk/ResearchBriefing/Summary/CDP-2014-1234"
+          debate_pack_url: "http://researchbriefings.parliament.uk/ResearchBriefing/Summary/CDP-2014-1234",
+          public_engagement_url: "https://committees.parliament.uk/public-engagement",
+          debate_summary_url: "https://ukparliament.shorthandstories.com/about-a-petition",
         }
       end
 
@@ -177,6 +179,8 @@ RSpec.describe Admin::DebateOutcomesController, type: :controller, admin: true d
               expect(petition.debate_outcome.transcript_url).to eq debate_outcome_attributes[:transcript_url]
               expect(petition.debate_outcome.video_url).to eq debate_outcome_attributes[:video_url]
               expect(petition.debate_outcome.debate_pack_url).to eq debate_outcome_attributes[:debate_pack_url]
+              expect(petition.debate_outcome.public_engagement_url).to eq debate_outcome_attributes[:public_engagement_url]
+              expect(petition.debate_outcome.debate_summary_url).to eq debate_outcome_attributes[:debate_summary_url]
             end
 
             describe "emails out a debate outcome response" do
@@ -387,6 +391,8 @@ RSpec.describe Admin::DebateOutcomesController, type: :controller, admin: true d
               expect(petition.debate_outcome.transcript_url).to eq debate_outcome_attributes[:transcript_url]
               expect(petition.debate_outcome.video_url).to eq debate_outcome_attributes[:video_url]
               expect(petition.debate_outcome.debate_pack_url).to eq debate_outcome_attributes[:debate_pack_url]
+              expect(petition.debate_outcome.public_engagement_url).to eq debate_outcome_attributes[:public_engagement_url]
+              expect(petition.debate_outcome.debate_summary_url).to eq debate_outcome_attributes[:debate_summary_url]
             end
 
             describe "does not email out debate outcome response" do

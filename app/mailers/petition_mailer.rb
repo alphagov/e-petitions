@@ -22,7 +22,8 @@ class PetitionMailer < ApplicationMailer
 
     mail to: @signature.email,
       subject: subject_for(:email_signer),
-      list_unsubscribe: unsubscribe_url
+      list_unsubscribe: unsubscribe_url,
+      list_unsubscribe_post: one_click_unsubscribe
   end
 
   def email_creator(petition, signature, email)
@@ -30,7 +31,8 @@ class PetitionMailer < ApplicationMailer
 
     mail to: @signature.email,
       subject: subject_for(:email_creator),
-      list_unsubscribe: unsubscribe_url
+      list_unsubscribe: unsubscribe_url,
+      list_unsubscribe_post: one_click_unsubscribe
   end
 
   def mailshot_for_signer(petition, signature, mailshot)
@@ -38,7 +40,8 @@ class PetitionMailer < ApplicationMailer
 
     mail to: @signature.email,
       subject: subject_for(:mailshot_for_signer),
-      list_unsubscribe: unsubscribe_url
+      list_unsubscribe: unsubscribe_url,
+      list_unsubscribe_post: one_click_unsubscribe
   end
 
   def mailshot_for_creator(petition, signature, mailshot)
@@ -46,7 +49,8 @@ class PetitionMailer < ApplicationMailer
 
     mail to: @signature.email,
       subject: subject_for(:mailshot_for_creator),
-      list_unsubscribe: unsubscribe_url
+      list_unsubscribe: unsubscribe_url,
+      list_unsubscribe_post: one_click_unsubscribe
   end
 
   def special_resend_of_email_confirmation_for_signer(signature)
@@ -59,7 +63,8 @@ class PetitionMailer < ApplicationMailer
 
     mail to: @signature.email,
       subject: subject_for(:notify_creator_that_petition_is_published),
-      list_unsubscribe: unsubscribe_url
+      list_unsubscribe: unsubscribe_url,
+      list_unsubscribe_post: one_click_unsubscribe
   end
 
   def notify_sponsor_that_petition_is_published(signature)
@@ -82,7 +87,8 @@ class PetitionMailer < ApplicationMailer
 
     mail to: @signature.email,
       subject: subject_for(:notify_signer_of_threshold_response),
-      list_unsubscribe: unsubscribe_url
+      list_unsubscribe: unsubscribe_url,
+      list_unsubscribe_post: one_click_unsubscribe
   end
 
   def notify_creator_of_threshold_response(petition, signature)
@@ -90,7 +96,8 @@ class PetitionMailer < ApplicationMailer
 
     mail to: @signature.email,
       subject: subject_for(:notify_creator_of_threshold_response),
-      list_unsubscribe: unsubscribe_url
+      list_unsubscribe: unsubscribe_url,
+      list_unsubscribe_post: one_click_unsubscribe
   end
 
   def notify_creator_of_closing_date_change(signature, petitions, remaining = 0)
@@ -143,7 +150,9 @@ class PetitionMailer < ApplicationMailer
       subject = subject_for(:notify_signer_of_negative_debate_outcome)
     end
 
-    mail to: @signature.email, subject: subject, list_unsubscribe: unsubscribe_url
+    mail to: @signature.email, subject: subject,
+      list_unsubscribe: unsubscribe_url,
+      list_unsubscribe_post: one_click_unsubscribe
   end
 
   def notify_creator_of_debate_outcome(petition, signature)
@@ -155,7 +164,9 @@ class PetitionMailer < ApplicationMailer
       subject = subject_for(:notify_creator_of_negative_debate_outcome)
     end
 
-    mail to: @signature.email, subject: subject, list_unsubscribe: unsubscribe_url
+    mail to: @signature.email, subject: subject,
+      list_unsubscribe: unsubscribe_url,
+      list_unsubscribe_post: one_click_unsubscribe
   end
 
   def notify_signer_of_debate_scheduled(petition, signature)
@@ -163,14 +174,16 @@ class PetitionMailer < ApplicationMailer
 
     mail to: @signature.email,
       subject: subject_for(:notify_signer_of_debate_scheduled),
-      list_unsubscribe: unsubscribe_url
+      list_unsubscribe: unsubscribe_url,
+      list_unsubscribe_post: one_click_unsubscribe
   end
 
   def notify_creator_of_debate_scheduled(petition, signature)
     @petition, @signature = petition, signature
     mail to: @signature.email,
       subject: subject_for(:notify_creator_of_debate_scheduled),
-      list_unsubscribe: unsubscribe_url
+      list_unsubscribe: unsubscribe_url,
+      list_unsubscribe_post: one_click_unsubscribe
   end
 
   def notify_creator_that_moderation_is_delayed(signature, subject, body)
@@ -179,7 +192,8 @@ class PetitionMailer < ApplicationMailer
 
     mail to: @signature.email,
       subject: subject_for(:notify_creator_that_moderation_is_delayed),
-      list_unsubscribe: unsubscribe_url
+      list_unsubscribe: unsubscribe_url,
+      list_unsubscribe_post: one_click_unsubscribe
   end
 
   def privacy_policy_update_email(privacy_notification)
@@ -229,5 +243,9 @@ class PetitionMailer < ApplicationMailer
 
   def unsubscribe_url
     "<#{unsubscribe_signature_url(@signature, token: @signature.unsubscribe_token)}>"
+  end
+
+  def one_click_unsubscribe
+    "List-Unsubscribe=One-Click"
   end
 end

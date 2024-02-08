@@ -17,9 +17,18 @@ RSpec.describe Archived::SignaturesController, type: :controller do
         expect(signature).to receive(:unsubscribe!).with("token")
       end
 
-      it "renders the action template" do
-        get :unsubscribe, params: { id: "1", token: "token" }
-        expect(response).to render_template(:unsubscribe)
+      context "and the request method is GET" do
+        it "renders the action template" do
+          get :unsubscribe, params: { id: "1", token: "token" }
+          expect(response).to render_template(:unsubscribe)
+        end
+      end
+
+      context "and the request method is POST" do
+        it "renders the action template" do
+          post :unsubscribe, params: { id: "1", token: "token" }
+          expect(response).to render_template(:unsubscribe)
+        end
       end
     end
 
@@ -28,10 +37,20 @@ RSpec.describe Archived::SignaturesController, type: :controller do
         expect(signature).to receive(:fraudulent?).and_return(true)
       end
 
-      it "raises an ActiveRecord::RecordNotFound error" do
-        expect {
-          get :unsubscribe, params: { id: "1", token: "token" }
-        }.to raise_error(ActiveRecord::RecordNotFound)
+      context "and the request method is GET" do
+        it "raises an ActiveRecord::RecordNotFound error" do
+          expect {
+            get :unsubscribe, params: { id: "1", token: "token" }
+          }.to raise_error(ActiveRecord::RecordNotFound)
+        end
+      end
+
+      context "and the request method is POST" do
+        it "raises an ActiveRecord::RecordNotFound error" do
+          expect {
+            post :unsubscribe, params: { id: "1", token: "token" }
+          }.to raise_error(ActiveRecord::RecordNotFound)
+        end
       end
     end
 
@@ -40,10 +59,20 @@ RSpec.describe Archived::SignaturesController, type: :controller do
         expect(signature).to receive(:invalidated?).and_return(true)
       end
 
-      it "raises an ActiveRecord::RecordNotFound error" do
-        expect {
-          get :unsubscribe, params: { id: "1", token: "token" }
-        }.to raise_error(ActiveRecord::RecordNotFound)
+      context "and the request method is GET" do
+        it "raises an ActiveRecord::RecordNotFound error" do
+          expect {
+            get :unsubscribe, params: { id: "1", token: "token" }
+          }.to raise_error(ActiveRecord::RecordNotFound)
+        end
+      end
+
+      context "and the request method is POST" do
+        it "raises an ActiveRecord::RecordNotFound error" do
+          expect {
+            get :unsubscribe, params: { id: "1", token: "token" }
+          }.to raise_error(ActiveRecord::RecordNotFound)
+        end
       end
     end
   end

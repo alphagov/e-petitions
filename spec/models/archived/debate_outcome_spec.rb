@@ -11,6 +11,8 @@ RSpec.describe Archived::DebateOutcome, type: :model do
     it { is_expected.to have_db_column(:transcript_url).of_type(:string).with_options(limit: 500) }
     it { is_expected.to have_db_column(:video_url).of_type(:string).with_options(limit: 500) }
     it { is_expected.to have_db_column(:debate_pack_url).of_type(:string).with_options(limit: 500) }
+    it { is_expected.to have_db_column(:public_engagement_url).of_type(:string).with_options(limit: 500) }
+    it { is_expected.to have_db_column(:debate_summary_url).of_type(:string).with_options(limit: 500) }
     it { is_expected.to have_db_column(:overview).of_type(:text) }
     it { is_expected.to have_db_column(:created_at).of_type(:datetime).with_options(null: false) }
     it { is_expected.to have_db_column(:updated_at).of_type(:datetime).with_options(null: false) }
@@ -38,10 +40,15 @@ RSpec.describe Archived::DebateOutcome, type: :model do
     it { is_expected.to allow_value("https://hansard.parliament.uk/").for(:transcript_url) }
     it { is_expected.to allow_value("https://parliamentlive.tv/").for(:video_url) }
     it { is_expected.to allow_value("https://www.youtube.com/").for(:video_url) }
+    it { is_expected.to allow_value("https://committees.parliament.uk/").for(:public_engagement_url) }
+    it { is_expected.to allow_value("https://ukparliament.shorthandstories.com/").for(:public_engagement_url) }
+    it { is_expected.to allow_value("https://ukparliament.shorthandstories.com/").for(:debate_summary_url) }
 
     it { is_expected.not_to allow_value("https://www.example.com/").for(:debate_pack_url) }
     it { is_expected.not_to allow_value("https://www.example.com/").for(:transcript_url) }
     it { is_expected.not_to allow_value("https://www.example.com/").for(:video_url) }
+    it { is_expected.not_to allow_value("https://www.example.com/").for(:public_engagement_url) }
+    it { is_expected.not_to allow_value("https://www.example.com/").for(:debate_summary_url) }
 
     context "when then petition was debated" do
       subject { described_class.new(debated: true) }

@@ -39,6 +39,12 @@ FactoryBot.define do
       sequence(:debate_pack_url) { |n|
         "http://researchbriefings.parliament.uk/ResearchBriefing/Summary/CDP-#{debated_on.strftime('%Y')}-#{ '%04d' % n }"
       }
+      public_engagement_url {
+        "https://committees.parliament.uk/public-engagement"
+      }
+      debate_summary_url {
+        "https://ukparliament.shorthandstories.com/about-a-petition"
+      }
     end
   end
 
@@ -128,6 +134,8 @@ FactoryBot.define do
         video_url { nil }
         debate_pack_url { nil }
         debate_image { nil }
+        public_engagement_url { nil }
+        debate_summary_url { nil }
       end
 
       after(:build) do |petition, evaluator|
@@ -138,6 +146,8 @@ FactoryBot.define do
           o.transcript_url = evaluator.transcript_url if evaluator.transcript_url.present?
           o.video_url = evaluator.video_url if evaluator.video_url.present?
           o.debate_pack_url = evaluator.debate_pack_url if evaluator.debate_pack_url.present?
+          o.public_engagement_url = evaluator.public_engagement_url if evaluator.public_engagement_url.present?
+          o.debate_summary_url = evaluator.debate_summary_url if evaluator.debate_summary_url.present?
           o.image = evaluator.debate_image if evaluator.debate_image.present?
         end
       end
@@ -492,6 +502,18 @@ FactoryBot.define do
 
   factory :hidden_petition, :parent => :petition do
     state { Petition::HIDDEN_STATE }
+
+    transient do
+      rejection_code { "libellous" }
+      rejection_details { nil }
+    end
+
+    after(:create) do |petition, evaluator|
+      petition.create_rejection! do |r|
+        r.code = evaluator.rejection_code
+        r.details = evaluator.rejection_details
+      end
+    end
   end
 
   factory :awaiting_petition, :parent => :open_petition do
@@ -533,6 +555,8 @@ FactoryBot.define do
       video_url { nil }
       debate_pack_url { nil }
       debate_image { nil }
+      public_engagement_url { nil }
+      debate_summary_url { nil }
     end
 
     debate_state { 'debated' }
@@ -545,6 +569,8 @@ FactoryBot.define do
       debate_outcome_attributes[:transcript_url] = evaluator.transcript_url if evaluator.transcript_url.present?
       debate_outcome_attributes[:video_url] = evaluator.video_url if evaluator.video_url.present?
       debate_outcome_attributes[:debate_pack_url] = evaluator.debate_pack_url if evaluator.debate_pack_url.present?
+      debate_outcome_attributes[:public_engagement_url] = evaluator.public_engagement_url if evaluator.public_engagement_url.present?
+      debate_outcome_attributes[:debate_summary_url] = evaluator.debate_summary_url if evaluator.debate_summary_url.present?
       debate_outcome_attributes[:image] = evaluator.debate_image if evaluator.debate_image.present?
 
       petition.build_debate_outcome(debate_outcome_attributes)
@@ -755,6 +781,12 @@ FactoryBot.define do
       }
       sequence(:debate_pack_url) { |n|
         "http://researchbriefings.parliament.uk/ResearchBriefing/Summary/CDP-#{debated_on.strftime('%Y')}-#{ '%04d' % n }"
+      }
+      public_engagement_url {
+        "https://committees.parliament.uk/public-engagement"
+      }
+      debate_summary_url {
+        "https://ukparliament.shorthandstories.com/about-a-petition"
       }
     end
   end

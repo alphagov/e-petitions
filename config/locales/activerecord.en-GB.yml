@@ -62,7 +62,10 @@ en-GB:
               invalid: "Please use a url on the parliament.uk website or a subdomain"
             video_url:
               invalid: "Please use a url on the parliamentlive.tv website or www.youtube.com"
-
+            public_engagement_url:
+              invalid: "Please use a url on the committees.parliament.uk or ukparliament.shorthandstories.com websites"
+            debate_summary_url:
+              invalid: "Please use a url on the ukparliament.shorthandstories.com website"
         archived/petition:
           attributes:
             parliament:
@@ -155,6 +158,10 @@ en-GB:
               invalid: "Please use a url on the parliament.uk website or a subdomain"
             video_url:
               invalid: "Please use a url on the parliamentlive.tv website or www.youtube.com"
+            public_engagement_url:
+              invalid: "Please use a url on the committees.parliament.uk or ukparliament.shorthandstories.com websites"
+            debate_summary_url:
+              invalid: "Please use a url on the ukparliament.shorthandstories.com website"
 
         rate_limit:
           attributes:

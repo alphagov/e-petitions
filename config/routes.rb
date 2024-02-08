@@ -81,8 +81,9 @@ Rails.application.routes.draw do
 
         member do
           get 'verify'
-          get 'unsubscribe'
           get 'signed'
+
+          match 'unsubscribe', via: %i[get post]
         end
       end
     end
@@ -91,7 +92,7 @@ Rails.application.routes.draw do
       resources :petitions, only: %i[index show]
 
       resources :signatures, only: [] do
-        get 'unsubscribe', on: :member
+        match 'unsubscribe', via: %i[get post], on: :member
       end
     end
 

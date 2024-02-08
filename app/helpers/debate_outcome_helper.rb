@@ -1,7 +1,7 @@
 require 'ostruct'
 
 module DebateOutcomeHelper
-  DEBATE_OUTCOME_URLS = %i[video_url transcript_url debate_pack_url]
+  DEBATE_OUTCOME_URLS = %i[video_url transcript_url debate_pack_url public_engagement_url debate_summary_url]
 
   OUTCOME_IMAGE_WIDTH = 1260.0
   OUTCOME_IMAGE_HEIGHT = 944.0
