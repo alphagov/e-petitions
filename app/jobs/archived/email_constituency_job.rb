@@ -12,7 +12,7 @@ module Archived
       log_exception(exception)
     end
 
-    def perform(**args)
+    def perform(args)
       @mailshot = args[:mailshot]
       super
     end

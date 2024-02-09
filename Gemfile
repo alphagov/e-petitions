@@ -6,7 +6,7 @@ gem 'dotenv-rails', require: 'dotenv/rails-now'
 gem 'rails', '6.1.7.7'
 
 gem 'rake'
-gem 'pg'
+gem 'pg', '< 1.5'
 gem 'authlogic'
 gem 'will_paginate'
 gem 'json'
@@ -34,6 +34,8 @@ gem 'image_processing'
 gem 'maxminddb'
 gem 'redcarpet'
 gem 'scrypt'
+gem 'webrick'
+gem 'nokogiri', '< 1.16'
 
 gem 'aws-sdk-codedeploy'
 gem 'aws-sdk-cloudwatchlogs'
@@ -48,7 +50,6 @@ group :development, :test do
 end
 
 group :test do
-  gem 'nokogiri'
   gem 'shoulda-matchers'
   gem 'cucumber', '~> 2.4.0'
   gem 'cucumber-rails', require: false

@@ -106,7 +106,7 @@ module Archived
     private
 
     def subject_for(key, options = {})
-      I18n.t key, i18n_options.merge(options)
+      I18n.t key, **(i18n_options.merge(options))
     end
 
     def signature_belongs_to_creator?

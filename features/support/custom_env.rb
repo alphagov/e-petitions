@@ -60,7 +60,8 @@ Capybara.default_normalize_ws = true
 
 pid = Process.spawn('bin/local_proxy', out: 'log/proxy.log', err: 'log/proxy.log')
 Process.detach(pid)
-at_exit { Process.kill('INT', pid) }
+
+at_exit { Process.kill('INT', pid) rescue nil }
 
 module CucumberI18n
   def t(*args)

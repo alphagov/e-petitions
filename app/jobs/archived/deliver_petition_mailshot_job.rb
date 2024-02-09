@@ -4,7 +4,7 @@ module Archived
 
     attr_reader :mailshot
 
-    def perform(**args)
+    def perform(args)
       @mailshot = args[:mailshot]
       super
     end

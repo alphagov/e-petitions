@@ -58,7 +58,7 @@ module EmailAllPetitionSignatories
     end
   end
 
-  def perform(**args)
+  def perform(args)
     @petition = args[:petition]
     @requested_at = args[:requested_at]
     @scope = args[:scope]
