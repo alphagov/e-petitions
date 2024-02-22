@@ -17,7 +17,7 @@ RUN curl -sL https://github.com/nodenv/node-build/archive/master.tar.gz | tar xz
     rm -rf /tmp/node-build-master
 
 # Install Bundler
-RUN gem install bundler -v 1.17.3
+RUN gem install bundler -v 2.3.27
 
 # Install Chromium and Chromium-Driver
 RUN apt-get install -y chromium chromium-driver
