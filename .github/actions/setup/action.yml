@@ -12,7 +12,8 @@ runs:
       shell: bash
       run: |
         gem install bundler -v 2.3.27
-        bundle install --jobs 4 --retry 3 --path vendor/bundle
+        bundle config set --local path 'vendor/bundle'
+        bundle install --jobs 4 --retry 3
 
     - name: Setup database
       shell: bash

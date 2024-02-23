@@ -3,7 +3,7 @@ class DeliverPetitionEmailJob < ApplicationJob
 
   attr_reader :email
 
-  def perform(**args)
+  def perform(args)
     @email = args[:email]
     super
   end

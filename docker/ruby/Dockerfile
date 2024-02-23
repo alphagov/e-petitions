@@ -1,34 +1,32 @@
-FROM ruby:2.7
+FROM ruby:3.0-bullseye
 
 ENV BUNDLE_PATH=/bundle
 
-# Install PostgreSQL client
-RUN echo 'deb http://apt.postgresql.org/pub/repos/apt/ bullseye-pgdg main' \
+# Install apt signing keys
+RUN wget --quiet -O - https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | \
+    gpg --dearmor -o /usr/share/keyrings/nodesource.gpg && \
+    wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | \
+    gpg --dearmor -o /usr/share/keyrings/pgdg.gpg
+
+# Add apt repositories
+RUN echo 'deb [signed-by=/usr/share/keyrings/nodesource.gpg] https://deb.nodesource.com/node_20.x nodistro main' \
+    > /etc/apt/sources.list.d/nodesource.list && \
+    echo 'deb [signed-by=/usr/share/keyrings/pgdg.gpg] http://apt.postgresql.org/pub/repos/apt/ bullseye-pgdg main' \
     > /etc/apt/sources.list.d/pgdg.list && \
-    wget -q -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc \
-    | apt-key add - && apt-get update && \
-    apt-get install -y postgresql-client-12
+    apt-get update
 
-# Install NodeJS
-ENV PATH=/usr/local/node/bin:$PATH
-RUN curl -sL https://github.com/nodenv/node-build/archive/master.tar.gz | tar xz -C /tmp/ && \
-    /tmp/node-build-master/bin/node-build "18.16.0" /usr/local/node && \
-    npm install -g yarn@1.22.19 && \
-    rm -rf /tmp/node-build-master
-
-# Install Bundler
-RUN gem install bundler -v 2.3.27
-
-# Install Chromium and Chromium-Driver
-RUN apt-get install -y chromium chromium-driver
-
-# Link chromedriver so the webdrivers gem finds it
-RUN mkdir -p /root/.webdrivers && \
-   ln -nfs /usr/bin/chromedriver /root/.webdrivers/chromedriver && \
-   /usr/bin/chromedriver --version | cut -d ' ' -f 2 | cat > /root/.webdrivers/chromedriver.version
+# Install packages
+RUN apt-get install -y --no-install-recommends \
+    chromium chromium-driver nodejs postgresql-client-12
 
 # Create the crash reports directory - without it Chromium complains on startup
 RUN mkdir -p "/root/.config/chromium/Crash Reports/pending/"
+
+# Install NPM
+RUN npm install -g npm@10
+
+# Install Bundler
+RUN gem install bundler -v 2.3.27
 
 WORKDIR /app
 

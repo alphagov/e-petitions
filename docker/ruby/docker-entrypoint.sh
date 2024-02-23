@@ -13,7 +13,7 @@ echo 'Connected to postgres...'
 if [ "$1" = "bash" ]; then
   exec "$@"
 else
-  yarn install
+  npm install --no-fund --no-audit
   bundle check || bundle install
 
   exec bundle exec "$@"

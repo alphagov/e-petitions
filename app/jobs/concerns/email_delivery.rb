@@ -40,7 +40,7 @@ module EmailDelivery
     end
   end
 
-  def perform(**args)
+  def perform(args)
     @signature = args[:signature]
     @petition = args[:petition]
     @requested_at = args[:requested_at].in_time_zone
