@@ -225,7 +225,7 @@ class PackageBuilder
   end
 
   def package_gems
-    args = %w[bundle package --all --all-platforms --no-install]
+    args = %w[bundle package --no-install]
 
     info "Packaging gems ..."
     with_build_env do
@@ -478,6 +478,8 @@ class PackageBuilder
     # https://github.com/rubygems/bundler/issues/5863
     env = Bundler.original_env
     env["BUNDLE_SPECIFIC_PLATFORM"] = "true"
+    env["BUNDLE_CACHE_ALL"] = "true"
+    env["BUNDLE_CACHE_ALL_PLATFORMS"] = "true"
 
     # Ensure that we pick up the archive's Gemfile
     env.delete("BUNDLE_GEMFILE")
