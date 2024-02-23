@@ -13,24 +13,6 @@ RSpec.describe Admin::TrendingDomainsController, type: :controller, admin: true 
     end
   end
 
-  context "when logged in as moderator user but need to reset password" do
-    let(:user) { FactoryBot.create(:moderator_user, force_password_reset: true) }
-
-    before do
-      login_as(user)
-    end
-
-    describe "GET /admin/petitions/200000/trending-domains" do
-      before do
-        get :index, params: { petition_id: "200000" }
-      end
-
-      it "redirects to edit profile page" do
-        expect(response).to redirect_to("https://moderate.petition.parliament.uk/admin/profile/#{user.id}/edit")
-      end
-    end
-  end
-
   context "when logged in as moderator user" do
     let(:user) { FactoryBot.create(:moderator_user) }
 

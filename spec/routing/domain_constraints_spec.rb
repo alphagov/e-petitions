@@ -30,7 +30,7 @@ RSpec.describe "domain constraints", type: :routes do
 
     context "and making a request for an admin path" do
       it "is routable" do
-        expect(get("/admin/login")).to route_to("admin/user_sessions#new")
+        expect(get("/admin/login")).to route_to("admin/sessions#new")
       end
     end
 

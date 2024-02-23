@@ -26,9 +26,7 @@ RSpec.describe 'Requests containing invalid characters are rejected', type: :req
       {
         first_name: "System",
         last_name: "Administrator",
-        email: "admin@petition.parliament.uk",
-        password: "L3tme1n!",
-        password_confirmation: "L3tme1n!"
+        email: "admin@petition.parliament.uk"
       }
     end
 

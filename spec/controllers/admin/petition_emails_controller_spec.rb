@@ -89,48 +89,6 @@ RSpec.describe Admin::PetitionEmailsController, type: :controller, admin: true d
     end
   end
 
-  context 'logged in as moderator user but need to reset password' do
-    let(:email) { FactoryBot.create(:petition_email, petition: petition) }
-    let(:user) { FactoryBot.create(:moderator_user, force_password_reset: true) }
-
-    before { login_as(user) }
-
-    describe 'GET /new' do
-      it 'redirects to edit profile page' do
-        get :new, params: { petition_id: petition.id }
-        expect(response).to redirect_to("https://moderate.petition.parliament.uk/admin/profile/#{user.id}/edit")
-      end
-    end
-
-    describe 'POST /' do
-      it 'redirects to edit profile page' do
-        post :create, params: { petition_id: petition.id }
-        expect(response).to redirect_to("https://moderate.petition.parliament.uk/admin/profile/#{user.id}/edit")
-      end
-    end
-
-    describe 'GET /:id/edit' do
-      it 'redirects to the login page' do
-        get :edit, params: { petition_id: petition.id, id: email.id }
-        expect(response).to redirect_to("https://moderate.petition.parliament.uk/admin/profile/#{user.id}/edit")
-      end
-    end
-
-    describe 'PATCH /:id' do
-      it 'redirects to the login page' do
-        patch :update, params: { petition_id: petition.id, id: email.id }
-        expect(response).to redirect_to("https://moderate.petition.parliament.uk/admin/profile/#{user.id}/edit")
-      end
-    end
-
-    describe 'DELETE /:id' do
-      it 'redirects to the login page' do
-        patch :destroy, params: { petition_id: petition.id, id: email.id }
-        expect(response).to redirect_to("https://moderate.petition.parliament.uk/admin/profile/#{user.id}/edit")
-      end
-    end
-  end
-
   context "logged in as moderator user" do
     let(:user) { FactoryBot.create(:moderator_user) }
     before { login_as(user) }

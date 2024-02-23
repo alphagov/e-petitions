@@ -41,25 +41,6 @@ RSpec.describe Admin::GovernmentResponseController, type: :controller, admin: tr
     end
   end
 
-  context 'logged in as moderator user but need to reset password' do
-    let(:user) { FactoryBot.create(:moderator_user, force_password_reset: true) }
-    before { login_as(user) }
-
-    describe 'GET /show' do
-      it 'redirects to edit profile page' do
-        get :show, params: { petition_id: petition.id }
-        expect(response).to redirect_to("https://moderate.petition.parliament.uk/admin/profile/#{user.id}/edit")
-      end
-    end
-
-    describe 'PATCH /update' do
-      it 'redirects to edit profile page' do
-        patch :update, params: { petition_id: petition.id }
-        expect(response).to redirect_to("https://moderate.petition.parliament.uk/admin/profile/#{user.id}/edit")
-      end
-    end
-  end
-
   context "logged in as moderator user" do
     let(:user) { FactoryBot.create(:moderator_user) }
     before { login_as(user) }

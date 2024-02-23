@@ -15,11 +15,11 @@ Feature: Restricted access to the admin console
     And I should be connected to the server via an ssl connection
     And the markup should be valid
 
+  @javascript
   Scenario: Login and logout to the admin console as a sysadmin
-    Given a sysadmin user exists with first_name: "John", last_name: "Admin", email: "admin@example.com", password: "Letmein1!", password_confirmation: "Letmein1!"
+    Given a sysadmin SSO user exists
     When I go to the admin login page
-    And I fill in "Email" with "admin@example.com"
-    And I fill in "Password" with "Letmein1!"
+    And I fill in "Email" with "sysadmin@example.com"
     And I press "Sign in"
     Then I should be on the admin home page
     And I should be connected to the server via an ssl connection
@@ -29,74 +29,54 @@ Feature: Restricted access to the admin console
     And I follow "Logout"
     And I should be on the admin login page
 
-  Scenario: Login and logout to the admin console as a moderator user
-    Given a moderator user exists with first_name: "John", last_name: "Moderator", email: "admin@example.com", password: "Letmein1!", password_confirmation: "Letmein1!"
+  @javascript
+  Scenario: Login and logout to the admin console as a moderator
+    Given a moderator SSO user exists
     When I go to the admin login page
-    And I fill in "Email" with "admin@example.com"
-    And I fill in "Password" with "Letmein1!"
+    And I fill in "Email" with "moderator@example.com"
     And I press "Sign in"
     Then I should be on the admin home page
-    And I should see "John Moderator"
+    And I should be connected to the server via an ssl connection
+    And the markup should be valid
     And I should not see "Users"
+    And I should see "John Moderator"
     And I follow "Logout"
     And I should be on the admin login page
 
-  Scenario: Invalid login
-    Given I go to the admin login page
-    And I fill in "Email" with "admin@example.com"
-    And I fill in "Password" with "letmein1"
-    And I press "Sign in"
-    Then I should see "Invalid email/password combination"
-    And should not see "Logout"
-
-  Scenario: 5 failed logins disables an account
-    Given a moderator user exists with email: "admin@example.com", password: "Letmein1!", password_confirmation: "Letmein1!"
-    And I go to the admin login page
-    And I try the password "wrong trousers" 3 times in a row
-    And I fill in "Email" with "admin@example.com"
-    And I fill in "Password" with "wrong trousers"
-    And I press "Sign in"
-    Then I should see "You have one more attempt before your account is temporarily disabled"
-    And should not see "Logout"
-    And I fill in "Email" with "admin@example.com"
-    And I fill in "Password" with "wrong trousers"
-    And I press "Sign in"
-    Then I should see "Failed login limit exceeded, your account has been temporarily disabled"
-    And should not see "Logout"
-
-  Scenario: 5 failed logins with an email address containing a wildcard does not disable an account
-    Given a moderator user exists with email: "admin@example.com", password: "Letmein1!", password_confirmation: "Letmein1!"
-    And I go to the admin login page
-    And I try the password "wrong trousers" 5 times in a row for the email "admin%"
-    And I fill in "Email" with "admin@example.com"
-    And I fill in "Password" with "Letmein1!"
+  @javascript
+  Scenario: Login and logout to the admin console as a reviewer
+    Given a reviewer SSO user exists
+    When I go to the admin login page
+    And I fill in "Email" with "reviewer@example.com"
     And I press "Sign in"
     Then I should be on the admin home page
-
-  Scenario: Login as a user who hasn't changed their password for over 9 months
-    Given a moderator user exists with email: "admin@example.com", password: "Letmein1!", password_confirmation: "Letmein1!"
-    And the password was changed 10 months ago
-    When I go to the admin login page
-    And I fill in "Email" with "admin@example.com"
-    And I fill in "Password" with "Letmein1!"
-    And I press "Sign in"
-    Then I should be on the admin edit profile page for "admin@example.com"
     And I should be connected to the server via an ssl connection
-    And I fill in "Current password" with "Letmein1!"
-    And I fill in "New password" with "Letmeout1!"
-    And I fill in "Password confirmation" with "Letmeout1!"
-    And I press "Save"
-    Then I should be on the admin home page
+    And the markup should be valid
+    And I should not see "Users"
+    And I should see "John Reviewer"
+    And I follow "Logout"
+    And I should be on the admin login page
 
-  Scenario: Login as a user who is logging in for the first time
-    Given a moderator user exists with email: "admin@example.com", password: "Letmein1!", password_confirmation: "Letmein1!", force_password_reset: true
+  Scenario: Invalid domain
+    When I go to the admin login page
+    And I fill in "Email" with "admin@example.org"
+    And I press "Sign in"
+    Then I should see "Invalid login details"
+    And should not see "Logout"
+
+  Scenario: Invalid login
+    Given an invalid SSO login
     When I go to the admin login page
     And I fill in "Email" with "admin@example.com"
-    And I fill in "Password" with "Letmein1!"
     And I press "Sign in"
-    Then I should be on the admin edit profile page for "admin@example.com"
-    And I fill in "Current password" with "Letmein1!"
-    And I fill in "New password" with "Letmeout1!"
-    And I fill in "Password confirmation" with "Letmeout1!"
-    And I press "Save"
-    Then I should be on the admin home page
+    Then I should see "There was a problem logging in - please contact support"
+    And should not see "Logout"
+
+  Scenario: Valid login but no role
+    Given a valid SSO login with no roles
+    When I go to the admin login page
+    And I fill in "Email" with "norole@example.com"
+    And I press "Sign in"
+    Then I should see "Invalid login details"
+    And should not see "Logout"
+

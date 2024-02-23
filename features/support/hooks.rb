@@ -83,3 +83,16 @@ end
 Before do
   Rails.application.env_config['action_dispatch.show_detailed_exceptions'] = false
 end
+
+Before do
+  OmniAuth.config.test_mode = true
+
+  OmniAuth.config.on_failure = Proc.new { |env|
+    OmniAuth::FailureEndpoint.new(env).redirect_to_failure
+  }
+end
+
+After do
+  OmniAuth.config.mock_auth[:example] = nil
+  OmniAuth.config.test_mode = false
+end

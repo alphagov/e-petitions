@@ -131,9 +131,8 @@ Rails.application.routes.draw do
       resource :parliament, only: %i[show update]
       resource :search, only: %i[show]
 
-      resources :admin_users
+      resources :admin_users, only: %[index]
       resources :profile, only: %i[edit update]
-      resources :user_sessions, only: %i[create]
 
       resources :invalidations, except: %i[show] do
         post :cancel, :count, :start, on: :member
@@ -246,15 +245,32 @@ Rails.application.routes.draw do
         get  '/', action: 'index', as: :stats
         post '/', action: 'create', as: nil
       end
+    end
 
-      controller 'user_sessions' do
-        get '/logout',   action: 'destroy'
-        get '/login',    action: 'new'
-        get '/continue', action: 'continue'
-        get '/status',   action: 'status'
+    devise_for :users, class_name: 'AdminUser', module: 'admin', skip: %i[sessions]
+
+    as :user do
+      controller 'admin/sessions' do
+        get  '/admin/login',    action: 'new'
+        post '/admin/login',    action: 'create', as: nil
+        get  '/admin/logout',   action: 'destroy'
+        get  '/admin/continue', action: 'continue'
+        get  '/admin/status',   action: 'status'
+      end
+
+      controller 'admin/omniauth_callbacks' do
+        get '/admin/auth/failure', action: 'failure'
+
+        scope '/admin/auth/:provider', via: %i[get post] do
+          match '/',         action: 'passthru', as: :sso_provider
+          match '/callback', action: 'saml',     as: :sso_provider_callback
+        end
       end
     end
   end
+
+  # Devise needs a `new_user_session_url` helper for its failure app
+  direct(:new_user_session) { route_for(:admin_login) }
 
   get 'ping', to: 'ping#ping'
 end

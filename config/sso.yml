@@ -1,0 +1,63 @@
+development:
+  - name: "example"
+    strategy: "Developer"
+    domains:
+      - "example.com"
+    roles:
+      sysadmin:
+        - "sysadmin"
+      moderator:
+        - "moderator"
+      reviewer:
+        - "reviewer"
+    config:
+      uid_field: "email"
+      fields:
+        - "first_name"
+        - "last_name"
+        - "email"
+        - "groups"
+
+test:
+  - name: "example"
+    strategy: "SAML"
+    domains:
+      - "example.com"
+    roles:
+      sysadmin:
+        - "sysadmins"
+      moderator:
+        - "moderators"
+      reviewer:
+        - "reviewers"
+    config:
+      attribute_statements:
+        email: ["email"]
+        first_name: ["first_name"]
+        last_name: ["last_name"]
+        groups: ["groups"]
+      assertion_consumer_service_url: "http://localhost:3000/admin/auth/example/callback"
+      sp_entity_id: "http://localhost:3000/admin/auth/example"
+      idp_sso_service_url: "http://localhost:3000/sso"
+      idp_cert: |-
+        -----BEGIN CERTIFICATE-----
+        MIIDeDCCAmCgAwIBAgIBADANBgkqhkiG9w0BAQUFADA1MQswCQYDVQQGEwJHQjES
+        MBAGA1UECgwJUGV0aXRpb25zMRIwEAYDVQQDDAlsb2NhbGhvc3QwHhcNMjIwMjAy
+        MDUwMzE0WhcNMjMwMjAyMDUwMzI4WjA1MQswCQYDVQQGEwJHQjESMBAGA1UECgwJ
+        UGV0aXRpb25zMRIwEAYDVQQDDAlsb2NhbGhvc3QwggEiMA0GCSqGSIb3DQEBAQUA
+        A4IBDwAwggEKAoIBAQCvJ05sYvxerYrFUsMrlAXug+TRjIzhvWKefsSe35OekNnx
+        p12xev1wbtTziZ4BVs0foh6GEESDKQfG9prFZzq7RTTLkrvP4UKTAENjXWNO8vda
+        y2rB223qK6+txb8Qz5ErMY/4UpQBSy4ZbyymkIz+jUmR6Oos12EHKQRRjtYoLvlF
+        tvEgQ4Swj033G0JN/jlcCmqIB3Jrk+r8kXaES3KM+PgkTNecwUTxGSloFC0q0y/H
+        16re+Cb7zWckL8z8T5Oh1e0WRl/mBZVXA9JFTh/BUE92f1BCZ9lAk8mBG+jxPpCn
+        Gs8YrLWYhE923C8yHxkTNbv2QBq6UWEztU8ezRyZAgMBAAGjgZIwgY8wDwYDVR0T
+        AQH/BAUwAwEB/zAdBgNVHQ4EFgQUBnQRKdCr99+kGkRfLtk0U+PffTkwXQYDVR0j
+        BFYwVIAUBnQRKdCr99+kGkRfLtk0U+PffTmhOaQ3MDUxCzAJBgNVBAYTAkdCMRIw
+        EAYDVQQKDAlQZXRpdGlvbnMxEjAQBgNVBAMMCWxvY2FsaG9zdIIBADANBgkqhkiG
+        9w0BAQUFAAOCAQEAqe+63xNxYY8cnsau3OU73R23nvbk/Aa8CG58n6dTMcX9GJuR
+        d++XDVm9aHw1jqR3kfGOXG0EeRDvyD6wy/U4UiUa4xVHh2B9z/J/p/3AqugjTiMb
+        8AvSCH2PUvE9CwfHdPPnAvqXBbjpdjFP7kIxyQ3tGkhAVxN70URc/PA3xt2c0y6Y
+        guPc+5DFqHdnT8mdUbCkH4PpbbunbBhGsUChK5a/WQQWFCpb/vjOLo8XjnLM6n1d
+        xyXv04lILZ9fJ8jy30mHT8jesS6LlNioufs0XM3pJQ/tY3/hWHNaQLs8vseULFWV
+        +ZKWSqrGoR6dQZtg67X/Hv4V62tJTEhzqFwQnw==
+        -----END CERTIFICATE-----

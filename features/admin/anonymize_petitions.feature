@@ -4,7 +4,7 @@ Feature: An admin anonymizes petitions
   I want to anonymize all petitions 6 months after parliament closes in accordance with our privacy policy
 
   Background:
-    Given I am logged in as a sysadmin with the email "muddy@fox.com", first_name "Sys", last_name "Admin"
+    Given I am logged in as a sysadmin with the email "muddy@example.com", first_name "Sys", last_name "Admin"
 
   @javascript
   Scenario: Admin anonymizes petitions 6 months after parliament closes

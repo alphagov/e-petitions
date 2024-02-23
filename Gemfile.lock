@@ -64,11 +64,6 @@ GEM
       public_suffix (>= 2.0.2, < 6.0)
     appsignal (3.4.13)
       rack
-    authlogic (6.4.3)
-      activemodel (>= 5.2, < 7.2)
-      activerecord (>= 5.2, < 7.2)
-      activesupport (>= 5.2, < 7.2)
-      request_store (~> 1.0)
     aws-eventstream (1.3.0)
     aws-partitions (1.888.0)
     aws-sdk-cloudwatchlogs (1.79.0)
@@ -142,6 +137,14 @@ GEM
     delayed_job_active_record (4.1.8)
       activerecord (>= 3.0, < 8.0)
       delayed_job (>= 3.0, < 5)
+    devise (4.9.3)
+      bcrypt (~> 3.0)
+      orm_adapter (~> 0.1)
+      railties (>= 4.1.0)
+      responders
+      warden (~> 1.2.3)
+    devise-encryptable (0.2.0)
+      devise (>= 2.1.0)
     diff-lcs (1.5.1)
     docile (1.3.1)
     dotenv (2.7.6)
@@ -194,6 +197,7 @@ GEM
     globalid (1.2.1)
       activesupport (>= 6.1)
     hashdiff (1.1.0)
+    hashie (5.0.0)
     htmlentities (4.3.4)
     i18n (1.14.1)
       concurrent-ruby (~> 1.0)
@@ -257,6 +261,17 @@ GEM
       racc (~> 1.4)
     nokogiri (1.16.2-x86_64-linux)
       racc (~> 1.4)
+    omniauth (2.1.1)
+      hashie (>= 3.4.6)
+      rack (>= 2.2.3)
+      rack-protection
+    omniauth-rails_csrf_protection (1.0.1)
+      actionpack (>= 4.2)
+      omniauth (~> 2.0)
+    omniauth-saml (2.1.0)
+      omniauth (~> 2.0)
+      ruby-saml (~> 1.12)
+    orm_adapter (0.5.0)
     pg (1.4.6)
     pry (0.14.2)
       coderay (~> 1.1)
@@ -266,6 +281,8 @@ GEM
       nio4r (~> 2.0)
     racc (1.7.3)
     rack (2.2.8)
+    rack-protection (3.1.0)
+      rack (~> 2.2, >= 2.2.4)
     rack-test (2.1.0)
       rack (>= 1.3)
     rails (6.1.7.7)
@@ -308,6 +325,9 @@ GEM
     regexp_parser (2.8.2)
     request_store (1.5.0)
       rack (>= 1.4)
+    responders (3.1.1)
+      actionpack (>= 5.2)
+      railties (>= 5.2)
     rexml (3.2.6)
     rspec-core (3.13.0)
       rspec-support (~> 3.13.0)
@@ -326,6 +346,9 @@ GEM
       rspec-mocks (~> 3.12)
       rspec-support (~> 3.12)
     rspec-support (3.13.0)
+    ruby-saml (1.16.0)
+      nokogiri (>= 1.13.10)
+      rexml
     ruby-vips (2.1.4)
       ffi (~> 1.12)
     ruby2_keywords (0.0.5)
@@ -371,6 +394,8 @@ GEM
       concurrent-ruby (~> 1.0)
     uglifier (4.1.8)
       execjs (>= 0.3.0, < 3)
+    warden (1.2.9)
+      rack (>= 2.0.9)
     webmock (3.20.0)
       addressable (>= 2.8.0)
       crack (>= 0.3.2)
@@ -395,7 +420,6 @@ PLATFORMS
 
 DEPENDENCIES
   appsignal
-  authlogic
   aws-sdk-cloudwatchlogs
   aws-sdk-codedeploy
   aws-sdk-s3
@@ -411,6 +435,7 @@ DEPENDENCIES
   database_cleaner
   delayed-web
   delayed_job_active_record
+  devise
   dotenv-rails
   email_spec
   factory_bot_rails
@@ -427,6 +452,9 @@ DEPENDENCIES
   maxminddb
   net-http-persistent
   nokogiri
+  omniauth
+  omniauth-rails_csrf_protection
+  omniauth-saml
   pg (< 1.5)
   pry
   puma (< 6)

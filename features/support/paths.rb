@@ -110,12 +110,6 @@ module NavigationHelpers
     when /^new user page$/
       new_admin_admin_user_url
 
-    when /^edit profile page$/
-      edit_admin_profile_url(@user)
-
-    when /^edit profile page for "([^\"]*)"$/
-      edit_admin_profile_url(AdminUser.find_by(email: $1))
-
     when /^debate outcomes form page for "([^\"]*)"$/
       admin_petition_debate_outcome_url(Petition.find_by(action: $1))
 

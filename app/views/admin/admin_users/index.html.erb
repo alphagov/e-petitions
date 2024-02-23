@@ -1,26 +1,16 @@
-<%= link_to 'New user', new_admin_admin_user_path, class: "button" %>
-
 <table class="user-list">
   <tr>
     <th>Name</th>
     <th>Email</th>
     <th>Role</th>
-    <th>Disabled</th>
-    <th></th>
+    <th>Last login</th>
   </tr>
   <%- @users.each do |user| -%>
     <tr class="user-list-user">
-      <td><%= link_to user.name, edit_admin_admin_user_path(user) %></td>
+      <td><%= user.name%></td>
       <td><%= mail_to user.email %></td>
       <td><%= user.role %></td>
-      <td><%= user.account_disabled ? 'Yes' : '' %></td>
-      <td class="action last">
-        <% if user != current_user %>
-          <%= cms_delete_link user, :url => admin_admin_user_path(user) %>
-        <% else %>
-          &nbsp;
-        <% end %>
-      </td>
+      <td><%= short_date_time_format(user.current_sign_in_at) %></td>
     </tr>
   <%- end -%>
   <%= will_paginate(@users) if @users.any? %>

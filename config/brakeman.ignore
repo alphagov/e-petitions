@@ -128,26 +128,6 @@
       "user_input": null,
       "confidence": "Medium",
       "note": ""
-    },
-    {
-      "warning_type": "Mass Assignment",
-      "warning_code": 105,
-      "fingerprint": "f523941f55e48c9af1dda1b71dd47c35e8cd6bce092c90e04bc940d257bf44e8",
-      "check_name": "PermitAttributes",
-      "message": "Potentially dangerous key allowed for mass assignment",
-      "file": "app/controllers/admin/admin_users_controller.rb",
-      "line": 64,
-      "link": "https://brakemanscanner.org/docs/warning_types/mass_assignment/",
-      "code": "params.require(:admin_user).permit(:password, :password_confirmation, :first_name, :last_name, :role, :email, :force_password_reset, :account_disabled)",
-      "render_path": null,
-      "location": {
-        "type": "method",
-        "class": "Admin::AdminUsersController",
-        "method": "admin_user_params"
-      },
-      "user_input": ":role",
-      "confidence": "Medium",
-      "note": ""
     }
   ],
   "updated": "2023-03-30 00:48:36 +0100",

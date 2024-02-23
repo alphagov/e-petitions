@@ -20,25 +20,6 @@ RSpec.describe Admin::Archived::SignaturesController, type: :controller, admin: 
     end
   end
 
-  context "logged in as moderator user but need to reset password" do
-    let(:user) { FactoryBot.create(:moderator_user, force_password_reset: true) }
-    before { login_as(user) }
-
-    describe "GET /admin/archived/signatures" do
-      it "redirects to the login page" do
-        get :index, params: { q: "Alice" }
-        expect(response).to redirect_to("https://moderate.petition.parliament.uk/admin/profile/#{user.id}/edit")
-      end
-    end
-
-    describe "DELETE /admin/archived/signatures/:id" do
-      it "redirects to edit profile page" do
-        delete :destroy, params: { id: signature.id }
-        expect(response).to redirect_to("https://moderate.petition.parliament.uk/admin/profile/#{user.id}/edit")
-      end
-    end
-  end
-
   context "logged in as moderator user" do
     let(:user) { FactoryBot.create(:moderator_user) }
     let(:token) { SecureRandom.base64(32) }

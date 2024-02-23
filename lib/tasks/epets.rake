@@ -6,7 +6,6 @@ namespace :epets do
     if AdminUser.find_by(email: 'admin@example.com').nil?
        admin = AdminUser.new(:first_name => 'Cool', :last_name => 'Admin', :email => 'admin@example.com')
        admin.role = 'sysadmin'
-       admin.password = admin.password_confirmation = 'Letmein1!'
        admin.save!
      end
   end

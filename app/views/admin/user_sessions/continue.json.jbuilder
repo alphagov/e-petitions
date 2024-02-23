@@ -1,1 +1,0 @@
-json.last_request_at current_user.last_request_at

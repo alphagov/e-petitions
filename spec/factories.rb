@@ -4,11 +4,8 @@ require 'active_support/core_ext/digest/uuid'
 FactoryBot.define do
   factory :admin_user do
     sequence(:email) { |n| "admin#{n}@example.com" }
-    password { "Letmein1!" }
-    password_confirmation { "Letmein1!" }
     sequence(:first_name) { |n| "AdminUser#{n}" }
     sequence(:last_name) { |n| "AdminUser#{n}" }
-    force_password_reset { false }
   end
 
   factory :sysadmin_user, :parent => :admin_user do
@@ -233,7 +230,7 @@ FactoryBot.define do
     location_code { "GB" }
     ip_address { Faker::Internet.public_ip_v4_address }
     state { Archived::Signature::VALIDATED_STATE }
-    unsubscribe_token { Authlogic::Random.friendly_token }
+    unsubscribe_token { SecureRandom.base58(20) }
     notify_by_email { true }
 
     trait :creator do
@@ -1015,6 +1012,84 @@ FactoryBot.define do
       Digest::UUID.uuid_v5(
         Digest::UUID::URL_NAMESPACE, "mailto:jo#{n}@public.com"
       )
+    end
+  end
+
+  factory :sso_user, class: Hash do
+    transient do
+      email { "admin@example.com" }
+      first_name { "Sys" }
+      last_name { "Admin" }
+      groups { %w[sysadmins] }
+    end
+
+    provider { "example" }
+    uid { email }
+
+    info do
+      {
+        name: "#{first_name} #{last_name}",
+        email: email,
+        first_name: first_name,
+        last_name: last_name,
+        groups: groups
+      }
+    end
+
+    credentials do
+      {}
+    end
+
+    extra do
+      {
+        raw_info: {
+          name: "#{first_name} #{last_name}",
+          email: email,
+          first_name: first_name,
+          last_name: last_name,
+          groups: groups
+        }
+      }
+    end
+
+    skip_create
+
+    initialize_with { OmniAuth::AuthHash.new(attributes) }
+  end
+
+  factory :sysadmin_sso_user, parent: :sso_user do
+    transient do
+      email { "sysadmin@example.com" }
+      first_name { "John" }
+      last_name { "Admin" }
+      groups { %w[sysadmins] }
+    end
+  end
+
+  factory :moderator_sso_user, parent: :sso_user do
+    transient do
+      email { "moderator@example.com" }
+      first_name { "John" }
+      last_name { "Moderator" }
+      groups { %w[moderators] }
+    end
+  end
+
+  factory :reviewer_sso_user, parent: :sso_user do
+    transient do
+      email { "reviewer@example.com" }
+      first_name { "John" }
+      last_name { "Reviewer" }
+      groups { %w[reviewers] }
+    end
+  end
+
+  factory :norole_sso_user, parent: :sso_user do
+    transient do
+      email { "norole@example.com" }
+      first_name { "No" }
+      last_name { "Role" }
+      groups { %w[] }
     end
   end
 end

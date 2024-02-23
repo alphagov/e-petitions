@@ -1,6 +1,6 @@
 <% if current_user %>
   <ul>
-    <li><%= link_to current_user.pretty_name, edit_admin_profile_path(current_user) %></li>
+    <li><%= current_user.pretty_name %></li>
     <% if current_user.is_a_sysadmin? %>
       <li><%= link_to "Site", edit_admin_site_path %></li>
       <li><%= link_to "Parliament", admin_parliament_path %></li>

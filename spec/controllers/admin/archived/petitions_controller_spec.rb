@@ -21,25 +21,6 @@ RSpec.describe Admin::Archived::PetitionsController, type: :controller, admin: t
     end
   end
 
-  context "when logged in as a moderator but need to reset password" do
-    let(:user) { FactoryBot.create(:moderator_user, force_password_reset: true) }
-    before { login_as(user) }
-
-    describe "GET /admin/archived/petitions" do
-      it "redirects to the edit profile page" do
-        get :index
-        expect(response).to redirect_to("https://moderate.petition.parliament.uk/admin/profile/#{user.id}/edit")
-      end
-    end
-
-    describe "GET /admin/archived/petitions/:id" do
-      it "redirects to the edit profile page" do
-        get :show, params: { id: "100000" }
-        expect(response).to redirect_to("https://moderate.petition.parliament.uk/admin/profile/#{user.id}/edit")
-      end
-    end
-  end
-
   context "when logged in as a moderator" do
     let(:user) { FactoryBot.create(:moderator_user) }
     before { login_as(user) }

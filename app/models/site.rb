@@ -86,6 +86,14 @@ class Site < ActiveRecord::Base
       instance.moderate_host_with_port
     end
 
+    def moderate_url
+      if table_exists?
+        instance.moderate_url
+      else
+        default_moderate_url
+      end
+    end
+
     def constraints_for_moderation
       if table_exists?
         instance.constraints_for_moderation

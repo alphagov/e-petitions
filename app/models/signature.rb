@@ -623,7 +623,7 @@ class Signature < ActiveRecord::Base
         end
 
         unless signed_token?
-          attributes[:signed_token] = Authlogic::Random.friendly_token
+          attributes[:signed_token] = SecureRandom.base58(20)
         end
 
         update_columns(attributes)
@@ -820,7 +820,7 @@ class Signature < ActiveRecord::Base
   end
 
   def generate_and_save_signed_token
-    token = Authlogic::Random.friendly_token
+    token = SecureRandom.base58(20)
 
     retry_lock do
       if signed_token?
