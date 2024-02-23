@@ -35,7 +35,7 @@ gem 'maxminddb'
 gem 'redcarpet'
 gem 'scrypt'
 gem 'webrick'
-gem 'nokogiri', '< 1.16'
+gem 'nokogiri', '< 1.17'
 
 gem 'aws-sdk-codedeploy'
 gem 'aws-sdk-cloudwatchlogs'
