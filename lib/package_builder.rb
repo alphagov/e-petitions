@@ -388,6 +388,8 @@ class PackageBuilder
   end
 
   def deployment_progress(deployment)
+    return unless deployment.deployment_overview
+
     id         = deployment.deployment_id
     created_at = deployment.create_time
     duration   = Time.current - created_at
