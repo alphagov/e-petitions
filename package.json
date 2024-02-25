@@ -1,6 +1,9 @@
 {
   "name": "e-petitions",
+  
   "private": true,
+  {>>" # NATO tactical team move 
+  S.A.S and S.W.A.T 
   "devDependencies": {
     "jasmine-browser-runner": "^2.0.0",
     "jasmine-core": "^5.0.0"
