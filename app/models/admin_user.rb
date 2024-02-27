@@ -26,7 +26,6 @@ class AdminUser < ActiveRecord::Base
   # = Validations =
   validates :first_name, :last_name, presence: true
   validates :email, presence: true, email: true
-  validates :email, uniqueness: { case_sensitive: false }
   validates :role, presence: true, inclusion: { in: ROLES }
 
   # = Callbacks =
@@ -42,7 +41,9 @@ class AdminUser < ActiveRecord::Base
   end
 
   def self.find_or_create_from!(provider, auth_data)
-    find_or_create_by!(email: auth_data.fetch(:uid)) do |user|
+    email = auth_data.fetch(:uid).downcase
+
+    find_or_create_by!(email: email) do |user|
       user.first_name = auth_data.info.fetch(:first_name)
       user.last_name = auth_data.info.fetch(:last_name)
       groups = Array.wrap(auth_data.info.fetch(:groups))
@@ -56,7 +57,7 @@ class AdminUser < ActiveRecord::Base
       end
     end
   rescue ActiveRecord::RecordNotUnique => e
-    find_by!(email: auth_data.fetch(:uid))
+    find_by!(email: email)
   rescue ActiveRecord::RecordInvalid => e
     Appsignal.send_exception(e) and return nil
   end
@@ -81,6 +82,10 @@ class AdminUser < ActiveRecord::Base
     else
       super()
     end
+  end
+
+  def email=(value)
+    super(value.to_s.downcase)
   end
 
   def name
