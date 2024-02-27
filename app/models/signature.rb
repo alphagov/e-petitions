@@ -823,8 +823,8 @@ class Signature < ActiveRecord::Base
     token = SecureRandom.base58(20)
 
     retry_lock do
-      if signed_token?
-        token = read_attribute(:signed_token)
+      if existing_token = read_attribute(:signed_token)
+        token = existing_token
       else
         update_column(:signed_token, token)
       end
