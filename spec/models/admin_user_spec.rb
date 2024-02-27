@@ -33,11 +33,6 @@ RSpec.describe AdminUser, type: :model do
     it { is_expected.to allow_value("oliver@opsb.co.uk").for(:email)}
     it { is_expected.not_to allow_value("jimbo").for(:email) }
 
-    it "should validate uniqueness of email" do
-      FactoryBot.create(:moderator_user)
-      is_expected.to validate_uniqueness_of(:email).case_insensitive
-    end
-
     it "should allow sysadmin role" do
       u = FactoryBot.build(:admin_user, :role => 'sysadmin')
       expect(u).to be_valid
@@ -69,6 +64,72 @@ RSpec.describe AdminUser, type: :model do
     describe ".by_role" do
       it "should return moderator users" do
         expect(AdminUser.by_role(AdminUser::MODERATOR_ROLE)).to eq([@user2])
+      end
+    end
+  end
+
+  describe "class methods" do
+    describe ".find_or_create_from!" do
+      let(:provider) { IdentityProvider.providers.first }
+
+      context "when a user doesn't exist" do
+        let(:auth_data1) do
+          OmniAuth::AuthHash.new(
+            uid: "anne.admin@example.com",
+            provider: "example",
+            info: {
+              first_name: "Anne",
+              last_name: "Admin",
+              groups: ["sysadmins"]
+            }
+          )
+        end
+
+        let(:auth_data2) do
+          OmniAuth::AuthHash.new(
+            uid: "Anne.Admin@example.com",
+            provider: "example",
+            info: {
+              first_name: "Anne",
+              last_name: "Admin",
+              groups: ["sysadmins"]
+            }
+          )
+        end
+
+        it "creates only one new user" do
+          expect {
+            AdminUser.find_or_create_from!(provider, auth_data1)
+          }.to change(AdminUser, :count).by(1)
+
+          expect {
+            AdminUser.find_or_create_from!(provider, auth_data2)
+          }.not_to change(AdminUser, :count)
+        end
+      end
+
+      context "when a user exists" do
+        let(:auth_data) do
+          OmniAuth::AuthHash.new(
+            uid: "Anne.Admin@example.com",
+            provider: "example",
+            info: {
+              first_name: "Anne",
+              last_name: "Admin",
+              groups: ["sysadmins"]
+            }
+          )
+        end
+
+        before do
+          FactoryBot.create(:sysadmin_user, email: "anne.admin@example.com", first_name: "Anne", last_name: "Admin")
+        end
+
+        it "doesn't create a new user" do
+          expect {
+            AdminUser.find_or_create_from!(provider, auth_data)
+          }.not_to change(AdminUser, :count)
+        end
       end
     end
   end
@@ -111,6 +172,13 @@ RSpec.describe AdminUser, type: :model do
             user.destroy(current_user: nil)
           }.to raise_error(AdminUser::MustBeAtLeastOneAdminUser)
         end
+      end
+    end
+
+    describe "#email=" do
+      it "should downcase the email address" do
+        user = FactoryBot.create(:moderator_user, :email => 'SURNAMEINITIAL@example.com')
+        expect(user.email).to eq('surnameinitial@example.com')
       end
     end
 
