@@ -1,7 +1,7 @@
-require File.expand_path('../boot', __FILE__)
-require File.expand_path('../../lib/cloud_front_remote_ip', __FILE__)
-require File.expand_path('../../lib/quiet_logger', __FILE__)
-require File.expand_path('../../lib/reject_bad_requests', __FILE__)
+require_relative 'boot'
+require_relative '../lib/cloud_front_remote_ip'
+require_relative '../lib/quiet_logger'
+require_relative '../lib/reject_bad_requests'
 
 require 'rails'
 
@@ -14,7 +14,6 @@ require 'action_controller/railtie'
 require 'action_mailer/railtie'
 require 'action_view/railtie'
 require 'sprockets/railtie'
-require 'rails/test_unit/railtie'
 
 # Require the gems listed in Gemfile, including any gems
 # you've limited to :test, :development, or :production.
@@ -23,7 +22,7 @@ Bundler.require(*Rails.groups)
 module Epets
   class Application < Rails::Application
     # Initialize configuration defaults for originally generated Rails version.
-    config.load_defaults 6.1
+    config.load_defaults 7.0
 
     # Configuration for the application, engines, and railties goes here.
     #

@@ -112,7 +112,7 @@ module CacheHelper
         elsif Array === value
           value.map{ |v| cache_key_for(v) }.to_param
         elsif Time === value
-          value.to_s(:nsec)
+          value.to_fs(:nsec)
         else
           value.to_param
         end

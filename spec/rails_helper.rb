@@ -5,6 +5,12 @@ require 'faker'
 require 'rspec/rails'
 require 'webmock/rspec'
 
+# Use webmock to disable net connections except for localhost and exceptions
+WebMock.disable_net_connect!(
+  allow_localhost: true,
+  allow: 'chromedriver.storage.googleapis.com'
+)
+
 Dir[Rails.root.join('spec/support/**/*.rb')].each { |f| require f }
 
 ActiveRecord::Migration.maintain_test_schema!

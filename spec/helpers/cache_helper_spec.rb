@@ -342,7 +342,7 @@ RSpec.describe CacheHelper, type: :helper do
 
     describe ".build" do
       let(:now) { Time.current }
-      let(:hash) { { site_updated_at: now.to_s(:nsec) } }
+      let(:hash) { { site_updated_at: now.to_fs(:nsec) } }
       let(:digest) { Digest::SHA1.hexdigest(hash.to_param) }
 
       before do

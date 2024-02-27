@@ -3,7 +3,7 @@ source 'https://rubygems.org'
 # Load environment variables
 gem 'dotenv-rails', require: 'dotenv/rails-now'
 
-gem 'rails', '6.1.7.7'
+gem 'rails', '7.0.8.1'
 
 gem 'rake'
 gem 'pg', '< 1.5'
@@ -18,7 +18,7 @@ gem 'faraday_middleware'
 gem 'net-http-persistent'
 gem 'sass-rails', '~> 5.0'
 gem 'textacular'
-gem 'uglifier'
+gem 'terser'
 gem 'bcrypt'
 gem 'faker', require: false
 gem 'slack-notifier'

@@ -2093,7 +2093,6 @@ RSpec.describe Signature, type: :model do
       end
 
       it "returns the token from the database" do
-        expect(signature).to receive(:signed_token?).and_return(true)
         expect(signature).to receive(:read_attribute).with(:signed_token).and_return(token)
         expect(signature.signed_token).to eq(token)
       end
