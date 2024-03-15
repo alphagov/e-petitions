@@ -59,10 +59,6 @@ Given(/^there (?:are|is) (\d+) petitions? created from this IP address$/) do |co
   end
 end
 
-When(/^I wait (\d+) seconds?$/) do |duration|
-  sleep duration.to_i
-end
-
 Then(/^the signature "([^"]*)" is marked as fraudulent$/) do |email|
   expect(Signature.for_email(email).last).to be_fraudulent
 end

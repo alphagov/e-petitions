@@ -1,7 +1,3 @@
-Given(/^a sysadmin user exists with email: "([^"]*)", first_name: "([^"]*)", last_name: "([^"]*)"$/) do |email, first_name, last_name|
-  @user = FactoryBot.create(:sysadmin_user, first_name: first_name, last_name: last_name, email: email)
-end
-
 Given(/^a moderator user exists with email: "([^"]*)", first_name: "([^"]*)", last_name: "([^"]*)"$/) do |email, first_name, last_name|
   @user = FactoryBot.create(:moderator_user, first_name: first_name, last_name: last_name, email: email)
 end
@@ -22,16 +18,8 @@ Given(/^(\d+) petitions exist with state: "([^"]*)"$/) do |number, state|
   end
 end
 
-Then(/^a admin user should not exist with email: "([^"]*)"$/) do |email|
-  expect(AdminUser.where(email: email)).not_to exist
-end
-
 Given(/^an open petition exists with action: "([^"]*)"(?:, signature_count: (\d+))?$/) do |action, signature_count|
   @petition = FactoryBot.create(:open_petition, action: action, validated_signatures: signature_count)
-end
-
-Given(/^a referred petition exists with action: "([^"]*)"$/) do |action|
-  @petition = FactoryBot.create(:referred_petition, action: action)
 end
 
 Given(/^a rejected petition exists with action: "([^"]*)"$/) do |action|
@@ -42,28 +30,12 @@ Given(/^a hidden petition exists with action: "([^"]*)"$/) do |action|
   @petition = FactoryBot.create(:hidden_petition, action: action)
 end
 
-Then(/^a validated signature should exist with name: "([^"]*)", location_code: "([^"]*)", postcode: "([^"]*)"$/) do |name, location_code, postcode|
-  expect(Signature.where(name: name, location_code: location_code, postcode: postcode)).to exist
-end
-
 Given(/^a sponsored petition exists with action: "([^"]*)"$/) do |action|
   @petition = FactoryBot.create(:sponsored_petition, action: action)
 end
 
 Then(/^a petition should exist with action: "([^"]*)", state: "([^"]*)"$/) do |action, state|
   expect(Petition.where(action: action, state: state)).to exist
-end
-
-Then(/^a petition exists with state: "([^"]*)", action: "([^"]*)", closed_at: "([^"]*)"$/) do |state, action, closed_at|
-  expect(Petition.where(state: state, action: action, closed_at: closed_at)).to exist
-end
-
-Then(/^a signature exists with state: "([^"]*)", name: "([^"]*)", email: "([^"]*)", postcode: "([^"]*)"$/) do |state, name, email, postcode|
-  expect(Signature.where(state: state, name: name, email: email, postcode: postcode)).to exist
-end
-
-Then(/^a contact exists with address: "([^"]*)", phone_number: "([^"]*)"$/) do |address, phone_number|
-  @contact = FactoryBot.create(:contact, address: address, phone_number: phone_number)
 end
 
 Given(/^a tag exists with name: "([^"]*)"$/) do |name|

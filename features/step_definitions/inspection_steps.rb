@@ -1,7 +1,3 @@
-Then(/^I should see a fieldset called "(.*?)"$/) do |legend|
-  expect(page).to have_xpath("//fieldset/legend[contains(., '#{legend}')]", visible: false)
-end
-
 Then(/^I should see a heading called "(.*?)"$/) do |title|
   expect(page).to have_css('h1', text: "#{title}")
 end
@@ -26,38 +22,12 @@ end
 
 ### Fields...
 
-Then /^"([^"]*)" should be selected for "([^"]*)"$/ do |value, field|
-  expect(field_labeled(field).element.search(".//option[@selected = 'selected']").inner_html).to match(/#{value}/)
-end
-
 Then /^I should see an? "([^\"]*)" (\S+) field$/ do |name, type|
   expect(page).to have_field(name, type: type)
 end
 
 Then /^I should not see an? "([^\"]*)" (\S+) field$/ do |name, type|
   expect(page).not_to have_field(name, type: type)
-end
-
-Then /^I should see an? "([^\"]*)" select field with the following options:$/ do |name, options|
-  expected_options = options.raw.flatten
-  field = find_field(name)
-  expect(field).not_to be_nil
-  found_options = field.all('option').map(&:text)
-  expect(found_options).to eq expected_options
-end
-
-Then /^I should see (\d+) dropdowns in the (.*)$/ do |count, section_name|
-  within_section(section_name) do
-    expect(page).to have_xpath(".//select", :count => count.to_i)
-  end
-end
-
-Then /^the "([^\"]*)" select field should have "([^\"]*)" selected$/ do |label, value|
-  expect(find_field(label).find('.//option[@selected]').text).to eq value
-end
-
-Then /^the "([^\"]*)" radio button should be selected$/ do |label|
-  expect(find_field(label)['checked']).to be_truthy
 end
 
 ### Tables...
@@ -95,19 +65,6 @@ Then /^I should see the following list of archived petitions:$/ do |table|
   end
 end
 
-Then /^I should see the creation date of the petition$/ do
-  expect(page).to have_css("th", :text => "Created")
-end
-
-Then /^I should not see the signature count or the closing date$/ do
-  expect(page).to have_no_css("th", :text => "Signatures")
-  expect(page).to have_no_css("th", :text => "Closing")
-end
-
-Then /^the row with the name "([^\"]*)" is not listed$/ do |name|
-  expect(page.body).not_to match(/#{name}/)
-end
-
 Then /^I should see (\d+) petitions?$/ do |number|
   expect(page).to have_xpath( "//ol[count(li)=#{number.to_i}]" )
 end
@@ -121,8 +78,4 @@ Then /^I should (not |)see a link called "([^\"]*)" linking to "([^\"]*)"$/ do |
   else
     expect(page).to_not have_xpath(xpath)
   end
-end
-
-Then /^"([^"]*)" should show as "([^"]*)"$/ do |node_text, node_class_name|
-  expect(page).to have_xpath("//*[.='#{node_text}']#{XPathHelpers.class_matching(node_lcass_name)}")
 end
