@@ -7,9 +7,15 @@ class Admin::Archived::PetitionDepartmentsController < Admin::AdminController
 
   def update
     if @petition.update(petition_params)
-      redirect_to admin_archived_petition_url(@petition), notice: :petition_updated
+      respond_to do |format|
+        format.html { redirect_to admin_archived_petition_url(@petition), notice: :petition_updated }
+        format.json { render json: { updated: true } }
+      end
     else
-      render 'admin/archived/petitions/show'
+      respond_to do |format|
+        format.html { render 'admin/archived/petitions/show', alert: :petition_not_updated }
+        format.json { render json: { updated: true } }
+      end
     end
   end
 

@@ -1,7 +1,5 @@
 <% if @petition.is_a?(::Archived::Petition) %>
-  <%= link_to 'Tags', admin_archived_petition_tags_path(@petition), class: 'petition-action-heading' %>
-<% elsif @petition.tags? %>
-  <%= link_to 'Tags', admin_petition_tags_path(@petition), class: 'petition-action-heading present' %>
+  <%= link_to 'Tags', admin_archived_petition_tags_path(@petition), class: class_names('petition-action-heading', present: @petition.tags?) %>
 <% else %>
-  <%= link_to 'Tags', admin_petition_tags_path(@petition), class: 'petition-action-heading' %>
+  <%= link_to 'Tags', admin_petition_tags_path(@petition), class: class_names('petition-action-heading', present: @petition.tags?) %>
 <% end %>
