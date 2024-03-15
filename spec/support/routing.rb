@@ -198,7 +198,7 @@ RSpec.configure do |config|
     begin
       env_config = Rails.application.env_config
       show_exceptions = env_config['action_dispatch.show_exceptions']
-      env_config['action_dispatch.show_exceptions'] = true
+      env_config['action_dispatch.show_exceptions'] = :all
       example.run
     ensure
       env_config['action_dispatch.show_exceptions'] = show_exceptions
