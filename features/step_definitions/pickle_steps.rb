@@ -78,11 +78,11 @@ Given(/^an open petition exists with action: "([^"]*)", background: "([^"]*)"(?:
   @petition = FactoryBot.create(:open_petition, action: action, background: background, validated_signatures: signature_count)
 end
 
-Given(/^a closed petition exists with action: "([^"]*)"$/) do |action|
+Given('a closed petition exists with action: {string}') do |action|
   @petition = FactoryBot.create(:closed_petition, action: action)
 end
 
-Given(/^a closed petition exists with action: "([^"]*)", closed_at: "([^"]*)"$/) do |action, closed_at|
+Given('a closed petition exists with action: {string}, closed_at: {timestamp}') do |action, closed_at|
   @petition = FactoryBot.create(:closed_petition, action: action, closed_at: closed_at)
 end
 
@@ -94,20 +94,16 @@ Given(/^a validated petition exists with action: "([^"]*)"$/) do |action|
   @petition = FactoryBot.create(:validated_petition, action: action)
 end
 
-Given(/^an open petition exists with action: "([^"]*)", additional_details: "([^"]*)", closed_at: "([^"]*)"(?:, signature_count: (\d+))?$/) do |action, additional_details, closed_at, signature_count|
+Given('an open petition exists with action: {string}, additional_details: {string}, closed_at: {timestamp}, signature_count: {int}') do |action, additional_details, closed_at, signature_count|
   @petition = FactoryBot.create(:open_petition, action: action, additional_details: additional_details, closed_at: closed_at, validated_signatures: signature_count)
 end
 
-Given(/^an open petition exists with action: "([^"]*)", background: "([^"]*)", closed_at: "([^"]*)"(?:, signature_count: (\d+))?$/) do |action, background, closed_at, signature_count|
+Given('an open petition exists with action: {string}, background: {string}, closed_at: {timestamp}, signature_count: {int}') do |action, background, closed_at, signature_count|
   @petition = FactoryBot.create(:open_petition, action: action, background: background, closed_at: closed_at, validated_signatures: signature_count)
 end
 
-Given(/^an open petition exists with action: "([^"]*)", closed_at: "([^"]*)"(?:, signature_count: (\d+))?$/) do |action, closed_at, signature_count|
+Given('an open petition exists with action: {string}, closed_at: {timestamp}, signature_count: {int}') do |action, closed_at, signature_count|
   @petition = FactoryBot.create(:open_petition, action: action, closed_at: closed_at, validated_signatures: signature_count)
-end
-
-Given(/^a referred petition exists with action: "([^"]*)", closed_at: "([^"]*)"$/) do |action, closed_at|
-  @petition = FactoryBot.create(:referred_petition, action: action, closed_at: closed_at)
 end
 
 Then(/^a signature should exist with email: "([^"]*)", state: "([^"]*)"$/) do |email, state|

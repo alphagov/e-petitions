@@ -187,12 +187,11 @@ Given(/^the petition has closed some time ago$/) do
   @petition.close_early!(2.days.ago)
 end
 
-Given(/^a petition "([^"]*)" has been rejected( with the reason "([^"]*)")?$/) do |petition_action, reason_or_not, reason|
-  reason_text = reason.nil? ? "It doesn't make any sense" : reason
+Given(/^a petition "([^"]*)" has been rejected(?: with the reason "([^"]*)")?$/) do |petition_action, reason|
   @petition = FactoryBot.create(:rejected_petition,
     :action => petition_action,
     :rejection_code => "irrelevant",
-    :rejection_details => reason_text)
+    :rejection_details => reason || "It doesn't make any sense")
 end
 
 Given(/^an archived petition "([^"]*)" has been rejected with the reason "([^"]*)"$/) do |action, rejection_details|

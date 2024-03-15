@@ -546,7 +546,7 @@ jobs:
       - name: Run cucumber specs
         env:
           CUCUMBER_FORMAT: pretty
-          CUCUMBER_OPTS: "--tags ~@admin --profile default"
+          CUCUMBER_OPTS: "--tags 'not @admin' --profile default"
           DATABASE_URL: postgres://postgres:postgres@localhost:5432/epets_test
           RAILS_ENV: test
         run: |
