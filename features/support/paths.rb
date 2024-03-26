@@ -113,6 +113,9 @@ module NavigationHelpers
     when /^debate outcomes form page for "([^\"]*)"$/
       admin_petition_debate_outcome_url(Petition.find_by(action: $1))
 
+    when /^archived debate outcomes form page for "([^\"]*)"$/
+      admin_archived_petition_debate_outcome_url(Archived::Petition.find_by(action: $1))
+
     when /^email petitioners form page for "([^\"]*)"$/
       new_admin_petition_email_url(Petition.find_by(action: $1))
 
@@ -121,6 +124,9 @@ module NavigationHelpers
 
     when /^petition edit details page for "([^\"]*)"$/
       admin_petition_details_url(Petition.find_by(action: $1))
+
+    when /^archived petitions page$/
+      admin_archived_petitions_url
 
     when /^archived petition page for "([^\"]*)"$/
       admin_archived_petition_url(Archived::Petition.find_by(action: $1))
