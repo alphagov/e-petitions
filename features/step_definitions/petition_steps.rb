@@ -422,6 +422,11 @@ Given(/^an? (open|closed|rejected) petition "(.*?)" with some (fraudulent)? ?sig
   5.times { FactoryBot.create(:"#{signature_state}_signature", petition: @petition) }
 end
 
+Given(/^an archived petition "(.*?)" with some signatures$/) do |petition_action|
+  @petition = FactoryBot.create(:archived_petition, :creator, action: petition_action, signature_count: 6)
+  5.times { FactoryBot.create(:archived_signature, petition: @petition) }
+end
+
 Given(/^the threshold for a parliamentary debate is "(.*?)"$/) do |amount|
   Site.instance.update!(threshold_for_debate: amount)
 end

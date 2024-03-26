@@ -103,6 +103,17 @@ Then(/^the petition creator should have been emailed about the debate$/) do
   )
 end
 
+Then(/^the archived petition creator should have been emailed about the debate$/) do
+  @petition.reload
+  steps %Q(
+    Then "#{@petition.creator.email}" should receive an email
+    When they open the email
+    Then they should see "Parliament debated your petition" in the email body
+    When they follow "#{archived_petition_url(@petition)}" in the email
+    Then I should be on the archived petition page for "#{@petition.action}"
+  )
+end
+
 Then(/^all the signatories of the petition should have been emailed about the debate$/) do
   @petition.reload
   @petition.signatures.validated.subscribed.where.not(id: @petition.creator.id).each do |signatory|
@@ -112,6 +123,19 @@ Then(/^all the signatories of the petition should have been emailed about the de
       Then they should see "Parliament debated the petition you signed" in the email body
       When they follow "#{petition_url(@petition)}" in the email
       Then I should be on the petition page for "#{@petition.action}"
+    )
+  end
+end
+
+Then(/^all the signatories of the archived petition should have been emailed about the debate$/) do
+  @petition.reload
+  @petition.signatures.validated.subscribed.where.not(id: @petition.creator.id).each do |signatory|
+    steps %Q(
+      Then "#{signatory.email}" should receive an email
+      When they open the email
+      Then they should see "Parliament debated the petition you signed" in the email body
+      When they follow "#{archived_petition_url(@petition)}" in the email
+      Then I should be on the archived petition page for "#{@petition.action}"
     )
   end
 end
