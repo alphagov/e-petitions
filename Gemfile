@@ -3,10 +3,10 @@ source 'https://rubygems.org'
 # Load environment variables
 gem 'dotenv-rails', require: 'dotenv/rails-now'
 
-gem 'rails', '6.1.7.7'
+gem 'rails', '7.1.3.2'
 
 gem 'rake'
-gem 'pg', '< 1.5'
+gem 'pg'
 gem 'devise'
 gem 'will_paginate'
 gem 'json'
@@ -18,7 +18,7 @@ gem 'faraday_middleware'
 gem 'net-http-persistent'
 gem 'sass-rails', '~> 5.0'
 gem 'textacular'
-gem 'uglifier'
+gem 'terser'
 gem 'bcrypt'
 gem 'faker', require: false
 gem 'slack-notifier'
@@ -54,7 +54,6 @@ end
 
 group :test do
   gem 'shoulda-matchers'
-  gem 'cucumber', '~> 2.4.0'
   gem 'cucumber-rails', require: false
   gem 'database_cleaner'
   gem 'capybara'

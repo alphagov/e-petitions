@@ -12,18 +12,6 @@ class ApplicationController < ActionController::Base
   before_action :set_seen_cookie_message, if: :show_cookie_message?
   helper_method :show_cookie_message?, :public_petition_facets
 
-  after_action do
-    directives = [
-      "default-src 'self'",
-      "connect-src 'self' https://www.google-analytics.com",
-      "img-src 'self' https://www.google-analytics.com",
-      "script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://www.google-analytics.com",
-      "style-src 'self' 'unsafe-inline'"
-    ]
-
-    response.headers["Content-Security-Policy"] = directives.join("; ")
-  end
-
   def admin_request?
     false
   end

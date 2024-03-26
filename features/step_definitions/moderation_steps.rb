@@ -177,10 +177,6 @@ When(/^I filter the list to show "([^"]*)" petitions$/) do |option|
   select option
 end
 
-Then /^I should not see any "([^"]*)" petitions$/ do |state|
-  expect(page).to have_no_css("td.state", :text => state)
-end
-
 Then /^I see relevant reason descriptions when I browse different reason codes$/ do
   choose "Reject"
   select "Duplicate petition", :from => :petition_rejection_code

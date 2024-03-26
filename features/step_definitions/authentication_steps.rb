@@ -51,10 +51,6 @@ Given /^the admin user is logged in$/ do
   click_button("Sign in")
 end
 
-Given /^the admin user is logged out$/ do
-  visit admin_logout_url
-end
-
 Given /^a sysadmin SSO user exists$/ do
   OmniAuth.config.mock_auth[:example] = FactoryBot.build(:sysadmin_sso_user)
 end
