@@ -1,5 +1,3 @@
-version: "3.7"
-
 x-application: &application
   image: e-petitions/ruby
   build: docker/ruby
