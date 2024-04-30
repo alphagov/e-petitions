@@ -110,6 +110,7 @@ RSpec.describe Constituency::ApiQuery, type: :model do
         end
 
         it "returns an empty array" do
+          expect(Appsignal).not_to receive(:send_exception)
           expect(query.fetch("N1")).to eq([])
         end
       end
@@ -120,6 +121,7 @@ RSpec.describe Constituency::ApiQuery, type: :model do
         end
 
         it "returns an empty array" do
+          expect(Appsignal).not_to receive(:send_exception)
           expect(query.fetch("N1")).to eq([])
         end
       end
@@ -130,6 +132,7 @@ RSpec.describe Constituency::ApiQuery, type: :model do
         end
 
         it "returns an empty array" do
+          expect(Appsignal).not_to receive(:send_exception)
           expect(query.fetch("N1")).to eq([])
         end
       end
@@ -140,6 +143,7 @@ RSpec.describe Constituency::ApiQuery, type: :model do
         end
 
         it "returns an empty array" do
+          expect(Appsignal).not_to receive(:send_exception)
           expect(query.fetch("N1")).to eq([])
         end
       end
@@ -150,6 +154,7 @@ RSpec.describe Constituency::ApiQuery, type: :model do
         end
 
         it "returns an empty array" do
+          expect(Appsignal).to receive(:send_exception)
           expect(query.fetch("N1")).to eq([])
         end
       end

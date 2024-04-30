@@ -13,6 +13,16 @@ class Constituency < ActiveRecord::Base
     MP_START   = './StartDate'
     MP_END     = './EndDate'
 
+    IGNORE_EXCEPTIONS = [
+      Faraday::ResourceNotFound,
+      Faraday::ClientError,
+      Faraday::TimeoutError
+    ]
+
+    NOTIFY_EXCEPTIONS = [
+      Faraday::Error
+    ]
+
     def fetch(postcode)
       response = client.call(postcode)
 
@@ -21,9 +31,9 @@ class Constituency < ActiveRecord::Base
       else
         []
       end
-    rescue Faraday::ResourceNotFound, Faraday::ClientError => e
+    rescue *IGNORE_EXCEPTIONS => e
       return []
-    rescue Faraday::Error => e
+    rescue *NOTIFY_EXCEPTIONS => e
       Appsignal.send_exception(e)
       return []
     end
