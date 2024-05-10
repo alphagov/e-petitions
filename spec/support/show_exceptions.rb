@@ -3,7 +3,7 @@ module ShowExceptionsHelper
     begin
       env_config = Rails.application.env_config
       show_exceptions = env_config['action_dispatch.show_exceptions']
-      env_config['action_dispatch.show_exceptions'] = on_or_off
+      env_config['action_dispatch.show_exceptions'] = on_or_off ? :all : :none
 
       yield
     ensure

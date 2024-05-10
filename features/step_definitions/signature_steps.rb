@@ -20,10 +20,6 @@ Then /^I am told to check my inbox to complete signing$/ do
   expect(page).to have_content("We’ve sent you an email")
 end
 
-Then(/^(?:I|they|"(.*?)") should be asked to confirm their email address$/) do |address|
-  expect(find_email(address, with_subject: "Please confirm your email address")).to be_present
-end
-
 When(/^I confirm my email address(?: again)?$/) do
   steps %Q(
     And I open the email with subject "Please confirm your email address"
@@ -85,10 +81,6 @@ When /^I fill in my details and sign a petition$/ do
     Then I am told to check my inbox to complete signing
     And "womboid@wimbledon.com" should receive 1 email
   )
-end
-
-Then /^I should see that I have already signed the petition$/ do
-  expect(page).to have_text("You’ve already signed this petition")
 end
 
 Then(/^I am asked to review my email address$/) do
@@ -206,15 +198,6 @@ end
 
 Then /^"([^"]*)" wants to be notified about the petition's progress$/ do |name|
   expect(Signature.find_by(name: name).notify_by_email?).to be_truthy
-end
-
-Given /^I have already signed the petition "([^"]*)" but not confirmed my email$/ do |petition_action|
-  petition = Petition.find_by(action: petition_action)
-  FactoryBot.create(:pending_signature, :email => 'suzie@example.com', :petition => petition)
-end
-
-When /^I fill in "([^"]*)" with my email address$/ do |field_name|
-  step "I fill in \"#{field_name}\" with \"suzie@example.com\""
 end
 
 Then /^the signature count (?:stays at|goes up to) (\d+)$/ do |number|

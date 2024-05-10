@@ -106,6 +106,6 @@ class Admin::PetitionsController < Admin::AdminController
   end
 
   def csv_filename
-    "#{@petitions.scope.to_s.dasherize}-petitions-#{Time.current.to_s(:number)}.csv"
+    "#{@petitions.scope.to_s.dasherize}-petitions-#{Time.current.to_fs(:number)}.csv"
   end
 end

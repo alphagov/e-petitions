@@ -43,33 +43,8 @@ When /^(?:|I )fill in "([^"]*)" with "([^"]*)"(?: within "([^"]*)")?$/ do |field
   end
 end
 
-When /^(?:|I )fill in "([^"]*)" for "([^"]*)"(?: within "([^"]*)")?$/ do |value, field, selector|
-  with_scope(selector) do
-    fill_in(field, :with => value)
-  end
-end
-
 When /^I fill in "([^"]+)" with text longer than (\d+) characters$/ do |field, count|
   fill_in field, with: ?a * (count + 1)
-end
-
-# Use this to fill in an entire form with data from a table. Example:
-#
-#   When I fill in the following:
-#     | Account Number | 5002       |
-#     | Expiry date    | 2009-11-01 |
-#     | Note           | Nice guy   |
-#     | Wants Email?   |            |
-#
-# TODO: Add support for checkbox, select og option
-# based on naming conventions.
-#
-When /^(?:|I )fill in the following(?: within "([^"]*)")?:$/ do |selector, fields|
-  with_scope(selector) do
-    fields.rows_hash.each do |name, value|
-      When %{I fill in "#{name}" with "#{value}"}
-    end
-  end
 end
 
 When /^(?:|I )select "([^"]*)" from "([^"]*)"(?: within "([^"]*)")?$/ do |value, field, selector|
@@ -88,25 +63,6 @@ When /^(?:|I )uncheck "([^"]*)"(?: within "([^"]*)")?$/ do |field, selector|
   with_scope(selector) do
     uncheck(field)
   end
-end
-
-When /^(?:|I )choose "([^"]*)"(?: within "([^"]*)")?$/ do |field, selector|
-  with_scope(selector) do
-    choose(field)
-  end
-end
-
-When /^(?:|I )attach the file "([^"]*)" to "([^"]*)"(?: within "([^"]*)")?$/ do |path, field, selector|
-  with_scope(selector) do
-    attach_file(field, path)
-  end
-end
-
-Then /^(?:|I )should see JSON:$/ do |expected_json|
-  require 'json'
-  expected = JSON.pretty_generate(JSON.parse(expected_json))
-  actual   = JSON.pretty_generate(JSON.parse(response.body))
-  expect(expected).to eq actual
 end
 
 Then /^(?:|I )should see "([^"]*)"(?: within "([^"]*)")?$/ do |text, selector|
@@ -128,26 +84,11 @@ Then /^(?:|I )should not see "([^"]*)"(?: within "([^"]*)")?$/ do |text, selecto
   end
 end
 
-Then /^(?:|I )should not see \/([^\/]*)\/(?: within "([^"]*)")?$/ do |regexp, selector|
-  regexp = Regexp.new(regexp)
-  with_scope(selector) do
-    expect(page).to have_no_xpath('//*', :text => regexp)
-  end
-end
-
 Then /^the "([^"]*)" field(?: within "([^"]*)")? should contain "([^"]*)"$/ do |field, selector, value|
   with_scope(selector) do
     field = find_field(field)
     field_value = (field.tag_name == 'textarea') ? field.text : field.value
     expect(field_value).to match(/#{value}/)
-  end
-end
-
-Then /^the "([^"]*)" field(?: within "([^"]*)")? should not contain "([^"]*)"$/ do |field, selector, value|
-  with_scope(selector) do
-    field = find_field(field)
-    field_value = (field.tag_name == 'textarea') ? field.text : field.value
-    expect(field_value).not_to match(/#{value}/)
   end
 end
 
@@ -159,20 +100,6 @@ Then /^the "([^"]*)" checkbox(?: within "([^"]*)")? should be checked$/ do |labe
 end
 
 Then /^the "([^"]*)" checkbox(?: within "([^"]*)")? should not be checked$/ do |label, selector|
-  with_scope(selector) do
-    field_checked = find_field(label)['checked']
-    expect(field_checked).to be_falsey
-  end
-end
-
-Then /^the "([^"]*)" radio button(?: within "([^"]*)")? should be chosen$/ do |label, selector|
-  with_scope(selector) do
-    field_checked = find_field(label)['checked']
-    expect(field_checked).to be_truthy
-  end
-end
-
-Then /^the "([^"]*)" radio button(?: within "([^"]*)")? should not be chosen$/ do |label, selector|
   with_scope(selector) do
     field_checked = find_field(label)['checked']
     expect(field_checked).to be_falsey
@@ -196,8 +123,4 @@ end
 
 Then(/^I should get a download with the filename "([^\"]*)"$/) do |filename|
   expect(page.response_headers['Content-Disposition']).to include("attachment; filename=#{filename}")
-end
-
-Then /^show me the page$/ do
-  save_and_open_page
 end

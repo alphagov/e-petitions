@@ -15,6 +15,7 @@ x-application: &application
 
 x-environment: &environment
   DATABASE_URL: "postgres://postgres:ZW4IvOPrXcbp2hyp@postgres:5432"
+  DATABASE_CLEANER_ALLOW_REMOTE_DATABASE_URL: "true"
   MEMCACHE_SERVERS: "memcached:11211"
   SMTP_HOST: "mailcatcher"
   SMTP_PORT: "1025"
