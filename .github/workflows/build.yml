@@ -496,6 +496,24 @@ jobs:
       - name: Setup
         uses: ./.github/actions/setup
 
+      - name: Save screenshots
+        if: ${{ failure() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: selenium-screenshots-admin
+          path: ${{ github.workspace }}/tmp/capybara/*.png
+          retention-days: 7
+          if-no-files-found: ignore
+
+      - name: Save rails logs
+        if: ${{ failure() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: rails-logs-admin
+          path: ${{ github.workspace }}/log/test.log
+          retention-days: 7
+          if-no-files-found: ignore
+
       - name: Run cucumber specs
         env:
           CUCUMBER_FORMAT: pretty
@@ -542,6 +560,24 @@ jobs:
 
       - name: Setup
         uses: ./.github/actions/setup
+
+      - name: Save screenshots
+        if: ${{ failure() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: selenium-screenshots-public
+          path: ${{ github.workspace }}/tmp/capybara/*.png
+          retention-days: 7
+          if-no-files-found: ignore
+
+      - name: Save rails logs
+        if: ${{ failure() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: rails-logs-public
+          path: ${{ github.workspace }}/log/test.log
+          retention-days: 7
+          if-no-files-found: ignore
 
       - name: Run cucumber specs
         env:
