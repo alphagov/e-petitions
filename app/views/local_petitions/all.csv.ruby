@@ -1,6 +1,4 @@
-CSV.generate do |csv|
-  csv << ['Petition', 'URL', 'State', 'Local Signatures', 'Total Signatures']
-
+csv_builder = lambda do |csv|
   @petitions.each do |petition|
     csv << [
       csv_escape(petition.action),
@@ -11,3 +9,7 @@ CSV.generate do |csv|
     ]
   end
 end
+
+headers = %["Petition","URL","State","Local Signatures","Total Signatures"\n]
+
+CSV.generate(headers, force_quotes: [0, 1, 2], &csv_builder)
