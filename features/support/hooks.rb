@@ -58,6 +58,10 @@ After do
   ENV["INLINE_UPDATES"] = "true"
 end
 
+After do
+   OmniAuth.config.mock_auth[:example] = nil
+end
+
 After do |scenario|
   if scenario.failed? && page.respond_to?(:save_screenshot)
     page.save_screenshot("#{scenario.name.gsub(' ', '_').gsub(/[^0-9A-Za-z_]/, '')}.png")
