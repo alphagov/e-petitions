@@ -24,6 +24,11 @@ module Epets
     # Initialize configuration defaults for originally generated Rails version.
     config.load_defaults 7.0
 
+    # Enable the application to run concurrently with Rails 6.1 instances
+    config.active_support.cache_format_version = 6.1
+    config.active_support.hash_digest_class = OpenSSL::Digest::SHA1
+    config.active_support.key_generator_hash_digest_class = OpenSSL::Digest::SHA1
+
     # Please, add to the `ignore` list any other `lib` subdirectories that do
     # not contain `.rb` files, or that should not be reloaded or eager loaded.
     # Common ones are `templates`, `generators`, or `middleware`, for example.
