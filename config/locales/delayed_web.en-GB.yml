@@ -34,3 +34,5 @@ en-GB:
         destroyed:
           alert: 'Job cannot be deleted because it is already %{status}'
           notice: 'Job destroyed'
+        not_found:
+          notice: 'Job not found'
