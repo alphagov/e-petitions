@@ -192,6 +192,14 @@ class Parliament < ActiveRecord::Base
     dissolution_at? && show_dissolution_notification?
   end
 
+  def dissolution_emails_sent?
+    dissolution_emails_sent_at?
+  end
+
+  def closure_scheduled?
+    closure_scheduled_at?
+  end
+
   def registration_closed?(now = Time.current)
     registration_closed_at? && registration_closed_at <= now
   end
@@ -221,16 +229,18 @@ class Parliament < ActiveRecord::Base
     end
   end
 
-  def schedule_closure!
+  def schedule_closure!(now = Time.current)
     if dissolution_announced? && !dissolved?
       ClosePetitionsEarlyJob.schedule_for(dissolution_at)
       StopPetitionsEarlyJob.schedule_for(dissolution_at)
+      update_column(:closure_scheduled_at, now)
     end
   end
 
-  def send_emails!
+  def send_emails!(now = Time.current)
     if dissolution_at? && !dissolved?
       NotifyPetitionsThatParliamentIsDissolvingJob.perform_later
+      update_column(:dissolution_emails_sent_at, now)
     end
   end
 

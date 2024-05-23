@@ -1,3 +1,5 @@
+<%= render 'parliament_dissolution_warning' %>
+
 <% if @petition.rejected? %>
   <%= render 'rejected_petition_show', petition: @petition %>
 <% elsif @petition.closed? %>

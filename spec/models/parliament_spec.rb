@@ -937,14 +937,24 @@ RSpec.describe Parliament, type: :model do
 
     context "when parliament has announced dissolution" do
       context "and the dissolution date has not passed" do
+        let(:now) { Time.current.floor }
+
         subject :parliament do
           FactoryBot.create(:parliament, :dissolving)
         end
 
         it "schedules a job" do
           expect {
-            subject.send_emails!
+            subject.send_emails!(now)
           }.to have_enqueued_job(NotifyPetitionsThatParliamentIsDissolvingJob).on_queue(:high_priority)
+        end
+
+        it "marks the dissolution emails as having been sent" do
+          expect {
+            subject.send_emails!(now)
+          }.to change {
+            subject.reload.dissolution_emails_sent_at
+          }.from(nil).to(now)
         end
       end
 
@@ -982,6 +992,7 @@ RSpec.describe Parliament, type: :model do
     context "when parliament has announced dissolution" do
       context "and the dissolution date has not passed" do
         let(:dissolution_at) { 2.weeks.from_now }
+        let(:now) { Time.current.floor }
 
         subject :parliament do
           FactoryBot.create(:parliament, :dissolving, dissolution_at: dissolution_at, show_dissolution_notification: true)
@@ -989,14 +1000,22 @@ RSpec.describe Parliament, type: :model do
 
         it "schedules a job to close petitions early" do
           expect {
-            subject.schedule_closure!
+            subject.schedule_closure!(now)
           }.to have_enqueued_job(ClosePetitionsEarlyJob).on_queue(:high_priority).with(dissolution_at.iso8601).at(dissolution_at)
         end
 
         it "schedules a job to stop petitions collecting sponsors early" do
           expect {
-            subject.schedule_closure!
+            subject.schedule_closure!(now)
           }.to have_enqueued_job(StopPetitionsEarlyJob).on_queue(:high_priority).with(dissolution_at.iso8601).at(dissolution_at)
+        end
+
+        it "marks the closure as having been scheduled" do
+          expect {
+            subject.schedule_closure!(now)
+          }.to change {
+            subject.reload.closure_scheduled_at
+          }.from(nil).to(now)
         end
       end
 

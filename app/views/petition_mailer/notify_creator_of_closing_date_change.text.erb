@@ -11,19 +11,23 @@ You recently started the <%= "petition".pluralize(@count) %>:
 Plus another <%= pluralize(@remaining, "petition", locale: :en) %>
 
 <% end %>
-Because of the General Election, the closing date for your <%= "petition".pluralize(@count) %> has changed. All petitions now have to close at <%= @closing_time %> on <%= @closing_date %>. This is because Parliament will be dissolved, which means all parliamentary business – including petitions – will come to an end until after the election. This means the petitions site will be closed and people will not be able to start or sign petitions.
+Because of the General Election, the closing date for your <%= "petition".pluralize(@count) %> has changed. All petitions now have to close at <%= @closing_time %> on <%= @closing_date %>. This is because Parliament will be dissolved, which means all parliamentary business – including petitions – must stop. This means the petitions site will be closed and people will not be able to start or sign petitions.
 
 We’re sorry we weren’t able to give you more notice that this would happen.
 
 Your <%= "petition".pluralize(@count) %> will be available for people to read on the site even though it will be closed for signatures. Your <%= "petition".pluralize(@count) %> can’t be reopened after the election. You are very welcome to start your <%= "petition".pluralize(@count) %> again when the site reopens after the election, but we can’t transfer signatures to your new <%= "petition".pluralize(@count) %>.
 
-The Government can’t respond to petitions during the election period. This means if <%= @count > 1 ? "any of your petitions" : "your petition" %> has over <%= Site.formatted_threshold_for_response %> signatures, <%= @count > 1 ? "they" : "it" %> can’t receive a response from the current Government after <%= @last_response_date %>. After the election, the new Government will have to decide whether it wants to respond to petitions from before the election.
+The Government can’t respond to petitions during the election period. This means if <%= @count > 1 ? "any of your petitions" : "your petition" %> has over <%= Site.formatted_threshold_for_response %> signatures, <%= @count > 1 ? "they" : "it" %> can’t receive a response from the current Government after <%= @last_response_date %>. After the election, the new Government will have to decide whether to respond to petitions from before the election.
 
-The Petitions Committee, the group of MPs who decide whether petitions are debated, won’t exist after <%= @closing_date %>. This means that if <%= @count > 1 ? "any of your petitions" : "your petition" %> has over <%= Site.formatted_threshold_for_debate %> signatures, <%= @count > 1 ? "they" : "it" %> can’t be scheduled for debate during this Parliament. After the election, there will be a new Petitions Committee, and they will be responsible for deciding which petitions are debated.
+The Petitions Committee, the group of MPs who decide whether petitions are debated, won’t exist after <%= @closing_date %>. This means that if <%= @count > 1 ? "any of your petitions" : "your petition" %> has over <%= Site.formatted_threshold_for_debate %> signatures, <%= @count > 1 ? "they" : "it" %> can’t be scheduled for debate during this Parliament. After the election, a new Petitions Committee will be responsible for deciding which petitions are debated.
 
-The petitions site will open again after the election, but at the moment we don’t know exactly when. You can follow us on Twitter @HoCPetitions for updates, or check back on the petitions site for news if you prefer.
+The petitions site will reopen when a new Petitions Committee is appointed, but at the moment we don’t know exactly when. You can follow us on X (formerly Twitter) @HoCPetitions for updates, or check back on the petitions site for news.
 
-Ahead of the General Election on <%= @election_date %>, make sure you’re registered to vote. You can check whether you’re eligible to vote and find out how to register at: https://www.gov.uk/register-to-vote. The deadline to register to vote is <%= @registration_deadline %>.</p>
+<% if Parliament.dissolution_faq_url? %>
+You can find out more about what the General Election means for your petitions on our website: <%= Parliament.dissolution_faq_url %>
+
+<% end %>
+Ahead of the General Election on <%= @election_date %>, make sure you’re registered to vote. You can check whether you’re eligible to vote and find out how to register at: https://www.gov.uk/register-to-vote. The deadline to register to vote is <%= @registration_deadline %>.
 
 Many thanks,
 <%= t("petitions.emails.signoff_prefix") %>
