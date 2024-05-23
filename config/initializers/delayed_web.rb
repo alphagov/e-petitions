@@ -18,10 +18,6 @@ Rails.application.config.to_prepare do
       main_app.admin_login_url
     end
 
-    def current_user
-      @current_user ||= warden.authenticate(scope: :user)
-    end
-
     def require_admin
       unless current_user
         redirect_to admin_login_url, alert: :admin_required
