@@ -71,7 +71,14 @@ class PetitionMailerPreview < ActionMailer::Preview
     petition = Petition.open_at_dissolution.first
     signature = petition.creator
 
-    PetitionMailer.notify_creator_of_closing_date_change(signature)
+    PetitionMailer.notify_creator_of_closing_date_change(signature, [petition])
+  end
+
+  def notify_signer_of_closing_date_change
+    petitions = Petition.open_at_dissolution.to_a
+    signature = petitions.first.signatures.validated.last
+
+    PetitionMailer.notify_signer_of_closing_date_change(signature, petitions.take(5), petitions.size - 5)
   end
 
   def notify_creator_of_sponsored_petition_being_stopped
