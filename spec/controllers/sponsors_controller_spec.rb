@@ -41,7 +41,7 @@ RSpec.describe SponsorsController, type: :controller do
       end
     end
 
-    %w[flagged dormant hidden stopped].each do |state|
+    %w[dormant hidden stopped].each do |state|
       context "when the petition is #{state}" do
         let(:petition) { FactoryBot.create(:"#{state}_petition") }
 
@@ -71,7 +71,7 @@ RSpec.describe SponsorsController, type: :controller do
       end
     end
 
-    %w[pending validated sponsored].each do |state|
+    %w[pending validated sponsored flagged].each do |state|
       context "when the petition is #{state}" do
         let(:petition) { FactoryBot.create(:"#{state}_petition") }
 
@@ -154,7 +154,7 @@ RSpec.describe SponsorsController, type: :controller do
       end
     end
 
-    %w[flagged dormant hidden stopped].each do |state|
+    %w[dormant hidden stopped].each do |state|
       context "when the petition is #{state}" do
         let(:petition) { FactoryBot.create(:"#{state}_petition") }
 
@@ -184,7 +184,7 @@ RSpec.describe SponsorsController, type: :controller do
       end
     end
 
-    %w[pending validated sponsored].each do |state|
+    %w[pending validated sponsored flagged].each do |state|
       context "when the petition is #{state}" do
         let(:petition) { FactoryBot.create(:"#{state}_petition") }
 
@@ -291,7 +291,7 @@ RSpec.describe SponsorsController, type: :controller do
       end
     end
 
-    %w[flagged dormant hidden stopped].each do |state|
+    %w[dormant hidden stopped].each do |state|
       context "when the petition is #{state}" do
         let(:petition) { FactoryBot.create(:"#{state}_petition") }
 
@@ -321,7 +321,7 @@ RSpec.describe SponsorsController, type: :controller do
       end
     end
 
-    %w[pending validated sponsored].each do |state|
+    %w[pending validated sponsored flagged].each do |state|
       context "when the petition is #{state}" do
         let(:petition) { FactoryBot.create(:"#{state}_petition") }
 
@@ -557,7 +557,7 @@ RSpec.describe SponsorsController, type: :controller do
       end
     end
 
-    %w[flagged dormant hidden stopped].each do |state|
+    %w[dormant hidden stopped].each do |state|
       context "when the petition is #{state}" do
         let(:petition) { FactoryBot.create(:"#{state}_petition") }
 
@@ -591,7 +591,7 @@ RSpec.describe SponsorsController, type: :controller do
       end
     end
 
-    %w[pending validated sponsored].each do |state|
+    %w[pending validated sponsored flagged].each do |state|
       context "when the petition is #{state}" do
         let(:petition) { FactoryBot.create(:"#{state}_petition") }
         let(:signature) { FactoryBot.create(:validated_signature, :just_signed, petition: petition) }
@@ -690,7 +690,7 @@ RSpec.describe SponsorsController, type: :controller do
       end
     end
 
-    %w[flagged dormant hidden stopped].each do |state|
+    %w[dormant hidden stopped].each do |state|
       context "when the petition is #{state}" do
         let(:petition) { FactoryBot.create(:"#{state}_petition") }
         let(:signature) { FactoryBot.create(:pending_signature, petition: petition, sponsor: true) }
@@ -1080,6 +1080,119 @@ RSpec.describe SponsorsController, type: :controller do
         end
       end
     end
+
+    context "when the petition is flagged" do
+      let(:petition) { FactoryBot.create(:flagged_petition, creator_attributes: { email: "bob@example.com" }) }
+      let(:signature) { FactoryBot.create(:pending_signature, petition: petition, sponsor: true, name: "Alice") }
+      let(:other_petition) { FactoryBot.create(:open_petition) }
+      let(:other_signature) { FactoryBot.create(:validated_signature, petition: other_petition) }
+
+      before do
+        cookies.encrypted[:signed_tokens] = {
+          other_signature.id.to_s => other_signature.signed_token
+        }.to_json
+
+        perform_enqueued_jobs {
+          get :verify, params: { id: signature.id, token: signature.perishable_token }
+        }
+      end
+
+      it "assigns the @signature instance variable" do
+        expect(assigns[:signature]).to eq(signature)
+      end
+
+      it "assigns the @petition instance variable" do
+        expect(assigns[:petition]).to eq(petition)
+      end
+
+      it "validates the signature" do
+        expect(assigns[:signature]).to be_validated
+      end
+
+      it "records the constituency id on the signature" do
+        expect(assigns[:signature].constituency_id).to eq("3415")
+      end
+
+      it "records the ip address on the signature" do
+        expect(assigns[:signature].validated_ip).to eq("0.0.0.0")
+      end
+
+      it "deletes old signed tokens" do
+        expect(parsed_cookie).not_to have_key(other_signature.id.to_s)
+      end
+
+      it "saves the signed token in the cookie" do
+        expect(parsed_cookie).to eq({ signature.id.to_s => signature.signed_token })
+      end
+
+      it "doesn't send an email notification to the petition creator" do
+        expect(deliveries).to be_empty
+      end
+
+      it "redirects to the signed signature page" do
+        expect(response).to redirect_to("/sponsors/#{signature.id}/sponsored")
+      end
+
+      context "and the signature has already been validated" do
+        let(:signature) { FactoryBot.create(:validated_signature, petition: petition, sponsor: true) }
+
+        it "doesn't set the flash :notice message" do
+          expect(flash[:notice]).to be_nil
+        end
+      end
+
+      context "and has one remaining sponsor slot" do
+        let(:petition) { FactoryBot.create(:flagged_petition, sponsor_count: Site.maximum_number_of_sponsors - 1, sponsors_signed: true, creator_attributes: { email: "bob@example.com" }) }
+
+        it "assigns the @signature instance variable" do
+          expect(assigns[:signature]).to eq(signature)
+        end
+
+        it "assigns the @petition instance variable" do
+          expect(assigns[:petition]).to eq(petition)
+        end
+
+        it "validates the signature" do
+          expect(assigns[:signature]).to be_validated
+        end
+
+        it "records the constituency id on the signature" do
+          expect(assigns[:signature].constituency_id).to eq("3415")
+        end
+
+        it "saves the signed token in the cookie" do
+          expect(parsed_cookie).to eq({ signature.id.to_s => signature.signed_token })
+        end
+
+        it "doesn't send an email notification to the petition creator" do
+          expect(deliveries).to be_empty
+        end
+
+        it "redirects to the signed signature page" do
+          expect(response).to redirect_to("/sponsors/#{signature.id}/sponsored")
+        end
+      end
+
+      context "and has reached the maximum number of sponsors" do
+        let(:petition) { FactoryBot.create(:flagged_petition, sponsor_count: Site.maximum_number_of_sponsors, sponsors_signed: true) }
+
+        it "redirects to the petition moderation info page" do
+          expect(response).to redirect_to("/petitions/#{petition.id}/moderation-info")
+        end
+      end
+
+      context "and signature collection is paused" do
+        let(:signature_collection_disabled?) { true }
+
+        it "sets the flash :notice message" do
+          expect(flash[:notice]).to eq("Sorry, you can’t sign petitions at the moment")
+        end
+
+        it "redirects to the petition page" do
+          expect(response).to redirect_to("/petitions/#{petition.to_param}")
+        end
+      end
+    end
   end
 
   describe "GET /sponsors/:id/sponsored" do
@@ -1125,7 +1238,7 @@ RSpec.describe SponsorsController, type: :controller do
       end
     end
 
-    %w[flagged dormant hidden stopped].each do |state|
+    %w[dormant hidden stopped].each do |state|
       context "when the petition is #{state}" do
         let(:petition) { FactoryBot.create(:"#{state}_petition") }
         let(:signature) { FactoryBot.create(:validated_signature, :just_signed, petition: petition, sponsor: true) }
@@ -1166,7 +1279,7 @@ RSpec.describe SponsorsController, type: :controller do
       end
     end
 
-    %w[pending validated sponsored].each do |state|
+    %w[pending validated sponsored flagged].each do |state|
       context "when the petition is #{state}" do
         let(:petition) { FactoryBot.create(:"#{state}_petition") }
         let(:signature) { FactoryBot.create(:validated_signature, :just_signed, petition: petition, sponsor: true) }
