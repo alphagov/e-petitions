@@ -100,7 +100,7 @@
 
         $checked.each(function() {
           var $tr = $(this).closest('tr');
-          var $action = $tr.find('input[type=submit].' + action + '-action');
+          var $action = $tr.find('button.' + action + '-action');
 
           if ($action.length == 0) {
             disabled = true;
