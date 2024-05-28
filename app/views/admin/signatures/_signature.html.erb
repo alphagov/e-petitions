@@ -1,6 +1,6 @@
 <tr>
   <td class="petition-id">
-    <label><%= check_box_tag 'id', signature.id, false, disabled: signature.creator? %></label>
+    <label><%= check_box_tag 'id', signature.id, false, id: dom_id(signature), disabled: signature.creator? %></label>
   </td>
   <td class="petition-details">
     <p>
