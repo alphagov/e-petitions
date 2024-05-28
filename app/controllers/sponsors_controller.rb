@@ -23,7 +23,7 @@ class SponsorsController < SignaturesController
   def retrieve_petition
     @petition = Petition.not_hidden.find(petition_id)
 
-    if @petition.flagged? || @petition.dormant? || @petition.stopped?
+    if @petition.dormant? || @petition.stopped?
       raise ActiveRecord::RecordNotFound, "Unable to find Petition with id: #{petition_id}"
     end
 
@@ -36,7 +36,7 @@ class SponsorsController < SignaturesController
     @signature = Signature.sponsors.find(signature_id)
     @petition = @signature.petition
 
-    if @petition.flagged? || @petition.dormant? || @petition.hidden? || @petition.stopped?
+    if @petition.dormant? || @petition.hidden? || @petition.stopped?
       raise ActiveRecord::RecordNotFound, "Unable to find Signature with id: #{signature_id}"
     end
   end

@@ -2109,9 +2109,23 @@ RSpec.describe Petition, type: :model do
       it "records changes the state from 'pending' to 'validated'" do
         expect {
           petition.increment_signature_count!
-        }.to change{
+        }.to change {
           petition.state
         }.from(Petition::PENDING_STATE).to(Petition::VALIDATED_STATE)
+      end
+
+      context "and the petition is flagged" do
+        before do
+          petition.update!(state: "flagged")
+        end
+
+        it "doesn't change the state" do
+          expect {
+            petition.increment_signature_count!
+          }.not_to change {
+            petition.state
+          }.from(Petition::FLAGGED_STATE)
+        end
       end
     end
 
@@ -2147,6 +2161,20 @@ RSpec.describe Petition, type: :model do
             petition.state
           }.from(Petition::VALIDATED_STATE).to(Petition::SPONSORED_STATE)
         end
+
+        context "and the petition is flagged" do
+          before do
+            petition.update!(state: "flagged")
+          end
+
+          it "doesn't change the state" do
+            expect {
+              petition.increment_signature_count!
+            }.not_to change {
+              petition.state
+            }.from(Petition::FLAGGED_STATE)
+          end
+        end
       end
 
       context "without having been validated by a sponsor yet" do
@@ -2172,6 +2200,20 @@ RSpec.describe Petition, type: :model do
           }.to change {
             petition.state
           }.from(Petition::PENDING_STATE).to(Petition::SPONSORED_STATE)
+        end
+
+        context "and the petition is flagged" do
+          before do
+            petition.update!(state: "flagged")
+          end
+
+          it "doesn't change the state" do
+            expect {
+              petition.increment_signature_count!
+            }.not_to change {
+              petition.state
+            }.from(Petition::FLAGGED_STATE)
+          end
         end
       end
     end
