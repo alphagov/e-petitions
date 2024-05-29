@@ -126,6 +126,15 @@ class Site < ActiveRecord::Base
       Thread.current[:__site__] = nil
     end
 
+    def reset!(attributes = defaults)
+      destroy_all and reload
+      create!(attributes)
+    end
+
+    def update!(attributes)
+      instance.update!(attributes)
+    end
+
     def touch(*names)
       if instance.persisted?
         instance.touch(*names)

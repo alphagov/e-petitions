@@ -86,7 +86,7 @@ RSpec.describe Admin::ParliamentsController, type: :controller, admin: true do
       end
 
       context "when clicking the 'Save' button" do
-        before { patch :update, params: { parliament: params, commit: "Save" } }
+        before { patch :update, params: { parliament: params, button: "save" } }
 
         context "and the params are invalid" do
           let(:params) { invalid_params }
@@ -106,7 +106,7 @@ RSpec.describe Admin::ParliamentsController, type: :controller, admin: true do
       end
 
       context "when clicking the 'Send dissolution emails' button" do
-        before { patch :update, params: { parliament: params, send_emails: "Send dissolution emails" } }
+        before { patch :update, params: { parliament: params, button: "send_emails" } }
 
         context "and the params are invalid" do
           let(:params) { invalid_params }
@@ -120,11 +120,16 @@ RSpec.describe Admin::ParliamentsController, type: :controller, admin: true do
               government: "Conservative",
               opening_at: 2.years.ago.iso8601,
               dissolution_at: 2.weeks.from_now.iso8601,
+              registration_closed_at: 3.weeks.from_now.iso8601,
+              election_date: 3.weeks.from_now.to_date.iso8601,
+              show_dissolution_notification: true,
               dissolution_heading: "Parliament is dissolving",
               dissolution_message: "This means all petitions will close in 2 weeks",
               dissolution_faq_url: "https://parliament.example.com/parliament-is-closing"
             }
           end
+
+          it_behaves_like "a valid request"
 
           it "sets the flash notice message" do
             expect(flash[:notice]).to eq("Everyone will be notified of the early closing of their petitions")
@@ -147,9 +152,7 @@ RSpec.describe Admin::ParliamentsController, type: :controller, admin: true do
             }
           end
 
-          it "sets the flash notice message" do
-            expect(flash[:notice]).to eq("Parliament updated successfully")
-          end
+          it_behaves_like "an invalid request"
 
           it "doesn't enqueue a job to notify creators" do
             expect(enqueued_jobs).to eq([])
@@ -158,7 +161,7 @@ RSpec.describe Admin::ParliamentsController, type: :controller, admin: true do
       end
 
       context "when clicking the 'Schedule closure' button" do
-        before { patch :update, params: { parliament: params, schedule_closure: "Schedule closure" } }
+        before { patch :update, params: { parliament: params, button: "schedule_closure" } }
 
         context "and the params are invalid" do
           let(:params) { invalid_params }
@@ -177,7 +180,8 @@ RSpec.describe Admin::ParliamentsController, type: :controller, admin: true do
               dissolution_heading: "Parliament is dissolving",
               dissolution_message: "This means all petitions will close in 2 weeks",
               dissolution_faq_url: "https://parliament.example.com/parliament-is-closing",
-              show_dissolution_notification: "true"
+              show_dissolution_notification: "true",
+              notification_cutoff_at: 3.months.ago.iso8601
             }
           end
 
@@ -199,11 +203,7 @@ RSpec.describe Admin::ParliamentsController, type: :controller, admin: true do
         context "and the params are valid but parliament isn't dissolving" do
           let(:params) { valid_params }
 
-          it_behaves_like "a valid request"
-
-          it "sets the flash notice message" do
-            expect(flash[:notice]).to eq("Parliament updated successfully")
-          end
+          it_behaves_like "an invalid request"
 
           it "doesn't enqueue jobs to close and stop petitions" do
             expect(enqueued_jobs).to eq([])
@@ -212,7 +212,7 @@ RSpec.describe Admin::ParliamentsController, type: :controller, admin: true do
       end
 
       context "when clicking the 'Archive petitions' button" do
-        before { patch :update, params: { parliament: params, archive_petitions: "Archive petitions" } }
+        before { patch :update, params: { parliament: params, button: "archive_petitions" } }
 
         context "and the params are invalid" do
           let(:params) { invalid_params }
@@ -263,11 +263,7 @@ RSpec.describe Admin::ParliamentsController, type: :controller, admin: true do
             }
           end
 
-          it_behaves_like "a valid request"
-
-          it "sets the flash notice message" do
-            expect(flash[:notice]).to eq("Parliament updated successfully")
-          end
+          it_behaves_like "an invalid request"
 
           it "doesn't enqueue a job to archive petitions" do
             expect(enqueued_jobs).to eq([])
@@ -281,11 +277,7 @@ RSpec.describe Admin::ParliamentsController, type: :controller, admin: true do
         context "and the params are valid but parliament isn't dissolving" do
           let(:params) { valid_params }
 
-          it_behaves_like "a valid request"
-
-          it "sets the flash notice message" do
-            expect(flash[:notice]).to eq("Parliament updated successfully")
-          end
+          it_behaves_like "an invalid request"
 
           it "doesn't enqueue a job to archive petitions" do
             expect(enqueued_jobs).to eq([])
@@ -300,9 +292,9 @@ RSpec.describe Admin::ParliamentsController, type: :controller, admin: true do
       context "when clicking the 'Archive parliament' button" do
         before do
           FactoryBot.create(:closed_petition, archived_at: 1.hour.ago)
-          FactoryBot.create(:parliament, archiving_started_at: 1.day.ago)
+          Parliament.update!(archiving_started_at: 1.day.ago)
 
-          patch :update, params: { parliament: params, archive_parliament: "Archive parliament" }
+          patch :update, params: { parliament: params, button: "archive_parliament" }
         end
 
         context "and the params are invalid" do
@@ -354,11 +346,7 @@ RSpec.describe Admin::ParliamentsController, type: :controller, admin: true do
             }
           end
 
-          it_behaves_like "a valid request"
-
-          it "sets the flash notice message" do
-            expect(flash[:notice]).to eq("Parliament updated successfully")
-          end
+          it_behaves_like "an invalid request"
 
           it "doesn't enqueue a job to delete petitions" do
             expect(enqueued_jobs).to eq([])
@@ -372,11 +360,7 @@ RSpec.describe Admin::ParliamentsController, type: :controller, admin: true do
         context "and the params are valid but parliament isn't dissolving" do
           let(:params) { valid_params }
 
-          it_behaves_like "a valid request"
-
-          it "sets the flash notice message" do
-            expect(flash[:notice]).to eq("Parliament updated successfully")
-          end
+          it_behaves_like "an invalid request"
 
           it "doesn't enqueue a job to delete petitions" do
             expect(enqueued_jobs).to eq([])
@@ -394,7 +378,7 @@ RSpec.describe Admin::ParliamentsController, type: :controller, admin: true do
         before do
           FactoryBot.create(:archived_petition, anonymized_at: anonymized_at)
 
-          patch :update, params: { parliament: params, anonymize_petitions: "Anonymize petitions" }
+          patch :update, params: { parliament: params, button: "anonymize_petitions" }
         end
 
         context "and the params are invalid" do
@@ -417,6 +401,18 @@ RSpec.describe Admin::ParliamentsController, type: :controller, admin: true do
           end
         end
 
+        context "and the params are valid, but the site has been reopened for less than six months" do
+          let :params do
+            { government: "Conservative", opening_at: 5.months.ago.iso8601 }
+          end
+
+          it_behaves_like "an invalid request"
+
+          it "doesn't enqueue a job to anonymize petitions" do
+            expect(enqueued_jobs).to eq([])
+          end
+        end
+
         context "and the params are valid, but there are no unanonymized petitions" do
           let(:params) { valid_params }
           let(:anonymized_at) { 2.weeks.ago }
@@ -424,7 +420,7 @@ RSpec.describe Admin::ParliamentsController, type: :controller, admin: true do
           it_behaves_like "a valid request"
 
           it "sets the flash notice message" do
-            expect(flash[:notice]).to eq("Parliament updated successfully")
+            expect(flash[:alert]).to eq("Anonymizing of petitions could not be started - please contact support")
           end
 
           it "doesn't enqueue a job to anonymize petitions" do
@@ -449,7 +445,7 @@ RSpec.describe Admin::ParliamentsController, type: :controller, admin: true do
           it_behaves_like "a valid request"
 
           it "sets the flash notice message" do
-            expect(flash[:notice]).to eq("Parliament updated successfully")
+            expect(flash[:alert]).to eq("Anonymizing of petitions could not be started - please contact support")
           end
 
           it "doesn't enqueue a job to anonymize petitions" do
@@ -474,7 +470,7 @@ RSpec.describe Admin::ParliamentsController, type: :controller, admin: true do
           it_behaves_like "a valid request"
 
           it "sets the flash notice message" do
-            expect(flash[:notice]).to eq("Parliament updated successfully")
+            expect(flash[:alert]).to eq("Anonymizing of petitions could not be started - please contact support")
           end
 
           it "doesn't enqueue a job to anonymize petitions" do

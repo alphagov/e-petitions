@@ -111,7 +111,7 @@ Given(/^a petition "([^"]*)" has been closed early because of parliament dissolv
   open_at = 3.months.ago
   closed_at = 1.month.ago
 
-  Parliament.instance.update! dissolution_at: closed_at,
+  Parliament.update! dissolution_at: closed_at,
     dissolution_heading: "Parliament is dissolving",
     dissolution_message: "This means all petitions will close in 2 weeks",
     dissolved_heading: "Parliament has been dissolved",
@@ -132,7 +132,7 @@ Given(/^the petition "([^"]*)" has been closed early because of parliament disso
   open_at = 3.months.ago
   closed_at = 1.month.ago
 
-  Parliament.instance.update! dissolution_at: closed_at,
+  Parliament.update! dissolution_at: closed_at,
     dissolution_heading: "Parliament is dissolving",
     dissolution_message: "This means all petitions will close in 2 weeks",
     dissolved_heading: "Parliament has been dissolved",
@@ -375,7 +375,7 @@ Given(/^an archived petition "(.*?)" with some signatures$/) do |petition_action
 end
 
 Given(/^the threshold for a parliamentary debate is "(.*?)"$/) do |amount|
-  Site.instance.update!(threshold_for_debate: amount)
+  Site.update!(threshold_for_debate: amount)
 end
 
 Given(/^there are (\d+) petitions awaiting a government response$/) do |response_count|

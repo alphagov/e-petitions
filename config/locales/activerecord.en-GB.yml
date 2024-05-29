@@ -91,6 +91,25 @@ en-GB:
             aliased_domain:
               not_found: "The aliased domain was not found - please check the spelling and try again"
 
+        parliament:
+          attributes:
+            dissolution_at:
+              blank: Please enter the date and time when parliament dissolves
+              too_soon: Please wait until two days after dissolution to begin archiving
+            dissolution_faq_url:
+              blank: Please enter a URL for the Dissolution FAQ
+            election_date:
+              blank: Please enter the election date
+            notification_cutoff_at:
+              blank: Please enter a notification cut-off
+            opening_at:
+              blank: Please enter the date and time when parliament will reopen
+              too_soon: Please wait until six months after reopening before anonymizing petitions
+            registration_closed_at:
+              blank: Please enter the date and time at which voter registration closes
+            show_dissolution_notification:
+              not_visible: Please make the dissolution notification visible
+
         petition:
           attributes:
             moderation:

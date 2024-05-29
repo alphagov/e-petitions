@@ -159,6 +159,28 @@ module AdminHelper
     t(rejection.code, scope: :"rejection.reasons.short", default: rejection.code.titleize)
   end
 
+  def parliament_tab
+    if (errors = @parliament.errors.attribute_names).present?
+      if (errors & %i[government opening_at]).present?
+        "details"
+      elsif (errors & %i[dissolution_at dissolution_faq_url show_dissolution_notification dissolution_heading dissolution_message]).present?
+        "dissolution"
+      elsif (errors & %i[notification_cutoff_at dissolved_heading dissolved_message]).present?
+        "dissolved"
+      elsif (errors & %i[election_date registration_closed_at]).present?
+        "election"
+      elsif (errors & %i[government_response_heading government_response_description government_response_status]).present?
+        "response"
+      elsif (errors & %i[parliamentary_debate_heading parliamentary_debate_description parliamentary_debate_status]).present?
+        "debate"
+      else
+        "details"
+      end
+    else
+      params.fetch(:tab, "details")
+    end
+  end
+
   private
 
   def admin_petition_facets
