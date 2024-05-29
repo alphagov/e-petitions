@@ -163,6 +163,43 @@ class Parliament < ActiveRecord::Base
   validates_numericality_of :petition_duration, greater_than_or_equal_to: 1, allow_blank: true
   validates_numericality_of :petition_duration, less_than_or_equal_to: 12, allow_blank: true
 
+  validate on: :send_emails do
+    errors.add(:dissolution_at, :blank) unless dissolution_at?
+    errors.add(:dissolution_faq_url, :blank) unless dissolution_faq_url?
+    errors.add(:show_dissolution_notification, :not_visible) unless show_dissolution_notification?
+    errors.add(:registration_closed_at, :blank) unless registration_closed_at?
+    errors.add(:election_date, :blank) unless election_date?
+  end
+
+  validate on: :schedule_closure do
+    errors.add(:notification_cutoff_at, :blank) unless notification_cutoff_at?
+  end
+
+  validate on: :archive_petitions do
+    errors.add(:dissolution_at, :blank) unless dissolution_at?
+
+    if dissolution_at?
+      errors.add(:dissolution_at, :too_soon) unless dissolution_at < 2.days.ago
+    end
+  end
+
+  validate on: :archive_parliament do
+    errors.add(:dissolution_at, :blank) unless dissolution_at?
+
+    if dissolution_at?
+      errors.add(:dissolution_at, :too_soon) unless dissolution_at < 2.days.ago
+      errors.add(:dissolution_at, :still_archiving) if dissolved? && archiving?
+    end
+  end
+
+  validate on: :anonymize_petitions do
+    errors.add(:opening_at, :blank) unless opening_at?
+
+    if opening_at?
+      errors.add(:opening_at, :too_soon) unless opening_at < 6.months.ago
+    end
+  end
+
   after_save { Site.touch }
 
   def name
@@ -239,7 +276,7 @@ class Parliament < ActiveRecord::Base
   end
 
   def start_anonymizing!(now = Time.current)
-    unless dissolving? || dissolved? || archiving?
+    if can_anonymize_petitions?
       Archived::AnonymizePetitionsJob.set(wait_until: midnight).perform_later(midnight.iso8601)
     end
   end

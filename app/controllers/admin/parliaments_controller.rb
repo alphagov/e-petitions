@@ -9,27 +9,20 @@ class Admin::ParliamentsController < Admin::AdminController
   end
 
   def update
-    if @parliament.update(parliament_params)
-      if send_emails?
-        @parliament.send_emails!
-        redirect_to admin_parliament_url(tab: params[:tab]), notice: :creators_emailed
-      elsif schedule_closure?
-        @parliament.schedule_closure!
-        redirect_to admin_parliament_url(tab: params[:tab]), notice: :closure_scheduled
-      elsif archive_petitions?
-        @parliament.start_archiving!
-        redirect_to admin_parliament_url(tab: params[:tab]), notice: :petitions_archiving
-      elsif anonymize_petitions?
-        @parliament.start_anonymizing!
-        redirect_to admin_parliament_url(tab: params[:tab]), notice: :petitions_anonymizing
-      elsif archive_parliament?
-        @parliament.archive!
-        redirect_to admin_parliament_url(tab: params[:tab]), notice: :parliament_archived
-      else
-        redirect_to admin_parliament_url(tab: params[:tab]), notice: :parliament_updated
+    respond_to do |format|
+      format.html do
+        @parliament.assign_attributes(parliament_params)
+
+        if @parliament.save(context: parliament_context)
+          if perform_parliament_action!
+            redirect_to admin_parliament_url(tab: params[:tab]), notice: parliament_action_notice
+          else
+            redirect_to admin_parliament_url(tab: params[:tab]), alert: parliament_action_alert
+          end
+        else
+          render :show, alert: :parliament_not_updated
+        end
       end
-    else
-      render :show, alert: :parliament_not_updated
     end
   end
 
@@ -53,23 +46,75 @@ class Admin::ParliamentsController < Admin::AdminController
     )
   end
 
-  def send_emails?
-    params.key?(:send_emails) && @parliament.dissolution_at?
+  def perform_parliament_action!
+    case button_param
+    when "send_emails"
+      @parliament.send_emails!
+    when "schedule_closure"
+      @parliament.schedule_closure!
+    when "archive_petitions"
+      @parliament.start_archiving!
+    when "anonymize_petitions"
+      @parliament.start_anonymizing!
+    when "archive_parliament"
+      @parliament.archive!
+    else
+      true
+    end
   end
 
-  def schedule_closure?
-    params.key?(:schedule_closure) && @parliament.dissolution_announced?
+  def parliament_context
+    case button_param
+    when "send_emails"
+      :send_emails
+    when "schedule_closure"
+      :schedule_closure
+    when "archive_petitions"
+      :archive_petitions
+    when "archive_parliament"
+      :archive_parliament
+    when "anonymize_petitions"
+      :anonymize_petitions
+    else
+      nil
+    end
   end
 
-  def archive_petitions?
-    params.key?(:archive_petitions) && @parliament.can_archive_petitions?
+  def parliament_action_notice
+    case button_param
+    when "send_emails" then
+      :creators_emailed
+    when "schedule_closure"
+      :closure_scheduled
+    when "archive_petitions"
+      :petitions_archiving
+    when "archive_parliament"
+      :parliament_archived
+    when "anonymize_petitions"
+      :petitions_anonymizing
+    else
+      :parliament_updated
+    end
   end
 
-  def anonymize_petitions?
-    params.key?(:anonymize_petitions) && @parliament.can_anonymize_petitions?
+  def parliament_action_alert
+    case button_param
+    when "send_emails" then
+      :creators_not_emailed
+    when "schedule_closure"
+      :closure_not_scheduled
+    when "archive_petitions"
+      :petitions_not_archiving
+    when "archive_parliament"
+      :parliament_not_archived
+    when "anonymize_petitions"
+      :petitions_not_anonymizing
+    else
+      :parliament_not_updated
+    end
   end
 
-  def archive_parliament?
-    params.key?(:archive_parliament) && @parliament.can_archive?
+  def button_param
+    params.fetch(:button, "save")
   end
 end

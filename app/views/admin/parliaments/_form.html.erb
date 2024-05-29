@@ -1,21 +1,21 @@
 <%= form_for @parliament, url: admin_parliament_url do |form| %>
-  <%= render tab, form: form %>
-  <%= form.submit 'Save', class: 'button' %>
+  <%= render parliament_tab, form: form %>
+  <%= form.button 'Save', name: 'button', value: 'save', class: 'button' %>
   <% if @parliament.dissolved? %>
     <% if @parliament.can_archive_petitions? %>
-      <%= form.submit 'Archive petitions', name: 'archive_petitions', class: 'button-secondary', data: { confirm: 'Copy current petitions to archive?' } %>
+      <%= form.button 'Archive petitions', name: 'button', value: 'archive_petitions', class: 'button-secondary', data: { confirm: 'Copy current petitions to archive?' } %>
     <% elsif @parliament.can_archive? %>
-      <%= form.submit 'Archive parliament', name: 'archive_parliament', class: 'button-secondary', data: { confirm: 'Archive this parliament and create a new one?' } %>
+      <%= form.button 'Archive parliament', name: 'button', value: 'archive_parliament', class: 'button-secondary', data: { confirm: 'Archive this parliament and create a new one?' } %>
     <% end %>
   <% elsif @parliament.dissolving? %>
     <% if !@parliament.dissolution_emails_sent? %>
-      <%= form.submit 'Send dissolution emails', name: 'send_emails', class: 'button-secondary', data: { confirm: 'Email everyone about dissolution?' } %>
+      <%= form.button 'Send dissolution emails', name: 'button', value: 'send_emails', class: 'button-secondary', data: { confirm: 'Email everyone about dissolution?' } %>
     <% elsif !@parliament.closure_scheduled? %>
-      <%= form.submit 'Schedule closure', name: 'schedule_closure', class: 'button-secondary', data: { confirm: 'Schedule early closure of petitions?' } %>
+      <%= form.button 'Schedule closure', name: 'button', value: 'schedule_closure', class: 'button-secondary', data: { confirm: 'Schedule early closure of petitions?' } %>
     <% end %>
   <% end %>
   <% if @parliament.can_anonymize_petitions? %>
-    <%= form.submit 'Anonymize petitions', name: 'anonymize_petitions', class: 'button-secondary', data: { confirm: 'Anonymize all archived petitions?' } %>
+    <%= form.button 'Anonymize petitions', name: 'button', value: 'anonymize_petitions', class: 'button-secondary', data: { confirm: 'Anonymize all archived petitions?' } %>
   <% end %>
   <%= link_to 'Cancel', admin_root_path, class: 'button-secondary' %>
 <% end %>
