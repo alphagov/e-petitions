@@ -7,11 +7,11 @@ Then(/^I should not see the cookie message$/) do
 end
 
 Given(/^the site is disabled$/) do
-  Site.instance.update! enabled: false
+  Site.update! enabled: false
 end
 
 Given(/^the site is protected$/) do
-  Site.instance.update! protected: true, username: "username", password: "password"
+  Site.update! protected: true, username: "username", password: "password"
 end
 
 Given(/^signature counting is handled by an external process$/) do
@@ -19,7 +19,7 @@ Given(/^signature counting is handled by an external process$/) do
 end
 
 Given(/^Parliament is dissolving$/) do
-  Parliament.instance.update! dissolution_at: 2.weeks.from_now,
+  Parliament.update! dissolution_at: 2.weeks.from_now,
     dissolution_heading: "Parliament is dissolving",
     dissolution_message: "This means all petitions will close in 2 weeks",
     dissolution_faq_url: "https://parliament.example.com/parliament-is-closing",
@@ -27,7 +27,7 @@ Given(/^Parliament is dissolving$/) do
 end
 
 Given(/^Parliament is dissolved$/) do
-  Parliament.instance.update! dissolution_at: 1.day.ago,
+  Parliament.update! dissolution_at: 1.day.ago,
     dissolution_heading: "Parliament is dissolving",
     dissolution_message: "This means all petitions will close in 2 weeks",
     dissolved_heading: "Parliament has been dissolved",
@@ -37,7 +37,11 @@ Given(/^Parliament is dissolved$/) do
 end
 
 Given(/^Parliament is pending$/) do
-  Parliament.instance.update!(opening_at: 1.month.from_now)
+  Parliament.update!(opening_at: 1.month.from_now)
+end
+
+Given('{int} months has passed since parliament opened') do |number|
+  Parliament.update!(opening_at: number.months.ago)
 end
 
 Given(/^the request is not local$/) do

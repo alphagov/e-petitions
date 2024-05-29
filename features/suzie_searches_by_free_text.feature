@@ -5,6 +5,7 @@ Feature: Suzy Singer searches by free text
 
   Background:
     Given the date is the "21 April 2011 12:00"
+    And 6 months has passed since parliament opened
     And a pending petition exists with action: "Wombles are great"
     And a validated petition exists with action: "The Wombles of Wimbledon"
     And an open petition exists with action: "Uncle Bulgaria", additional_details: "The Wombles are here", closed_at: "1 minute from now", signature_count: 23

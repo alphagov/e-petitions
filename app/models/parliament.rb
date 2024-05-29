@@ -132,8 +132,23 @@ class Parliament < ActiveRecord::Base
       Thread.current[:__parliament__] = nil
     end
 
+    def reset!(attributes = defaults)
+      destroy_all and reload
+      create!(attributes)
+    end
+
     def current_or_create
-      current.first_or_create(government: "TBC", opening_at: 2.weeks.ago)
+      current.first_or_create(defaults)
+    end
+
+    def update!(attributes)
+      instance.update!(attributes)
+    end
+
+    def defaults
+      I18n.t(:defaults, scope: :parliament).transform_values do |value|
+        value.respond_to?(:call) ? value.call : value
+      end
     end
   end
 
