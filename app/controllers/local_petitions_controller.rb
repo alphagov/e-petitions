@@ -2,6 +2,8 @@ require 'postcode_sanitizer'
 require 'csv'
 
 class LocalPetitionsController < ApplicationController
+  before_action :redirect_to_home_page, if: :parliament_closed?
+
   before_action :sanitize_postcode, only: :index
   before_action :find_by_postcode, if: :postcode?, only: :index
   before_action :find_by_slug, only: [:show, :all]
@@ -69,6 +71,14 @@ class LocalPetitionsController < ApplicationController
     else
       redirect_to local_petition_url(@constituency.slug)
     end
+  end
+
+  def redirect_to_home_page
+    redirect_to home_url
+  end
+
+  def parliament_closed?
+    Parliament.closed?
   end
 
   def csv_filename
