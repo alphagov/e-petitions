@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_05_23_163632) do
+ActiveRecord::Schema[7.1].define(version: 2024_05_31_162307) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "intarray"
   enable_extension "plpgsql"
@@ -263,9 +263,11 @@ ActiveRecord::Schema[7.1].define(version: 2024_05_23_163632) do
     t.string "example_postcode", limit: 30
     t.string "party", limit: 100
     t.string "region_id", limit: 30
+    t.date "start_date"
+    t.date "end_date"
     t.index ["external_id"], name: "index_constituencies_on_external_id", unique: true
     t.index ["region_id"], name: "index_constituencies_on_region_id"
-    t.index ["slug"], name: "index_constituencies_on_slug", unique: true
+    t.index ["slug"], name: "index_constituencies_on_slug", unique: true, where: "(end_date IS NULL)"
   end
 
   create_table "constituency_petition_journals", id: :serial, force: :cascade do |t|
