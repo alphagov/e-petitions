@@ -6,6 +6,8 @@ class FetchConstituenciesJob < ApplicationJob
   def perform
     constituencies.each do |external_id, name, ons_code, start_date, end_date|
       begin
+        retried = false
+
         Constituency.for(external_id) do |constituency|
           constituency.name = name
           constituency.ons_code = ons_code
@@ -29,7 +31,8 @@ class FetchConstituenciesJob < ApplicationJob
           constituency.save!
         end
       rescue ActiveRecord::RecordNotUnique => e
-        retry
+        retry unless retried
+        retried = true
       end
     end
   end
