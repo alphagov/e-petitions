@@ -46,11 +46,11 @@ class LocalPetitionsController < ApplicationController
   end
 
   def find_by_postcode
-    @constituency = Constituency.find_by_postcode(@postcode)
+    @constituency = Constituency.current.find_by_postcode(@postcode)
   end
 
   def find_by_slug
-    @constituency = Constituency.find_by_slug!(params[:id])
+    @constituency = Constituency.current.find_by_slug!(params[:id])
   end
 
   def constituency?

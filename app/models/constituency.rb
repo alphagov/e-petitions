@@ -61,6 +61,10 @@ class Constituency < ActiveRecord::Base
       end
     end
 
+    def current
+      where(end_date: nil)
+    end
+
     def english
       where(arel_table[:ons_code].matches('E%'))
     end
