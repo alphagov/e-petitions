@@ -6,7 +6,7 @@ module Feed
 
     with_options instance_writer: false do
       class_attribute :host, :path, :model
-      class_attribute :columns, :filter
+      class_attribute :columns, :filter, :orderby
       class_attribute :open_timeout, :timeout
       class_attribute :xpath, :klass
     end
@@ -22,7 +22,7 @@ module Feed
     end
 
     def endpoint
-      "#{path}/#{model}?$select=#{columns}&$filter=#{filter}"
+      "#{path}/#{model}?$select=#{columns}&$filter=#{escape(filter)}&$orderby=#{orderby||columns}"
     end
 
     def each(&block)
@@ -38,6 +38,10 @@ module Feed
     end
 
     private
+
+    def escape(filter)
+      CGI.escape(filter)
+    end
 
     def entries
       @entries ||= fetch_entries

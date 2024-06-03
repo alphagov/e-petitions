@@ -10,7 +10,8 @@ module Feed
 
     self.model   = "Constituencies"
     self.columns = "Constituency_Id,Name,ONSCode,StartDate,EndDate"
-    self.filter  = "EndDate%20eq%20null"
+    self.filter  = "(EndDate gt datetime'2015-05-07') or (EndDate eq null)"
+    self.orderby = "ONSCode"
     self.klass   = Constituency
   end
 end
