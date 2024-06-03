@@ -11,8 +11,8 @@ class FetchConstituenciesJob < ApplicationJob
         Constituency.for(external_id) do |constituency|
           constituency.name = name
           constituency.ons_code = ons_code
-          constituency.example_postcode = example_postcodes[ons_code]
-          constituency.region_id = regions[external_id]
+          constituency.example_postcode = example_postcodes.fetch(ons_code)
+          constituency.region_id = regions.fetch(external_id)
           constituency.start_date = start_date
           constituency.end_date = end_date
 
