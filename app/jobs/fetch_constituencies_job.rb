@@ -4,13 +4,17 @@ class FetchConstituenciesJob < ApplicationJob
   end
 
   def perform
-    constituencies.each do |external_id, name, ons_code|
+    constituencies.each do |external_id, name, ons_code, start_date, end_date|
       begin
+        retried = false
+
         Constituency.for(external_id) do |constituency|
           constituency.name = name
           constituency.ons_code = ons_code
-          constituency.example_postcode = example_postcodes[ons_code]
-          constituency.region_id = regions[external_id]
+          constituency.example_postcode = example_postcodes.fetch(ons_code)
+          constituency.region_id = regions.fetch(external_id)
+          constituency.start_date = start_date
+          constituency.end_date = end_date
 
           if mp = mps[external_id]
             constituency.mp_id = mp.id
@@ -27,7 +31,8 @@ class FetchConstituenciesJob < ApplicationJob
           constituency.save!
         end
       rescue ActiveRecord::RecordNotUnique => e
-        retry
+        retry unless retried
+        retried = true
       end
     end
   end

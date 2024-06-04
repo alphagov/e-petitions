@@ -8,7 +8,8 @@ module Feed
 
     self.model   = "Areas"
     self.columns = "Area_Id,Name,OnsAreaId"
-    self.filter  = "AreaType_Id%20eq%208"
+    self.filter  = "AreaType_Id eq 8"
+    self.orderby = "OnsAreaId"
     self.klass   = Region
   end
 end

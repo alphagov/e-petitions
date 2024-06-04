@@ -10,7 +10,8 @@ module Feed
 
     self.model   = "Members"
     self.columns = "Member_Id,NameFullTitle,Party,MembershipFrom_Id,StartDate"
-    self.filter  = "CurrentStatusActive%20eq%20true%20and%20House_Id%20eq%201"
+    self.filter  = "(CurrentStatusActive eq true) and (House_Id eq 1)"
+    self.orderby = "Member_id"
     self.klass   = Member
   end
 end

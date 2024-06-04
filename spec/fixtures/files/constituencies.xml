@@ -18,6 +18,8 @@
                 <d:Constituency_Id m:type="Edm.Int32">3320</d:Constituency_Id>
                 <d:Name>Bethnal Green and Bow</d:Name>
                 <d:ONSCode>E14000555</d:ONSCode>
+                <d:StartDate m:type="Edm.DateTime">2010-04-13T00:00:00</d:StartDate>
+                <d:EndDate m:type="Edm.DateTime" m:null="true" />
             </m:properties>
         </content>
     </entry>
@@ -35,6 +37,8 @@
                 <d:Constituency_Id m:type="Edm.Int32">3427</d:Constituency_Id>
                 <d:Name>Coventry North East</d:Name>
                 <d:ONSCode>E14000649</d:ONSCode>
+                <d:StartDate m:type="Edm.DateTime">2010-04-13T00:00:00</d:StartDate>
+                <d:EndDate m:type="Edm.DateTime" m:null="true" />
             </m:properties>
         </content>
     </entry>
@@ -52,6 +56,8 @@
                 <d:Constituency_Id m:type="Edm.Int32">3724</d:Constituency_Id>
                 <d:Name>Sheffield, Brightside and Hillsborough</d:Name>
                 <d:ONSCode>E14000921</d:ONSCode>
+                <d:StartDate m:type="Edm.DateTime">2010-04-13T00:00:00</d:StartDate>
+                <d:EndDate m:type="Edm.DateTime" m:null="true" />
             </m:properties>
         </content>
     </entry>

@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe FetchRegionsJob, type: :job do
   let(:url) { "http://data.parliament.uk/membersdataplatform/open/OData.svc" }
-  let(:regions_api) { "#{url}/Areas?$filter=AreaType_Id%20eq%208&$select=Area_Id,Name,OnsAreaId"}
+  let(:regions_api) { "#{url}/Areas?$filter=AreaType_Id%20eq%208&$orderby=OnsAreaId&$select=Area_Id,Name,OnsAreaId"}
   let(:stub_regions_api) { stub_request(:get, regions_api) }
 
   def odata_response(status, body = nil, &block)

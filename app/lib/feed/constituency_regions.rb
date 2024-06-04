@@ -7,7 +7,7 @@ module Feed
 
     self.model   = "ConstituencyAreas"
     self.columns = "Area_Id,Constituency_Id"
-    self.filter  = "Area/AreaType_Id%20eq%208%20and%20Constituency/EndDate%20eq%20null"
+    self.filter  = "(Area/AreaType_Id eq 8) and ((Constituency/EndDate gt datetime'2015-05-07') or (Constituency/EndDate eq null))"
     self.klass   = ConstituencyRegion
   end
 end

@@ -11,7 +11,8 @@ module Feed
 
     self.model   = "Departments"
     self.columns = "Department_Id,Name,Acronym,Url,StartDate,EndDate"
-    self.filter  = "EndDate%20eq%20null%20"
+    self.filter  = "EndDate eq null"
+    self.orderby = "Department_Id"
     self.klass   = Department
   end
 end
