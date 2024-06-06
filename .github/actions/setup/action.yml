@@ -8,6 +8,11 @@ runs:
       run: |
         sudo apt-get -yqq install libpq-dev
 
+    - name: Install image processing tools
+      shell: bash
+      run: |
+        sudo apt-get -yqq install imagemagick libvips
+
     - name: Install gems
       shell: bash
       run: |
