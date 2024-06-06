@@ -133,7 +133,7 @@ jobs:
         env:
           DATABASE_URL: postgres://postgres:postgres@localhost:5432/epets_test
           RAILS_ENV: test
-          SPEC_OPTS: "-f doc -P spec/controllers/admin/*_spec.rb"
+          SPEC_OPTS: "-f doc --force-color -P spec/controllers/admin/*_spec.rb"
         run: |
           bundle exec rake spec:controllers
 
@@ -179,7 +179,7 @@ jobs:
         env:
           DATABASE_URL: postgres://postgres:postgres@localhost:5432/epets_test
           RAILS_ENV: test
-          SPEC_OPTS: "-f doc -P spec/controllers/*_spec.rb"
+          SPEC_OPTS: "-f doc --force-color -P spec/controllers/*_spec.rb"
         run: |
           bundle exec rake spec:controllers
 
@@ -225,7 +225,7 @@ jobs:
         env:
           DATABASE_URL: postgres://postgres:postgres@localhost:5432/epets_test
           RAILS_ENV: test
-          SPEC_OPTS: "-f doc -P spec/jobs/**/*_spec.rb"
+          SPEC_OPTS: "-f doc --force-color -P spec/jobs/**/*_spec.rb"
         run: |
           bundle exec rake spec:jobs
 
@@ -271,7 +271,7 @@ jobs:
         env:
           DATABASE_URL: postgres://postgres:postgres@localhost:5432/epets_test
           RAILS_ENV: test
-          SPEC_OPTS: "-f doc -P spec/mailers/**/*_spec.rb"
+          SPEC_OPTS: "-f doc --force-color -P spec/mailers/**/*_spec.rb"
         run: |
           bundle exec rake spec
 
@@ -317,7 +317,7 @@ jobs:
         env:
           DATABASE_URL: postgres://postgres:postgres@localhost:5432/epets_test
           RAILS_ENV: test
-          SPEC_OPTS: "-f doc -P spec/models/**/*_spec.rb"
+          SPEC_OPTS: "-f doc --force-color -P spec/models/**/*_spec.rb"
         run: |
           bundle exec rake spec
 
@@ -363,7 +363,7 @@ jobs:
         env:
           DATABASE_URL: postgres://postgres:postgres@localhost:5432/epets_test
           RAILS_ENV: test
-          SPEC_OPTS: "-f doc -P spec/{requests,routing}/**/*_spec.rb"
+          SPEC_OPTS: "-f doc --force-color -P spec/{requests,routing}/**/*_spec.rb"
         run: |
           bundle exec rake spec
 
@@ -409,7 +409,7 @@ jobs:
         env:
           DATABASE_URL: postgres://postgres:postgres@localhost:5432/epets_test
           RAILS_ENV: test
-          SPEC_OPTS: "-f doc -P spec/{helpers,lib,presenters,tasks,validators,views}/**/*_spec.rb"
+          SPEC_OPTS: "-f doc --force-color -P spec/{helpers,lib,presenters,tasks,validators,views}/**/*_spec.rb"
         run: |
           bundle exec rake spec
 
