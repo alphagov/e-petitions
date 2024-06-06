@@ -8,7 +8,7 @@ on:
 
 jobs:
   bundle-audit:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
 
     services:
       postgres:
@@ -38,9 +38,9 @@ jobs:
         uses: actions/cache@v4
         with:
           path: vendor/bundle
-          key: ubuntu-22.04-gems-${{ hashFiles('/Gemfile.lock') }}
+          key: ubuntu-24.04-gems-${{ hashFiles('/Gemfile.lock') }}
           restore-keys: |
-            ubuntu-22.04-gems-
+            ubuntu-24.04-gems-
 
       - name: Setup
         uses: ./.github/actions/setup
@@ -50,7 +50,7 @@ jobs:
           bundle exec rake bundle:audit
 
   brakeman:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
 
     services:
       postgres:
@@ -80,9 +80,9 @@ jobs:
         uses: actions/cache@v4
         with:
           path: vendor/bundle
-          key: ubuntu-22.04-gems-${{ hashFiles('/Gemfile.lock') }}
+          key: ubuntu-24.04-gems-${{ hashFiles('/Gemfile.lock') }}
           restore-keys: |
-            ubuntu-22.04-gems-
+            ubuntu-24.04-gems-
 
       - name: Setup
         uses: ./.github/actions/setup
@@ -92,7 +92,7 @@ jobs:
           bundle exec rake brakeman:check
 
   spec-admin-controllers:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
 
     services:
       postgres:
@@ -122,9 +122,9 @@ jobs:
         uses: actions/cache@v4
         with:
           path: vendor/bundle
-          key: ubuntu-22.04-gems-${{ hashFiles('/Gemfile.lock') }}
+          key: ubuntu-24.04-gems-${{ hashFiles('/Gemfile.lock') }}
           restore-keys: |
-            ubuntu-22.04-gems-
+            ubuntu-24.04-gems-
 
       - name: Setup
         uses: ./.github/actions/setup
@@ -138,7 +138,7 @@ jobs:
           bundle exec rake spec:controllers
 
   spec-public-controllers:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
 
     services:
       postgres:
@@ -168,9 +168,9 @@ jobs:
         uses: actions/cache@v4
         with:
           path: vendor/bundle
-          key: ubuntu-22.04-gems-${{ hashFiles('/Gemfile.lock') }}
+          key: ubuntu-24.04-gems-${{ hashFiles('/Gemfile.lock') }}
           restore-keys: |
-            ubuntu-22.04-gems-
+            ubuntu-24.04-gems-
 
       - name: Setup
         uses: ./.github/actions/setup
@@ -184,7 +184,7 @@ jobs:
           bundle exec rake spec:controllers
 
   spec-jobs:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
 
     services:
       postgres:
@@ -214,9 +214,9 @@ jobs:
         uses: actions/cache@v4
         with:
           path: vendor/bundle
-          key: ubuntu-22.04-gems-${{ hashFiles('/Gemfile.lock') }}
+          key: ubuntu-24.04-gems-${{ hashFiles('/Gemfile.lock') }}
           restore-keys: |
-            ubuntu-22.04-gems-
+            ubuntu-24.04-gems-
 
       - name: Setup
         uses: ./.github/actions/setup
@@ -230,7 +230,7 @@ jobs:
           bundle exec rake spec:jobs
 
   spec-mailers:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
 
     services:
       postgres:
@@ -260,9 +260,9 @@ jobs:
         uses: actions/cache@v4
         with:
           path: vendor/bundle
-          key: ubuntu-22.04-gems-${{ hashFiles('/Gemfile.lock') }}
+          key: ubuntu-24.04-gems-${{ hashFiles('/Gemfile.lock') }}
           restore-keys: |
-            ubuntu-22.04-gems-
+            ubuntu-24.04-gems-
 
       - name: Setup
         uses: ./.github/actions/setup
@@ -276,7 +276,7 @@ jobs:
           bundle exec rake spec
 
   spec-models:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
 
     services:
       postgres:
@@ -306,9 +306,9 @@ jobs:
         uses: actions/cache@v4
         with:
           path: vendor/bundle
-          key: ubuntu-22.04-gems-${{ hashFiles('/Gemfile.lock') }}
+          key: ubuntu-24.04-gems-${{ hashFiles('/Gemfile.lock') }}
           restore-keys: |
-            ubuntu-22.04-gems-
+            ubuntu-24.04-gems-
 
       - name: Setup
         uses: ./.github/actions/setup
@@ -322,7 +322,7 @@ jobs:
           bundle exec rake spec
 
   spec-requests:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
 
     services:
       postgres:
@@ -352,9 +352,9 @@ jobs:
         uses: actions/cache@v4
         with:
           path: vendor/bundle
-          key: ubuntu-22.04-gems-${{ hashFiles('/Gemfile.lock') }}
+          key: ubuntu-24.04-gems-${{ hashFiles('/Gemfile.lock') }}
           restore-keys: |
-            ubuntu-22.04-gems-
+            ubuntu-24.04-gems-
 
       - name: Setup
         uses: ./.github/actions/setup
@@ -368,7 +368,7 @@ jobs:
           bundle exec rake spec
 
   spec-other:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
 
     services:
       postgres:
@@ -398,9 +398,9 @@ jobs:
         uses: actions/cache@v4
         with:
           path: vendor/bundle
-          key: ubuntu-22.04-gems-${{ hashFiles('/Gemfile.lock') }}
+          key: ubuntu-24.04-gems-${{ hashFiles('/Gemfile.lock') }}
           restore-keys: |
-            ubuntu-22.04-gems-
+            ubuntu-24.04-gems-
 
       - name: Setup
         uses: ./.github/actions/setup
@@ -414,7 +414,7 @@ jobs:
           bundle exec rake spec
 
   javascript:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
 
     services:
       postgres:
@@ -444,9 +444,9 @@ jobs:
         uses: actions/cache@v4
         with:
           path: vendor/bundle
-          key: ubuntu-22.04-gems-${{ hashFiles('/Gemfile.lock') }}
+          key: ubuntu-24.04-gems-${{ hashFiles('/Gemfile.lock') }}
           restore-keys: |
-            ubuntu-22.04-gems-
+            ubuntu-24.04-gems-
 
       - name: Setup
         uses: ./.github/actions/setup
@@ -459,7 +459,7 @@ jobs:
           bundle exec rake jasmine:ci
 
   cucumber-admin:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
 
     services:
       postgres:
@@ -489,9 +489,9 @@ jobs:
         uses: actions/cache@v4
         with:
           path: vendor/bundle
-          key: ubuntu-22.04-gems-${{ hashFiles('/Gemfile.lock') }}
+          key: ubuntu-24.04-gems-${{ hashFiles('/Gemfile.lock') }}
           restore-keys: |
-            ubuntu-22.04-gems-
+            ubuntu-24.04-gems-
 
       - name: Setup
         uses: ./.github/actions/setup
@@ -524,7 +524,7 @@ jobs:
           bundle exec rake cucumber
 
   cucumber-public:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
 
     services:
       postgres:
@@ -554,9 +554,9 @@ jobs:
         uses: actions/cache@v4
         with:
           path: vendor/bundle
-          key: ubuntu-22.04-gems-${{ hashFiles('/Gemfile.lock') }}
+          key: ubuntu-24.04-gems-${{ hashFiles('/Gemfile.lock') }}
           restore-keys: |
-            ubuntu-22.04-gems-
+            ubuntu-24.04-gems-
 
       - name: Setup
         uses: ./.github/actions/setup
