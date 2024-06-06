@@ -1,4 +1,4 @@
-FROM ruby:3.0-bullseye
+FROM ruby:3.2-bullseye
 
 ENV BUNDLE_PATH=/bundle
 
