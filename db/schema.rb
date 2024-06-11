@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_05_31_162307) do
+ActiveRecord::Schema[7.1].define(version: 2024_06_11_085936) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "intarray"
   enable_extension "plpgsql"
