@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_06_11_085936) do
+ActiveRecord::Schema[7.1].define(version: 2024_06_11_131029) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "intarray"
   enable_extension "plpgsql"
@@ -67,7 +67,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_06_11_085936) do
   end
 
   create_table "archived_debate_outcomes", id: :serial, force: :cascade do |t|
-    t.integer "petition_id", null: false
+    t.bigint "petition_id", null: false
     t.date "debated_on"
     t.string "transcript_url", limit: 500
     t.string "video_url", limit: 500
@@ -88,7 +88,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_06_11_085936) do
   end
 
   create_table "archived_government_responses", id: :serial, force: :cascade do |t|
-    t.integer "petition_id"
+    t.bigint "petition_id"
     t.string "summary", limit: 500, null: false
     t.text "details"
     t.datetime "created_at", precision: nil, null: false
@@ -99,7 +99,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_06_11_085936) do
   end
 
   create_table "archived_notes", id: :serial, force: :cascade do |t|
-    t.integer "petition_id"
+    t.bigint "petition_id"
     t.text "details"
     t.datetime "created_at", precision: nil, null: false
     t.datetime "updated_at", precision: nil, null: false
@@ -107,7 +107,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_06_11_085936) do
   end
 
   create_table "archived_petition_emails", id: :serial, force: :cascade do |t|
-    t.integer "petition_id"
+    t.bigint "petition_id"
     t.string "subject", null: false
     t.text "body"
     t.string "sent_by"
@@ -190,7 +190,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_06_11_085936) do
   end
 
   create_table "archived_rejections", id: :serial, force: :cascade do |t|
-    t.integer "petition_id"
+    t.bigint "petition_id"
     t.string "code", limit: 50, null: false
     t.text "details"
     t.datetime "created_at", precision: nil, null: false
@@ -272,7 +272,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_06_11_085936) do
 
   create_table "constituency_petition_journals", id: :serial, force: :cascade do |t|
     t.string "constituency_id", null: false
-    t.integer "petition_id", null: false
+    t.bigint "petition_id", null: false
     t.integer "signature_count", default: 0, null: false
     t.datetime "created_at", precision: nil, null: false
     t.datetime "updated_at", precision: nil, null: false
@@ -281,7 +281,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_06_11_085936) do
   end
 
   create_table "country_petition_journals", id: :serial, force: :cascade do |t|
-    t.integer "petition_id", null: false
+    t.bigint "petition_id", null: false
     t.integer "signature_count", default: 0, null: false
     t.datetime "created_at", precision: nil, null: false
     t.datetime "updated_at", precision: nil, null: false
@@ -291,7 +291,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_06_11_085936) do
   end
 
   create_table "debate_outcomes", id: :serial, force: :cascade do |t|
-    t.integer "petition_id", null: false
+    t.bigint "petition_id", null: false
     t.date "debated_on"
     t.string "transcript_url", limit: 500
     t.string "video_url", limit: 500
@@ -354,7 +354,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_06_11_085936) do
   end
 
   create_table "email_requested_receipts", id: :serial, force: :cascade do |t|
-    t.integer "petition_id"
+    t.bigint "petition_id"
     t.datetime "government_response", precision: nil
     t.datetime "debate_outcome", precision: nil
     t.datetime "created_at", precision: nil, null: false
@@ -376,7 +376,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_06_11_085936) do
   end
 
   create_table "government_responses", id: :serial, force: :cascade do |t|
-    t.integer "petition_id"
+    t.bigint "petition_id"
     t.string "summary", limit: 500, null: false
     t.text "details"
     t.datetime "created_at", precision: nil, null: false
@@ -398,7 +398,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_06_11_085936) do
   create_table "invalidations", id: :serial, force: :cascade do |t|
     t.string "summary", limit: 255, null: false
     t.string "details", limit: 10000
-    t.integer "petition_id"
+    t.bigint "petition_id"
     t.string "name", limit: 255
     t.string "postcode", limit: 255
     t.string "ip_address", limit: 20
@@ -440,7 +440,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_06_11_085936) do
   end
 
   create_table "notes", id: :serial, force: :cascade do |t|
-    t.integer "petition_id"
+    t.bigint "petition_id"
     t.text "details"
     t.datetime "created_at", precision: nil, null: false
     t.datetime "updated_at", precision: nil, null: false
@@ -478,7 +478,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_06_11_085936) do
   end
 
   create_table "petition_emails", id: :serial, force: :cascade do |t|
-    t.integer "petition_id"
+    t.bigint "petition_id"
     t.string "subject", null: false
     t.text "body"
     t.string "sent_by"
@@ -500,7 +500,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_06_11_085936) do
   end
 
   create_table "petition_statistics", id: :serial, force: :cascade do |t|
-    t.integer "petition_id"
+    t.bigint "petition_id"
     t.datetime "refreshed_at", precision: nil
     t.integer "duplicate_emails"
     t.datetime "created_at", precision: nil
@@ -510,7 +510,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_06_11_085936) do
     t.index ["petition_id"], name: "index_petition_statistics_on_petition_id", unique: true
   end
 
-  create_table "petitions", id: :serial, force: :cascade do |t|
+  create_table "petitions", force: :cascade do |t|
     t.string "action", limit: 255, null: false
     t.text "additional_details"
     t.string "state", limit: 10, default: "pending", null: false
@@ -631,7 +631,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_06_11_085936) do
   end
 
   create_table "rejections", id: :serial, force: :cascade do |t|
-    t.integer "petition_id"
+    t.bigint "petition_id"
     t.string "code", limit: 50, null: false
     t.text "details"
     t.datetime "created_at", precision: nil, null: false
@@ -639,13 +639,13 @@ ActiveRecord::Schema[7.1].define(version: 2024_06_11_085936) do
     t.index ["petition_id"], name: "index_rejections_on_petition_id", unique: true
   end
 
-  create_table "signatures", id: :serial, force: :cascade do |t|
+  create_table "signatures", force: :cascade do |t|
     t.string "name", limit: 255, null: false
     t.string "state", limit: 20, default: "pending", null: false
     t.string "perishable_token", limit: 255
     t.string "postcode", limit: 255
     t.string "ip_address", limit: 20
-    t.integer "petition_id"
+    t.bigint "petition_id"
     t.datetime "created_at", precision: nil
     t.datetime "updated_at", precision: nil
     t.boolean "notify_by_email", default: false
@@ -754,7 +754,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_06_11_085936) do
   end
 
   create_table "trending_domains", id: :serial, force: :cascade do |t|
-    t.integer "petition_id"
+    t.bigint "petition_id"
     t.string "domain", limit: 100, null: false
     t.integer "count", null: false
     t.datetime "starts_at", precision: nil, null: false
@@ -766,7 +766,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_06_11_085936) do
   end
 
   create_table "trending_ips", id: :serial, force: :cascade do |t|
-    t.integer "petition_id"
+    t.bigint "petition_id"
     t.inet "ip_address", null: false
     t.string "country_code", limit: 30, null: false
     t.integer "count", null: false
