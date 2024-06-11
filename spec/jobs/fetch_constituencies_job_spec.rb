@@ -4,7 +4,7 @@ RSpec.describe FetchConstituenciesJob, type: :job do
   let(:url) { "http://data.parliament.uk/membersdataplatform/open/OData.svc" }
   let(:constituency_api) { "#{url}/Constituencies?$filter=(EndDate%20gt%20datetime'2015-05-07')%20or%20(EndDate%20eq%20null)&$orderby=ONSCode&$select=Constituency_Id,Name,ONSCode,StartDate,EndDate" }
   let(:stub_constituency_api) { stub_request(:get, constituency_api) }
-  let(:member_api) { "#{url}/Members?$filter=(CurrentStatusActive%20eq%20true)%20and%20(House_Id%20eq%201)&$orderby=Member_id&$select=Member_Id,NameFullTitle,Party,MembershipFrom_Id,StartDate" }
+  let(:member_api) { "#{url}/Members?$filter=(CurrentStatusActive%20eq%20true)%20and%20(House_Id%20eq%201)&$orderby=Member_Id&$select=Member_Id,NameFullTitle,Party,MembershipFrom_Id,StartDate" }
   let(:stub_member_api) { stub_request(:get, member_api) }
   let(:regions_api) { "#{url}/ConstituencyAreas?$filter=(Area/AreaType_Id%20eq%208)%20and%20((Constituency/EndDate%20gt%20datetime'2015-05-07')%20or%20(Constituency/EndDate%20eq%20null))&$orderby=Area_Id,Constituency_Id&$select=Area_Id,Constituency_Id"}
   let(:stub_regions_api) { stub_request(:get, regions_api) }
