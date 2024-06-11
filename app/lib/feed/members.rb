@@ -11,7 +11,7 @@ module Feed
     self.model   = "Members"
     self.columns = "Member_Id,NameFullTitle,Party,MembershipFrom_Id,StartDate"
     self.filter  = "(CurrentStatusActive eq true) and (House_Id eq 1)"
-    self.orderby = "Member_id"
+    self.orderby = "Member_Id"
     self.klass   = Member
   end
 end
