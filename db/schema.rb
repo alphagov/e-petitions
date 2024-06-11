@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_06_11_085936) do
+ActiveRecord::Schema[7.1].define(version: 2024_06_11_093449) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "intarray"
   enable_extension "plpgsql"
@@ -43,7 +43,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_06_11_085936) do
     t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
   end
 
-  create_table "admin_users", id: :serial, force: :cascade do |t|
+  create_table "admin_users", force: :cascade do |t|
     t.string "email", limit: 255, null: false
     t.string "persistence_token", limit: 255
     t.string "encrypted_password", limit: 255
@@ -66,8 +66,8 @@ ActiveRecord::Schema[7.1].define(version: 2024_06_11_085936) do
     t.index ["last_name", "first_name"], name: "index_admin_users_on_last_name_and_first_name"
   end
 
-  create_table "archived_debate_outcomes", id: :serial, force: :cascade do |t|
-    t.integer "petition_id", null: false
+  create_table "archived_debate_outcomes", force: :cascade do |t|
+    t.bigint "petition_id", null: false
     t.date "debated_on"
     t.string "transcript_url", limit: 500
     t.string "video_url", limit: 500
@@ -87,8 +87,8 @@ ActiveRecord::Schema[7.1].define(version: 2024_06_11_085936) do
     t.index ["updated_at"], name: "index_archived_debate_outcomes_on_updated_at"
   end
 
-  create_table "archived_government_responses", id: :serial, force: :cascade do |t|
-    t.integer "petition_id"
+  create_table "archived_government_responses", force: :cascade do |t|
+    t.bigint "petition_id"
     t.string "summary", limit: 500, null: false
     t.text "details"
     t.datetime "created_at", precision: nil, null: false
@@ -98,16 +98,16 @@ ActiveRecord::Schema[7.1].define(version: 2024_06_11_085936) do
     t.index ["updated_at"], name: "index_archived_government_responses_on_updated_at"
   end
 
-  create_table "archived_notes", id: :serial, force: :cascade do |t|
-    t.integer "petition_id"
+  create_table "archived_notes", force: :cascade do |t|
+    t.bigint "petition_id"
     t.text "details"
     t.datetime "created_at", precision: nil, null: false
     t.datetime "updated_at", precision: nil, null: false
     t.index ["petition_id"], name: "index_archived_notes_on_petition_id", unique: true
   end
 
-  create_table "archived_petition_emails", id: :serial, force: :cascade do |t|
-    t.integer "petition_id"
+  create_table "archived_petition_emails", force: :cascade do |t|
+    t.bigint "petition_id"
     t.string "subject", null: false
     t.text "body"
     t.string "sent_by"
@@ -118,7 +118,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_06_11_085936) do
     t.index ["petition_id"], name: "index_archived_petition_emails_on_petition_id"
   end
 
-  create_table "archived_petition_mailshots", id: :serial, force: :cascade do |t|
+  create_table "archived_petition_mailshots", force: :cascade do |t|
     t.bigint "petition_id"
     t.string "subject", null: false
     t.text "body"
@@ -128,14 +128,14 @@ ActiveRecord::Schema[7.1].define(version: 2024_06_11_085936) do
     t.index ["petition_id"], name: "index_archived_petition_mailshots_on_petition_id"
   end
 
-  create_table "archived_petitions", id: :serial, force: :cascade do |t|
+  create_table "archived_petitions", force: :cascade do |t|
     t.string "state", limit: 10, default: "closed", null: false
     t.datetime "opened_at", precision: nil
     t.datetime "closed_at", precision: nil
     t.integer "signature_count", default: 0
     t.datetime "created_at", precision: nil, null: false
     t.datetime "updated_at", precision: nil, null: false
-    t.integer "parliament_id", null: false
+    t.bigint "parliament_id", null: false
     t.string "action", limit: 255
     t.string "background", limit: 300
     t.text "additional_details"
@@ -158,12 +158,12 @@ ActiveRecord::Schema[7.1].define(version: 2024_06_11_085936) do
     t.datetime "email_requested_for_petition_email_at", precision: nil
     t.integer "tags", default: [], null: false, array: true
     t.datetime "locked_at", precision: nil
-    t.integer "locked_by_id"
+    t.bigint "locked_by_id"
     t.integer "moderation_lag"
     t.text "committee_note"
     t.integer "departments", default: [], null: false, array: true
     t.datetime "anonymized_at", precision: nil
-    t.integer "moderated_by_id"
+    t.bigint "moderated_by_id"
     t.integer "topics", default: [], null: false, array: true
     t.datetime "email_requested_for_petition_mailshot_at", precision: nil
     t.boolean "do_not_anonymize"
@@ -189,8 +189,8 @@ ActiveRecord::Schema[7.1].define(version: 2024_06_11_085936) do
     t.index ["topics"], name: "index_archived_petitions_on_topics", opclass: :gin__int_ops, using: :gin
   end
 
-  create_table "archived_rejections", id: :serial, force: :cascade do |t|
-    t.integer "petition_id"
+  create_table "archived_rejections", force: :cascade do |t|
+    t.bigint "petition_id"
     t.string "code", limit: 50, null: false
     t.text "details"
     t.datetime "created_at", precision: nil, null: false
@@ -198,13 +198,13 @@ ActiveRecord::Schema[7.1].define(version: 2024_06_11_085936) do
     t.index ["petition_id"], name: "index_archived_rejections_on_petition_id", unique: true
   end
 
-  create_table "archived_signatures", id: :serial, force: :cascade do |t|
+  create_table "archived_signatures", force: :cascade do |t|
     t.string "name", limit: 255, null: false
     t.string "state", limit: 20, default: "pending", null: false
     t.string "perishable_token", limit: 255
     t.string "postcode", limit: 255
     t.string "ip_address", limit: 20
-    t.integer "petition_id"
+    t.bigint "petition_id"
     t.datetime "created_at", precision: nil
     t.datetime "updated_at", precision: nil
     t.boolean "notify_by_email", default: false
@@ -215,7 +215,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_06_11_085936) do
     t.integer "number"
     t.string "location_code", limit: 30
     t.datetime "invalidated_at", precision: nil
-    t.integer "invalidation_id"
+    t.bigint "invalidation_id"
     t.datetime "government_response_email_at", precision: nil
     t.datetime "debate_scheduled_email_at", precision: nil
     t.datetime "debate_outcome_email_at", precision: nil
@@ -250,7 +250,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_06_11_085936) do
     t.index ["validated_at"], name: "index_archived_signatures_on_validated_at"
   end
 
-  create_table "constituencies", id: :serial, force: :cascade do |t|
+  create_table "constituencies", force: :cascade do |t|
     t.string "name", limit: 100, null: false
     t.string "slug", limit: 100, null: false
     t.string "external_id", limit: 30, null: false
@@ -270,9 +270,9 @@ ActiveRecord::Schema[7.1].define(version: 2024_06_11_085936) do
     t.index ["slug"], name: "index_constituencies_on_slug", unique: true, where: "(end_date IS NULL)"
   end
 
-  create_table "constituency_petition_journals", id: :serial, force: :cascade do |t|
+  create_table "constituency_petition_journals", force: :cascade do |t|
     t.string "constituency_id", null: false
-    t.integer "petition_id", null: false
+    t.bigint "petition_id", null: false
     t.integer "signature_count", default: 0, null: false
     t.datetime "created_at", precision: nil, null: false
     t.datetime "updated_at", precision: nil, null: false
@@ -280,8 +280,8 @@ ActiveRecord::Schema[7.1].define(version: 2024_06_11_085936) do
     t.index ["petition_id", "constituency_id"], name: "idx_constituency_petition_journal_uniqueness", unique: true
   end
 
-  create_table "country_petition_journals", id: :serial, force: :cascade do |t|
-    t.integer "petition_id", null: false
+  create_table "country_petition_journals", force: :cascade do |t|
+    t.bigint "petition_id", null: false
     t.integer "signature_count", default: 0, null: false
     t.datetime "created_at", precision: nil, null: false
     t.datetime "updated_at", precision: nil, null: false
@@ -290,8 +290,8 @@ ActiveRecord::Schema[7.1].define(version: 2024_06_11_085936) do
     t.index ["petition_id", "location_code"], name: "index_country_petition_journals_on_petition_and_location", unique: true
   end
 
-  create_table "debate_outcomes", id: :serial, force: :cascade do |t|
-    t.integer "petition_id", null: false
+  create_table "debate_outcomes", force: :cascade do |t|
+    t.bigint "petition_id", null: false
     t.date "debated_on"
     t.string "transcript_url", limit: 500
     t.string "video_url", limit: 500
@@ -311,7 +311,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_06_11_085936) do
     t.index ["updated_at"], name: "index_debate_outcomes_on_updated_at"
   end
 
-  create_table "delayed_jobs", id: :serial, force: :cascade do |t|
+  create_table "delayed_jobs", force: :cascade do |t|
     t.integer "priority", default: 0
     t.integer "attempts", default: 0
     t.text "handler"
@@ -342,8 +342,8 @@ ActiveRecord::Schema[7.1].define(version: 2024_06_11_085936) do
     t.datetime "updated_at", precision: nil, null: false
   end
 
-  create_table "domains", id: :serial, force: :cascade do |t|
-    t.integer "canonical_domain_id"
+  create_table "domains", force: :cascade do |t|
+    t.bigint "canonical_domain_id"
     t.string "name", limit: 100, null: false
     t.string "strip_characters", limit: 10
     t.string "strip_extension", limit: 10, default: "+"
@@ -353,8 +353,8 @@ ActiveRecord::Schema[7.1].define(version: 2024_06_11_085936) do
     t.index ["name"], name: "index_domains_on_name", unique: true
   end
 
-  create_table "email_requested_receipts", id: :serial, force: :cascade do |t|
-    t.integer "petition_id"
+  create_table "email_requested_receipts", force: :cascade do |t|
+    t.bigint "petition_id"
     t.datetime "government_response", precision: nil
     t.datetime "debate_outcome", precision: nil
     t.datetime "created_at", precision: nil, null: false
@@ -365,7 +365,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_06_11_085936) do
     t.index ["petition_id"], name: "index_email_requested_receipts_on_petition_id"
   end
 
-  create_table "feedback", id: :serial, force: :cascade do |t|
+  create_table "feedback", force: :cascade do |t|
     t.string "comment", limit: 32768, null: false
     t.string "petition_link_or_title"
     t.string "email"
@@ -375,8 +375,8 @@ ActiveRecord::Schema[7.1].define(version: 2024_06_11_085936) do
     t.index ["ip_address"], name: "index_feedback_on_ip_address"
   end
 
-  create_table "government_responses", id: :serial, force: :cascade do |t|
-    t.integer "petition_id"
+  create_table "government_responses", force: :cascade do |t|
+    t.bigint "petition_id"
     t.string "summary", limit: 500, null: false
     t.text "details"
     t.datetime "created_at", precision: nil, null: false
@@ -386,7 +386,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_06_11_085936) do
     t.index ["updated_at"], name: "index_government_responses_on_updated_at"
   end
 
-  create_table "holidays", id: :serial, force: :cascade do |t|
+  create_table "holidays", force: :cascade do |t|
     t.date "christmas_start"
     t.date "christmas_end"
     t.date "easter_start"
@@ -395,10 +395,10 @@ ActiveRecord::Schema[7.1].define(version: 2024_06_11_085936) do
     t.datetime "updated_at", precision: nil, null: false
   end
 
-  create_table "invalidations", id: :serial, force: :cascade do |t|
+  create_table "invalidations", force: :cascade do |t|
     t.string "summary", limit: 255, null: false
     t.string "details", limit: 10000
-    t.integer "petition_id"
+    t.bigint "petition_id"
     t.string "name", limit: 255
     t.string "postcode", limit: 255
     t.string "ip_address", limit: 20
@@ -427,7 +427,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_06_11_085936) do
     t.index ["started_at"], name: "index_invalidations_on_started_at"
   end
 
-  create_table "locations", id: :serial, force: :cascade do |t|
+  create_table "locations", force: :cascade do |t|
     t.string "code", limit: 30, null: false
     t.string "name", limit: 100, null: false
     t.date "start_date"
@@ -439,15 +439,15 @@ ActiveRecord::Schema[7.1].define(version: 2024_06_11_085936) do
     t.index ["start_date", "end_date"], name: "index_locations_on_start_date_and_end_date"
   end
 
-  create_table "notes", id: :serial, force: :cascade do |t|
-    t.integer "petition_id"
+  create_table "notes", force: :cascade do |t|
+    t.bigint "petition_id"
     t.text "details"
     t.datetime "created_at", precision: nil, null: false
     t.datetime "updated_at", precision: nil, null: false
     t.index ["petition_id"], name: "index_notes_on_petition_id", unique: true
   end
 
-  create_table "parliaments", id: :serial, force: :cascade do |t|
+  create_table "parliaments", force: :cascade do |t|
     t.datetime "dissolution_at", precision: nil
     t.text "dissolution_message"
     t.datetime "created_at", precision: nil, null: false
@@ -477,8 +477,8 @@ ActiveRecord::Schema[7.1].define(version: 2024_06_11_085936) do
     t.datetime "closure_scheduled_at"
   end
 
-  create_table "petition_emails", id: :serial, force: :cascade do |t|
-    t.integer "petition_id"
+  create_table "petition_emails", force: :cascade do |t|
+    t.bigint "petition_id"
     t.string "subject", null: false
     t.text "body"
     t.string "sent_by"
@@ -489,7 +489,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_06_11_085936) do
     t.index ["petition_id"], name: "index_petition_emails_on_petition_id"
   end
 
-  create_table "petition_mailshots", id: :serial, force: :cascade do |t|
+  create_table "petition_mailshots", force: :cascade do |t|
     t.bigint "petition_id"
     t.string "subject", null: false
     t.text "body"
@@ -499,8 +499,8 @@ ActiveRecord::Schema[7.1].define(version: 2024_06_11_085936) do
     t.index ["petition_id"], name: "index_petition_mailshots_on_petition_id"
   end
 
-  create_table "petition_statistics", id: :serial, force: :cascade do |t|
-    t.integer "petition_id"
+  create_table "petition_statistics", force: :cascade do |t|
+    t.bigint "petition_id"
     t.datetime "refreshed_at", precision: nil
     t.integer "duplicate_emails"
     t.datetime "created_at", precision: nil
@@ -510,7 +510,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_06_11_085936) do
     t.index ["petition_id"], name: "index_petition_statistics_on_petition_id", unique: true
   end
 
-  create_table "petitions", id: :serial, force: :cascade do |t|
+  create_table "petitions", force: :cascade do |t|
     t.string "action", limit: 255, null: false
     t.text "additional_details"
     t.string "state", limit: 10, default: "pending", null: false
@@ -537,14 +537,14 @@ ActiveRecord::Schema[7.1].define(version: 2024_06_11_085936) do
     t.datetime "archiving_started_at", precision: nil
     t.integer "tags", default: [], null: false, array: true
     t.datetime "locked_at", precision: nil
-    t.integer "locked_by_id"
+    t.bigint "locked_by_id"
     t.integer "moderation_lag"
     t.datetime "signature_count_reset_at", precision: nil
     t.datetime "signature_count_validated_at", precision: nil
     t.text "committee_note"
     t.integer "departments", default: [], null: false, array: true
     t.datetime "anonymized_at", precision: nil
-    t.integer "moderated_by_id"
+    t.bigint "moderated_by_id"
     t.integer "deadline_extension", default: 0, null: false
     t.integer "topics", default: [], null: false, array: true
     t.boolean "do_not_anonymize"
@@ -582,7 +582,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_06_11_085936) do
     t.datetime "ignore_petitions_before", precision: nil, null: false
   end
 
-  create_table "rate_limits", id: :serial, force: :cascade do |t|
+  create_table "rate_limits", force: :cascade do |t|
     t.integer "burst_rate", default: 1, null: false
     t.integer "burst_period", default: 60, null: false
     t.integer "sustained_rate", default: 5, null: false
@@ -608,7 +608,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_06_11_085936) do
     t.integer "feedback_rate", default: 2, null: false
   end
 
-  create_table "regions", id: :serial, force: :cascade do |t|
+  create_table "regions", force: :cascade do |t|
     t.string "external_id", limit: 30, null: false
     t.string "name", limit: 50, null: false
     t.string "ons_code", limit: 10, null: false
@@ -619,7 +619,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_06_11_085936) do
     t.index ["ons_code"], name: "index_regions_on_ons_code", unique: true
   end
 
-  create_table "rejection_reasons", id: :serial, force: :cascade do |t|
+  create_table "rejection_reasons", force: :cascade do |t|
     t.string "code", limit: 30, null: false
     t.string "title", limit: 100, null: false
     t.string "description", limit: 2000, null: false
@@ -630,8 +630,8 @@ ActiveRecord::Schema[7.1].define(version: 2024_06_11_085936) do
     t.index ["title"], name: "index_rejection_reasons_on_title", unique: true
   end
 
-  create_table "rejections", id: :serial, force: :cascade do |t|
-    t.integer "petition_id"
+  create_table "rejections", force: :cascade do |t|
+    t.bigint "petition_id"
     t.string "code", limit: 50, null: false
     t.text "details"
     t.datetime "created_at", precision: nil, null: false
@@ -639,13 +639,13 @@ ActiveRecord::Schema[7.1].define(version: 2024_06_11_085936) do
     t.index ["petition_id"], name: "index_rejections_on_petition_id", unique: true
   end
 
-  create_table "signatures", id: :serial, force: :cascade do |t|
+  create_table "signatures", force: :cascade do |t|
     t.string "name", limit: 255, null: false
     t.string "state", limit: 20, default: "pending", null: false
     t.string "perishable_token", limit: 255
     t.string "postcode", limit: 255
     t.string "ip_address", limit: 20
-    t.integer "petition_id"
+    t.bigint "petition_id"
     t.datetime "created_at", precision: nil
     t.datetime "updated_at", precision: nil
     t.boolean "notify_by_email", default: false
@@ -657,7 +657,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_06_11_085936) do
     t.boolean "seen_signed_confirmation_page", default: false, null: false
     t.string "location_code", limit: 30
     t.datetime "invalidated_at", precision: nil
-    t.integer "invalidation_id"
+    t.bigint "invalidation_id"
     t.datetime "government_response_email_at", precision: nil
     t.datetime "debate_scheduled_email_at", precision: nil
     t.datetime "debate_outcome_email_at", precision: nil
@@ -699,7 +699,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_06_11_085936) do
     t.index ["validated_at"], name: "index_signatures_on_validated_at"
   end
 
-  create_table "sites", id: :serial, force: :cascade do |t|
+  create_table "sites", force: :cascade do |t|
     t.string "title", limit: 50, default: "Petition parliament", null: false
     t.string "url", limit: 50, default: "https://petition.parliament.uk", null: false
     t.string "email_from", limit: 100, default: "\"Petitions: UK Government and Parliament\" <no-reply@petition.parliament.uk>", null: false
@@ -737,7 +737,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_06_11_085936) do
     t.index ["name"], name: "index_tags_on_name", unique: true
   end
 
-  create_table "tasks", id: :serial, force: :cascade do |t|
+  create_table "tasks", force: :cascade do |t|
     t.string "name", limit: 60, null: false
     t.datetime "created_at", precision: nil, null: false
     t.datetime "updated_at", precision: nil, null: false
@@ -753,8 +753,8 @@ ActiveRecord::Schema[7.1].define(version: 2024_06_11_085936) do
     t.index ["name"], name: "index_topics_on_name", unique: true
   end
 
-  create_table "trending_domains", id: :serial, force: :cascade do |t|
-    t.integer "petition_id"
+  create_table "trending_domains", force: :cascade do |t|
+    t.bigint "petition_id"
     t.string "domain", limit: 100, null: false
     t.integer "count", null: false
     t.datetime "starts_at", precision: nil, null: false
@@ -765,8 +765,8 @@ ActiveRecord::Schema[7.1].define(version: 2024_06_11_085936) do
     t.index ["petition_id"], name: "index_trending_domains_on_petition_id"
   end
 
-  create_table "trending_ips", id: :serial, force: :cascade do |t|
-    t.integer "petition_id"
+  create_table "trending_ips", force: :cascade do |t|
+    t.bigint "petition_id"
     t.inet "ip_address", null: false
     t.string "country_code", limit: 30, null: false
     t.integer "count", null: false
