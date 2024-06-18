@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_06_11_093449) do
+ActiveRecord::Schema[7.1].define(version: 2024_06_15_110144) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "intarray"
   enable_extension "plpgsql"
@@ -270,7 +270,15 @@ ActiveRecord::Schema[7.1].define(version: 2024_06_11_093449) do
     t.index ["slug"], name: "index_constituencies_on_slug", unique: true, where: "(end_date IS NULL)"
   end
 
-  create_table "constituency_petition_journals", force: :cascade do |t|
+  create_table "constituencies_parliaments", id: false, force: :cascade do |t|
+    t.bigint "constituency_id", null: false
+    t.bigint "parliament_id", null: false
+    t.string "constituency_external_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "constituency_petition_journals", id: :serial, force: :cascade do |t|
     t.string "constituency_id", null: false
     t.bigint "petition_id", null: false
     t.integer "signature_count", default: 0, null: false
@@ -475,6 +483,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_06_11_093449) do
     t.string "parliamentary_debate_status"
     t.datetime "dissolution_emails_sent_at"
     t.datetime "closure_scheduled_at"
+    t.string "period"
   end
 
   create_table "petition_emails", force: :cascade do |t|
@@ -797,6 +806,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_06_11_093449) do
   add_foreign_key "email_requested_receipts", "petitions"
   add_foreign_key "government_responses", "petitions", on_delete: :cascade
   add_foreign_key "notes", "petitions", on_delete: :cascade
+  add_foreign_key "parliament_constituencies", "parliaments"
   add_foreign_key "petition_emails", "petitions", on_delete: :cascade
   add_foreign_key "petition_mailshots", "petitions"
   add_foreign_key "petition_statistics", "petitions"
