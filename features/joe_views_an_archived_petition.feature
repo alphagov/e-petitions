@@ -9,7 +9,7 @@ Feature: Joe views an archived petition
     Then I should see the petition details
     And I should see "Spend more money on Defence - Petitions" in the browser page title
     And I should see the vote count, closed and open dates
-    And I should see "This petition was submitted during the 2010–2015 Conservative - Liberal Democrat coalition government"
+    And I should see "This petition was submitted during the 2010-2015 Conservative - Liberal Democrat coalition government"
 
   Scenario: Joe views an archived petition at the old url and is redirected
     Given an archived petition "Spend more money on Defence"
@@ -17,7 +17,7 @@ Feature: Joe views an archived petition
     Then I should be redirected to the archived url
     And I should see "Spend more money on Defence - Petitions" in the browser page title
     And I should see the vote count, closed and open dates
-    And I should see "This petition was submitted during the 2010–2015 Conservative - Liberal Democrat coalition government"
+    And I should see "This petition was submitted during the 2010-2015 Conservative - Liberal Democrat coalition government"
 
   Scenario: Joe views an archived petition containing urls, email addresses and html tags
     Given an archived petition exists with action: "Defence review", background: "<i>We<i> like http://www.google.com and bambi@gmail.com"
@@ -52,7 +52,7 @@ Feature: Joe views an archived petition
   Scenario: Joe sees a 'closed' message when viewing an archived petition
     Given an archived petition "Spend more money on Defence"
     When I view the petition
-    Then I should see "This petition was submitted during the 2010–2015 Conservative - Liberal Democrat coalition government"
+    Then I should see "This petition was submitted during the 2010-2015 Conservative - Liberal Democrat coalition government"
 
   Scenario: Joe sees information about the outcomes when viewing a debated archived petition
     Given an archived petition "Ban Badger Baiting" has been debated 2 days ago

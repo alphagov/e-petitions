@@ -29,6 +29,8 @@ class FetchConstituenciesJob < ApplicationJob
           end
 
           constituency.save!
+
+          update_constituencies_parliaments(constituency)
         end
       rescue ActiveRecord::RecordNotUnique => e
         retry unless retried
@@ -61,5 +63,19 @@ class FetchConstituenciesJob < ApplicationJob
 
   def example_postcodes
     @example_postcodes ||= YAML.load_file(Rails.root.join("data", "example_postcodes.yml"))
+  end
+
+  def parliaments
+    Parliament.all
+  end
+
+  def update_constituencies_parliaments(constituency)
+    parliaments.each do |parliament|
+      if constituency.intersects_parliament?(parliament)
+        ConstituenciesParliament.find_or_create_by!(constituency_id: constituency.id, parliament_id: parliament.id, constituency_external_id: constituency.external_id)
+      else
+        ConstituenciesParliament.where(constituency_id: constituency.id, parliament_id: parliament.id, constituency_external_id: constituency.external_id).destroy_all
+      end
+    end
   end
 end

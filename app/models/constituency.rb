@@ -8,6 +8,7 @@ class Constituency < ActiveRecord::Base
   belongs_to :region, primary_key: :external_id, optional: true
   has_many :signatures, primary_key: :external_id
   has_many :petitions, through: :signatures
+  has_and_belongs_to_many :parliaments
 
   validates :name, presence: true, length: { maximum: 100 }
   validates :external_id, presence: true, length: { maximum: 30 }
@@ -104,5 +105,21 @@ class Constituency < ActiveRecord::Base
 
   def to_param
     slug
+  end
+
+  def overlaps_current_parliament?(parliament)
+    end_date.nil? && parliament.dissolution_at.nil?
+  end
+  
+  def overlaps_previous_parliament_when_current?(parliament)
+    end_date.nil? && start_date < parliament.dissolution_at
+  end
+
+  def overlaps_previous_parliament_when_archived?(parliament)
+    end_date.present? && parliament.dissolution_at.present? && start_date < parliament.dissolution_at && end_date > parliament.opening_at
+  end
+
+  def intersects_parliament?(parliament)
+    overlaps_current_parliament?(parliament) || overlaps_previous_parliament_when_current?(parliament) || overlaps_previous_parliament_when_archived?(parliament)
   end
 end

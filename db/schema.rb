@@ -806,7 +806,6 @@ ActiveRecord::Schema[7.1].define(version: 2024_06_15_110144) do
   add_foreign_key "email_requested_receipts", "petitions"
   add_foreign_key "government_responses", "petitions", on_delete: :cascade
   add_foreign_key "notes", "petitions", on_delete: :cascade
-  add_foreign_key "parliament_constituencies", "parliaments"
   add_foreign_key "petition_emails", "petitions", on_delete: :cascade
   add_foreign_key "petition_mailshots", "petitions"
   add_foreign_key "petition_statistics", "petitions"

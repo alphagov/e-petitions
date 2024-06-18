@@ -4,6 +4,11 @@ Rails.application.routes.draw do
       get '/constituencies', action: 'index', as: :constituencies
     end
 
+    controller 'parliaments' do
+      get '/parliaments', action: 'index'
+      get '/parliaments/:period', action: 'show'
+    end
+
     controller 'topics' do
       get '/topics', action: 'index', as: :topics
     end

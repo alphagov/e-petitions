@@ -41,7 +41,7 @@ Given(/^a(n)? ?(archived|pending|validated|sponsored|open)? petition "([^"]*)" w
 end
 
 Given(/^an archived petition "([^"]*)"$/) do |action|
-  @parliament = FactoryBot.create(:parliament, :coalition)
+  @parliament = FactoryBot.create(:parliament, :coalition, period: "2010-2015")
   @petition = FactoryBot.create(:archived_petition, :closed, parliament: @parliament, action: action)
 end
 
@@ -455,7 +455,7 @@ Then(/^I should see the related activity$/) do
 end
 
 Given(/^these archived petitions? exist?:?$/) do |table|
-  parliament = FactoryBot.create(:parliament, :coalition)
+  parliament = FactoryBot.create(:parliament, :coalition, period: "2010-2015")
 
   table.raw[1..-1].each do |petition|
     attributes = {

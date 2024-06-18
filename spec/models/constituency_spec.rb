@@ -324,4 +324,73 @@ RSpec.describe Constituency, type: :model do
       URL
     end
   end
+
+  describe "#overlaps_current_parliament?(parliament)" do
+    let(:constituency) { FactoryBot.build(:constituency, end_date: "2024/05/29") }
+    let(:parliament) { FactoryBot.build(:parliament, opening_at: "2024/05/30") }
+
+    it "returns false" do
+      expect(constituency.overlaps_current_parliament?(parliament)).to be_falsey
+    end
+  end
+
+  describe "#overlaps_previous_parliament_when_current?(parliament)" do
+    context "the constituency is current and started before previous parliament ended" do
+      let(:constituency) { FactoryBot.build(:constituency, start_date: "2022/07/29") }
+      let(:parliament) { FactoryBot.build(:parliament, :dissolved, opening_at: "2022/05/30", dissolution_at: "2023/05/30") }
+
+      it "returns true when the start date falls within the parliamentary period" do
+        expect(constituency.overlaps_previous_parliament_when_current?(parliament)).to be_truthy
+      end
+    end
+
+    context "the constituency is current and started after previous parliament ended" do
+      let(:constituency) { FactoryBot.build(:constituency, start_date: "2023/07/29") }
+      let(:parliament) { FactoryBot.build(:parliament, :dissolved, opening_at: "2022/05/30", dissolution_at: "2023/05/30") }
+
+      it "returns false when the start date does not fall within the parliamentary period" do
+        expect(constituency.overlaps_previous_parliament_when_current?(parliament)).to be_falsey
+      end
+    end
+  end
+
+  describe "#overlaps_previous_parliament_when_archived?(parliament)" do
+    context "the constituency is archived and ended before previous parliament started" do
+      let(:constituency) { FactoryBot.build(:constituency, start_date: "2021/05/29", end_date: "2022/05/29") }
+      let(:parliament) { FactoryBot.build(:parliament, :dissolved, opening_at: "2022/05/30", dissolution_at: "2023/05/30") }
+
+      it "returns false with an earlier end date" do
+        expect(constituency.overlaps_previous_parliament_when_archived?(parliament)).to be_falsey
+      end
+    end
+
+    context "the constituency is archived and ended after previous parliament started" do
+      let(:constituency) { FactoryBot.build(:constituency, start_date: "2021/05/29", end_date: "2022/06/29") }
+      let(:parliament) { FactoryBot.build(:parliament, :dissolved, opening_at: "2022/05/30", dissolution_at: "2023/05/30") }
+
+      it "returns true with a later end date" do
+        expect(constituency.overlaps_previous_parliament_when_archived?(parliament)).to be_truthy
+      end
+    end
+  end
+
+  describe "#intersects_parliament?(parliament)" do
+  context "the constituency is current and the parliament is current" do
+    let(:constituency) { FactoryBot.build(:constituency, start_date: "2021/05/29") }
+    let(:parliament) { FactoryBot.build(:parliament, opening_at: "2022/05/30") }
+
+    it "returns true if both are current" do
+      expect(constituency.intersects_parliament?(parliament)).to be_truthy
+    end
+  end
+
+  context "the constituency is current and the parliament is archived" do
+    let(:constituency) { FactoryBot.build(:constituency, start_date: "2024/05/29") }
+    let(:parliament) { FactoryBot.build(:parliament, :dissolved, opening_at: "2022/05/30", dissolution_at: "2023/05/30") }
+
+    it "returns false if constituency starts after parliament is dissolved" do
+      expect(constituency.intersects_parliament?(parliament)).to be_falsey
+    end
+  end
+end
 end
