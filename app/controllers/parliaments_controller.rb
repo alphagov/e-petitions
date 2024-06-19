@@ -1,8 +1,8 @@
 class ParliamentsController < ApplicationController
-  before_action :set_cors_headers, only: [:index], if: :json_request?
+  before_action :set_cors_headers, if: :json_request?
 
   def index
-    @parliaments = Parliament.order(:period)
+    @parliaments = Parliament.archived.order(:period)
 
     respond_to do |format|
       format.json
@@ -10,10 +10,10 @@ class ParliamentsController < ApplicationController
   end
 
   def show
-    @parliament = Parliament.find_by(period: params[:period])
+    @parliament = Parliament.archived.find_by!(period: params[:period])
 
     respond_to do |format|
-      format.json
+     format.json
     end
   end
 end

@@ -5,7 +5,7 @@ Rails.application.routes.draw do
     end
 
     controller 'parliaments' do
-      get '/parliaments', action: 'index'
+      get '/parliaments', action: 'index', as: :parliaments
       get '/parliaments/:period', action: 'show'
     end
 

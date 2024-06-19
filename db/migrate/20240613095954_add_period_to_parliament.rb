@@ -1,15 +1,15 @@
 class AddPeriodToParliament < ActiveRecord::Migration[7.1]
   def change
-    add_column :parliaments, :period, :string
-
-    execute <<-SQL
-    UPDATE parliaments
-    SET period = 
-    (CASE
-    WHEN opening_at IS NULL THEN EXTRACT(year FROM now()) || '-'
-    WHEN dissolution_at IS NULL THEN EXTRACT(year FROM opening_at) || '-'
-    ELSE EXTRACT(year FROM opening_at) || '-' || EXTRACT(year FROM dissolution_at)
-    END)
+    current_year = Time.now.year
+    
+    period_sql = <<-SQL
+      CASE
+        WHEN opening_at IS NULL THEN date_part('year', created_at) || '-'
+        WHEN dissolution_at IS NULL THEN date_part('year', opening_at) || '-'
+        ELSE (date_part('year', opening_at) || '-' || date_part('year', dissolution_at))
+      END
     SQL
+    
+    add_column :parliaments, :period, :virtual, type: :string, as: period_sql, stored: true
   end
 end

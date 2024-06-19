@@ -8,7 +8,8 @@ class Constituency < ActiveRecord::Base
   belongs_to :region, primary_key: :external_id, optional: true
   has_many :signatures, primary_key: :external_id
   has_many :petitions, through: :signatures
-  has_and_belongs_to_many :parliaments
+  has_many :parliament_constituencies
+  has_many :parliaments, through: :parliament_constituencies
 
   validates :name, presence: true, length: { maximum: 100 }
   validates :external_id, presence: true, length: { maximum: 30 }
@@ -93,6 +94,22 @@ class Constituency < ActiveRecord::Base
     def valid_postcode?(postcode)
       postcode.match?(POSTCODE)
     end
+
+    def for_parliament(parliament)
+      if parliament.archived? || parliament.dissolved?
+        between(parliament.opening_at, parliament.dissolution_at)
+      else
+        current
+      end
+    end
+  
+    def between(opening_at, dissolution_at)
+      where(arel_table[:start_date].lteq(opening_at).and(arel_table[:end_date].gteq(dissolution_at).or(arel_table[:end_date].eq(nil))))
+    end
+  
+    def external_ids
+      pluck(:external_id)
+    end
   end
 
   def sitting_mp?
@@ -105,21 +122,5 @@ class Constituency < ActiveRecord::Base
 
   def to_param
     slug
-  end
-
-  def overlaps_current_parliament?(parliament)
-    end_date.nil? && parliament.dissolution_at.nil?
-  end
-  
-  def overlaps_previous_parliament_when_current?(parliament)
-    end_date.nil? && start_date < parliament.dissolution_at
-  end
-
-  def overlaps_previous_parliament_when_archived?(parliament)
-    end_date.present? && parliament.dissolution_at.present? && start_date < parliament.dissolution_at && end_date > parliament.opening_at
-  end
-
-  def intersects_parliament?(parliament)
-    overlaps_current_parliament?(parliament) || overlaps_previous_parliament_when_current?(parliament) || overlaps_previous_parliament_when_archived?(parliament)
   end
 end

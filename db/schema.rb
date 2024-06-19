@@ -270,15 +270,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_06_15_110144) do
     t.index ["slug"], name: "index_constituencies_on_slug", unique: true, where: "(end_date IS NULL)"
   end
 
-  create_table "constituencies_parliaments", id: false, force: :cascade do |t|
-    t.bigint "constituency_id", null: false
-    t.bigint "parliament_id", null: false
-    t.string "constituency_external_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
-  create_table "constituency_petition_journals", id: :serial, force: :cascade do |t|
+  create_table "constituency_petition_journals", force: :cascade do |t|
     t.string "constituency_id", null: false
     t.bigint "petition_id", null: false
     t.integer "signature_count", default: 0, null: false
@@ -455,6 +447,15 @@ ActiveRecord::Schema[7.1].define(version: 2024_06_15_110144) do
     t.index ["petition_id"], name: "index_notes_on_petition_id", unique: true
   end
 
+  create_table "parliament_constituencies", force: :cascade do |t|
+    t.integer "parliament_id", null: false
+    t.string "constituency_id", limit: 30, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["constituency_id"], name: "index_parliament_constituencies_on_constituency_id"
+    t.index ["parliament_id", "constituency_id"], name: "idx_on_parliament_id_constituency_id_ced79e105b", unique: true
+  end
+
   create_table "parliaments", force: :cascade do |t|
     t.datetime "dissolution_at", precision: nil
     t.text "dissolution_message"
@@ -483,7 +484,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_06_15_110144) do
     t.string "parliamentary_debate_status"
     t.datetime "dissolution_emails_sent_at"
     t.datetime "closure_scheduled_at"
-    t.string "period"
+    t.virtual "period", type: :string, as: "\nCASE\n    WHEN (opening_at IS NULL) THEN (date_part('year'::text, created_at) || '-'::text)\n    WHEN (dissolution_at IS NULL) THEN (date_part('year'::text, opening_at) || '-'::text)\n    ELSE ((date_part('year'::text, opening_at) || '-'::text) || date_part('year'::text, dissolution_at))\nEND", stored: true
   end
 
   create_table "petition_emails", force: :cascade do |t|
@@ -806,6 +807,8 @@ ActiveRecord::Schema[7.1].define(version: 2024_06_15_110144) do
   add_foreign_key "email_requested_receipts", "petitions"
   add_foreign_key "government_responses", "petitions", on_delete: :cascade
   add_foreign_key "notes", "petitions", on_delete: :cascade
+  add_foreign_key "parliament_constituencies", "constituencies", primary_key: "external_id"
+  add_foreign_key "parliament_constituencies", "parliaments"
   add_foreign_key "petition_emails", "petitions", on_delete: :cascade
   add_foreign_key "petition_mailshots", "petitions"
   add_foreign_key "petition_statistics", "petitions"

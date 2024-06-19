@@ -36,27 +36,27 @@ RSpec.describe "API request to display parliaments", type: :request, show_except
 
   describe "data fields" do
     it "returns a list of parliaments", :skip_before_hook do
-      parliament = FactoryBot.create(:parliament, :dissolved)
-      parliament_2 = FactoryBot.create(:parliament, opening_at: "2023/05/30", period: "2023-2024")
+      parliament = FactoryBot.create(:parliament, :dissolved, opening_at: "2021/05/30", dissolution_at: "2022/06/30", period: "2021-2022", archived_at: "2022/08/30")
+      parliament_2 = FactoryBot.create(:parliament, :dissolved, opening_at: "2022/05/30", dissolution_at: "2023/06/30", period: "2023-2024", archived_at: "2023/08/30")
 
       get "/parliaments.json"
 
-      expect(JSON.parse(response.body)[JSON.parse(response.body).keys.first]).to match({"archived_at"=>nil, "debate_threshold"=>100000, "dissolution_at"=>nil, "election_date"=>nil, "government"=>"Conservative", "opening_at"=>"2023-05-30T00:00:00.000+01:00", "period"=>"2023-2024", "response_threshold"=>10000})
+      expect(JSON.parse(response.body).first).to match({"debate_threshold"=>100000, "dissolution_at"=>"2023-06-30T00:00:00.000+01:00", "government"=>"Conservative", "period"=>"2022-2023", "response_threshold"=>10000})
     end
   end
 
   describe "data fields for constituencies", :skip_before_hook do
     it "returns a list of constituencies for a specific parliament" do
-      parliament = FactoryBot.create(:parliament, opening_at: "2023/05/30", period: "2023-2024")
+      parliament = FactoryBot.create(:parliament, :dissolved, opening_at: "2021/05/30", dissolution_at: "2022/06/30", period: "2021-2022", archived_at: "2022/08/30")
       constituency = FactoryBot.create(:constituency, name: "Buckinghamshire", mp_name: "Naoma Green", ons_code: "E00000001", party: "Test Party")
       constituency_2 = FactoryBot.create(:constituency)
 
       parliament.constituencies << constituency
       parliament.constituencies << constituency_2
 
-      get "/parliaments/2023-2024.json"
+      get "/parliaments/2021-2022.json"
       
-      expect(JSON.parse(response.body)["period"]).to match("2023-2024")
+      expect(JSON.parse(response.body)["period"]).to match("2021-2022")
       expect(JSON.parse(response.body)["constituencies"].length).to match(2)
       expect(JSON.parse(response.body)["constituencies"].first).to match({"constituency"=>"Buckinghamshire", "end_date"=>nil, "mp"=>"Naoma Green", "ons_code"=>"E00000001", "party"=>"Test Party", "start_date"=>nil})
     end

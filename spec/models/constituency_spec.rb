@@ -297,6 +297,83 @@ RSpec.describe Constituency, type: :model do
     end
   end
 
+
+  describe ".for_parliament(parliament)" do
+    let(:constituency) { FactoryBot.create(:constituency, start_date: "2023/05/29", end_date: "20214/05/31") }
+    let(:constituency_2) { FactoryBot.create(:constituency, start_date: "2010/05/29", end_date: "2014/05/29") }
+    let(:constituency_3) { FactoryBot.create(:constituency, start_date: "2024/11/12") }
+    let(:constituency_4) { FactoryBot.create(:constituency, start_date: "2023/04/30", end_date: "2024/05/31") }
+    let(:constituency_5) { FactoryBot.create(:constituency, start_date: "2022/04/29") }
+    let(:current_parliament) { FactoryBot.create(:parliament, opening_at: "2024/05/30") }
+    let(:future_parliament) { FactoryBot.create(:parliament, opening_at: 1.month.from_now, dissolution_at: nil) }
+    let(:dissolved_parliament) { FactoryBot.create(:parliament, :dissolved, opening_at: "2023/05/30", dissolution_at: "2024/05/30") }
+    let(:archived_parliament) { FactoryBot.create(:parliament, :dissolved, opening_at: "2023/05/30", dissolution_at: "2024/05/30", archived_at: "2024/06/01") }
+
+    context "parliament is dissolved" do
+      it "excludes constituencies ended before parliament opened" do
+        expect(described_class.for_parliament(dissolved_parliament)).not_to include(constituency_2)
+      end
+
+      it "excludes constituencies started after parliament ended" do
+        expect(described_class.for_parliament(dissolved_parliament)).not_to include(constituency_3)
+      end
+
+      it "includes constituencies started before parliament opened and ended after dissolution" do
+        expect(described_class.for_parliament(dissolved_parliament)).to include(constituency_4)
+      end
+
+      it "includes constituencies started before parliament opened and not ended" do
+        expect(described_class.for_parliament(dissolved_parliament)).to include(constituency_5)
+      end
+    end
+
+    context "parliament is archived" do
+      it "excludes constituencies ended before parliament opened" do
+        expect(described_class.for_parliament(dissolved_parliament)).not_to include(constituency_2)
+      end
+
+      it "excludes constituencies started after parliament ended" do
+        expect(described_class.for_parliament(dissolved_parliament)).not_to include(constituency_3)
+      end
+
+      it "includes constituencies started before parliament opened and ended after dissolution" do
+        expect(described_class.for_parliament(dissolved_parliament)).to include(constituency_4)
+      end
+
+      it "includes constituencies started before parliament opened and not ended" do
+        expect(described_class.for_parliament(dissolved_parliament)).to include(constituency_5)
+      end
+    end
+
+    context "parliament is not archived and has not opened yet" do
+      it "excludes constituencies ended before parliament opened" do
+        expect(described_class.for_parliament(future_parliament)).not_to include(constituency)
+      end
+
+      it "includes constituencies started before parliament opened and not ended" do
+        expect(described_class.for_parliament(future_parliament)).to include(constituency_5)
+      end
+
+      it "includes constituencies started before parliament opened and not ended" do
+        expect(described_class.for_parliament(future_parliament)).to include(constituency_3)
+      end
+    end
+
+    context "parliament is not archived and has already opened" do
+      it "excludes constituencies ended before parliament opened" do
+        expect(described_class.for_parliament(current_parliament)).not_to include(constituency)
+      end
+
+      it "includes constituencies started before parliament opened and not ended" do
+        expect(described_class.for_parliament(current_parliament)).to include(constituency_5)
+      end
+
+      it "includes constituencies started before parliament opens and not ended" do
+        expect(described_class.for_parliament(current_parliament)).to include(constituency_3)
+      end
+    end
+  end
+
   describe "#sitting_mp?" do
     context "when the MP details are available" do
       let(:constituency) { FactoryBot.build(:constituency, mp_id: "4477", mp_name: "Harry Harpham") }
@@ -324,73 +401,4 @@ RSpec.describe Constituency, type: :model do
       URL
     end
   end
-
-  describe "#overlaps_current_parliament?(parliament)" do
-    let(:constituency) { FactoryBot.build(:constituency, end_date: "2024/05/29") }
-    let(:parliament) { FactoryBot.build(:parliament, opening_at: "2024/05/30") }
-
-    it "returns false" do
-      expect(constituency.overlaps_current_parliament?(parliament)).to be_falsey
-    end
-  end
-
-  describe "#overlaps_previous_parliament_when_current?(parliament)" do
-    context "the constituency is current and started before previous parliament ended" do
-      let(:constituency) { FactoryBot.build(:constituency, start_date: "2022/07/29") }
-      let(:parliament) { FactoryBot.build(:parliament, :dissolved, opening_at: "2022/05/30", dissolution_at: "2023/05/30") }
-
-      it "returns true when the start date falls within the parliamentary period" do
-        expect(constituency.overlaps_previous_parliament_when_current?(parliament)).to be_truthy
-      end
-    end
-
-    context "the constituency is current and started after previous parliament ended" do
-      let(:constituency) { FactoryBot.build(:constituency, start_date: "2023/07/29") }
-      let(:parliament) { FactoryBot.build(:parliament, :dissolved, opening_at: "2022/05/30", dissolution_at: "2023/05/30") }
-
-      it "returns false when the start date does not fall within the parliamentary period" do
-        expect(constituency.overlaps_previous_parliament_when_current?(parliament)).to be_falsey
-      end
-    end
-  end
-
-  describe "#overlaps_previous_parliament_when_archived?(parliament)" do
-    context "the constituency is archived and ended before previous parliament started" do
-      let(:constituency) { FactoryBot.build(:constituency, start_date: "2021/05/29", end_date: "2022/05/29") }
-      let(:parliament) { FactoryBot.build(:parliament, :dissolved, opening_at: "2022/05/30", dissolution_at: "2023/05/30") }
-
-      it "returns false with an earlier end date" do
-        expect(constituency.overlaps_previous_parliament_when_archived?(parliament)).to be_falsey
-      end
-    end
-
-    context "the constituency is archived and ended after previous parliament started" do
-      let(:constituency) { FactoryBot.build(:constituency, start_date: "2021/05/29", end_date: "2022/06/29") }
-      let(:parliament) { FactoryBot.build(:parliament, :dissolved, opening_at: "2022/05/30", dissolution_at: "2023/05/30") }
-
-      it "returns true with a later end date" do
-        expect(constituency.overlaps_previous_parliament_when_archived?(parliament)).to be_truthy
-      end
-    end
-  end
-
-  describe "#intersects_parliament?(parliament)" do
-  context "the constituency is current and the parliament is current" do
-    let(:constituency) { FactoryBot.build(:constituency, start_date: "2021/05/29") }
-    let(:parliament) { FactoryBot.build(:parliament, opening_at: "2022/05/30") }
-
-    it "returns true if both are current" do
-      expect(constituency.intersects_parliament?(parliament)).to be_truthy
-    end
-  end
-
-  context "the constituency is current and the parliament is archived" do
-    let(:constituency) { FactoryBot.build(:constituency, start_date: "2024/05/29") }
-    let(:parliament) { FactoryBot.build(:parliament, :dissolved, opening_at: "2022/05/30", dissolution_at: "2023/05/30") }
-
-    it "returns false if constituency starts after parliament is dissolved" do
-      expect(constituency.intersects_parliament?(parliament)).to be_falsey
-    end
-  end
-end
 end
