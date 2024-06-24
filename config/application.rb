@@ -90,11 +90,6 @@ module Epets
     # Reject requests with parameters containing null bytes
     config.middleware.insert_before ActionDispatch::Callbacks, RejectBadRequests
 
-    # Generate integer primary keys
-    config.generators do |generator|
-      generator.orm :active_record, primary_key_type: :serial
-    end
-
     # Don't generate system test files.
     config.generators.system_tests = nil
   end
