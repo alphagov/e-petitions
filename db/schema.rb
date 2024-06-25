@@ -448,7 +448,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_06_15_110144) do
   end
 
   create_table "parliament_constituencies", force: :cascade do |t|
-    t.integer "parliament_id", null: false
+    t.bigint "parliament_id", null: false
     t.string "constituency_id", limit: 30, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
