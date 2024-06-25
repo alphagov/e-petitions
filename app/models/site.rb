@@ -119,7 +119,11 @@ class Site < ActiveRecord::Base
     end
 
     def login_timeout
-      instance.login_timeout
+      if table_exists?
+        instance.login_timeout
+      else
+        default_login_timeout
+      end
     end
 
     def reload
