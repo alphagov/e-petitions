@@ -6,6 +6,8 @@ class Parliament < ActiveRecord::Base
   CUTOFF_DATE = Date.civil(2015, 5, 7)
 
   has_many :petitions, inverse_of: :parliament, class_name: "Archived::Petition"
+  has_many :parliament_constituencies
+  has_many :constituencies, through: :parliament_constituencies
 
   class << self
     def before_remove_const
@@ -220,12 +222,6 @@ class Parliament < ActiveRecord::Base
     end
 
     opening_at? && time.after?(opening_at)
-  end
-
-  def period
-    if opening_at? && dissolution_at?
-      "#{opening_at.year}–#{dissolution_at.year}"
-    end
   end
 
   def period?

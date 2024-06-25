@@ -297,6 +297,83 @@ RSpec.describe Constituency, type: :model do
     end
   end
 
+
+  describe ".for_parliament(parliament)" do
+    let(:constituency) { FactoryBot.create(:constituency, start_date: "2023/05/29", end_date: "20214/05/31") }
+    let(:constituency_2) { FactoryBot.create(:constituency, start_date: "2010/05/29", end_date: "2014/05/29") }
+    let(:constituency_3) { FactoryBot.create(:constituency, start_date: "2024/11/12") }
+    let(:constituency_4) { FactoryBot.create(:constituency, start_date: "2023/04/30", end_date: "2024/05/31") }
+    let(:constituency_5) { FactoryBot.create(:constituency, start_date: "2022/04/29") }
+    let(:current_parliament) { FactoryBot.create(:parliament, opening_at: "2024/05/30") }
+    let(:future_parliament) { FactoryBot.create(:parliament, opening_at: 1.month.from_now, dissolution_at: nil) }
+    let(:dissolved_parliament) { FactoryBot.create(:parliament, :dissolved, opening_at: "2023/05/30", dissolution_at: "2024/05/30") }
+    let(:archived_parliament) { FactoryBot.create(:parliament, :dissolved, opening_at: "2023/05/30", dissolution_at: "2024/05/30", archived_at: "2024/06/01") }
+
+    context "parliament is dissolved" do
+      it "excludes constituencies ended before parliament opened" do
+        expect(described_class.for_parliament(dissolved_parliament)).not_to include(constituency_2)
+      end
+
+      it "excludes constituencies started after parliament ended" do
+        expect(described_class.for_parliament(dissolved_parliament)).not_to include(constituency_3)
+      end
+
+      it "includes constituencies started before parliament opened and ended after dissolution" do
+        expect(described_class.for_parliament(dissolved_parliament)).to include(constituency_4)
+      end
+
+      it "includes constituencies started before parliament opened and not ended" do
+        expect(described_class.for_parliament(dissolved_parliament)).to include(constituency_5)
+      end
+    end
+
+    context "parliament is archived" do
+      it "excludes constituencies ended before parliament opened" do
+        expect(described_class.for_parliament(dissolved_parliament)).not_to include(constituency_2)
+      end
+
+      it "excludes constituencies started after parliament ended" do
+        expect(described_class.for_parliament(dissolved_parliament)).not_to include(constituency_3)
+      end
+
+      it "includes constituencies started before parliament opened and ended after dissolution" do
+        expect(described_class.for_parliament(dissolved_parliament)).to include(constituency_4)
+      end
+
+      it "includes constituencies started before parliament opened and not ended" do
+        expect(described_class.for_parliament(dissolved_parliament)).to include(constituency_5)
+      end
+    end
+
+    context "parliament is not archived and has not opened yet" do
+      it "excludes constituencies ended before parliament opened" do
+        expect(described_class.for_parliament(future_parliament)).not_to include(constituency)
+      end
+
+      it "includes constituencies started before parliament opened and not ended" do
+        expect(described_class.for_parliament(future_parliament)).to include(constituency_5)
+      end
+
+      it "includes constituencies started before parliament opened and not ended" do
+        expect(described_class.for_parliament(future_parliament)).to include(constituency_3)
+      end
+    end
+
+    context "parliament is not archived and has already opened" do
+      it "excludes constituencies ended before parliament opened" do
+        expect(described_class.for_parliament(current_parliament)).not_to include(constituency)
+      end
+
+      it "includes constituencies started before parliament opened and not ended" do
+        expect(described_class.for_parliament(current_parliament)).to include(constituency_5)
+      end
+
+      it "includes constituencies started before parliament opens and not ended" do
+        expect(described_class.for_parliament(current_parliament)).to include(constituency_3)
+      end
+    end
+  end
+
   describe "#sitting_mp?" do
     context "when the MP details are available" do
       let(:constituency) { FactoryBot.build(:constituency, mp_id: "4477", mp_name: "Harry Harpham") }

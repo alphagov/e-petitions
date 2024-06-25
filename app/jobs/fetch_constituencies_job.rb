@@ -37,6 +37,10 @@ class FetchConstituenciesJob < ApplicationJob
     end
   end
 
+  Parliament.all.each do |parliament|
+    parliament.constituency_ids = Constituency.for_parliament(parliament).pluck(:external_id)
+  end
+
   private
 
   def constituencies

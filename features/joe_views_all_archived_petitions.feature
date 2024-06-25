@@ -79,4 +79,4 @@ Feature: Joe views all archived petition
       | Free gig tickets          | Rejected       |
     And the markup should be valid
     When I click the CSV link
-    Then I should get a download with the filename "all-petitions-2010–2015.csv"
+    Then I should get a download with the filename "all-petitions-2010-2015.csv"
