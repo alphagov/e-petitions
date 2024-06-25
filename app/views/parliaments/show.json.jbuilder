@@ -7,8 +7,6 @@ json.attributes do
   json.debate_threshold @parliament.threshold_for_debate
 end
 json.constituencies @parliament.constituencies.each do |constituency|
-                        json.mp constituency.mp_name
-                        json.party constituency.party
                         json.constituency constituency.name
                         json.ons_code constituency.ons_code
                         json.start_date constituency.start_date

@@ -48,8 +48,8 @@ RSpec.describe "API request to display parliaments", type: :request, show_except
   describe "data fields for constituencies", :skip_before_hook do
     it "returns a list of constituencies for a specific parliament" do
       parliament = FactoryBot.create(:parliament, :dissolved, opening_at: "2021/05/30", dissolution_at: "2022/06/30", period: "2021-2022", archived_at: "2022/08/30")
-      constituency = FactoryBot.create(:constituency, name: "Buckinghamshire", mp_name: "Naoma Green", ons_code: "E00000001", party: "Test Party")
-      constituency_2 = FactoryBot.create(:constituency)
+      constituency = FactoryBot.create(:constituency, name: "Buckinghamshire", ons_code: "E00000001")
+      constituency_2 = FactoryBot.create(:constituency, name: "Aberafan")
 
       parliament.constituencies << constituency
       parliament.constituencies << constituency_2
@@ -58,7 +58,7 @@ RSpec.describe "API request to display parliaments", type: :request, show_except
       
       expect(JSON.parse(response.body)["period"]).to match("2021-2022")
       expect(JSON.parse(response.body)["constituencies"].length).to match(2)
-      expect(JSON.parse(response.body)["constituencies"].first).to match({"constituency"=>"Buckinghamshire", "end_date"=>nil, "mp"=>"Naoma Green", "ons_code"=>"E00000001", "party"=>"Test Party", "start_date"=>nil})
+      expect(JSON.parse(response.body)["constituencies"].first).to match({"constituency"=>"Buckinghamshire", "end_date"=>nil, "ons_code"=>"E00000001", "start_date"=>nil})
     end
   end
 end
