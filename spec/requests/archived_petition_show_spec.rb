@@ -72,6 +72,16 @@ RSpec.describe "API request to show an archived petition", type: :request, show_
           "updated_at" => a_string_matching(%r[\A\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z\z])
         )
       )
+
+      expect(JSON.parse(response.body)["data"]["parliament"]).to match(
+                              a_hash_including(
+                                "period" => a_string_matching(petition.parliament.period),
+                                "government" => a_string_matching(petition.parliament.government),
+                                "dissolution_at" => a_string_matching(petition.parliament.dissolution_at),
+                                "response_threshold" => a_string_matching(petition.parliament.threshold_for_response),
+                                "debate_threshold" => a_string_matching(petition.parliament.threshold_for_debate),
+                              )
+                            )
     end
 
     it "doesn't include the rejection section for non-rejected petitions" do

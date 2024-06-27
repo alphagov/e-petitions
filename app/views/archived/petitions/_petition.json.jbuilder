@@ -5,6 +5,14 @@ json.links do
   json.self archived_petition_url(petition, format: :json)
 end if defined?(is_collection)
 
+json.parliament do
+  json.period petition.parliament.period
+  json.government petition.parliament.government
+  json.dissolution_at petition.parliament.dissolution_at
+  json.response_threshold petition.parliament.threshold_for_response
+  json.debate_threshold petition.parliament.threshold_for_debate
+end
+
 json.attributes do
   json.action petition.action
   json.background petition.background
