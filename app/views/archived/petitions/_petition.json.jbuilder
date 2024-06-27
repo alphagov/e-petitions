@@ -8,6 +8,7 @@ end if defined?(is_collection)
 json.parliament do
   json.period petition.parliament.period
   json.government petition.parliament.government
+  json.dissolution_at petition.parliament.dissolution_at
   json.response_threshold petition.parliament.threshold_for_response
   json.debate_threshold petition.parliament.threshold_for_debate
 end

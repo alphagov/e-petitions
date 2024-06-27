@@ -77,6 +77,7 @@ RSpec.describe "API request to show an archived petition", type: :request, show_
                               a_hash_including(
                                 "period" => a_string_matching(petition.parliament.period),
                                 "government" => a_string_matching(petition.parliament.government),
+                                "dissolution_at" => a_string_matching(petition.parliament.dissolution_at),
                                 "response_threshold" => a_string_matching(petition.parliament.threshold_for_response),
                                 "debate_threshold" => a_string_matching(petition.parliament.threshold_for_debate),
                               )
