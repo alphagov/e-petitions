@@ -34,25 +34,25 @@ RSpec.describe AdminUser, type: :model do
     it { is_expected.not_to allow_value("jimbo").for(:email) }
 
     it "should allow sysadmin role" do
-      u = FactoryBot.build(:admin_user, :role => 'sysadmin')
+      u = FactoryBot.build(:admin_user, role: 'sysadmin')
       expect(u).to be_valid
     end
 
     it "should allow moderator role" do
-      u = FactoryBot.build(:admin_user, :role => 'moderator')
+      u = FactoryBot.build(:admin_user, role: 'moderator')
       expect(u).to be_valid
     end
 
     it "should disallow other roles" do
-      u = FactoryBot.build(:admin_user, :role => 'unheard_of')
+      u = FactoryBot.build(:admin_user, role: 'unheard_of')
       expect(u).not_to be_valid
     end
   end
 
   describe "scopes" do
     before :each do
-      @user1 = FactoryBot.create(:sysadmin_user, :first_name => 'Ronald', :last_name => 'Reagan')
-      @user2 = FactoryBot.create(:moderator_user, :first_name => 'Bill', :last_name => 'Clinton')
+      @user1 = FactoryBot.create(:sysadmin_user, first_name: 'Ronald', last_name: 'Reagan')
+      @user2 = FactoryBot.create(:moderator_user, first_name: 'Bill', last_name: 'Clinton')
     end
 
     describe ".by_name" do
@@ -97,13 +97,16 @@ RSpec.describe AdminUser, type: :model do
           )
         end
 
+        let(:auth_user1) { AdminUser.find_or_create_from!(provider, auth_data1) }
+        let(:auth_user2) { AdminUser.find_or_create_from!(provider, auth_data2) }
+
         it "creates only one new user" do
           expect {
-            AdminUser.find_or_create_from!(provider, auth_data1)
+            expect(auth_user1).to have_attributes(email: "anne.admin@example.com")
           }.to change(AdminUser, :count).by(1)
 
           expect {
-            AdminUser.find_or_create_from!(provider, auth_data2)
+            expect(auth_user2).to have_attributes(email: "anne.admin@example.com")
           }.not_to change(AdminUser, :count)
         end
       end
@@ -121,14 +124,73 @@ RSpec.describe AdminUser, type: :model do
           )
         end
 
+        let(:auth_user) { AdminUser.find_or_create_from!(provider, auth_data) }
+
         before do
           FactoryBot.create(:sysadmin_user, email: "anne.admin@example.com", first_name: "Anne", last_name: "Admin")
         end
 
         it "doesn't create a new user" do
           expect {
-            AdminUser.find_or_create_from!(provider, auth_data)
+            expect(auth_user).to have_attributes(email: "anne.admin@example.com")
           }.not_to change(AdminUser, :count)
+        end
+      end
+
+      context "when saving a user repeatedly fails" do
+        let(:auth_data) do
+          OmniAuth::AuthHash.new(
+            uid: "anne.admin@example.com",
+            provider: "example",
+            info: {
+              first_name: "Anne",
+              last_name: "Admin",
+              groups: ["sysadmins"]
+            }
+          )
+        end
+
+        let(:user) { instance_spy(AdminUser) }
+
+        before do
+          allow(AdminUser).to receive(:find_or_initialize_by).with(email: "anne.admin@example.com").and_return(user)
+          allow(user).to receive(:save!).and_raise(ActiveRecord::RecordNotUnique)
+        end
+
+        it "retries twice and returns nil" do
+          expect(AdminUser.find_or_create_from!(provider, auth_data)).to be_nil
+          expect(user).to have_received(:save!).twice
+        end
+      end
+
+      %w[sysadmin moderator reviewer].each do |role|
+        context "when a #{role} user " do
+          (%w[sysadmin moderator reviewer] - [role]).each do |new_role|
+            context "has their role changes to #{new_role}" do
+              let(:auth_data) do
+                OmniAuth::AuthHash.new(
+                  uid: user.email,
+                  provider: "example",
+                  info: {
+                    first_name: user.first_name,
+                    last_name: user.last_name,
+                    groups: [new_role.pluralize]
+                  }
+                )
+              end
+
+              let(:user) { FactoryBot.create(:admin_user, role: role, email: "anne.admin@example.com") }
+              let(:auth_user) { AdminUser.find_or_create_from!(provider, auth_data) }
+
+              it "updates the role correctly" do
+                expect {
+                  expect(auth_user).to have_attributes(email: "anne.admin@example.com")
+                }.to change {
+                  user.reload.role
+                }.from(role).to(new_role)
+              end
+            end
+          end
         end
       end
     end
@@ -177,50 +239,50 @@ RSpec.describe AdminUser, type: :model do
 
     describe "#email=" do
       it "should downcase the email address" do
-        user = FactoryBot.create(:moderator_user, :email => 'SURNAMEINITIAL@example.com')
+        user = FactoryBot.create(:moderator_user, email: 'SURNAMEINITIAL@example.com')
         expect(user.email).to eq('surnameinitial@example.com')
       end
     end
 
     describe "#name" do
       it "should return a user's name" do
-        user = FactoryBot.create(:moderator_user, :first_name => 'Jo', :last_name => 'Public')
+        user = FactoryBot.create(:moderator_user, first_name: 'Jo', last_name: 'Public')
         expect(user.name).to eq('Public, Jo')
       end
     end
 
     describe "#is_a_sysadmin?" do
       it "should return true when user is a sysadmin" do
-        user = FactoryBot.create(:admin_user, :role => 'sysadmin')
+        user = FactoryBot.create(:admin_user, role: 'sysadmin')
         expect(user.is_a_sysadmin?).to be_truthy
       end
 
       it "should return false when user is a moderator user" do
-        user = FactoryBot.create(:admin_user, :role => 'moderator')
+        user = FactoryBot.create(:admin_user, role: 'moderator')
         expect(user.is_a_sysadmin?).to be_falsey
       end
     end
 
     describe "#is_a_moderator?" do
       it "should return true when user is a moderator user" do
-        user = FactoryBot.create(:admin_user, :role => 'moderator')
+        user = FactoryBot.create(:admin_user, role: 'moderator')
         expect(user.is_a_moderator?).to be_truthy
       end
 
       it "should return false when user is a sysadmin" do
-        user = FactoryBot.create(:admin_user, :role => 'sysadmin')
+        user = FactoryBot.create(:admin_user, role: 'sysadmin')
         expect(user.is_a_moderator?).to be_falsey
       end
     end
 
     describe "#can_take_petitions_down?" do
       it "is true if the user is a sysadmin" do
-        user = FactoryBot.create(:admin_user, :role => 'sysadmin')
+        user = FactoryBot.create(:admin_user, role: 'sysadmin')
         expect(user.can_take_petitions_down?).to be_truthy
       end
 
       it "is true if the user is a moderator user" do
-        user = FactoryBot.create(:admin_user, :role => 'moderator')
+        user = FactoryBot.create(:admin_user, role: 'moderator')
         expect(user.can_take_petitions_down?).to be_truthy
       end
     end
