@@ -166,6 +166,21 @@ RSpec.describe FetchConstituenciesJob, type: :job do
         stub_constituency_api.to_return(odata_response(:ok, "constituencies"))
       end
 
+      context "when a record is duplicated" do
+        let(:constituency) { instance_spy(Constituency) }
+
+        before do
+          allow(Constituency).to receive(:find_or_initialize_by).and_call_original
+          allow(Constituency).to receive(:find_or_initialize_by).with(external_id: "3320").and_return(constituency)
+          allow(constituency).to receive(:save!).and_raise(ActiveRecord::RecordNotUnique)
+        end
+
+        it "retries twice before skipping" do
+          described_class.perform_now
+          expect(constituency).to have_received(:save!).twice
+        end
+      end
+
       context "when a record fails to save" do
         let!(:constituency) { FactoryBot.create(:constituency, :bethnal_green_and_bow) }
         let(:exception) { ActiveRecord::RecordInvalid.new(constituency) }
