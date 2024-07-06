@@ -23,43 +23,48 @@ class AdminUser < ActiveRecord::Base
     end
   end
 
-  # = Validations =
   validates :first_name, :last_name, presence: true
   validates :email, presence: true, email: true
   validates :role, presence: true, inclusion: { in: ROLES }
 
-  # = Callbacks =
   before_save :reset_persistence_token, unless: :persistence_token?
 
-  # = Finders =
   scope :by_name, -> { order(:last_name, :first_name) }
   scope :by_role, ->(role) { where(role: role).order(:id) }
 
-  # = Methods =
-  def self.timeout_in
-    Site.login_timeout.seconds
-  end
-
-  def self.find_or_create_from!(provider, auth_data)
-    email = auth_data.fetch(:uid).downcase
-
-    find_or_create_by!(email: email) do |user|
-      user.first_name = auth_data.info.fetch(:first_name)
-      user.last_name = auth_data.info.fetch(:last_name)
-      groups = Array.wrap(auth_data.info.fetch(:groups))
-
-      if (groups & provider.sysadmin).any?
-        user.role = SYSADMIN_ROLE
-      elsif (groups & provider.moderator).any?
-        user.role = MODERATOR_ROLE
-      elsif (groups & provider.reviewer).any?
-        user.role = REVIEWER_ROLE
-      end
+  class << self
+    def timeout_in
+      Site.login_timeout.seconds
     end
-  rescue ActiveRecord::RecordNotUnique => e
-    find_by!(email: email)
-  rescue ActiveRecord::RecordInvalid => e
-    Appsignal.send_exception(e) and return nil
+
+    def find_or_create_from!(provider, auth_data)
+      email = auth_data.fetch(:uid).downcase
+      groups = Array.wrap(auth_data.info.fetch(:groups))
+      retried = false
+
+      begin
+        find_or_initialize_by(email: email).tap do |user|
+          user.first_name = auth_data.info.fetch(:first_name)
+          user.last_name = auth_data.info.fetch(:last_name)
+
+          if (groups & provider.sysadmin).any?
+            user.role = SYSADMIN_ROLE
+          elsif (groups & provider.moderator).any?
+            user.role = MODERATOR_ROLE
+          elsif (groups & provider.reviewer).any?
+            user.role = REVIEWER_ROLE
+          end
+
+          user.save!
+        end
+      rescue ActiveRecord::RecordNotUnique => e
+        return nil if retried
+        retried = true
+        retry
+      end
+    rescue ActiveRecord::RecordInvalid => e
+      Appsignal.send_exception(e) and return nil
+    end
   end
 
   def reset_persistence_token
