@@ -12,6 +12,8 @@ namespace :epets do
     desc "Add a task to the queue to close petitions at midnight"
     task :close => :environment do
       Task.run("epets:petitions:close") do
+        break if Parliament.closed?(48.hours.ago)
+
         time = Date.tomorrow.beginning_of_day
         ClosePetitionsJob.set(wait_until: time).perform_later(time.iso8601)
       end
@@ -20,6 +22,8 @@ namespace :epets do
     desc "Add a task to the queue to validate petition counts"
     task :count => :environment do
       Task.run("epets:petitions:count") do
+        break if Parliament.closed?(48.hours.ago)
+
         PetitionCountJob.perform_later
       end
     end
@@ -27,6 +31,8 @@ namespace :epets do
     desc "Add a task to the queue to mark petitions as debated at midnight"
     task :debated => :environment do
       Task.run("epets:petitions:debated") do
+        break if Parliament.closed?(48.hours.ago)
+
         date = Date.tomorrow
         DebatedPetitionsJob.set(wait_until: date.beginning_of_day).perform_later(date.iso8601)
       end
@@ -35,6 +41,8 @@ namespace :epets do
     desc "Add a task to the queue to extend petition deadlines at midnight"
     task :extend_deadline => :environment do
       Task.run("epets:petitions:extend_deadline") do
+        break if Parliament.closed?(48.hours.ago)
+
         ExtendPetitionDeadlinesJob.set(wait_until: Date.tomorrow.beginning_of_day).perform_later
       end
     end
@@ -42,6 +50,8 @@ namespace :epets do
     desc "Add a task to the queue to update petition statistics"
     task :update_statistics => :environment do
       Task.run("epets:petitions:update_statistics", 12.hours) do
+        break if Parliament.closed?(48.hours.ago)
+
         EnqueuePetitionStatisticsUpdatesJob.perform_later(24.hours.ago.iso8601)
       end
     end
