@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 
 # Load environment variables
-gem 'dotenv-rails', require: 'dotenv/rails-now'
+gem 'dotenv', require: 'dotenv/load'
 
 gem 'rails', '7.1.3.4'
 

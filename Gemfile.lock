@@ -180,10 +180,7 @@ GEM
       warden (~> 1.2.3)
     diff-lcs (1.5.1)
     docile (1.4.0)
-    dotenv (2.7.6)
-    dotenv-rails (2.7.6)
-      dotenv (= 2.7.6)
-      railties (>= 3.2)
+    dotenv (3.1.2)
     drb (2.2.1)
     email_spec (2.2.2)
       htmlentities (~> 4.3.3)
@@ -498,7 +495,7 @@ DEPENDENCIES
   delayed-web
   delayed_job_active_record
   devise
-  dotenv-rails
+  dotenv
   email_spec
   factory_bot_rails
   faker
