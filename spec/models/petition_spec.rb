@@ -3425,8 +3425,8 @@ RSpec.describe Petition, type: :model do
   describe "#id" do
     let(:petition){ FactoryBot.create(:petition) }
 
-    it "is greater than or equal to 300000" do
-      expect(petition.id).to be >= 300000
+    it "is greater than or equal to 700000" do
+      expect(petition.id).to be >= 700000
     end
   end
 
