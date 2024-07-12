@@ -74,6 +74,7 @@ namespace :epets do
     desc "Start the signature count updater if it's not running"
     task :signature_counts => :environment do
       Task.run("epets:site:signature_counts", 10.minutes) do
+        break if Parliament.closed?(48.hours.ago)
         break unless Site.update_signature_counts
 
         unless Site.signature_count_updated_at > 15.minutes.ago
@@ -85,6 +86,8 @@ namespace :epets do
     desc "Track trending domains"
     task :trending_domains => :environment do
       Task.run("epets:site:trending_domains", 30.minutes) do
+        break if Parliament.closed?(48.hours.ago)
+
         TrendingDomainsByPetitionJob.perform_later
       end
     end
@@ -92,6 +95,8 @@ namespace :epets do
     desc "Track trending IP addresses"
     task :trending_ips => :environment do
       Task.run("epets:site:trending_ips", 30.minutes) do
+        break if Parliament.closed?(48.hours.ago)
+
         TrendingIpsByPetitionJob.perform_later
       end
     end

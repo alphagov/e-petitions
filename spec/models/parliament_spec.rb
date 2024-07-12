@@ -369,7 +369,7 @@ RSpec.describe Parliament, type: :model do
           FactoryBot.build(:parliament, opening_at: 2.years.ago, dissolution_at: nil)
         end
 
-        it "return false" do
+        it "returns false" do
           expect(parliament.closed?).to eq(false)
         end
       end
@@ -379,7 +379,7 @@ RSpec.describe Parliament, type: :model do
           FactoryBot.build(:parliament, opening_at: 2.years.ago, dissolution_at: 1.day.from_now)
         end
 
-        it "return false" do
+        it "returns false" do
           expect(parliament.closed?).to eq(false)
         end
       end
@@ -389,8 +389,20 @@ RSpec.describe Parliament, type: :model do
           FactoryBot.build(:parliament, opening_at: 2.years.ago, dissolution_at: 1.day.ago)
         end
 
-        it "return true" do
+        it "returns true" do
           expect(parliament.closed?).to eq(true)
+        end
+
+        context "and passed a timestamp before the dissolution time" do
+          it "returns false" do
+            expect(parliament.closed?(48.hours.ago)).to eq(false)
+          end
+        end
+
+        context "and passed a timestamp after the dissolution time" do
+          it "returns true" do
+            expect(parliament.closed?(12.hours.ago)).to eq(true)
+          end
         end
       end
     end
@@ -400,7 +412,7 @@ RSpec.describe Parliament, type: :model do
         FactoryBot.build(:parliament, opening_at: nil, dissolution_at: nil)
       end
 
-      it "return true" do
+      it "returns true" do
         expect(parliament.closed?).to eq(true)
       end
     end
