@@ -21,6 +21,10 @@ jobs:
       with:
         ruby-version: "3.0"
 
+    - name: Update package list
+      run: |
+        sudo apt-get update
+
     - name: Install postgres client
       run: |
         sudo apt-get -yqq install libpq-dev

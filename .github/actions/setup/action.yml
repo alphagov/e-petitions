@@ -3,6 +3,10 @@ name: Setup
 runs:
   using: composite
   steps:
+    - name: Update package list
+      run: |
+        sudo apt-get update
+
     - name: Install postgres client
       shell: bash
       run: |
