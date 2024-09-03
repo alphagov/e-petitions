@@ -174,7 +174,7 @@ class Invalidation < ActiveRecord::Base
       counted_at: Time.current
     )
 
-    Appsignal.without_instrumentation do
+    Appsignal.ignore_instrumentation_events do
       matching_signatures.find_in_batches(batch_size: 100) do |signatures|
         signatures.each do |signature|
           signature.invalidate!(Time.current, id)

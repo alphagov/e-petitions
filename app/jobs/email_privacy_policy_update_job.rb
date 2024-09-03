@@ -9,7 +9,7 @@ class EmailPrivacyPolicyUpdateJob < ApplicationJob
       worker.call
     end
 
-    Appsignal.without_instrumentation do
+    Appsignal.ignore_instrumentation_events do
       petition.signatures.validated.find_each do |signature|
         privacy_notification = PrivacyNotification.create!(
           id: signature.uuid,
