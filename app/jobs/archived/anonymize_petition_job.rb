@@ -15,7 +15,7 @@ module Archived
         worker.call
       end
 
-      Appsignal.without_instrumentation do
+      Appsignal.ignore_instrumentation_events do
         if petition.signatures.not_anonymized.exists?
           signatures = petition.signatures.not_anonymized.take(limit)
 

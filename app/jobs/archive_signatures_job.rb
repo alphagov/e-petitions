@@ -9,7 +9,7 @@ class ArchiveSignaturesJob < ApplicationJob
       worker.call
     end
 
-    Appsignal.without_instrumentation do
+    Appsignal.ignore_instrumentation_events do
       if petition.signatures.unarchived.exists?
         signatures = petition.signatures.unarchived.batch(limit: limit)
 

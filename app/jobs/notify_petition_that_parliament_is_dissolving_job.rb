@@ -2,7 +2,7 @@ class NotifyPetitionThatParliamentIsDissolvingJob < ApplicationJob
   queue_as :low_priority
 
   def perform(petition)
-    Appsignal.without_instrumentation do
+    Appsignal.ignore_instrumentation_events do
       signatures_to_email(petition).find_each do |signature|
         begin
           enqueue_notification(create_record(signature))

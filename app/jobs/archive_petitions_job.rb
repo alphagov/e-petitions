@@ -2,7 +2,7 @@ class ArchivePetitionsJob < ApplicationJob
   queue_as :high_priority
 
   def perform
-    Appsignal.without_instrumentation do
+    Appsignal.ignore_instrumentation_events do
       Petition.find_each do |petition|
         next if petition.archived?
 

@@ -75,7 +75,7 @@ module EmailAllPetitionSignatories
   # Batches the signataries to send emails to in groups of 1000
   # and enqueues a job to do the actual sending
   def enqueue_send_email_jobs
-    Appsignal.without_instrumentation do
+    Appsignal.ignore_instrumentation_events do
       run_callbacks :enqueue_send_email_jobs do
         signatures_to_email.find_each do |signature|
           email_delivery_job_class.perform_later(**mailer_arguments(signature))
