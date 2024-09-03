@@ -107,9 +107,7 @@ Then /^the "([^"]*)" checkbox(?: within "([^"]*)")? should not be checked$/ do |
 end
 
 Then /^(?:|I )should be on (.+)$/ do |page_name|
-  url = URI.parse(current_url)
-  url.query = nil
-  expect(url.to_s).to eq url_to(page_name)
+  expect(page).to have_current_path(url_to(page_name), ignore_query: true)
 end
 
 Then /^(?:|I )should have the following query string:$/ do |expected_pairs|
