@@ -1,3 +1,4 @@
+require 'marcel'
 require 'mini_magick'
 
 class ImageValidator < ActiveModel::EachValidator
@@ -39,14 +40,16 @@ class ImageValidator < ActiveModel::EachValidator
   end
 
   def validate_content_type(record, attribute, image)
+    mime_type = Marcel::MimeType.for(Pathname.new(image.path))
+
     valid = \
       case options[:content_type]
       when String
-        options[:content_type] == image.mime_type
+        options[:content_type] == mime_type
       when Regexp
-        options[:content_type].match?(image.mime_type)
+        options[:content_type].match?(mime_type)
       when Array
-        options[:content_type].include?(image.mime_type)
+        options[:content_type].include?(mime_type)
       else
         false
       end
