@@ -1,0 +1,38 @@
+version: 2
+updates:
+  - package-ecosystem: bundler
+    ignore:
+      - dependency-name: "rails"
+        update-types: ["version-update:semver-minor"]
+      - dependency-name: "*"
+        update-types: ["version-update:semver-major"]
+    directory: /
+    schedule:
+      interval: daily
+    versioning-strategy: increase-if-necessary
+    open-pull-requests-limit: 10
+
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: daily
+    versioning-strategy: increase-if-necessary
+
+  # Ruby needs to be upgraded manually in multiple places, so cannot be upgraded by Dependabot.
+  - package-ecosystem: docker
+    ignore:
+      - dependency-name: ruby
+    directory: /docker/mailcatcher
+    schedule:
+      interval: weekly
+  - package-ecosystem: docker
+    ignore:
+      - dependency-name: ruby
+    directory: /docker/ruby
+    schedule:
+      interval: weekly
+
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: daily
