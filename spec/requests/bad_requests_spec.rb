@@ -21,26 +21,40 @@ RSpec.describe 'Requests containing invalid characters are rejected', type: :req
     expect(response.status).to eq 400
   end
 
-  context "when logged in as an admin" do
+  context "when logged in as an admin", csrf: false do
     let(:user_attributes) do
       {
         first_name: "System",
         last_name: "Administrator",
-        email: "admin@petition.parliament.uk"
+        email: "admin@example.com"
       }
     end
 
     let(:login_params) do
-      { email: "admin@petition.parliament.uk", password: "L3tme1n!" }
+      { email: "admin@example.com" }
     end
-
-    let!(:user) { FactoryBot.create(:sysadmin_user, user_attributes) }
 
     before do
       host! "moderate.petition.parliament.uk"
       https!
 
-      post "/admin/user_sessions", params: { admin_user_session: login_params }
+      sso_user = FactoryBot.create(:sysadmin_sso_user, **user_attributes)
+      OmniAuth.config.mock_auth[:example] = sso_user
+
+      post "/admin/login", params: { user: login_params }
+
+      expect(response.status).to eq(307)
+      expect(response.location).to eq("https://moderate.petition.parliament.uk/admin/auth/example")
+
+      follow_redirect!(params: request.POST)
+
+      expect(response.status).to eq(302)
+      expect(response.location).to eq("https://moderate.petition.parliament.uk/admin/auth/example/callback")
+
+      follow_redirect!
+
+      expect(response.status).to eq(200)
+      expect(response).to have_header("Refresh", "0; url=https://moderate.petition.parliament.uk/admin")
     end
 
     context "and uploading a debate outcome image" do
@@ -49,7 +63,9 @@ RSpec.describe 'Requests containing invalid characters are rejected', type: :req
 
       it 'does not return 400 for an image containing null bytes' do
         patch "/admin/petitions/#{petition.id}/debate-outcome", params: { debate_outcome: { image: image } }
-        expect(response.status).to eq 302
+
+        expect(response.status).to eq(302)
+        expect(response.location).to eq("https://moderate.petition.parliament.uk/admin/petitions/#{petition.id}")
       end
     end
   end
