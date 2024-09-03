@@ -44,7 +44,11 @@ module AutoLinkHelper
     end
 
     def sanitized_text
-      (sanitize? ? sanitize(text, sanitize_options) : text).to_str
+      (sanitize? ? unescape_nbsp(sanitize(text, sanitize_options)) : text).to_str
+    end
+
+    def unescape_nbsp(escaped_text)
+      escaped_text.gsub("&nbsp;", "\u00A0")
     end
 
     def sanitize?
