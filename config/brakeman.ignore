@@ -143,27 +143,8 @@
         79
       ],
       "note": ""
-    },
-    {
-      "warning_type": "Unmaintained Dependency",
-      "warning_code": 121,
-      "fingerprint": "edf687f759ec9765bd5db185dbc615c80af77d6e7e19386fc42934e7a80307af",
-      "check_name": "EOLRuby",
-      "message": "Support for Ruby 3.0.7 ended on 2024-03-31",
-      "file": ".ruby-version",
-      "line": 1,
-      "link": "https://brakemanscanner.org/docs/warning_types/unmaintained_dependency/",
-      "code": null,
-      "render_path": null,
-      "location": null,
-      "user_input": null,
-      "confidence": "High",
-      "cwe_id": [
-        1104
-      ],
-      "note": ""
     }
   ],
-  "updated": "2024-05-31 17:06:26 +0000",
-  "brakeman_version": "6.1.2"
+  "updated": "2024-09-03 13:23:00 +0000",
+  "brakeman_version": "6.2.1"
 }
