@@ -1,5 +1,5 @@
 class IdentityProvider
-  class ProviderNotFound < ArgumentError; end
+  class NotFoundError < ArgumentError; end
 
   class << self
     delegate :each, to: :providers
@@ -27,7 +27,7 @@ class IdentityProvider
     end
 
     def raise_provider_not_found(name)
-      raise ProviderNotFound, "Couldn't find the provider '#{name}'"
+      raise NotFoundError, "Couldn't find the provider '#{name}'"
     end
   end
 

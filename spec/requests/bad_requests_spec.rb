@@ -69,4 +69,82 @@ RSpec.describe 'Requests containing invalid characters are rejected', type: :req
       end
     end
   end
+
+  context "when attempting to login as an admin", csrf: false do
+    before do
+      host! "moderate.petition.parliament.uk"
+      https!
+    end
+
+    context "on an unknown provider" do
+      let(:provider) { "/admin/auth/unknown" }
+
+      it "redirects to the login page on the passthru url" do
+        get "#{provider}"
+
+        expect(response.status).to eq(302)
+        expect(response.location).to eq("https://moderate.petition.parliament.uk/admin/login")
+        expect(flash[:alert]).to eq("Invalid login details")
+      end
+
+      it "redirects to the login page on the callback url" do
+        get "#{provider}/callback"
+
+        expect(response.status).to eq(302)
+        expect(response.location).to eq("https://moderate.petition.parliament.uk/admin/login")
+        expect(flash[:alert]).to eq("Invalid login details")
+      end
+    end
+
+    context "on a known provider" do
+      let(:provider) { "/admin/auth/example" }
+
+      it "redirects to the login page on the passthru url" do
+        get "#{provider}"
+
+        expect(response.status).to eq(302)
+        expect(response.location).to eq("https://moderate.petition.parliament.uk/admin/login")
+        expect(flash[:alert]).to eq("Invalid login details")
+      end
+
+      it "redirects to the login page on the callback url" do
+        get "#{provider}/callback"
+
+        expect(response.status).to eq(302)
+        expect(response.location).to eq("https://moderate.petition.parliament.uk/admin/login")
+        expect(flash[:alert]).to eq("Invalid login details")
+      end
+
+      context "with invalid auth data" do
+        let(:user_attributes) do
+          { first_name: "", last_name: "", email: "" }
+        end
+
+        let(:login_params) do
+          { email: "admin@example.com" }
+        end
+
+        it "redirects to the login page" do
+          sso_user = FactoryBot.create(:sso_user, **user_attributes)
+          OmniAuth.config.mock_auth[:example] = sso_user
+
+          post "/admin/login", params: { user: login_params }
+
+          expect(response.status).to eq(307)
+          expect(response.location).to eq("https://moderate.petition.parliament.uk/admin/auth/example")
+
+          follow_redirect!(params: request.POST)
+
+          expect(response.status).to eq(302)
+          expect(response.location).to eq("https://moderate.petition.parliament.uk/admin/auth/example/callback")
+
+          follow_redirect!
+
+          expect(response.status).to eq(302)
+          expect(response.location).to eq("https://moderate.petition.parliament.uk/admin/login")
+          expect(flash[:alert]).to eq("Invalid login details")
+        end
+      end
+    end
+  end
 end
