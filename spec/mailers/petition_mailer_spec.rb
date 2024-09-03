@@ -482,7 +482,7 @@ RSpec.describe PetitionMailer, type: :mailer do
       subject(:mail) { described_class.gather_sponsors_for_petition(petition, Site.feedback_email) }
 
       it "adds the BCC address to the email" do
-        expect(mail).to bcc_to("petitionscommittee@parliament.uk")
+        expect(mail.bcc).to eq(%w[petitionscommittee@parliament.uk])
       end
     end
   end
