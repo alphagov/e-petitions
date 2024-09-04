@@ -14,6 +14,10 @@ RSpec.configure do |config|
     ensure
       enable_test_adapter
     end
+
+    def queue_adapter_for_test
+      ActiveJob::QueueAdapters::TestAdapter.new
+    end
   end
 
   config.include(ActiveJob::TestHelper)

@@ -50,11 +50,11 @@ class HealthCheck
   end
 
   def database_connection
-    unless defined?(@connection)
+    unless defined?(@connection_pool)
       ActiveRecord::Base.establish_connection
     end
 
-    @connection ||= ActiveRecord::Base.connection
+    @connection_pool ||= ActiveRecord::Base.connection_pool
   rescue
     false
   end
