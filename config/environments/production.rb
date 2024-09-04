@@ -87,9 +87,13 @@ Rails.application.configure do
   # Use a different cache store in production.
   # config.cache_store = :mem_cache_store
 
-  # Set default_url_options for links in emails
-  config.action_mailer.default_url_options = { host: ENV.fetch('EPETITIONS_HOST') }
+  # Disable caching for Action Mailer templates even if Action Controller
+  # caching is enabled.
   config.action_mailer.perform_caching = false
+
+  # Unlike controllers, the mailer instance doesn't have any context about the
+  # incoming request so you'll need to provide the :host parameter yourself.
+  config.action_mailer.default_url_options = { host: ENV.fetch('EPETITIONS_HOST') }
 
   # Ignore bad email addresses and do not raise email delivery errors.
   # Set this to true and configure the email server for immediate delivery to raise delivery errors.
