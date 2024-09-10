@@ -274,7 +274,7 @@ GEM
     minitest (5.25.1)
     multi_test (1.1.0)
     multipart-post (2.4.0)
-    net-http-persistent (4.0.2)
+    net-http-persistent (4.0.4)
       connection_pool (~> 2.2)
     net-imap (0.4.15)
       date
