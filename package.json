@@ -4,5 +4,10 @@
   "devDependencies": {
     "jasmine-browser-runner": "^2.0.0",
     "jasmine-core": "^5.0.0"
+  },
+  "overrides": {
+    "express": "^4.20.0",
+    "send": "^0.19.0",
+    "serve-static": "^1.16.0"
   }
 }
