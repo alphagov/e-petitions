@@ -42,10 +42,6 @@ ensure
 end
 
 Before do
-  Rails.cache.clear
-end
-
-Before do
   Site.reset!
   Parliament.reset!(government: "TBC", opening_at: 2.weeks.ago)
 end

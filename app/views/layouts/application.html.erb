@@ -2,34 +2,32 @@
 <html lang="en-GB">
   <head>
     <title><%= page_title %></title>
-    <%= cache_for :head do %>
-      <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 
-      <%= preload_link_tag 'application.css', nopush: true %>
-      <%= preload_link_tag 'application.js', nopush: true %>
+    <%= preload_link_tag 'application.css', nopush: true %>
+    <%= preload_link_tag 'application.js', nopush: true %>
 
-      <% if open_petition_page? %>
-        <%= preload_link_tag 'auto-updater.js', nopush: true %>
-      <% end %>
-      <% if create_petition_page? %>
-        <%= preload_link_tag 'character-counter.js', nopush: true %>
-      <% end %>
-
-      <!--[if gt IE 8]><!--><%= stylesheet_link_tag 'application' %><!--<![endif]-->
-      <!--[if IE 7]><%= stylesheet_link_tag 'application-ie7' %><![endif]-->
-      <!--[if IE 8]><%= stylesheet_link_tag 'application-ie8' %><![endif]-->
-
-      <!--[if lt IE 9]><%= javascript_include_tag 'ie.js' %><![endif]-->
-      <!--[if IE]><%= javascript_include_tag 'details.js' %><![endif]-->
-
-      <meta name="viewport" content="width = device-width" />
-      <%= render 'application/os' %>
-      <%= render 'application/social_meta' %>
+    <% if open_petition_page? %>
+      <%= preload_link_tag 'auto-updater.js', nopush: true %>
     <% end %>
+    <% if create_petition_page? %>
+      <%= preload_link_tag 'character-counter.js', nopush: true %>
+    <% end %>
+
+    <!--[if gt IE 8]><!--><%= stylesheet_link_tag 'application' %><!--<![endif]-->
+    <!--[if IE 7]><%= stylesheet_link_tag 'application-ie7' %><![endif]-->
+    <!--[if IE 8]><%= stylesheet_link_tag 'application-ie8' %><![endif]-->
+
+    <!--[if lt IE 9]><%= javascript_include_tag 'ie.js' %><![endif]-->
+    <!--[if IE]><%= javascript_include_tag 'details.js' %><![endif]-->
+
+    <meta name="viewport" content="width = device-width" />
+    <%= render 'application/os' %>
+    <%= render 'application/social_meta' %>
     <% if noindex_page? %>
       <meta name="robots" content="noindex" />
     <% end %>
-      <meta name="theme-color" content="#080">
+    <meta name="theme-color" content="#080">
   </head>
   <body>
     <% if show_cookie_message? %>
@@ -38,24 +36,20 @@
       </div>
     <% end %>
 
-    <%= cache_for :header do %>
-      <%= render 'application/header' %>
-    <% end %>
+    <%= render 'application/header' %>
 
     <main id="content" role="main">
       <%= render 'application/messages' %>
       <%= yield %>
     </main>
 
-    <%= cache_for :footer do %>
-      <%= render 'application/footer' %>
-      <%= javascript_include_tag 'application' %>
-      <% if open_petition_page? %>
-        <%= javascript_include_tag 'auto-updater' %>
-      <% end %>
-      <% if create_petition_page? %>
-        <%= javascript_include_tag 'character-counter' %>
-      <% end %>
+    <%= render 'application/footer' %>
+    <%= javascript_include_tag 'application' %>
+    <% if open_petition_page? %>
+      <%= javascript_include_tag 'auto-updater' %>
+    <% end %>
+    <% if create_petition_page? %>
+      <%= javascript_include_tag 'character-counter' %>
     <% end %>
   </body>
 </html>

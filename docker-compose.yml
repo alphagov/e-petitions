@@ -11,12 +11,10 @@ x-application: &application
   depends_on:
     - postgres
     - mailcatcher
-    - memcached
 
 x-environment: &environment
   DATABASE_URL: "postgres://postgres:ZW4IvOPrXcbp2hyp@postgres:5432"
   DATABASE_CLEANER_ALLOW_REMOTE_DATABASE_URL: "true"
-  MEMCACHE_SERVERS: "memcached:11211"
   SMTP_HOST: "mailcatcher"
   SMTP_PORT: "1025"
   SPROCKETS_CACHE: "/cache"
@@ -42,11 +40,6 @@ services:
       - "1025"
     ports:
       - "127.0.0.1:1080:1080"
-
-  memcached:
-    image: memcached:1.5
-    expose:
-      - "11121"
 
   web:
     <<: *application
