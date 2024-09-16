@@ -1,70 +1,68 @@
-<%= cache_for :petition do %>
-  <% if Site.show_petition_page_message? %>
-    <div class="notification notification-<%= Site.petition_page_message_colour %>">
-      <span class="icon icon-warning-white"></span>
-      <%= markdown_to_html(Site.petition_page_message) %>
-    </div>
-  <% end %>
-
-  <h1>
-    <span class="heading-secondary">Petition</span>
-    <%= petition.action %>
-  </h1>
-
-  <% if @petition.committee_note? %>
-    <div class="committee-note">
-      <%= markdown_to_html(@petition.committee_note) %>
-    </div>
-  <% end %>
-
-  <div><%= auto_link(simple_format(h(petition.background)), html: { rel: 'nofollow' }) %></div>
-  <% unless petition.additional_details.blank? %>
-    <details>
-      <summary><span class="summary">More details</span></summary>
-      <div><%= auto_link(simple_format(h(petition.additional_details)), html: { rel: 'nofollow' }) %></div>
-    </details>
-  <% end %>
-
-  <% unless Site.signature_collection_disabled? %>
-    <%= link_to "Sign this petition", new_petition_signature_path(petition), :class => 'button button-sign-petition' %>
-  <% end %>
-
-  <div class="signature-count">
-    <p class="signature-count-number">
-      <%= signature_count(:default, petition.signature_count) %>
-    </p>
-    <div class="signature-count-graph" aria-hidden="true">
-      <span class="signature-count-current" style="width: <%= signatures_threshold_percentage(petition) %>"></span>
-    </div>
-    <p class="signatures-on-a-map">
-      <a href="https://petitionmap.unboxedconsulting.com/?petition=<%= petition.id %>">Show on a map</a>
-    </p>
-    <p class="signature-count-goal">
-      <%= number_with_delimiter(current_threshold(petition)) %>
-    </p>
+<% if Site.show_petition_page_message? %>
+  <div class="notification notification-<%= Site.petition_page_message_colour %>">
+    <span class="icon icon-warning-white"></span>
+    <%= markdown_to_html(Site.petition_page_message) %>
   </div>
-
-  <%= render 'threshold_details', petition: petition %>
-  <%= render 'related_activity_details', petition: petition %>
-  <%= render 'share_petition', petition: petition %>
-
-  <ul class="petition-meta">
-    <li class="meta-created-by">
-      <span class="label">Created by</span> <%= petition.creator.name %>
-    </li>
-    <li class="meta-deadline">
-      <% if petition.closing_early_for_dissolution? %>
-        <span class="label">Deadline</span> <%= short_date_time_format Parliament.dissolution_at %>
-      <% else %>
-        <span class="label">Deadline</span> <%= short_date_format petition.deadline %>
-      <% end %>
-      <% unless Parliament.dissolution_announced? %>
-        <span class="note">All petitions run for 6 months</span>
-      <% end %>
-    </li>
-    <li class="meta-json">
-      <span class="note"><%= link_to "Get petition data (json format)", petition_path(petition, :json) %></span>
-      <%= render "about_petition_data" %>
-    </li>
-  </ul>
 <% end %>
+
+<h1>
+  <span class="heading-secondary">Petition</span>
+  <%= petition.action %>
+</h1>
+
+<% if @petition.committee_note? %>
+  <div class="committee-note">
+    <%= markdown_to_html(@petition.committee_note) %>
+  </div>
+<% end %>
+
+<div><%= auto_link(simple_format(h(petition.background)), html: { rel: 'nofollow' }) %></div>
+<% unless petition.additional_details.blank? %>
+  <details>
+    <summary><span class="summary">More details</span></summary>
+    <div><%= auto_link(simple_format(h(petition.additional_details)), html: { rel: 'nofollow' }) %></div>
+  </details>
+<% end %>
+
+<% unless Site.signature_collection_disabled? %>
+  <%= link_to "Sign this petition", new_petition_signature_path(petition), :class => 'button button-sign-petition' %>
+<% end %>
+
+<div class="signature-count">
+  <p class="signature-count-number">
+    <%= signature_count(:default, petition.signature_count) %>
+  </p>
+  <div class="signature-count-graph" aria-hidden="true">
+    <span class="signature-count-current" style="width: <%= signatures_threshold_percentage(petition) %>"></span>
+  </div>
+  <p class="signatures-on-a-map">
+    <a href="https://petitionmap.unboxedconsulting.com/?petition=<%= petition.id %>">Show on a map</a>
+  </p>
+  <p class="signature-count-goal">
+    <%= number_with_delimiter(current_threshold(petition)) %>
+  </p>
+</div>
+
+<%= render 'threshold_details', petition: petition %>
+<%= render 'related_activity_details', petition: petition %>
+<%= render 'share_petition', petition: petition %>
+
+<ul class="petition-meta">
+  <li class="meta-created-by">
+    <span class="label">Created by</span> <%= petition.creator.name %>
+  </li>
+  <li class="meta-deadline">
+    <% if petition.closing_early_for_dissolution? %>
+      <span class="label">Deadline</span> <%= short_date_time_format Parliament.dissolution_at %>
+    <% else %>
+      <span class="label">Deadline</span> <%= short_date_format petition.deadline %>
+    <% end %>
+    <% unless Parliament.dissolution_announced? %>
+      <span class="note">All petitions run for 6 months</span>
+    <% end %>
+  </li>
+  <li class="meta-json">
+    <span class="note"><%= link_to "Get petition data (json format)", petition_path(petition, :json) %></span>
+    <%= render "about_petition_data" %>
+  </li>
+</ul>

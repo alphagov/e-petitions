@@ -1,13 +1,11 @@
-<%= cache_for :home_page do %>
-  <h1 class="visuallyhidden">Petitions – UK Government and Parliament</h1>
+<h1 class="visuallyhidden">Petitions – UK Government and Parliament</h1>
 
-  <% if Parliament.dissolved? %>
-    <%= render 'pages/home/dissolved' %>
-  <% elsif Parliament.dissolution_announced? %>
-    <%= render 'pages/home/dissolution_announced' %>
-  <% elsif Parliament.opened? %>
-    <%= render 'pages/home/opened' %>
-  <% else %>
-    <%= render 'pages/home/pending' %>
-  <% end %>
+<% if Parliament.dissolved? %>
+  <%= render 'pages/home/dissolved' %>
+<% elsif Parliament.dissolution_announced? %>
+  <%= render 'pages/home/dissolution_announced' %>
+<% elsif Parliament.opened? %>
+  <%= render 'pages/home/opened' %>
+<% else %>
+  <%= render 'pages/home/pending' %>
 <% end %>

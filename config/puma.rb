@@ -15,9 +15,6 @@ if ENV["RAILS_ENV"] == "production"
   plugin :appsignal
 
   on_worker_boot do
-    # Reset the connection to the cache if we can
-    ::Rails.cache.reset if ::Rails.cache.respond_to?(:reset)
-
     # Establish a connection to the database
     ActiveRecord::Base.establish_connection
   end

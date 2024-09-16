@@ -1,60 +1,58 @@
-<%= cache_for :petition do %>
-  <h1>
-    <span class="heading-secondary">Closed petition</span>
-    <%= petition.action %>
-  </h1>
+<h1>
+  <span class="heading-secondary">Closed petition</span>
+  <%= petition.action %>
+</h1>
 
-  <% if @petition.committee_note? %>
-    <div class="committee-note">
-      <%= markdown_to_html(@petition.committee_note) %>
-    </div>
-  <% end %>
-
-  <div><%= auto_link(simple_format(h(petition.background)), html: { rel: 'nofollow' }) %></div>
-  <% unless petition.additional_details.blank? %>
-    <details>
-      <summary><span class="summary">More details</span></summary>
-      <div><%= auto_link(simple_format(h(petition.additional_details)), html: { rel: 'nofollow' }) %></div>
-    </details>
-  <% end %>
-
-
-  <% if petition.closed_early_due_to_election? %>
-    <p class="flash-notice">
-      This petition closed early because of a General Election
-
-      <% if Parliament.dissolution_faq_url? %>
-        <span>Find out more on the <%= link_to 'Petitions Committee website', Parliament.dissolution_faq_url %></span>
-      <% end %>
-    </p>
-  <% else %>
-    <p class="flash-notice">
-      This petition is closed
-      <span>All petitions run for 6 months</span>
-    </p>
-  <% end %>
-
-  <div class="signature-count">
-    <p class="signature-count-number"><%= signature_count(:default, petition.signature_count) %></p>
-    <div class="signature-count-graph" aria-hidden="true">
-      <span class="signature-count-current" style="width: <%= signatures_threshold_percentage(petition) %>"></span>
-    </div>
-    <p class="signatures-on-a-map">
-      <a href="https://petitionmap.unboxedconsulting.com/?petition=<%= petition.id %>">Show on a map</a>
-    </p>
-    <p class="signature-count-goal">
-      <%= number_with_delimiter(current_threshold(petition)) %>
-    </p>
+<% if @petition.committee_note? %>
+  <div class="committee-note">
+    <%= markdown_to_html(@petition.committee_note) %>
   </div>
-  <%= render 'threshold_details', petition: petition %>
-  <%= render 'related_activity_details', petition: petition %>
-  <ul class="petition-meta">
-    <li>
-      <span class="label">Date closed</span> <%= short_date_format petition.closed_at %>
-    </li>
-    <li class="meta-json">
-      <span class="note"><%= link_to "Get petition data (json format)", petition_path(petition, :json) %></span>
-      <%= render "about_petition_data" %>
-    </li>
-  </ul>
 <% end %>
+
+<div><%= auto_link(simple_format(h(petition.background)), html: { rel: 'nofollow' }) %></div>
+<% unless petition.additional_details.blank? %>
+  <details>
+    <summary><span class="summary">More details</span></summary>
+    <div><%= auto_link(simple_format(h(petition.additional_details)), html: { rel: 'nofollow' }) %></div>
+  </details>
+<% end %>
+
+
+<% if petition.closed_early_due_to_election? %>
+  <p class="flash-notice">
+    This petition closed early because of a General Election
+
+    <% if Parliament.dissolution_faq_url? %>
+      <span>Find out more on the <%= link_to 'Petitions Committee website', Parliament.dissolution_faq_url %></span>
+    <% end %>
+  </p>
+<% else %>
+  <p class="flash-notice">
+    This petition is closed
+    <span>All petitions run for 6 months</span>
+  </p>
+<% end %>
+
+<div class="signature-count">
+  <p class="signature-count-number"><%= signature_count(:default, petition.signature_count) %></p>
+  <div class="signature-count-graph" aria-hidden="true">
+    <span class="signature-count-current" style="width: <%= signatures_threshold_percentage(petition) %>"></span>
+  </div>
+  <p class="signatures-on-a-map">
+    <a href="https://petitionmap.unboxedconsulting.com/?petition=<%= petition.id %>">Show on a map</a>
+  </p>
+  <p class="signature-count-goal">
+    <%= number_with_delimiter(current_threshold(petition)) %>
+  </p>
+</div>
+<%= render 'threshold_details', petition: petition %>
+<%= render 'related_activity_details', petition: petition %>
+<ul class="petition-meta">
+  <li>
+    <span class="label">Date closed</span> <%= short_date_format petition.closed_at %>
+  </li>
+  <li class="meta-json">
+    <span class="note"><%= link_to "Get petition data (json format)", petition_path(petition, :json) %></span>
+    <%= render "about_petition_data" %>
+  </li>
+</ul>

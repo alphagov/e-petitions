@@ -39,8 +39,6 @@ class Petition < ActiveRecord::Base
 
   DEBATE_STATES = %w[pending awaiting scheduled debated not_debated]
 
-  self.cache_timestamp_format = :stepped_cache_key
-
   has_perishable_token called: 'sponsor_token'
 
   before_save :update_debate_state, if: :scheduled_debate_date_changed?

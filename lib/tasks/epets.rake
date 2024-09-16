@@ -102,13 +102,6 @@ namespace :epets do
     end
   end
 
-  namespace :cache do
-    desc "Clear the cache"
-    task :clear => :environment do
-      Rails.cache.clear
-    end
-  end
-
   namespace :countries do
     desc "Load country data"
     task load: :environment do
