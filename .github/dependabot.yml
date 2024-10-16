@@ -11,6 +11,23 @@ updates:
       interval: daily
     versioning-strategy: increase-if-necessary
     open-pull-requests-limit: 10
+    groups:
+      aws:
+        applies-to: version-updates
+        patterns:
+          - "aws-*"
+        update-types:
+          - "minor"
+          - "patch"
+      rails:
+        applies-to: version-updates
+        patterns:
+          - "action*"
+          - "active*"
+          - "rails"
+          - "railties"
+        update-types:
+          - "patch"
 
   - package-ecosystem: npm
     directory: /
