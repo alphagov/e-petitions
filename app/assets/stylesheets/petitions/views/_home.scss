@@ -70,7 +70,7 @@
     font-size: 24px;
     line-height: 30/24;
     margin-top: 0;
-    padding-left: $text-indent;
+    padding-left: $text-indent - 5px;
   }
 
   p {
@@ -81,10 +81,11 @@ a.threshold-panel:hover, a.threshold-panel:focus {
   background-color: darken($petitions-panel-colour, 5%);
 }
 .threshold-panel-response {
+  background-position: 15px 16px;
   background-image: image-url("graphics/graphic_crown-white.png");
   @include device-pixel-ratio() {
     background-image: image-url("graphics/graphic_crown-white-2x.png");
-    background-size: 36px;
+    background-size: 27px;
   }
 }
 .threshold-panel-debate {

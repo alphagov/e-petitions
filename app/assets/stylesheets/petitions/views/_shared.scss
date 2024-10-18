@@ -290,11 +290,11 @@ input.back-page {
     font-size: 24px;
     line-height: 30/24;
     margin: 0 0 em(10, 24) 0;
-    padding: em(5, 24) 0 0 $text-indent;
+    padding: em(5, 24) 0 0 $text-indent - 5px;
 
     @include media(tablet) {
       margin: 0 0 em(10, 24) 0;
-      padding: em(5, 24) 0 0 $text-indent;
+      padding: em(5, 24) 0 0 $text-indent - 5px;
     }
   }
   h3 {
@@ -310,10 +310,10 @@ input.back-page {
 }
 .about-item-count-response h2 {
   background-position: 0 6px;
-  @include background-image("graphics/graphic_crown", 36px, 25px);
+  @include background-image("graphics/graphic_crown", 27px, 25px);
 }
 .about-item-count-debate h2, .about-item-other-business h2 {
-  background-position: 4px 0;
+  background-position: 1px 0;
   @include background-image("graphics/graphic_portcullis", 26px, 32px);
 }
 .about-item-scheduled-debate-date {
