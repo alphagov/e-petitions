@@ -1,5 +1,3 @@
-require_dependency 'archived'
-
 module Archived
   class Rejection < ActiveRecord::Base
     belongs_to :petition, touch: true

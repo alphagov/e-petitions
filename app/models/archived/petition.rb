@@ -1,5 +1,4 @@
 require 'textacular/searchable'
-require_dependency 'archived'
 
 module Archived
   class Petition < ActiveRecord::Base
