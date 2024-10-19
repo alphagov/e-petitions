@@ -6,7 +6,7 @@ module Archived
       belongs_to :petition, touch: true
 
       validates :petition, presence: true
-      validates :subject, presence: true, length: { maximum: 100 }
+      validates :subject, presence: true, length: { maximum: 150 }
       validates :body, presence: true, length: { maximum: 10000 }
 
       class << self

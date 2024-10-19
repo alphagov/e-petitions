@@ -27,7 +27,7 @@ RSpec.describe Archived::Petition::Mailshot, type: :model do
 
     it { is_expected.to validate_presence_of(:petition) }
     it { is_expected.to validate_presence_of(:subject) }
-    it { is_expected.to validate_length_of(:subject).is_at_most(100) }
+    it { is_expected.to validate_length_of(:subject).is_at_most(150) }
     it { is_expected.to validate_presence_of(:body) }
     it { is_expected.to validate_length_of(:body).is_at_most(10000) }
   end
