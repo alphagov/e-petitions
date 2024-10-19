@@ -1,7 +1,5 @@
 require 'ipaddr'
 
-require_dependency 'archived'
-
 module Archived
   class Signature < ActiveRecord::Base
     include GeoipLookup, Anonymize

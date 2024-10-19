@@ -1,6 +1,3 @@
-require_dependency 'constituency/api_client'
-require_dependency 'constituency/api_query'
-
 class Constituency < ActiveRecord::Base
   MP_URL = "https://members.parliament.uk/member/%{mp_id}/contact"
   POSTCODE = /\A([A-Z]{1,2}[0-9][0-9A-Z]?)([0-9]|[0-9][A-BD-HJLNP-UW-Z]{2})?\z/i
@@ -102,11 +99,11 @@ class Constituency < ActiveRecord::Base
         current
       end
     end
-  
+
     def between(opening_at, dissolution_at)
       where(arel_table[:start_date].lteq(opening_at).and(arel_table[:end_date].gteq(dissolution_at).or(arel_table[:end_date].eq(nil))))
     end
-  
+
     def external_ids
       pluck(:external_id)
     end

@@ -1,5 +1,3 @@
-require_dependency 'archived'
-
 module Archived
   class DebateOutcome < ActiveRecord::Base
     VALID_OTHER_URLS = /\Ahttps?:\/\/(?:[a-z][\-\.a-z0-9]{0,63}\.parliament\.uk|www\.youtube\.com).*\z/
