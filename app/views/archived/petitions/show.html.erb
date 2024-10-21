@@ -1,11 +1,11 @@
 <div class="notification">
   <span class="icon icon-warning-white"></span>
   <p class="content">
-    This petition was submitted during the <%= @parliament.period %> <%= @parliament.government %> government
+    This petition was submitted during the <%= @parliament.period %> parliament
   </p>
 
   <p class="link">
-    <%= link_to "View other petitions from this government", archived_petitions_path(parliament: @parliament) %>
+    <%= link_to "View other petitions from this parliament", archived_petitions_path(parliament: @parliament) %>
   </p>
 </div>
 

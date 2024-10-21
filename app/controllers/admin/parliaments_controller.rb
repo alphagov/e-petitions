@@ -34,7 +34,7 @@ class Admin::ParliamentsController < Admin::AdminController
 
   def parliament_params
     params.require(:parliament).permit(
-      :government, :opening_at,
+      :government, :state_opening_at, :opening_at,
       :dissolution_heading, :dissolution_message,
       :dissolved_heading, :dissolved_message,
       :dissolution_at, :dissolution_faq_url,
