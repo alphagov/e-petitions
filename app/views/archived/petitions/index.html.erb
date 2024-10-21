@@ -1,15 +1,15 @@
 <div class="notification">
   <span class="icon icon-warning-white"></span>
   <p class="content">
-    These petitions were submitted during the <%= @parliament.period %> <%= @parliament.government %> government
+    These petitions were submitted during the <%= @parliament.period %> parliament
   </p>
 
   <details class="list-of-parliaments">
-    <summary><span class="summary">View petitions from a different government</span></summary>
+    <summary><span class="summary">View petitions from previous parliaments</span></summary>
     <div>
       <ul>
         <% archived_parliaments.each do |parliament| %>
-          <li><%= link_to "#{parliament.period} #{parliament.government} government", archived_petitions_path(parliament: parliament, state: "published") %></li>
+          <li><%= link_to parliament.period, archived_petitions_path(parliament: parliament, state: "published") %></li>
         <% end %>
         <li><%= link_to "Back to current petitions", petitions_path(state: "open") %></li>
       </ul>

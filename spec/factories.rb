@@ -870,7 +870,8 @@ FactoryBot.define do
 
   factory :parliament do
     government { "Conservative" }
-    opening_at { "2015-05-18T00:00:00".in_time_zone }
+    state_opening_at { "2015-05-11T10:30:00".in_time_zone }
+    opening_at { "2015-05-18T09:00:00".in_time_zone }
 
     trait :dissolving do
       dissolution_heading { "Parliament is dissolving" }
@@ -895,6 +896,7 @@ FactoryBot.define do
 
     trait :coalition do
       government { "Conservative - Liberal Democrat coalition" }
+      state_opening_at { "2010-05-24T10:30:00".in_time_zone }
       opening_at { "2010-05-18T00:00:00".in_time_zone }
       dissolution_heading { "Parliament is dissolving" }
       dissolution_message { "This means all petitions will close in 2 weeks" }
@@ -906,6 +908,7 @@ FactoryBot.define do
 
     trait :conservatives do
       government { "Conservative" }
+      state_opening_at { "2015-05-27T10:30:00".in_time_zone }
       opening_at { "2015-05-18T00:00:00".in_time_zone }
       dissolution_heading { "Parliament is dissolving" }
       dissolution_message { "This means all petitions will close in 2 weeks" }
@@ -917,6 +920,7 @@ FactoryBot.define do
 
     trait :new_government do
       government { "TBC" }
+      state_opening_at { "2017-06-21T10:30:00".in_time_zone }
       opening_at { "2017-06-19T00:00:00".in_time_zone }
     end
 

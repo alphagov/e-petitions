@@ -138,7 +138,7 @@ input.back-page {
     @include core-16();
 
     ul {
-      padding: $gutter/6;
+      padding: $gutter/6 0;
     }
 
     li {
