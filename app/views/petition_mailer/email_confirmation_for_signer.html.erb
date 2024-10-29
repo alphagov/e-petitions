@@ -2,6 +2,4 @@
 
 <p><%= link_to nil, verify_signature_url(@signature, token: @signature.perishable_token) %></p>
 
-<p>Thanks,<br />
-<%= t("petitions.emails.signoff_prefix") %><br />
-<%= t("petitions.emails.signoff_suffix") %></p>
+<%= render "footer" %>

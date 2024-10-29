@@ -1,7 +1,4 @@
-<p><small>You’re receiving this email because you created this petition: “<%= @petition.action %>”.</small></p>
-<p><small>To unsubscribe from getting emails about this petition: <%= link_to nil, unsubscribe_archived_signature_url(@signature, token: @signature.unsubscribe_token) %></small></p>
-<hr>
-
+<%= render "reason" %>
 <p>Dear <%= @signature.name %>,</p>
 
 <p>Parliament is going to debate your petition – “<%= @petition.action %>”.</p>
@@ -12,10 +9,5 @@
 
 <p>Once the debate has happened, we’ll email you a video and transcript.</p>
 
-<p>Thanks,<br />
-<%= t("petitions.emails.signoff_prefix") %><br />
-<%= t("petitions.emails.signoff_suffix") %></p>
-
-<hr>
-<p><small>You’re receiving this email because you created this petition: “<%= @petition.action %>”.</small></p>
-<p><small>To unsubscribe from getting emails about this petition: <%= link_to nil, unsubscribe_archived_signature_url(@signature, token: @signature.unsubscribe_token) %></small></p>
+<%= render "footer" %>
+<%= render "unsubscribe" %>

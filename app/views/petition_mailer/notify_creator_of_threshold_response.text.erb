@@ -1,7 +1,4 @@
-You’re receiving this email because you created this petition: “<%= @petition.action %>”.
-To unsubscribe from getting emails about this petition: <%= unsubscribe_signature_url(@signature, token: @signature.unsubscribe_token) %>
---
-
+<%= render "reason" %>
 Dear <%= @signature.name %>,
 
 The Government has responded to your petition – “<%= @petition.action %>”.
@@ -24,10 +21,5 @@ This petition has over <%= Site.formatted_threshold_for_debate %> signatures. Th
 
 The Committee is made up of 11 MPs, from political parties in government and in opposition. It is entirely independent of the Government. Find out more about the Committee: <%= help_url(anchor: 'petitions-committee') %>
 
-Thanks,
-<%= t("petitions.emails.signoff_prefix") %>
-<%= t("petitions.emails.signoff_suffix") %>
-
---
-You’re receiving this email because you created this petition: “<%= @petition.action %>”.
-To unsubscribe from getting emails about this petition: <%= unsubscribe_signature_url(@signature, token: @signature.unsubscribe_token) %>
+<%= render "footer" %>
+<%= render "unsubscribe" %>

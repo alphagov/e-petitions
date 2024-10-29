@@ -1,0 +1,12 @@
+<% if @signature.creator? %>
+You’re receiving this email because you created the petition “<%= @petition.action %>”:
+<%= polymorphic_url(@petition) %>
+<% elsif @signature.sponsor? %>
+You’re receiving this email because you supported the petition “<%= @petition.action %>”:
+<%= polymorphic_url(@petition) %>
+<% else %>
+You’re receiving this email because you signed the petition “<%= @petition.action %>”:
+<%= polymorphic_url(@petition) %>
+<% end %>
+
+--
