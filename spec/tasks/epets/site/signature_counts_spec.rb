@@ -42,7 +42,7 @@ RSpec.describe "epets:site:signature_counts", type: :task do
             subject.invoke
           }.to have_enqueued_job(
             UpdateSignatureCountsJob
-          ).on_queue(:highest_priority)
+          ).on_queue(:counter)
         end
       end
     end
@@ -97,7 +97,7 @@ RSpec.describe "epets:site:signature_counts", type: :task do
             subject.invoke
           }.to have_enqueued_job(
             UpdateSignatureCountsJob
-          ).on_queue(:highest_priority)
+          ).on_queue(:counter)
         end
       end
     end
