@@ -209,6 +209,10 @@ class Petition < ActiveRecord::Base
       where(state: REJECTED_STATE)
     end
 
+    def validated_state
+      where(state: VALIDATED_STATE)
+    end
+
     def sponsored_state
       where(state: SPONSORED_STATE)
     end
