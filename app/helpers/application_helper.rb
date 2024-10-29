@@ -51,6 +51,10 @@ module ApplicationHelper
     request.original_url.force_encoding('utf-8')
   end
 
+  def number_to_word(number)
+    I18n.t(number, scope: :"number.words")
+  end
+
   private
 
   def referer_url
