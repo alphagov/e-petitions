@@ -194,6 +194,12 @@ en-GB:
           We rejected your petition “%{action}”
         notify_sponsor_that_petition_was_rejected: |-
           We rejected the petition “%{action}” that you supported
+        petition_and_email_confirmation_for_sponsor: |-
+          Please confirm your email address
+        sponsor_signed_email_below_threshold: |-
+          %{name} supported your petition
+        sponsor_signed_email_on_threshold: |-
+          We’re checking your petition
 
         # Re-send confirmation emails
         special_resend_of_email_confirmation_for_signer: |-
