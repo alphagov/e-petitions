@@ -1,8 +1,22 @@
 Dear <%= @signature.name %>,
 
-We published the petition you created – “<%= @petition.action %>”.
+We published the petition you created: “<%= @petition.action %>”.
 
-Click this link to see your petition and start sharing it:
+View the petition:
 <%= petition_url(@petition) %>
+
+It will be open for six months.
+
+If 10,000 people sign this petition, the Government will respond.
+
+If 100,000 people sign it, the Petitions Committee will consider whether MPs debate it in Parliament.
+
+If you chose to receive updates about this petition, we’ll tell you if it receives a government response or will be debated.
+
+We may also update you:
+
+* if the topic is raised elsewhere in Parliament
+
+* about any opportunities to share your views of the topic with MPs or the Government.
 
 <%= render "footer" %>

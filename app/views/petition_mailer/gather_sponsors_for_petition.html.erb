@@ -1,33 +1,26 @@
+<p><small>You’re receiving this email because you created the petition: “<%= link_to @petition.action, new_petition_sponsor_url(@petition, token: @petition.sponsor_token) %>”.</small></p>
+
 <p>Dear <%= @creator.name %>,</p>
 
 <p>You’re not done yet!</p>
 
-<p>Forward the email below to your potential supporters.</p>
+<p><%= number_to_word(Site.threshold_for_moderation).titleize %> people need to sign your petition for us to check it.</p>
 
-<p><%= Site.threshold_for_moderation %> people need to click the link and confirm their support for us to check your petition.</p>
+<p>Share <%= link_to "your petition", new_petition_sponsor_url(@petition, token: @petition.sponsor_token) %> with your potential supporters, or send them the information at the bottom of this email.</p>
 
-<% if moderation_delay? %>
-<p>Once you’ve gained the required number of supporters, we’ll check your petition to make sure it meets the petition standards. If it does, we’ll publish it. <%= moderation_delay_message %></p>
-<% elsif christmas_period? %>
-<p>Once you’ve gained the required number of supporters, we’ll check your petition to make sure it meets the petition standards. If it does, we’ll publish it. This usually takes a week or less but over the Christmas period it will take us a little longer than usual. We’ll check your petition as quickly as we can.</p>
-<% elsif easter_period? %>
-<p>Once you’ve gained the required number of supporters, we’ll check your petition to make sure it meets the petition standards. If it does, we’ll publish it. This usually takes a week or less but over the Easter period it will take us a little longer than usual. We’ll check your petition as quickly as we can.</p>
-<% else %>
-<p>Once you’ve gained the required number of supporters, we’ll check your petition to make sure it meets the petition standards. If it does, we’ll publish it. This usually takes a week or less.</p>
-<% end %>
+<p>Once you’ve gained <%= number_to_word(Site.threshold_for_moderation) %> signatures, we’ll check your petition to make sure it meets the <%= link_to "petition standards", help_url(anchor: 'standards') %>. If it does, we’ll publish it. If it doesn’t, we’ll let you know why.</p>
 
-<p>Once your petition has <%= Site.maximum_number_of_signatures %> signatures it won’t be able to add more until it’s been checked by the petitions team. So, please wait until it’s been checked and published before sharing it more widely.</p>
+<p>This can take up to 10 working days. Thank you for your patience.</p>
+
+<p>Up to <%= Site.maximum_number_of_sponsors %> people can sign your petition while we are checking it. Please wait until it’s been checked and published before sharing it more widely.</p>
 
 <%= render "footer" %>
 
-<hr />
+<hr>
 
-<p>I’ve made a petition – will you sign it?</p>
+<p>I want to start a petition – will you sign it?</p>
 
-<p>Click this link to sign the petition:<br />
-<%= link_to nil, new_petition_sponsor_url(@petition, token: @petition.sponsor_token) %></p>
-
-<p>My petition:</p>
+<p><%= link_to "Sign the petition", new_petition_sponsor_url(@petition, token: @petition.sponsor_token) %></p>
 
 <p><%= @petition.action %></p>
 
@@ -37,7 +30,4 @@
   <p><%= @petition.additional_details %></p>
 <% end %>
 
-<hr />
-
-<p>Click this link to sign the petition:<br />
-<%= link_to nil, new_petition_sponsor_url(@petition, token: @petition.sponsor_token) %></p>
+<p><%= link_to "Sign the petition", new_petition_sponsor_url(@petition, token: @petition.sponsor_token) %></p>

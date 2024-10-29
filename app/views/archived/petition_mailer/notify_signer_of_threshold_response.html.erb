@@ -1,25 +1,13 @@
 <%= render "reason" %>
 <p>Dear <%= @signature.name %>,</p>
 
-<p>The Government has responded to the petition you signed – “<%= link_to @petition.action, archived_petition_url(@petition) %>”.</p>
-
-<p>Government responded:</p>
+<p>The Government has responded to the petition you signed.</p>
 
 <blockquote><%= auto_link(simple_format(h(@government_response.summary))) %></blockquote>
 
-<blockquote><%= auto_link(simple_format(h(@government_response.details))) %></blockquote>
+<p><%= link_to "Read the full response", archived_petition_url(@petition, reveal_response: "yes") %>.</p>
 
-<p>Click this link to view the response online:</p>
-
-<p><%= link_to nil, archived_petition_url(@petition, reveal_response: "yes") %></p>
-
-<% if @petition.signature_count < @parliament.threshold_for_debate %>
-<p>The Petitions Committee will take a look at this petition and its response. They can press the government for action and gather evidence. If this petition reaches <%= @parliament.formatted_threshold_for_debate %> signatures, the Committee will consider it for a debate.</p>
-<% else %>
-<p>This petition has over <%= @parliament.formatted_threshold_for_debate %> signatures. The Petitions Committee will consider it for a debate. They can also gather further evidence and press the government for action.</p>
-<% end %>
-
-<p>The Committee is made up of 11 MPs, from political parties in government and in opposition. It is entirely independent of the Government. Find out more about the Committee: <%= link_to nil, help_url(anchor: 'petitions-committee') %></p>
+<p>If <%= Site.formatted_threshold_for_debate %> people sign the petition, the Petitions Committee will consider whether MPs debate it in Parliament.</p>
 
 <%= render "footer" %>
 <%= render "unsubscribe" %>

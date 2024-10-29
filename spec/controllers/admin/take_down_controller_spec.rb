@@ -144,12 +144,12 @@ RSpec.describe Admin::TakeDownController, type: :controller, admin: true do
 
           it "sends an email to the petition creator" do
             expect(creator_email).to deliver_to("bazbutler@gmail.com")
-            expect(creator_email.subject).to match(/We rejected your petition “[^"]+”/)
+            expect(creator_email.subject).to match(/Petition not accepted: “[^"]+”/)
           end
 
           it "sends an email to validated petition sponsors" do
             expect(sponsor_email).to deliver_to("laurapalmer@gmail.com")
-            expect(sponsor_email.subject).to match(/We rejected the petition “[^"]+” that you supported/)
+            expect(sponsor_email.subject).to match(/Petition not accepted: “[^"]+”/)
           end
 
           it "does not send an email to pending petition sponsors" do
@@ -185,12 +185,12 @@ RSpec.describe Admin::TakeDownController, type: :controller, admin: true do
 
           it "sends an email to the petition creator" do
             expect(creator_email).to deliver_to("bazbutler@gmail.com")
-            expect(creator_email.subject).to match(/We rejected your petition “[^"]+”/)
+            expect(creator_email.subject).to match(/Petition not accepted: “[^"]+”/)
           end
 
           it "sends an email to validated petition sponsors" do
             expect(sponsor_email).to deliver_to("laurapalmer@gmail.com")
-            expect(sponsor_email.subject).to match(/We rejected the petition “[^"]+” that you supported/)
+            expect(sponsor_email.subject).to match(/Petition not accepted: “[^"]+”/)
           end
 
           it "does not send an email to pending petition sponsors" do

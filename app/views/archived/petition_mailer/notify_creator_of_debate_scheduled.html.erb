@@ -1,13 +1,23 @@
 <%= render "reason" %>
 <p>Dear <%= @signature.name %>,</p>
 
-<p>Parliament is going to debate your petition – “<%= @petition.action %>”.</p>
-
-<p><%= link_to nil, archived_petition_url(@petition) %></p>
+<p>MPs are going to debate your petition – “<%= link_to @petition.action, archived_petition_url(@petition) %>”.</p>
 
 <p>The debate is scheduled for <%= short_date_format(@petition.scheduled_debate_date) %>.</p>
 
-<p>Once the debate has happened, we’ll email you a video and transcript.</p>
+<p>You can watch the debate live on <a href="http://www.youtube.com/ukparliament">Youtube</a> or <a href="https://parliamentlive.tv/Commons">parliamentlive.tv</a>.</p>
+
+<p>You can read a <a href="https://hansard.parliament.uk/">transcript of the debate</a> a few hours after it ends.</p>
+
+<p>After the debate, we’ll email you a video and transcript.</p>
+
+<h3>Petition debates</h3>
+
+<p>Petition debates allow MPs from all parties to discuss the issues raised by petitions.</p>
+
+<p>They don’t end with a vote to implement the request of a petition.</p>
+
+<p><a href="https://committees.parliament.uk/committee/326/petitions-committee/content/194347/how-petitions-debates-work/">Find out more</a></p>
 
 <%= render "footer" %>
 <%= render "unsubscribe" %>

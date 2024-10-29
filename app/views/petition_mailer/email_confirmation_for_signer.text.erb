@@ -1,5 +1,9 @@
-Click this link to sign the petition "<%= @petition.action %>"
+Dear <%= @signature.name %>,
 
+Please confirm your email:
 <%= verify_signature_url(@signature, token: @signature.perishable_token) %>
+
+to sign the petition “<%= @petition.action %>”:
+<%= petition_url(@petition) %>
 
 <%= render "footer" %>

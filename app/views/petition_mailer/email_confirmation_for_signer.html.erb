@@ -1,5 +1,5 @@
-<p>Click this link to sign the petition "<%= @petition.action %>"</p>
+<p>Dear <%= @signature.name %>,</p>
 
-<p><%= link_to nil, verify_signature_url(@signature, token: @signature.perishable_token) %></p>
+<p>Please <%= link_to "confirm your email", verify_signature_url(@signature, token: @signature.perishable_token) %> to sign the petition: “<%= link_to @petition.action, petition_url(@petition) %>”.</p>
 
 <%= render "footer" %>

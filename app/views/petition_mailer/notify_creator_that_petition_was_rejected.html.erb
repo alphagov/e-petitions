@@ -1,22 +1,21 @@
 <p>Dear <%= @signature.name %>,</p>
 
-<p>Sorry, we can’t accept your petition – “<%= @petition.action %>”.
+<% if @petition.hidden? %>
+<p>Sorry, we can’t accept your petition – “<%= @petition.action %>”.</p>
+<% else %>
+<p>Sorry, we can’t accept your petition – “<%= link_to @petition.action, petition_url(@petition) %>”.</p>
+<% end %>
 
 <%= rejection_description(@rejection.code) %>
 <% if @rejection.details? -%>
 
 <p><%= auto_link(h(@rejection.details)) %></p>
 <% end -%>
-<% unless @petition.hidden? -%>
 
-<p>Click this link to see your rejected petition:<br />
-<%= link_to 'View your rejected petition', petition_url(@petition) %></p>
-<% end -%>
+<p>We can only accept petitions that meet the petition standards.</p>
 
-<p>We only reject petitions that don’t meet the petition standards:<br />
-<%= link_to nil, help_url(anchor: 'standards') %></p>
+<p>If you like, you can <%= link_to "start a new petition", check_petitions_url %>.</p>
 
-<p>If you want to try again, click here to start a petition:<br />
-<%= link_to nil, check_petitions_url %></p>
+<p>We understand that it can be disappointing when your petition cannot be accepted. There are also <a href="https://www.parliament.uk/get-involved/">other ways to raise issues in Parliament</a>.</p>
 
 <%= render "footer" %>

@@ -1,22 +1,22 @@
 Dear <%= @signature.name %>,
 
-Sorry, we can’t accept your petition – "<%= @petition.action %>".
-
-<%= strip_tags(rejection_description(@rejection.code)) %>
-<% if @rejection.details? -%>
-
-<%= @rejection.details %>
-<% end -%>
+Sorry, we can’t accept your petition – “<%= @petition.action %>”.
 <% unless @petition.hidden? -%>
-
-Click this link to see your rejected petition:
 <%= petition_url(@petition) %>
 <% end -%>
 
-We only reject petitions that don’t meet the petition standards:
-<%= help_url(anchor: 'standards') %>
+<%= strip_tags(rejection_description(@rejection.code)) %>
+<% if @rejection.details? %>
 
-If you want to try again, click here to start a petition:
+<%= @rejection.details %>
+<% end %>
+We can only accept petitions that meet the petition standards.
+
+If you like, you can start a new petition:
 <%= check_petitions_url %>
+
+We understand that it can be disappointing when your petition cannot be accepted.
+There are also other ways to raise issues in Parliament:
+https://www.parliament.uk/get-involved/
 
 <%= render "footer" %>
