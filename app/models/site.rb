@@ -30,10 +30,6 @@ class Site < ActiveRecord::Base
       false
     end
 
-    def before_remove_const
-      Thread.current[:__site__] = nil
-    end
-
     def instance
       Thread.current[:__site__] ||= first_or_create(defaults)
     end
