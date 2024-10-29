@@ -1,7 +1,4 @@
-<p><small>You’re receiving this email because you signed this petition: “<%= @petition.action %>”.</small></p>
-<p><small>To unsubscribe from getting emails about this petition: <%= link_to nil, unsubscribe_signature_url(@signature, token: @signature.unsubscribe_token) %></small></p>
-<hr>
-
+<%= render "reason" %>
 <p>Dear <%= @signature.name %>,</p>
 
 <p>The Government has responded to the petition you signed – “<%= link_to @petition.action, petition_url(@petition) %>”.</p>
@@ -24,10 +21,5 @@
 
 <p>The Committee is made up of 11 MPs, from political parties in government and in opposition. It is entirely independent of the Government. Find out more about the Committee: <%= link_to nil, help_url(anchor: 'petitions-committee') %></p>
 
-<p>Thanks,<br />
-<%= t("petitions.emails.signoff_prefix") %><br />
-<%= t("petitions.emails.signoff_suffix") %></p>
-
-<hr>
-<p><small>You’re receiving this email because you signed this petition: “<%= @petition.action %>”.</small></p>
-<p><small>To unsubscribe from getting emails about this petition: <%= link_to nil, unsubscribe_signature_url(@signature, token: @signature.unsubscribe_token) %></small></p>
+<%= render "footer" %>
+<%= render "unsubscribe" %>

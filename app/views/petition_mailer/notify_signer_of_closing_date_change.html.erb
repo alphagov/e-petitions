@@ -29,6 +29,4 @@
 <% end %>
 <p>Ahead of the General Election on <%= @election_date %>, make sure you’re registered to vote. You can check whether you’re eligible to vote and find out how to register at: <a href="https://www.gov.uk/register-to-vote">https://www.gov.uk/register-to-vote</a>. The deadline to register to vote is <%= @registration_deadline %>.</p>
 
-<p>Many thanks,<br />
-<%= t("petitions.emails.signoff_prefix") %><br />
-<%= t("petitions.emails.signoff_suffix") %></p>
+<%= render "footer", closing: "Many thanks" %>
