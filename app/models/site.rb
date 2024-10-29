@@ -50,10 +50,6 @@ class Site < ActiveRecord::Base
       instance.enabled?
     end
 
-    def formatted_threshold_for_moderation
-      instance.formatted_threshold_for_moderation
-    end
-
     def formatted_threshold_for_response
       instance.formatted_threshold_for_response
     end
@@ -455,10 +451,6 @@ class Site < ActiveRecord::Base
     uri.scheme
   end
 
-  def formatted_threshold_for_moderation
-    number_to_delimited(threshold_for_moderation)
-  end
-
   def formatted_threshold_for_response
     number_to_delimited(threshold_for_response)
   end
@@ -549,7 +541,7 @@ class Site < ActiveRecord::Base
   validates :petition_duration, presence: true, numericality: { only_integer: true }
   validates :minimum_number_of_sponsors, presence: true, numericality: { only_integer: true }
   validates :maximum_number_of_sponsors, presence: true, numericality: { only_integer: true }
-  validates :threshold_for_moderation, presence: true, numericality: { only_integer: true }
+  validates :threshold_for_moderation, presence: true, numericality: { only_integer: true, greater_than_or_equal_to: 0, less_than_or_equal_to: 10 }
   validates :threshold_for_moderation_delay, presence: true, numericality: { only_integer: true }
   validates :threshold_for_response, presence: true, numericality: { only_integer: true }
   validates :threshold_for_debate, presence: true, numericality: { only_integer: true }
