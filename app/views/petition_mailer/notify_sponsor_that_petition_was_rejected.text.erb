@@ -1,19 +1,16 @@
 Dear <%= @signature.name %>,
 
-Sorry, we can’t accept the petition you supported  – "<%= @petition.action %>".
-
-<%= strip_tags(rejection_description(@rejection.code)) %>
-<% if @rejection.details? -%>
-
-<%= @rejection.details %>
-<% end -%>
+Sorry, we can’t accept the petition you supported: “<%= @petition.action %>”.
 <% unless @petition.hidden? -%>
-
-Click this link to see the rejected petition:
 <%= petition_url(@petition) %>
 <% end -%>
 
-We only reject petitions that don’t meet the petition standards:
+<%= strip_tags(rejection_description(@rejection.code)) %>
+<% if @rejection.details? %>
+
+<%= @rejection.details %>
+<% end %>
+We only accept petitions that meet the petition standards:
 <%= help_url(anchor: 'standards') %>
 
 <%= render "footer" %>

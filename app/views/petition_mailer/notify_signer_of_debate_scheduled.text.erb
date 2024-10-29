@@ -1,13 +1,28 @@
 <%= render "reason" %>
 Dear <%= @signature.name %>,
 
-Parliament is going to debate the petition you signed – “<%= @petition.action %>”.
-
-<%= petition_url(@petition) %>
+MPs are going to debate the petition you signed: “<%= @petition.action %>”.
 
 The debate is scheduled for <%= short_date_format(@petition.scheduled_debate_date) %>.
 
-Once the debate has happened, we’ll email you a video and transcript.
+You can watch the debate live on [Youtube][1] or [parliamentlive.tv][2].
+
+You can read a [transcript of the debate][3] a few hours after it ends.
+
+After the debate, we’ll email you a video and transcript.
+
+### Petition debates
+
+Petition debates allow MPs from all parties to discuss the issues raised by petitions.
+
+They don’t end with a vote to implement the request of a petition.
+
+[Find out more][4]
+
+[1]: http://www.youtube.com/ukparliament
+[2]: https://parliamentlive.tv/Commons
+[3]: https://hansard.parliament.uk/
+[4]: https://committees.parliament.uk/committee/326/petitions-committee/content/194347/how-petitions-debates-work/
 
 <%= render "footer" %>
 <%= render "unsubscribe" %>

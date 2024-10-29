@@ -1,19 +1,17 @@
 <p>Dear <%= @signature.name %>,</p>
 
-<p>Sorry, we can’t accept the petition you supported – “<%= @petition.action %>”.
+<% if @petition.hidden? %>
+<p>Sorry, we can’t accept the petition you supported: “<%= @petition.action %>”.
+<% else %>
+<p>Sorry, we can’t accept the petition you supported: “<%= link_to @petition.action, petition_url(@petition) %>”.
+<% end %>
 
 <%= rejection_description(@rejection.code) %>
 <% if @rejection.details? -%>
 
 <p><%= auto_link(h(@rejection.details)) %></p>
 <% end -%>
-<% unless @petition.hidden? -%>
 
-<p>Click this link to see the rejected petition:<br />
-<%= link_to 'View the rejected petition', petition_url(@petition) %></p>
-<% end -%>
-
-<p>We only reject petitions that don’t meet the petition standards:<br />
-<%= link_to nil, help_url(anchor: 'standards') %></p>
+<p>We only accept petitions that meet the <%= link_to "petition standards", help_url(anchor: 'standards') %>.</p>
 
 <%= render "footer" %>

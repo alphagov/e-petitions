@@ -1,6 +1,8 @@
-You're receiving this email because your email has been used to sign the petition “<%= @petition.action %>”, but you have already signed this petition.
+Dear <%= @signature.name %>,
 
-View the petition “<%= @petition.action %>” at:
+Your email has been used to sign the petition “<%= @petition.action %>":
 <%= petition_url(@petition) %>
+
+You have already signed it, so your signature cannot be accepted.
 
 <%= render "footer" %>

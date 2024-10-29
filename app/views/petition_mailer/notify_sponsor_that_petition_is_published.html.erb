@@ -1,8 +1,22 @@
 <p>Dear <%= @signature.name %>,</p>
 
-<p>We published the petition you supported – “<%= @petition.action %>”</p>
+<p>We published the petition you supported: “<%= link_to @petition.action, petition_url(@petition) %>”.</p>
 
-<p>Click this link to see the petition and start sharing it:<br />
-<%= link_to nil, petition_url(@petition) %></p>
+<p>It will be open for six months.</p>
+
+<p>If 10,000 people sign this petition, the Government will respond.</p>
+
+<p>If 100,000 people sign it, the <a href="https://committees.parliament.uk/committee/326/petitions-committee/role/">Petitions Committee</a> will consider whether MPs debate it in Parliament.</p>
+
+<p>If you chose to receive updates about this petition, we’ll tell you if it receives a government response or will be debated.</p>
+
+<p>We may also update you:</p>
+
+<ul>
+  <li>if the topic is raised elsewhere in Parliament</li>
+  <li>about any opportunities to share your views of the topic with MPs or the Government.</li>
+</ul>
+
+<p><%= link_to "View the petition", petition_url(@petition) %></p>
 
 <%= render "footer" %>

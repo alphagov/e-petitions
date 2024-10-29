@@ -132,7 +132,7 @@ Then(/^the creator should receive a notification email$/) do
     Then "#{@petition.creator.email}" should receive an email
     When they open the email
     Then they should see "published" in the email body
-    And they should see /We published your petition/ in the email subject
+    And they should see /Your petition is live/ in the email subject
   )
 end
 
@@ -147,7 +147,7 @@ Then(/^the creator should receive a (libel\/profanity )?rejection notification e
     When they open the email
     Then they should see "Sorry, we can’t accept your petition" in the email body
     And they should see "#{strip_tags(rejection_description(@petition.rejection.code)).split("\n").first}" in the email body
-    And they should see /We rejected your petition/ in the email subject
+    And they should see /Petition not accepted/ in the email subject
   )
   if petition_is_libellous
     step %{they should not see "#{petition_url(@petition)}" in the email body}
