@@ -744,22 +744,6 @@ RSpec.describe Site, type: :model do
     end
   end
 
-  describe ".before_remove_const" do
-    let(:site) { described_class.create! }
-
-    context "when it is cached in Thread.current" do
-      before do
-        Thread.current[:__site__] = site
-      end
-
-      it "clears the cached instance in Thread.current" do
-        expect{ Site.before_remove_const }.to change {
-          Thread.current[:__site__]
-        }.from(site).to(nil)
-      end
-    end
-  end
-
   describe "#authenticate" do
     subject :site do
       described_class.create!(username: "petitions", password: "letmein")

@@ -11,10 +11,6 @@ class Parliament < ActiveRecord::Base
   has_many :constituencies, through: :parliament_constituencies
 
   class << self
-    def before_remove_const
-      Thread.current[:__parliament__] = nil
-    end
-
     def instance
       Thread.current[:__parliament__] ||= current_or_create
     end

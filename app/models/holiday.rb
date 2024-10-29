@@ -1,9 +1,5 @@
 class Holiday < ActiveRecord::Base
   class << self
-    def before_remove_const
-      Thread.current[:__holiday__] = nil
-    end
-
     def instance
       Thread.current[:__holiday__] ||= first_or_create(defaults)
     end

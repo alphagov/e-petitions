@@ -314,22 +314,6 @@ RSpec.describe Parliament, type: :model do
     end
   end
 
-  describe ".before_remove_const" do
-    let(:parliament) { FactoryBot.create(:parliament) }
-
-    context "when it is cached in Thread.current" do
-      before do
-        Thread.current[:__parliament__] = parliament
-      end
-
-      it "clears the cached instance in Thread.current" do
-        expect{ Parliament.before_remove_const }.to change {
-          Thread.current[:__parliament__]
-        }.from(parliament).to(nil)
-      end
-    end
-  end
-
   describe "#opened?" do
     context "when opening_at is nil" do
       subject :parliament do
