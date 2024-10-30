@@ -501,6 +501,11 @@ RSpec.describe PetitionsController, type: :controller do
         get :index
         expect(response).to redirect_to("https://petition.parliament.uk/")
       end
+
+      it "doesn't redirect JSON requests" do
+        get :index, as: :json
+        expect(response).to be_successful
+      end
     end
   end
 

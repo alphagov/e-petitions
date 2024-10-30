@@ -102,7 +102,9 @@ class PetitionsController < ApplicationController
   end
 
   def redirect_to_home_page_unless_opened
-    redirect_to home_url unless Parliament.opened?
+    unless json_request?
+      redirect_to home_url unless Parliament.opened?
+    end
   end
 
   def request_format
