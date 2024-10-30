@@ -2,11 +2,15 @@ Rails.application.routes.draw do
   constraints Site.constraints_for_public do
     controller 'constituencies' do
       get '/constituencies', action: 'index', as: :constituencies
+
+      constraints period: /\d{4}-\d{4}|current/ do
+        get '/parliaments/:period/constituencies', action: 'index', as: nil
+      end
     end
 
     controller 'parliaments' do
       get '/parliaments', action: 'index', as: :parliaments
-      get '/parliaments/:period', action: 'show'
+      get '/parliaments/:period', action: 'show', constraints: { period: /\d{4}-\d{4}/ }
     end
 
     controller 'topics' do

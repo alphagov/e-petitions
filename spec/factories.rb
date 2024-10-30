@@ -927,6 +927,19 @@ FactoryBot.define do
     trait :archived do
       archived_at { 1.month.ago }
     end
+
+    trait :conservatives_2019 do
+      government { "Conservatives" }
+      state_opening_at { "2019-12-19 11:30:00".in_time_zone }
+      opening_at { "2020-03-03 10:55:00".in_time_zone }
+      archived_at { "2024-10-21 09:00:00".in_time_zone }
+
+      dissolution_heading { "Parliament is dissolving" }
+      dissolution_message { "This means all petitions will close in 2 weeks" }
+      dissolved_heading { "Parliament is dissolved" }
+      dissolved_message { "All petitions are now closed" }
+      dissolution_at { "2024-05-26 20:40:00".in_time_zone }
+    end
   end
 
   factory :tag do

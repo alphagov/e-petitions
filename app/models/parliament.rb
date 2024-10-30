@@ -4,6 +4,7 @@ class Parliament < ActiveRecord::Base
   include ActiveSupport::NumberHelper
 
   CUTOFF_DATE = Date.civil(2015, 5, 7)
+  PERIOD_FORMAT = /\A\d{4}-\d{4}\z/
 
   has_many :petitions, inverse_of: :parliament, class_name: "Archived::Petition"
   has_many :parliament_constituencies
