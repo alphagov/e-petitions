@@ -112,16 +112,18 @@ Rails.application.routes.draw do
     end
 
     # REDIRECT OLD PAGES
-    get '/api/petitions',        to: redirect('/')
-    get '/api/petitions/:id',    to: redirect('/')
-    get '/crown-copyright',      to: redirect('https://www.nationalarchives.gov.uk/information-management/our-services/crown-copyright.htm')
-    get '/departments',          to: redirect('/')
-    get '/departments/:id',      to: redirect('/')
-    get '/help/standards',       to: redirect('/standards')
-    get '/how-it-works',         to: redirect('/help')
-    get '/privacy-policy',       to: redirect('/privacy')
-    get '/faq',                  to: redirect('/help')
-    get '/terms-and-conditions', to: redirect('/help')
+    controller 'redirects' do
+      get '/api/petitions',        action: 'home'
+      get '/api/petitions/:id',    action: 'home'
+      get '/crown-copyright',      action: 'national_archives'
+      get '/departments',          action: 'home'
+      get '/departments/:id',      action: 'home'
+      get '/help/standards',       action: 'standards'
+      get '/how-it-works',         action: 'help'
+      get '/privacy-policy',       action: 'privacy'
+      get '/faq',                  action: 'help'
+      get '/terms-and-conditions', action: 'help'
+    end
 
     scope '/images', controller: 'images' do
       get '/:signed_blob_id/:variation_key/*filename', action: 'show', as: :image_proxy
@@ -138,6 +140,10 @@ Rails.application.routes.draw do
 
   direct :parliament do
     "https://www.parliament.uk/"
+  end
+
+  direct :national_archives do
+    "https://www.nationalarchives.gov.uk/information-management/our-services/crown-copyright.htm"
   end
 
   constraints Site.constraints_for_moderation do
