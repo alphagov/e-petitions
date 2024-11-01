@@ -45,6 +45,7 @@ class PackageBuilder
       package_gems unless skip_gems?
       package_assets unless skip_assets?
       create_revision_file
+      create_timestamp_file
       remove_artifacts
     end
 
@@ -144,6 +145,10 @@ class PackageBuilder
 
   def create_revision_file
     File.write(revision_file, revision)
+  end
+
+  def create_timestamp_file
+    File.write(timestamp_file, timestamp.iso8601(0))
   end
 
   def credentials
@@ -325,6 +330,10 @@ class PackageBuilder
 
   def revision_file
     File.join(archive_path, 'REVISION')
+  end
+
+  def timestamp_file
+    File.join(archive_path, 'TIMESTAMP')
   end
 
   def short_revision

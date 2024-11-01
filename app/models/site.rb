@@ -276,6 +276,10 @@ class Site < ActiveRecord::Base
       }
     end
 
+    def package_built_at
+      @package_built_at ||= read_package_timestamp
+    end
+
     private
 
     def default_title
@@ -392,6 +396,18 @@ class Site < ActiveRecord::Base
 
     def default_constraints_for_moderation
       { protocol: default_protocol, host: default_moderate_host, port: default_port }
+    end
+
+    def package_timestamp_file
+      Rails.root.join("TIMESTAMP")
+    end
+
+    def read_package_timestamp
+      if File.exist?(package_timestamp_file)
+        Time.iso8601(File.read(package_timestamp_file).chomp)
+      else
+        Time.current.getutc.floor
+      end
     end
   end
 
