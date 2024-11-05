@@ -27,6 +27,8 @@ namespace :errors do
 
     lookup_context = ActionView::LookupContext.new('app/views')
 
+    ActionView::Base.annotate_rendered_view_with_filenames = false
+
     %w[400 403 404 406 410 422 500 503].each do |status|
       context = context_class.new(lookup_context, { status: status }, controller_class.new)
       File.open(Rails.public_path.join("#{status}.html"), 'wb') do |f|
