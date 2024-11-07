@@ -60,11 +60,25 @@ class PetitionMailerPreview < ActionMailer::Preview
     PetitionMailer.notify_signer_of_threshold_response(petition, signature)
   end
 
+  def notify_signer_of_debate_scheduled
+    petition = Petition.debated.last
+    signature = petition.signatures.validated.last
+
+    PetitionMailer.notify_signer_of_debate_scheduled(petition, signature)
+  end
+
   def notify_creator_of_threshold_response
     petition = Petition.with_response.last
     signature = petition.creator
 
     PetitionMailer.notify_creator_of_threshold_response(petition, signature)
+  end
+
+  def notify_creator_of_debate_scheduled
+    petition = Petition.debated.last
+    signature = petition.creator
+
+    PetitionMailer.notify_creator_of_debate_scheduled(petition, signature)
   end
 
   def notify_creator_of_closing_date_change
@@ -104,7 +118,7 @@ class PetitionMailerPreview < ActionMailer::Preview
 
   def debated_petition_creator_notification
     petition = Petition.debated.last
-    signature = petition.signatures.validated.last
+    signature = petition.creator
 
     PetitionMailer.notify_creator_of_debate_outcome(petition, signature)
   end
@@ -126,5 +140,35 @@ class PetitionMailerPreview < ActionMailer::Preview
   def privacy_policy_update_email
     privacy_notification = PrivacyNotification.last
     PetitionMailer.privacy_policy_update_email(privacy_notification)
+  end
+
+  def notify_creator_that_petition_is_published
+    signature = Signature.creator.last
+    PetitionMailer.notify_creator_that_petition_is_published(signature)
+  end
+
+  def notify_creator_that_petition_is_rejected
+    signature = Petition.rejected_state.first.creator
+    PetitionMailer.notify_creator_that_petition_was_rejected(signature)
+  end
+
+  def notify_creator_that_petition_is_rejected_and_hidden
+    signature = Petition.hidden_state.first.creator
+    PetitionMailer.notify_creator_that_petition_was_rejected(signature)
+  end
+
+  def notify_sponsor_that_petition_is_published
+    signature = Signature.sponsors.last
+    PetitionMailer.notify_sponsor_that_petition_is_published(signature)
+  end
+
+  def notify_sponsor_that_petition_is_rejected
+    signature = Petition.rejected_state.first.sponsors.first
+    PetitionMailer.notify_sponsor_that_petition_was_rejected(signature)
+  end
+
+  def notify_sponsor_that_petition_is_rejected_and_hidden
+    signature = Petition.hidden_state.first.sponsors.first
+    PetitionMailer.notify_sponsor_that_petition_was_rejected(signature)
   end
 end

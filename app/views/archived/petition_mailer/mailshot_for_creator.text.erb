@@ -1,7 +1,4 @@
-You’re receiving this email because you created this petition: “<%= @petition.action %>”.
-To unsubscribe from getting emails about this petition: <%= unsubscribe_archived_signature_url(@signature, token: @signature.unsubscribe_token) %>
---
-
+<%= render "reason" %>
 Dear <%= @signature.name %>,
 
 You recently created the petition “<%= @petition.action %>”:
@@ -9,10 +6,5 @@ You recently created the petition “<%= @petition.action %>”:
 
 <%= markdown_to_text(@mailshot.body) %>
 
-Thanks,
-<%= t("petitions.emails.signoff_prefix") %>
-<%= t("petitions.emails.signoff_suffix") %>
-
---
-You’re receiving this email because you created this petition: “<%= @petition.action %>”.
-To unsubscribe from getting emails about this petition: <%= unsubscribe_archived_signature_url(@signature, token: @signature.unsubscribe_token) %>
+<%= render "footer" %>
+<%= render "unsubscribe" %>

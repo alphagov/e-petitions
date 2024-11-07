@@ -67,23 +67,15 @@ RSpec.describe Site, type: :model do
 
     it { is_expected.to validate_length_of(:moderation_delay_message).is_at_most(500) }
 
-    %w[
+    %i[
       petition_duration minimum_number_of_sponsors maximum_number_of_sponsors threshold_for_moderation
       threshold_for_moderation_delay threshold_for_response threshold_for_debate login_timeout
     ].each do |attribute|
-      describe attribute do
-        let(:errors) { subject.errors[attribute] }
-        let(:message) { "#{attribute.humanize} must be an integer" }
-
-        before do
-          subject.update(attribute => '0.1')
-        end
-
-        it "only accepts integers" do
-          expect(errors).to include(message)
-        end
-      end
+      it { is_expected.to validate_numericality_of(attribute).only_integer }
     end
+
+    it { is_expected.to validate_numericality_of(:threshold_for_moderation).is_greater_than_or_equal_to(0) }
+    it { is_expected.to validate_numericality_of(:threshold_for_moderation).is_less_than_or_equal_to(10) }
 
     context "when protected" do
       subject { described_class.new(protected: true) }
@@ -214,11 +206,6 @@ RSpec.describe Site, type: :model do
     it "delegates threshold_for_moderation to the instance" do
       expect(site).to receive(:threshold_for_moderation).and_return(5)
       expect(Site.threshold_for_moderation).to eq(5)
-    end
-
-    it "delegates formatted_threshold_for_moderation to the instance" do
-      expect(site).to receive(:formatted_threshold_for_moderation).and_return("5,000")
-      expect(Site.formatted_threshold_for_moderation).to eq("5,000")
     end
 
     it "delegates threshold_for_response to the instance" do
@@ -757,22 +744,6 @@ RSpec.describe Site, type: :model do
     end
   end
 
-  describe ".before_remove_const" do
-    let(:site) { described_class.create! }
-
-    context "when it is cached in Thread.current" do
-      before do
-        Thread.current[:__site__] = site
-      end
-
-      it "clears the cached instance in Thread.current" do
-        expect{ Site.before_remove_const }.to change {
-          Thread.current[:__site__]
-        }.from(site).to(nil)
-      end
-    end
-  end
-
   describe "#authenticate" do
     subject :site do
       described_class.create!(username: "petitions", password: "letmein")
@@ -798,16 +769,6 @@ RSpec.describe Site, type: :model do
 
     it "the protocol of the url" do
       expect(site.email_protocol).to eq("https")
-    end
-  end
-
-  describe "#formatted_threshold_for_moderation" do
-    subject :site do
-      described_class.create!(threshold_for_moderation: 5000)
-    end
-
-    it "returns a formatted number" do
-      expect(site.formatted_threshold_for_moderation).to eq("5,000")
     end
   end
 

@@ -22,7 +22,14 @@ end
 
 When(/^I confirm my email address(?: again)?$/) do
   steps %Q(
-    And I open the email with subject "Please confirm your email address"
+    And I open the email with subject "Confirm your email to sign"
+    When I click the first link in the email
+  )
+end
+
+When(/^I confirm my email address as a sponsor(?: again)?$/) do
+  steps %Q(
+    And I open the email with subject "Sign to support:"
     When I click the first link in the email
   )
 end
