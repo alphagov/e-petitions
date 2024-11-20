@@ -26,10 +26,10 @@ RSpec.describe SharingHelper, type: :helper do
     end
   end
 
-  describe "#share_via_twitter_url" do
-    it "generates a share via Twitter url" do
-      expect(helper.share_via_twitter_url(petition)).to eq <<-URL.strip
-        https://twitter.com/intent/tweet?text=Petition%3A%20Do%20something&url=https%3A%2F%2Fpetition.parliament.uk%2Fpetitions%2F100000
+  describe "#share_via_x_url" do
+    it "generates a share via X url" do
+      expect(helper.share_via_x_url(petition)).to eq <<-URL.strip
+        https://x.com/intent/post?text=Petition%3A%20Do%20something&url=https%3A%2F%2Fpetition.parliament.uk%2Fpetitions%2F100000
       URL
     end
   end

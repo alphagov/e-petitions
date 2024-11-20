@@ -19,17 +19,17 @@
 <%= open_graph_tag 'type', 'website' %>
 <%= open_graph_tag 'title', page_title %>
 <% end %>
-<!-- Twitter -->
-<%= twitter_card_tag 'card', 'summary' %>
-<%= twitter_card_tag 'site', '@hocpetitions' %>
-<%= twitter_card_tag 'image', 'os-social/opengraph-image.png' %>
+<!-- X -->
+<%= x_card_tag 'card', 'summary' %>
+<%= x_card_tag 'site', '@hocpetitions' %>
+<%= x_card_tag 'image', 'os-social/opengraph-image.png' %>
 <% if archived_petition_page? %>
-<%= twitter_card_tag 'title', :title, petition: @petition.action %>
-<%= twitter_card_tag 'description', @petition.background? ? @petition.background : @petition.additional_details %>
+<%= x_card_tag 'title', :title, petition: @petition.action %>
+<%= x_card_tag 'description', @petition.background? ? @petition.background : @petition.additional_details %>
 <% elsif defined?(@petition) %>
-<%= twitter_card_tag 'title', :title, petition: @petition.action %>
-<%= twitter_card_tag 'description', @petition.background %>
+<%= x_card_tag 'title', :title, petition: @petition.action %>
+<%= x_card_tag 'description', @petition.background %>
 <% else %>
-<%= twitter_card_tag 'title', page_title %>
-<%= twitter_card_tag 'description', 'Official online petitions in response to issues of the day, listing the number that got a Government response, and those that have been debated in the House of Parliament' %>
+<%= x_card_tag 'title', page_title %>
+<%= x_card_tag 'description', 'Official online petitions in response to issues of the day, listing the number that got a Government response, and those that have been debated in the House of Parliament' %>
 <% end %>

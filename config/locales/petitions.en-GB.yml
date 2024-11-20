@@ -27,8 +27,8 @@ en-GB:
         html: <span class="icon icon-share-facebook"></span> Facebook
       email:
         html: <span class="icon icon-share-email"></span> Email
-      twitter:
-        html: <span class="icon icon-share-twitter"></span> Twitter
+      x:
+        html: <span class="icon icon-share-x"></span> X
       whatsapp:
         html: <span class="icon icon-share-whatsapp"></span> Whatsapp
 

@@ -51,10 +51,10 @@ RSpec.describe SocialMetaHelper, type: :helper do
     end
   end
 
-  describe "#twitter_card_tag" do
+  describe "#x_card_tag" do
     context "when using a string for content" do
       subject do
-        helper.twitter_card_tag("site", "@hocpetitions")
+        helper.x_card_tag("site", "@hocpetitions")
       end
 
       it "generates a meta tag with the content" do
@@ -64,7 +64,7 @@ RSpec.describe SocialMetaHelper, type: :helper do
 
     context "when using a symbol for content" do
       subject do
-        helper.twitter_card_tag("title", :default_title)
+        helper.x_card_tag("title", :default_title)
       end
 
       it "generates a meta tag with the i18n content" do
@@ -74,7 +74,7 @@ RSpec.describe SocialMetaHelper, type: :helper do
 
     context "when using a symbol for content with interpolation" do
       subject do
-        helper.twitter_card_tag("title", :title, petition: "Show us the money")
+        helper.x_card_tag("title", :title, petition: "Show us the money")
       end
 
       it "generates a meta tag with the i18n content" do
@@ -90,7 +90,7 @@ RSpec.describe SocialMetaHelper, type: :helper do
       end
 
       subject do
-        helper.twitter_card_tag("image", "os-social/opengraph-image.png")
+        helper.x_card_tag("image", "os-social/opengraph-image.png")
       end
 
       it "generates a meta tag with the correct asset image url" do
