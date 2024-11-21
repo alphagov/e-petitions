@@ -46,28 +46,14 @@ services:
     environment:
       <<: *environment
     command: [
-      "rails", "server",
-      "-b", "0.0.0.0",
-      "-p", "3000"
+      "foreman", "start",
+      "-f", "Procfile.dev"
     ]
     ports:
       - "127.0.0.1:3000:3000"
     stdin_open: true
     tty: true
-
-  worker:
-    <<: *application
-    environment:
-      <<: *environment
-      MIN_PRIORITY: "10"
-    command: [ "rake", "jobs:work" ]
-
-  counter:
-    <<: *application
-    environment:
-      <<: *environment
-      MAX_PRIORITY: "5"
-    command: [ "rake", "jobs:work" ]
+    init: true
 
 volumes:
   bundle:

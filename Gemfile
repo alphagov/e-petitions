@@ -43,6 +43,10 @@ gem 'aws-sdk-codedeploy'
 gem 'aws-sdk-cloudwatchlogs'
 gem 'aws-sdk-s3'
 
+group :development do
+  gem 'foreman'
+end
+
 group :development, :test do
   gem 'simplecov'
   gem 'brakeman', require: false
