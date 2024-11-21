@@ -12,8 +12,6 @@ Rails.application.config.assets.version = "1.0"
 # Rails.application.config.assets.precompile += %w[ admin.js admin.css ]
 
 Rails.application.config.assets.precompile += %w[
-  application-ie7.css
-  application-ie8.css
   admin.css
   delayed/web/application.css
   ie.js
