@@ -3,7 +3,7 @@
   <%= link_to admin_petition_signatures_path(@petition, q: @signature.email) do %>
     <%= @signature.name %>
     &lt;<%= @signature.email %>&gt;
-  <% end %><br />
+  <% end %><br>
   on <%= link_to admin_petition_path(@petition) do %>
     <%= @petition.action %>
   <% end %>

@@ -2,7 +2,7 @@
 
 <p><%= link_to nil, verify_sponsor_url(@sponsor, token: @sponsor.perishable_token) %></p>
 
-<hr />
+<hr>
 
 <p><%= @petition.creator.name %>’s petition:</p>
 
@@ -14,7 +14,7 @@
   <p><%= @petition.additional_details %></p>
 <% end %>
 
-<hr />
+<hr>
 
-<p>Click this link to sign the petition:<br />
+<p>Click this link to sign the petition:<br>
 <%= link_to nil, verify_sponsor_url(@sponsor, token: @sponsor.perishable_token) %></p>
