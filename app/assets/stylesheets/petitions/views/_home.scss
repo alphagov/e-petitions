@@ -166,15 +166,19 @@ a.threshold-panel:hover, a.threshold-panel:focus {
   padding-bottom: 0;
 }
 
-.search-petitions label {
+.search-petitions h2 {
   @include bold-36();
 
-  display: block;
   margin-top: em(30, 20);
   margin-bottom: em(10, 20);
 
   @include media(tablet) {
     margin-top: em(30, 24);
     margin-bottom: em(10, 24);
+  }
+
+  label {
+    display: block;
+    margin: 0;
   }
 }
