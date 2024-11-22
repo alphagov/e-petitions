@@ -9,14 +9,14 @@
 <% end -%>
 <% unless @petition.hidden? -%>
 
-<p>Click this link to see your rejected petition:<br />
+<p>Click this link to see your rejected petition:<br>
 <%= link_to 'View your rejected petition', petition_url(@petition) %></p>
 <% end -%>
 
-<p>We only reject petitions that don’t meet the petition standards:<br />
+<p>We only reject petitions that don’t meet the petition standards:<br>
 <%= link_to nil, help_url(anchor: 'standards') %></p>
 
-<p>If you want to try again, click here to start a petition:<br />
+<p>If you want to try again, click here to start a petition:<br>
 <%= link_to nil, check_petitions_url %></p>
 
 <%= render "footer" %>

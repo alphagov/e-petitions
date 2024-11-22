@@ -15,7 +15,7 @@
 <% elsif creator = @petition.creator %>
   <dt>Creator</dt>
   <dd>
-    <span class="creator-name"><%= creator.name %></span><br />
+    <span class="creator-name"><%= creator.name %></span><br>
     <%= link_to(creator.email, admin_signatures_path(q: creator.email), class: "creator-email") %>
   </dd>
   <% if creator.united_kingdom? %>
@@ -32,7 +32,7 @@
   <% if constituency = creator.constituency %>
     <dt>Constituency</dt>
     <dd>
-      <span class="creator-constituency"><%= constituency.name %></span><br />
+      <span class="creator-constituency"><%= constituency.name %></span><br>
       <small class="creator-constituency-region"><%= constituency.region.name %></small>
     </dd>
   <% end %>

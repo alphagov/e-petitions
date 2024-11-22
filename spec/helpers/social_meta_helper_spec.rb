@@ -10,7 +10,7 @@ RSpec.describe SocialMetaHelper, type: :helper do
       end
 
       it "generates a meta tag with the content" do
-        expect(subject).to match(%r{<meta property="og:type" content="article" />})
+        expect(subject).to match(%r{<meta property="og:type" content="article">})
       end
     end
 
@@ -20,7 +20,7 @@ RSpec.describe SocialMetaHelper, type: :helper do
       end
 
       it "generates a meta tag with the i18n content" do
-        expect(subject).to match(%r{<meta property="og:site_name" content="Petitions - UK Government and Parliament" />})
+        expect(subject).to match(%r{<meta property="og:site_name" content="Petitions - UK Government and Parliament">})
       end
     end
 
@@ -30,7 +30,7 @@ RSpec.describe SocialMetaHelper, type: :helper do
       end
 
       it "generates a meta tag with the i18n content" do
-        expect(subject).to match(%r{<meta property="og:title" content="Petition: Show us the money" />})
+        expect(subject).to match(%r{<meta property="og:title" content="Petition: Show us the money">})
       end
     end
 
@@ -46,7 +46,7 @@ RSpec.describe SocialMetaHelper, type: :helper do
       end
 
       it "generates a meta tag with the correct asset image url" do
-        expect(subject).to match(%r{<meta property="og:image" content="https://petition.parliament.uk/assets/os-social/opengraph-image.png" />})
+        expect(subject).to match(%r{<meta property="og:image" content="https://petition.parliament.uk/assets/os-social/opengraph-image.png">})
       end
     end
   end
@@ -58,7 +58,7 @@ RSpec.describe SocialMetaHelper, type: :helper do
       end
 
       it "generates a meta tag with the content" do
-        expect(subject).to match(%r{<meta name="twitter:site" content="@hocpetitions" />})
+        expect(subject).to match(%r{<meta name="twitter:site" content="@hocpetitions">})
       end
     end
 
@@ -68,7 +68,7 @@ RSpec.describe SocialMetaHelper, type: :helper do
       end
 
       it "generates a meta tag with the i18n content" do
-        expect(subject).to match(%r{<meta name="twitter:title" content="Petitions - UK Government and Parliament" />})
+        expect(subject).to match(%r{<meta name="twitter:title" content="Petitions - UK Government and Parliament">})
       end
     end
 
@@ -78,7 +78,7 @@ RSpec.describe SocialMetaHelper, type: :helper do
       end
 
       it "generates a meta tag with the i18n content" do
-        expect(subject).to match(%r{<meta name="twitter:title" content="Petition: Show us the money" />})
+        expect(subject).to match(%r{<meta name="twitter:title" content="Petition: Show us the money">})
       end
     end
 
@@ -94,7 +94,7 @@ RSpec.describe SocialMetaHelper, type: :helper do
       end
 
       it "generates a meta tag with the correct asset image url" do
-        expect(subject).to match(%r{<meta name="twitter:image" content="https://petition.parliament.uk/assets/os-social/opengraph-image.png" />})
+        expect(subject).to match(%r{<meta name="twitter:image" content="https://petition.parliament.uk/assets/os-social/opengraph-image.png">})
       end
     end
   end

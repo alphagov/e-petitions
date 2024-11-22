@@ -31,14 +31,14 @@
           <div class="panel-indent">
             <p>
               <small>
-                Match <label><input type="radio" name="dmatch" value="any" checked /> any selected departments</label>
-                <label><input type="radio" name="dmatch" value="all" /> all selected departments</label>
-                <label><input type="radio" name="dmatch" value="none" /> no departments</label>
+                Match <label><input type="radio" name="dmatch" value="any" checked> any selected departments</label>
+                <label><input type="radio" name="dmatch" value="all"> all selected departments</label>
+                <label><input type="radio" name="dmatch" value="none"> no departments</label>
               </small>
             </p>
             <% Department.by_name.each do |dept| %>
               <div class="multiple-choice">
-                <input type="checkbox" name="depts[]" value="<%= dept.id %>" id="depts_<%= dept.id %>" />
+                <input type="checkbox" name="depts[]" value="<%= dept.id %>" id="depts_<%= dept.id %>">
                 <label for="depts_<%= dept.id %>" title="<%= dept.name %>"><%= dept.label %></label>
               </div>
             <% end %>
@@ -52,14 +52,14 @@
           <div class="panel-indent">
             <p>
               <small>
-                Match <label><input type="radio" name="tmatch" value="any" checked /> any selected tags</label>
-                <label><input type="radio" name="tmatch" value="all" /> all selected tags</label>
-                <label><input type="radio" name="tmatch" value="none" /> no tags</label>
+                Match <label><input type="radio" name="tmatch" value="any" checked> any selected tags</label>
+                <label><input type="radio" name="tmatch" value="all"> all selected tags</label>
+                <label><input type="radio" name="tmatch" value="none"> no tags</label>
               </small>
             </p>
             <% Tag.by_name.each do |tag| %>
               <div class="multiple-choice">
-                <input type="checkbox" name="tags[]" value="<%= tag.id %>" id="tags_<%= tag.id %>" />
+                <input type="checkbox" name="tags[]" value="<%= tag.id %>" id="tags_<%= tag.id %>">
                 <label for="tags_<%= tag.id %>" title="<%= tag.description %>"><%= tag.name %></label>
               </div>
             <% end %>

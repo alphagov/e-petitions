@@ -11,14 +11,14 @@
   <% elsif creator = @petition.creator %>
     <dt>Creator</dt>
     <dd>
-      <%= creator.name %><br />
+      <%= creator.name %><br>
       <%= auto_link(creator.email) %>
     </dd>
 
     <% if constituency = creator.constituency %>
       <dt>Constituency</dt>
       <dd>
-        <span class="creator-constituency"><%= constituency.name %></span><br />
+        <span class="creator-constituency"><%= constituency.name %></span><br>
         <small class="creator-constituency-region"><%= constituency.region.name %></small>
       </dd>
     <% end %>
