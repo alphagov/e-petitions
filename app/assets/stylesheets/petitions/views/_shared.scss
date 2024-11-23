@@ -220,6 +220,16 @@ input.back-page {
   float: left;
   text-align: left;
   margin-top: 5px;
+
+  &:hover {
+    &::before {
+      background-image: image-url("icons/icon_paginate-hover-previous.png");
+
+      @include device-pixel-ratio() {
+        background-image: image-url("icons/icon_paginate-hover-previous-2x.png");
+      }
+    }
+  }
 }
 
 .previous::before {
@@ -241,6 +251,16 @@ input.back-page {
   float: right;
   text-align: right;
   margin-top: 5px;
+
+  &:hover {
+    &::before {
+      background-image: image-url("icons/icon_paginate-hover-next.png");
+
+      @include device-pixel-ratio() {
+        background-image: image-url("icons/icon_paginate-hover-next-2x.png");
+      }
+    }
+  }
 }
 
 .next::before {
