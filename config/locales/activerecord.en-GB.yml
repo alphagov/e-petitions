@@ -104,7 +104,8 @@ en-GB:
               blank: Please enter a notification cut-off
             opening_at:
               blank: Please enter the date and time when parliament will reopen
-              too_soon: Please wait until six months after reopening before anonymizing petitions
+              previous_blank: There are no previous parliaments to anonymize
+              too_soon: Please wait until six months after dissolution before anonymizing petitions
             registration_closed_at:
               blank: Please enter the date and time at which voter registration closes
             show_dissolution_notification:

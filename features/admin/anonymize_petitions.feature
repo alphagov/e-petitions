@@ -9,7 +9,7 @@ Feature: An admin anonymizes petitions
   @javascript
   Scenario: Admin anonymizes petitions 6 months after parliament closes
     Given 2 archived petitions exist
-    And 6 months has passed since parliament opened
+    And 6 months has passed since the previous parliament dissolved
     When I go to the admin parliament page
     And I press "Anonymize petitions"
     And I accept the alert
