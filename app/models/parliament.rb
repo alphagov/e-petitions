@@ -27,6 +27,10 @@ class Parliament < ActiveRecord::Base
       where(archived_at: nil).order(created_at: :asc)
     end
 
+    def previous(opening_at)
+      where(opening_at: ...opening_at).order(opening_at: :desc).first
+    end
+
     def government
       instance.government
     end
@@ -198,8 +202,10 @@ class Parliament < ActiveRecord::Base
   validate on: :anonymize_petitions do
     errors.add(:opening_at, :blank) unless opening_at?
 
-    if opening_at?
-      errors.add(:opening_at, :too_soon) unless opening_at < 6.months.ago
+    if previous_dissolution_at.present?
+      errors.add(:opening_at, :too_soon) unless previous_dissolution_at < 6.months.ago
+    else
+      errors.add(:opening_at, :previous_blank)
     end
   end
 
@@ -227,6 +233,18 @@ class Parliament < ActiveRecord::Base
 
   def period?
     period.present?
+  end
+
+  def previous
+    return @previous if defined?(@previous)
+
+    if previous_parliament = self.class.previous(opening_at)
+      @previous = self.class.previous(opening_at)
+    end
+  end
+
+  def previous_dissolution_at
+    previous.present? && previous.dissolution_at
   end
 
   def dissolving?(now = Time.current)
@@ -272,7 +290,7 @@ class Parliament < ActiveRecord::Base
     end
   end
 
-  def start_anonymizing!(now = Time.current)
+  def start_anonymizing!
     if can_anonymize_petitions?
       Archived::AnonymizePetitionsJob.set(wait_until: midnight).perform_later(midnight.iso8601)
     end

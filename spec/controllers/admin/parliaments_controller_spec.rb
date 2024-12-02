@@ -374,9 +374,17 @@ RSpec.describe Admin::ParliamentsController, type: :controller, admin: true do
 
       context "when clicking the 'Anonymize petitions' button" do
         let(:anonymized_at) { nil }
+        let(:dissolution_at) { 7.months.ago }
+
+        let(:archived_parliament) do
+          FactoryBot.create(:parliament, :dissolved, :archived,
+            opening_at: 4.years.ago,
+            dissolution_at: dissolution_at
+          )
+        end
 
         before do
-          FactoryBot.create(:archived_petition, anonymized_at: anonymized_at)
+          FactoryBot.create(:archived_petition, parliament: archived_parliament, anonymized_at: anonymized_at)
 
           patch :update, params: { parliament: params, button: "anonymize_petitions" }
         end
@@ -401,9 +409,11 @@ RSpec.describe Admin::ParliamentsController, type: :controller, admin: true do
           end
         end
 
-        context "and the params are valid, but the site has been reopened for less than six months" do
+        context "and the params are valid, but it is less than 6 months since dissolution" do
+          let(:dissolution_at) { 5.months.ago }
+
           let :params do
-            { government: "Conservative", opening_at: 5.months.ago.iso8601 }
+            { government: "Conservative", opening_at: 2.months.ago.iso8601 }
           end
 
           it_behaves_like "an invalid request"

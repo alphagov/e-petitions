@@ -44,6 +44,16 @@ Given('{int} months has passed since parliament opened') do |number|
   Parliament.update!(opening_at: number.months.ago)
 end
 
+Given('{int} months has passed since the previous parliament dissolved') do |number|
+  Parliament.instance.previous.update!(
+    dissolution_at: number.months.ago,
+    dissolution_heading: "Parliament is dissolving",
+    dissolution_message: "This means all petitions will close in 2 weeks",
+    dissolved_heading: "Parliament has been dissolved",
+    dissolved_message: "All petitions have been closed"
+  )
+end
+
 Given(/^the request is not local$/) do
   page.driver.options[:headers] = { "REMOTE_ADDR" => "192.168.1.128" }
 end
