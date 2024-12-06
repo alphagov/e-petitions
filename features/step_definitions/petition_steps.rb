@@ -323,9 +323,9 @@ Then(/^I can share it via (.+)$/) do |service|
     within(:css, '.petition-share') do
       expect(page).to have_link('Facebook', href: %r[\Ahttps://www\.facebook\.com/sharer/sharer\.php\?ref=responsive&u=#{ERB::Util.url_encode(petition_url(@petition))}\z])
     end
-  when 'Twitter'
+  when 'X'
     within(:css, '.petition-share') do
-      expect(page).to have_link('Twitter', href: %r[\Ahttps://twitter\.com/intent/tweet\?text=Petition%3A%20#{ERB::Util.url_encode(@petition.action)}&url=#{ERB::Util.url_encode(petition_url(@petition))}\z])
+      expect(page).to have_link('X', href: %r[\Ahttps://x\.com/intent/post\?text=Petition%3A%20#{ERB::Util.url_encode(@petition.action)}&url=#{ERB::Util.url_encode(petition_url(@petition))}\z])
     end
   when 'Whatsapp'
     within(:css, '.petition-share') do
