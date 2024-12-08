@@ -155,7 +155,6 @@ GEM
       railties (>= 5.2, < 9)
     cucumber-tag-expressions (6.1.1)
     daemons (1.4.1)
-    dalli (3.2.8)
     database_cleaner (2.1.0)
       database_cleaner-active_record (>= 2, < 3)
     database_cleaner-active_record (2.2.0)
@@ -489,7 +488,6 @@ DEPENDENCIES
   connection_pool
   cucumber-rails
   daemons
-  dalli
   database_cleaner
   delayed-web
   delayed_job_active_record
