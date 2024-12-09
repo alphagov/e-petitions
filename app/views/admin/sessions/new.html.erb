@@ -4,7 +4,7 @@
     <%= form_for(@user, as: :user, url: admin_login_path, authenticity_token: form_authenticity_token) do |form| %>
       <div class="form-group">
         <%= form.label :email, "Email", class: "form-label" %>
-        <%= form.text_field :email, class: "form-control", type: "email", autofocus: "autofocus" %>
+        <%= form.text_field :email, class: "form-control", inputmode: "email", autofocus: "autofocus" %>
       </div>
 
       <%= form.submit "Sign in", class: "button" %>

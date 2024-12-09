@@ -20,7 +20,7 @@
 <%= form_row for: [signature, :email] do %>
   <%= form.label :email, "Email address", class: "form-label" %>
   <%= error_messages_for_field signature, :email %>
-  <%= form.text_field :email, type: "email", class: "form-control" %>
+  <%= form.text_field :email, inputmode: "email", class: "form-control" %>
 <% end %>
 
 <%= form_row for: [signature, :location_code] do %>
