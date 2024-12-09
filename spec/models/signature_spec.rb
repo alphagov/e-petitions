@@ -58,21 +58,29 @@ RSpec.describe Signature, type: :model do
         signature.postcode = " N1  1TY  "
         expect(signature.postcode).to eq "N11TY"
       end
+
       it "upcases the postcode" do
         signature.postcode = "n11ty "
         expect(signature.postcode).to eq "N11TY"
       end
+
       it "removes whitespaces and upcase the postcode" do
         signature.postcode = "   N1  1ty "
         expect(signature.postcode).to eq "N11TY"
       end
     end
+
     describe "#email=" do
       let(:signature) { FactoryBot.build(:signature) }
 
       it "downcases the email domain" do
         signature.email = "JOE@PUBLIC.COM"
         expect(signature.email).to eq "JOE@public.com"
+      end
+
+      it "doesn't normalize invalid values" do
+        signature.email = "foo"
+        expect(signature.email).to eq "foo"
       end
     end
   end

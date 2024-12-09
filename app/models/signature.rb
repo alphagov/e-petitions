@@ -803,6 +803,7 @@ class Signature < ActiveRecord::Base
 
   def normalize_email(value)
     return value unless value.present?
+    return value unless value.match?(/\A[^@\s]+@[^@\s]+\z/)
 
     Mail::Address.new(value.strip).yield_self do |address|
       "#{address.local}@#{address.domain.to_s.downcase}"

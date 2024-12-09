@@ -34,7 +34,7 @@
   <%= form_row for: [@feedback, :email] do %>
     <%= f.label :email, "Email address", class: "form-label" %>
     <%= error_messages_for_field @feedback, :email %>
-    <%= f.text_field :email, type: "email", class: "form-control" %>
+    <%= f.text_field :email, inputmode: "email", class: "form-control", autocomplete: "email" %>
   <% end %>
 
   <%= submit_tag "Send feedback", class: "button" %>

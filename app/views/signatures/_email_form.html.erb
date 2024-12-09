@@ -9,7 +9,7 @@
 <%= form_row for: [signature, :email] do %>
   <%= form.label :email, "Email address", class: "form-label visuallyhidden" %>
   <%= error_messages_for_field signature, :email %>
-  <%= form.text_field :email, type: "email", class: "form-control" %>
+  <%= form.text_field :email, inputmode: "email", class: "form-control", autocomplete: "email" %>
 <% end %>
 
 <%= form.submit "Yes – this is my email address", class: "button" %>
