@@ -7,10 +7,10 @@ class DomainAutocorrect
     /\A([^@]+)@((?:f|g)\.?(?:a|m|n)(?:a|i|m|n|s)(?:a|i|l|o|u)(?:i|k|l){0,2}\.(?:cim|clm|comm|com\.uk|com\.com|com|con|vom|cm|co\.uk|co|om|uk))\z/ => 'gmail.com',
     /\A([^@]+)@(goog?le?m(?:a|i|s)(?:a|i)l\.(?:com|con|co\.uk))\z/ => 'googlemail.com',
     /\A([^@]+)@(h(?:i|o)(?:r|t)?(?:m|n)(?:a|i|s)?(?:a|i|u)?(?:k|l){0,2}\.(?:cim|com|con|cm|co))\z/ => 'hotmail.com',
-    /\A([^@]+)@(h(?:i|o)(?:r|t)?(?:m|n)(?:a|i|s)?(?:a|i|u)?(?:k|l){0,2}\.?(?:com|con|co)?\.?(?:ik|uk|uj|ul|um|un|yk))\z/ => 'hotmail.co.uk',
+    /\A([^@]+)@(h(?:i|o)(?:r|t)?(?:m|n)(?:a|i|s)?(?:a|i|u)?(?:k|l){0,2}\.?(?:com|con|co|c)?\.?(?:ik|uk|uj|ul|um|un|yk))\z/ => 'hotmail.co.uk',
     /\A([^@]+)@(i?(?:c|v)l?oul?d\.(?:com|con|co\.uk))\z/ => 'icloud.com',
     /\A([^@]+)@(live\.(?:com|con|co))\z/ => 'live.com',
-    /\A([^@]+)@(live\.co\.(?:ik|uk|um|un))\z/ => 'live.co.uk',
+    /\A([^@]+)@(live\.(?:co|c)\.(?:ik|uk|um|un))\z/ => 'live.co.uk',
     /\A([^@]+)@(mac\.(?:com|con))\z/ => 'mac.com',
     /\A([^@]+)@(me\.(?:com|con))\z/ => 'me.com',
     /\A([^@]+)@(msn\.(?:com|con))\z/ => 'msn.com',
@@ -18,7 +18,7 @@ class DomainAutocorrect
     /\A([^@]+)@(out?l?(?:i|o)o+k\.co(?:m|n|\.uk))\z/ => 'outlook.com',
     /\A([^@]+)@(sky\.co(?:m|n))\z/ => 'sky.com',
     /\A([^@]+)@(talktalk\.(?:com|net))\z/ => 'talktalk.net',
-    /\A([^@]+)@((?:u|t|y)(?:a|s)?hoo?\.?(?:co)?n?\.?(?:i|u|y)(?:j|k|l|m|n))\z/ => 'yahoo.co.uk',
+    /\A([^@]+)@((?:u|t|y)(?:a|s)?hoo?\.?(?:com|con|co|c)?\.?(?:i|u|y)(?:j|k|l|m|n))\z/ => 'yahoo.co.uk',
     /\A([^@]+)@(yahoo\.co(?:m|n)?)\z/ => 'yahoo.com'
   }
 

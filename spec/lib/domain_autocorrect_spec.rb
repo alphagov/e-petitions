@@ -180,6 +180,7 @@ RSpec.describe DomainAutocorrect do
         hormail.co.uk
         hotmai.co.uk
         hotmaik.co.uk
+        hotmail.c.uk
         hotmail.co.ik
         hotmail.co.uj
         hotmail.co.ul
@@ -193,8 +194,8 @@ RSpec.describe DomainAutocorrect do
         hotmailco.uk
         hotmal.co.uk
         hotmaul.co.uk
-        hotmil.co.uk
         hotmial.co.uk
+        hotmil.co.uk
         hotmsil.co.uk
         hotnail.co.uk
       ].each do |domain|
@@ -252,7 +253,12 @@ RSpec.describe DomainAutocorrect do
         ).to eq("bob.jones@live.co.uk")
       end
 
-      %w[live.co.ik live.co.um live.co.un].each do |domain|
+      %w[
+        live.c.uk
+        live.co.ik
+        live.co.um
+        live.co.un
+      ].each do |domain|
         it "autocorrects '#{domain}' to 'live.co.uk'" do
           expect(
             described_class.call("bob.jones@#{domain}")
@@ -404,12 +410,13 @@ RSpec.describe DomainAutocorrect do
       end
 
       %w[
-        yahoo.co.uk
         tahoo.co.uk
         uahoo.co.uk
         yaho.co.uk
+        yahoo.c.uk
         yahoo.co.ik
         yahoo.co.uj
+        yahoo.co.uk
         yahoo.co.ul
         yahoo.co.um
         yahoo.co.un
