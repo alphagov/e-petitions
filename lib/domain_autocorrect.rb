@@ -22,8 +22,11 @@ class DomainAutocorrect
     /\A([^@]+)@(yahoo\.co(?:m|n)?)\z/ => 'yahoo.com'
   }
 
+  EMAIL_FORMAT = /\A[^@\s]+@[^@\s]+\z/
+
   def self.call(email)
     return email if email.blank?
+    return email unless email.match?(EMAIL_FORMAT)
 
     RULES.each do |pattern, domain|
       if data = pattern.match(email)

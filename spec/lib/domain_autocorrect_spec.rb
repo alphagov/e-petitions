@@ -15,6 +15,12 @@ RSpec.describe DomainAutocorrect do
       ).to eq("")
     end
 
+    it "returns the original email if it is invalid" do
+      expect(
+        described_class.call("foo")
+      ).to eq("foo")
+    end
+
     context "with typos for the domain 'aol.com'" do
       it "doesn't change a correct email address" do
         expect(
