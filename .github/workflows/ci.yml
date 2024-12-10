@@ -1,0 +1,95 @@
+name: CI
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+
+jobs:
+  bundle-audit:
+    uses: ./.github/workflows/build.yml
+    with:
+      description: "Check bundle for known CVEs"
+      command: "rake bundle:audit"
+
+  brakeman:
+    uses: ./.github/workflows/build.yml
+    with:
+      description: "Analyse code for vulnerabilities"
+      command: "rake brakeman:check"
+
+  spec-admin-controllers:
+    uses: ./.github/workflows/build.yml
+    with:
+      description: "Run specs"
+      command: "rake spec:controllers"
+      spec_opts: "-f doc --force-color -P spec/controllers/admin/*_spec.rb"
+
+  spec-public-controllers:
+    uses: ./.github/workflows/build.yml
+    with:
+      description: "Run specs"
+      command: "rake spec:controllers"
+      spec_opts: "-f doc --force-color -P spec/controllers/*_spec.rb"
+
+  spec-jobs:
+    uses: ./.github/workflows/build.yml
+    with:
+      description: "Run specs"
+      command: "rake spec:jobs"
+      spec_opts: "-f doc --force-color -P spec/jobs/**/*_spec.rb"
+
+  spec-mailers:
+    uses: ./.github/workflows/build.yml
+    with:
+      description: "Run specs"
+      command: "rake spec"
+      spec_opts: "-f doc --force-color -P spec/mailers/**/*_spec.rb"
+
+  spec-models:
+    uses: ./.github/workflows/build.yml
+    with:
+      description: "Run specs"
+      command: "rake spec"
+      spec_opts: "-f doc --force-color -P spec/models/**/*_spec.rb"
+
+  spec-requests:
+    uses: ./.github/workflows/build.yml
+    with:
+      description: "Run specs"
+      command: "rake spec"
+      spec_opts: "-f doc --force-color -P spec/{requests,routing}/**/*_spec.rb"
+
+  spec-other:
+    uses: ./.github/workflows/build.yml
+    with:
+      description: "Run specs"
+      command: "rake spec"
+      spec_opts: "-f doc --force-color -P spec/{helpers,lib,presenters,tasks,validators,views}/**/*_spec.rb"
+
+  javascript:
+    uses: ./.github/workflows/build.yml
+    with:
+      description: "Run javascript specs"
+      command: "rake jasmine:ci"
+
+  cucumber-admin:
+    uses: ./.github/workflows/build.yml
+    with:
+      description: "Run cucumber specs"
+      command: "rake cucumber"
+      cucumber_format: "pretty"
+      cucumber_opts: "--tags @admin --profile default"
+      save_screenshots: true
+      save_logs: true
+
+  cucumber-public:
+    uses: ./.github/workflows/build.yml
+    with:
+      description: "Run cucumber specs"
+      command: "rake cucumber"
+      cucumber_format: "pretty"
+      cucumber_opts: "--tags 'not @admin' --profile default"
+      save_screenshots: true
+      save_logs: true
