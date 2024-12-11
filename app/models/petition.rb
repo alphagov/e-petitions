@@ -510,6 +510,8 @@ class Petition < ActiveRecord::Base
 
   def statistics
     super || create_statistics!
+  rescue ActiveRecord::RecordNotUnique => e
+    reload_statistics
   end
 
   def reset_signature_count!(time = Time.current)

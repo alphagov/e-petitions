@@ -4071,4 +4071,27 @@ RSpec.describe Petition, type: :model do
       end
     end
   end
+
+  describe "#statistics" do
+    let(:petition) { FactoryBot.create(:open_petition) }
+
+    it "creates a new statistics record if one doesn't exist" do
+      expect {
+        expect(petition.statistics).to be_an_instance_of(Petition::Statistics)
+      }.to change(Petition::Statistics, :count).by(1)
+    end
+
+    it "doesn't raise an ActiveRecord::RecordNotUnique error" do
+      expect {
+        p1 = described_class.find(petition.id)
+        p2 = described_class.find(petition.id)
+
+        expect(p1.association(:statistics).reader).to be_nil
+        expect(p1.association(:statistics)).to be_loaded
+
+        expect(p2.statistics).to be_an_instance_of(Petition::Statistics)
+        expect(p1.statistics).to eq(p2.statistics)
+      }.not_to raise_error
+    end
+  end
 end
