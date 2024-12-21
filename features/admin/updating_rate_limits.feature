@@ -17,6 +17,20 @@ Feature: Sysadmin updates the rate limits
     And I press "Save"
     Then I should see "Rate limits updated successfully"
 
+  Scenario: Sysadmin updates the blocked emails list
+    When I am logged in as a sysadmin
+    And I am on the admin home page
+    And I follow "Rate Limits"
+    Then I should see "Edit Rate Limits"
+    When I follow "Blocked Emails"
+    Then I should see "normalize the email address according to the domain rules"
+    When I fill in "rate_limit_blocked_emails" with "foo"
+    And I press "Save"
+    Then I should see "Blocked emails list is invalid"
+    When I fill in "rate_limit_blocked_emails" with "user@example.com"
+    And I press "Save"
+    Then I should see "Rate limits updated successfully"
+
   Scenario: Sysadmin updates the allowed domains list
     When I am logged in as a sysadmin
     And I am on the admin home page

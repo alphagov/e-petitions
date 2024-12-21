@@ -188,8 +188,22 @@ Scenario: Charlie creates a petition when his email is autocorrected wrongly
   Then a petition should exist with action: "The wombats of wimbledon rock.", state: "pending"
   And a signature should exist with email: "charlie@hotmial.com", state: "pending"
 
-Scenario: Charlie creates a petition when blocked
+Scenario: Charlie creates a petition when his IP address is blocked
   Given the IP address 127.0.0.1 is blocked
+  And I start a new petition
+  And I fill in the petition details
+  And I press "Preview petition"
+  And I press "This looks good"
+  And I fill in my details
+  When I press "Continue"
+  Then the markup should be valid
+  And I am asked to review my email address
+  When I press "Yes – this is my email address"
+  Then a petition should not exist with action: "The wombats of wimbledon rock.", state: "pending"
+  And a signature should not exist with email: "womboid@wimbledon.com", state: "pending"
+
+Scenario: Charlie creates a petition when his email address is blocked
+  Given the email address "womboid@wimbledon.com" is blocked
   And I start a new petition
   And I fill in the petition details
   And I press "Preview petition"

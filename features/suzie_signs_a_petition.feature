@@ -221,6 +221,57 @@ Feature: Suzie signs a petition
     And I should see "This petition is closed"
     And I should see "2 signatures"
 
+  Scenario: Suzie cannot validate her signature when the domain is blocked
+    Given the domain "wimbledon.com" is blocked
+    When I am on the new signature page
+    And I fill in my details
+    And I try to sign
+    Then I should be on the new signature page
+    When I say I am happy with my email address
+    Then I am told to check my inbox to complete signing
+    And "womboid@wimbledon.com" should receive 1 email
+    And I confirm my email address
+    Then I should see "We've added your signature to the petition"
+    And I should see "2 signatures"
+    When I follow "Do something!"
+    Then I should be on the petition page
+    And I should see "1 signature"
+    And the signature "womboid@wimbledon.com" is marked as fraudulent
+
+  Scenario: Suzie cannot validate her signature when the email address is blocked
+    Given the email address "womboid@wimbledon.com" is blocked
+    When I am on the new signature page
+    And I fill in my details
+    And I try to sign
+    Then I should be on the new signature page
+    When I say I am happy with my email address
+    Then I am told to check my inbox to complete signing
+    And "womboid@wimbledon.com" should receive 1 email
+    And I confirm my email address
+    Then I should see "We've added your signature to the petition"
+    And I should see "2 signatures"
+    When I follow "Do something!"
+    Then I should be on the petition page
+    And I should see "1 signature"
+    And the signature "womboid@wimbledon.com" is marked as fraudulent
+
+  Scenario: Suzie can validate her signature when another email address on the same domain is blocked
+    Given the email address "bulgaria@wimbledon.com" is blocked
+    When I am on the new signature page
+    And I fill in my details
+    And I try to sign
+    Then I should be on the new signature page
+    When I say I am happy with my email address
+    Then I am told to check my inbox to complete signing
+    And "womboid@wimbledon.com" should receive 1 email
+    And I confirm my email address
+    Then I should see "We've added your signature to the petition"
+    And I should see "2 signatures"
+    When I follow "Do something!"
+    Then I should be on the petition page
+    And I should see "2 signatures"
+    And the signature "womboid@wimbledon.com" is marked as validated
+
   Scenario: Suzie cannot validate her signature when IP address is rate limited
     Given the burst rate limit is 1 per minute
     And there are no allowed IPs

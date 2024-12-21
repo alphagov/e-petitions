@@ -114,6 +114,17 @@ RSpec.describe RateLimit, type: :model do
         expect(subject.errors[:ignored_domains]).to include("Ignored domains list is invalid")
       end
     end
+
+    context "when the blocked email list is invalid" do
+      before do
+        subject.update(blocked_emails: "foo")
+      end
+
+      it "adds an error message" do
+        expect(subject.valid?).to eq(false)
+        expect(subject.errors[:blocked_emails]).to include("Blocked emails list is invalid")
+      end
+    end
   end
 
   describe "#exceeded?" do
@@ -125,6 +136,8 @@ RSpec.describe RateLimit, type: :model do
 
     let(:blocked_domains) { "" }
     let(:blocked_ips) { "" }
+    let(:ignored_domains) { "" }
+    let(:blocked_emails) { "" }
 
     let(:countries) { "" }
     let(:geoblocking_enabled) { false }
@@ -136,6 +149,7 @@ RSpec.describe RateLimit, type: :model do
         sustained_rate: 20, sustained_period: 300,
         allowed_domains: allowed_domains, allowed_ips: allowed_ips,
         blocked_domains: blocked_domains, blocked_ips: blocked_ips,
+        ignored_domains: ignored_domains, blocked_emails: blocked_emails,
         countries: countries, geoblocking_enabled: geoblocking_enabled,
         country_rate_limits_enabled: country_rate_limits_enabled,
         country_burst_rate: 20, country_sustained_rate: 120
@@ -270,6 +284,20 @@ RSpec.describe RateLimit, type: :model do
       end
     end
 
+    shared_examples_for "blocked emails" do
+      let(:blocked_emails) { "user@foo.com\n" }
+
+      it "returns false when the email is not blocked" do
+        allow(signature).to receive(:email).and_return("user@example.com")
+        expect(subject.exceeded?(signature)).to eq(false)
+      end
+
+      it "returns true when the domain is blocked" do
+        allow(signature).to receive(:email).and_return("user@foo.com")
+        expect(subject.exceeded?(signature)).to eq(true)
+      end
+    end
+
     context "when both rates are below the threshold" do
       before do
         allow(signature).to receive(:rate).with(60).and_return(5)
@@ -283,6 +311,7 @@ RSpec.describe RateLimit, type: :model do
       it_behaves_like "blocked domains"
       it_behaves_like "blocked IPs"
       it_behaves_like "GeoIP blocking"
+      it_behaves_like "blocked emails"
     end
 
     context "when the burst rate is above the threshold" do
@@ -554,6 +583,16 @@ RSpec.describe RateLimit, type: :model do
 
     it "normalizes line endings and strips whitespace" do
       expect(subject.ignored_domains).to eq("foo.com\nbar.com")
+    end
+  end
+
+  describe "#blocked_emails=" do
+    subject do
+      described_class.new(blocked_emails: " user@foo.com\r\nuser@bar.com\r\n")
+    end
+
+    it "normalizes line endings and strips whitespace" do
+      expect(subject.blocked_emails).to eq("user@foo.com\nuser@bar.com")
     end
   end
 
@@ -899,6 +938,72 @@ RSpec.describe RateLimit, type: :model do
 
       it "they are stripped" do
         expect(subject.ignored_domains_list).to eq(%w[foo.com bar.com])
+      end
+    end
+  end
+
+  describe "#blocked_emails_list" do
+    subject do
+      described_class.create!(blocked_emails: blocked_emails)
+    end
+
+    context "when there is extra whitespace" do
+      let :blocked_emails do
+        <<-EOF
+          user@foo.com
+             user@bar.com
+
+        EOF
+      end
+
+      it "is is stripped" do
+        expect(subject.blocked_emails_list).to eq(%w[user@foo.com user@bar.com])
+      end
+    end
+
+    context "when there are blank lines" do
+      let :blocked_emails do
+        <<-EOF
+          user@foo.com
+
+             user@bar.com
+
+        EOF
+      end
+
+      it "they are stripped" do
+        expect(subject.blocked_emails_list).to eq(%w[user@foo.com user@bar.com])
+      end
+    end
+
+    context "when there are line comments" do
+      let :blocked_emails do
+        <<-EOF
+          # This is a test
+          user@foo.com
+
+             user@bar.com
+
+        EOF
+      end
+
+      it "they are stripped" do
+        expect(subject.blocked_emails_list).to eq(%w[user@foo.com user@bar.com])
+      end
+    end
+
+    context "when there are inline comments" do
+      let :blocked_emails do
+        <<-EOF
+          user@foo.com # This is a test
+
+             user@bar.com
+
+        EOF
+      end
+
+      it "they are stripped" do
+        expect(subject.blocked_emails_list).to eq(%w[user@foo.com user@bar.com])
       end
     end
   end
