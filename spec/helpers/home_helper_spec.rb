@@ -47,19 +47,19 @@ RSpec.describe HomeHelper, type: :helper do
 
       context "when the petition count is 1" do
         it "returns a correctly formatted petition count" do
-          expect(helper.petition_count(:with_response, 1)).to eq("<span class=\"count\">1</span> petition got a response from the Government")
+          expect(helper.petition_count(:with_response, 1)).to eq("<span class=\"count\">1</span> <span class=\"suffix\">petition from the current Parliament got a response from the Government</span>")
         end
       end
 
       context "when the petition count is 100" do
         it "returns a correctly formatted petition count" do
-          expect(helper.petition_count(:with_response, 100)).to eq("<span class=\"count\">100</span> petitions got a response from the Government")
+          expect(helper.petition_count(:with_response, 100)).to eq("<span class=\"count\">100</span> <span class=\"suffix\">petitions from the current Parliament got a response from the Government</span>")
         end
       end
 
       context "when the petition count is 1000" do
         it "returns a correctly formatted petition count" do
-          expect(helper.petition_count(:with_response, 1000)).to eq("<span class=\"count\">1,000</span> petitions got a response from the Government")
+          expect(helper.petition_count(:with_response, 1000)).to eq("<span class=\"count\">1,000</span> <span class=\"suffix\">petitions from the current Parliament got a response from the Government</span>")
         end
       end
     end
@@ -71,19 +71,19 @@ RSpec.describe HomeHelper, type: :helper do
 
       context "when the petition count is 1" do
         it "returns a correctly formatted petition count" do
-          expect(helper.petition_count(:with_debated_outcome, 1)).to eq("<span class=\"count\">1</span> petition was debated in the House of Commons")
+          expect(helper.petition_count(:with_debated_outcome, 1)).to eq("<span class=\"count\">1</span> <span class=\"suffix\">petition from the current Parliament was debated in the House of Commons</span>")
         end
       end
 
       context "when the petition count is 100" do
         it "returns a correctly formatted petition count" do
-          expect(helper.petition_count(:with_debated_outcome, 100)).to eq("<span class=\"count\">100</span> petitions were debated in the House of Commons")
+          expect(helper.petition_count(:with_debated_outcome, 100)).to eq("<span class=\"count\">100</span> <span class=\"suffix\">petitions from the current Parliament were debated in the House of Commons</span>")
         end
       end
 
       context "when the petition count is 1000" do
         it "returns a correctly formatted petition count" do
-          expect(helper.petition_count(:with_debated_outcome, 1000)).to eq("<span class=\"count\">1,000</span> petitions were debated in the House of Commons")
+          expect(helper.petition_count(:with_debated_outcome, 1000)).to eq("<span class=\"count\">1,000</span> <span class=\"suffix\">petitions from the current Parliament were debated in the House of Commons</span>")
         end
       end
     end
