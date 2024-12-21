@@ -31,7 +31,7 @@ class Admin::RateLimitsController < Admin::AdminController
       geoblocking_enabled countries country_rate_limits_enabled
       country_burst_rate country_sustained_rate trending_items_notification_url
       threshold_for_logging_trending_items threshold_for_notifying_trending_items
-      enable_logging_of_trending_items ignored_domains
+      enable_logging_of_trending_items ignored_domains blocked_emails
     ]
   end
 

@@ -751,6 +751,8 @@ FactoryBot.define do
     mp_name { "#{Faker::Name.name} MP" }
     mp_id { generate(:mp_id) }
     example_postcode { Faker::Address.postcode }
+    start_date { "2010-04-13"}
+    end_date { nil }
   end
 
   factory :constituency_petition_journal do

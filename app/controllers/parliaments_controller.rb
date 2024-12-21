@@ -2,6 +2,7 @@ class ParliamentsController < ApplicationController
   before_action :set_cors_headers, if: :json_request?
   before_action :fetch_parliaments, only: [:index]
   before_action :fetch_parliament, only: [:show]
+  before_action :fetch_constituencies, only: [:show]
 
   def index
     expires_in 1.hour, public: true,
@@ -31,5 +32,9 @@ class ParliamentsController < ApplicationController
 
   def fetch_parliament
     @parliament = Parliament.archived.find_by!(period: params[:period])
+  end
+
+  def fetch_constituencies
+    @constituencies = @parliament.constituencies.by_ons_code
   end
 end

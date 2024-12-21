@@ -7,6 +7,7 @@ class RateLimit < ActiveRecord::Base
   SINGLE_GLOB = "*."
   SINGLE_PATTERN = "(?:[-a-z0-9]+\\.)"
   DOMAIN_PATTERN = /^(?:[a-z0-9][a-z0-9-]{0,61}[a-z0-9]\.)+[a-z]{2,}$/
+  EMAIL_PATTERN = /\A[^@\s]+@[^@\s]+\z/
 
   validates :burst_rate, presence: true, numericality: { only_integer: true, greater_than: 0 }
   validates :burst_period, presence: true, numericality: { only_integer: true, greater_than: 0 }
@@ -26,6 +27,7 @@ class RateLimit < ActiveRecord::Base
   validates :threshold_for_notifying_trending_items, presence: true, numericality: { only_integer: true, greater_than: 0 }
   validates :trending_items_notification_url, length: { maximum: 100, allow_blank: true }
   validates :ignored_domains, length: { maximum: 10000, allow_blank: true }
+  validates :blocked_emails, length: { maximum: 50000, allow_blank: true }
 
   validate do
     unless sustained_rate.nil? || burst_rate.nil?
@@ -75,6 +77,12 @@ class RateLimit < ActiveRecord::Base
     rescue StandardError => e
       errors.add :ignored_domains, :invalid
     end
+
+    begin
+      blocked_emails_list
+    rescue StandardError => e
+      errors.add :blocked_emails, :invalid
+    end
   end
 
   def reload
@@ -84,6 +92,7 @@ class RateLimit < ActiveRecord::Base
     @blocked_ips_list = nil
     @allowed_countries = nil
     @ignored_domains_list = nil
+    @blocked_emails_list = nil
 
     super
   end
@@ -92,6 +101,7 @@ class RateLimit < ActiveRecord::Base
     return true if ip_blocked?(signature.ip_address)
     return true if ip_geoblocked?(signature.ip_address)
     return true if domain_blocked?(signature.domain)
+    return true if email_blocked?(signature.email)
     return false if ip_allowed?(signature.ip_address)
     return false if domain_allowed?(signature.domain)
 
@@ -170,6 +180,15 @@ class RateLimit < ActiveRecord::Base
     @ignored_domains_list ||= build_ignored_domains
   end
 
+  def blocked_emails=(value)
+    @blocked_emails_list
+    super(normalize_lines(value))
+  end
+
+  def blocked_emails_list
+    @blocked_emails_list || build_blocked_emails
+  end
+
   private
 
   def strip_comments(list)
@@ -228,6 +247,17 @@ class RateLimit < ActiveRecord::Base
     strip_blank_lines(strip_comments(ignored_domains)).map { |d| validate_domain!(d.strip) }
   end
 
+  def build_blocked_emails
+    strip_blank_lines(strip_comments(blocked_emails)).map { |e| validate_email!(e.strip) }
+  end
+
+  def email_blocked?(email)
+    return false if email.blank?
+
+    canonical_email = Domain.normalize(email)
+    blocked_emails_list.any?{ |e| e == canonical_email }
+  end
+
   def build_allowed_countries
     strip_blank_lines(strip_comments(countries)).map(&:strip)
   end
@@ -269,6 +299,14 @@ class RateLimit < ActiveRecord::Base
       domain
     else
       raise ArgumentError, "Invalid domain: #{domain.inspect}"
+    end
+  end
+
+  def validate_email!(email)
+    if email =~ EMAIL_PATTERN
+      email
+    else
+      raise ArgumentError, "Invalid email: #{email.inspect}"
     end
   end
 

@@ -85,6 +85,20 @@ RSpec.describe Admin::RateLimitsController, type: :controller, admin: true do
         end
       end
 
+      context "when submitting just the blocked emails list" do
+        let :params do
+          { blocked_emails: "user@example.com" }
+        end
+
+        it "redirects to the edit page" do
+          expect(response).to redirect_to("https://moderate.petition.parliament.uk/admin/rate-limits/edit")
+        end
+
+        it "sets the flash notice message" do
+          expect(flash[:notice]).to eq("Rate limits updated successfully")
+        end
+      end
+
       context "when submitting just the allowed domains list" do
         let :params do
           { allowed_domains: "example.com" }

@@ -242,20 +242,20 @@ en-GB:
     counts:
       awaiting_response:
         html:
-          one: "<span class=\"count\">%{formatted_count}</span> petition is waiting for a response from the Government"
-          other: "<span class=\"count\">%{formatted_count}</span> petitions are waiting for responses from the Government"
+          one: "<span class=\"count\">%{formatted_count}</span> <span class=\"suffix\">petition from the current Parliament is waiting for a response from the Government</span>"
+          other: "<span class=\"count\">%{formatted_count}</span> <span class=\"suffix\">petitions from the current Parliament are waiting for responses from the Government</span>"
       with_response:
         html:
-          one: "<span class=\"count\">%{formatted_count}</span> petition got a response from the Government"
-          other: "<span class=\"count\">%{formatted_count}</span> petitions got a response from the Government"
+          one: "<span class=\"count\">%{formatted_count}</span> <span class=\"suffix\">petition from the current Parliament got a response from the Government</span>"
+          other: "<span class=\"count\">%{formatted_count}</span> <span class=\"suffix\">petitions from the current Parliament got a response from the Government</span>"
       awaiting_debate:
         html:
-          one: "<span class=\"count\">%{formatted_count}</span> petition is waiting to be considered for debate"
-          other: "<span class=\"count\">%{formatted_count}</span> petitions are waiting to be considered for debate"
+          one: "<span class=\"count\">%{formatted_count}</span> <span class=\"suffix\">petition from the current Parliament is waiting to be considered for debate</span>"
+          other: "<span class=\"count\">%{formatted_count}</span> <span class=\"suffix\">petitions from the current Parliament are waiting to be considered for debate</span>"
       with_debated_outcome:
         html:
-          one: "<span class=\"count\">%{formatted_count}</span> petition was debated in the House of Commons"
-          other: "<span class=\"count\">%{formatted_count}</span> petitions were debated in the House of Commons"
+          one: "<span class=\"count\">%{formatted_count}</span> <span class=\"suffix\">petition from the current Parliament was debated in the House of Commons</span>"
+          other: "<span class=\"count\">%{formatted_count}</span> <span class=\"suffix\">petitions from the current Parliament were debated in the House of Commons</span>"
       awaiting_response_explanation:
         html: "See all petitions waiting for a government response (%{formatted_count})"
       with_response_explanation:

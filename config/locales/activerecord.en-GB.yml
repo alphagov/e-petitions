@@ -188,6 +188,8 @@ en-GB:
               invalid: "Blocked IPs list is invalid"
             ignored_domains:
               invalid: "Ignored domains list is invalid"
+            blocked_emails:
+              invalid: "Blocked emails list is invalid"
 
         tag:
           attributes:
