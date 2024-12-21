@@ -213,11 +213,11 @@ class Site < ActiveRecord::Base
     end
 
     def moderation_overdue_in_days
-      7.days
+      10.days
     end
 
     def moderation_near_overdue_in_days
-      5.days
+      8.days
     end
 
     def maximum_number_of_signatures
