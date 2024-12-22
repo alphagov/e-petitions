@@ -19,6 +19,10 @@
     width: inherit;
     margin-right: $gutter-half;
   }
+
+  &:hover {
+    text-decoration: none;
+  }
 }
 
 .button {
