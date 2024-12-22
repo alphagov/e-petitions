@@ -14,6 +14,26 @@
     width: 50%;
   }
 
+  a {
+    display: block;
+    margin-right: 10px;
+    text-decoration: none;
+    text-decoration-thickness: 2px;
+
+    @include media(tablet) {
+      margin-right: 20px;
+    }
+
+    &:hover {
+      text-decoration: underline;
+      background-color: darken($white, 5%);
+    }
+
+    &:focus {
+      background-color: $focus-colour;
+    }
+  }
+
   .count {
     display: block;
     font-size: 36px;
@@ -29,12 +49,10 @@
   .suffix {
     display: block;
     font-size: 14px;
-    padding-right: 10px;
     text-wrap: balance;
 
     @include media(tablet) {
       font-size: 19px;
-      padding-right: 20px;
     }
   }
 }
@@ -67,6 +85,7 @@
 
 // Threshold panel links
 .threshold-panel {
+  color: $white !important;
   display: block;
   @extend %outdent-to-full-width;
   background-color: $petitions-panel-colour;
@@ -74,17 +93,14 @@
   background-repeat: no-repeat;
   padding: $gutter-half $gutter*2 $gutter-two-thirds $gutter-half;
   margin: $gutter*1.5 $gutter-half*-1 $gutter;
+  text-decoration: none;
   @include media(tablet) {
     margin: $gutter*1.5 0 $gutter;
   }
 
-  h2, p {
-    color: $white;
-  }
-
   h2 {
     font-size: 24px;
-    line-height: 30/24;
+    line-height: 1.25;
     margin-top: 0;
     padding-left: $text-indent - 5px;
   }
