@@ -26,7 +26,7 @@ Rails.application.configure do
   end
 
   # Use mailcatcher to capture all emails, otherwise deliver locally
-  if ENV["SMTP_HOST"] == "mailcatcher"
+  if ENV["SMTP_HOST"] == "mailcatcher.localhost"
     config.action_mailer.delivery_method = :smtp
     config.action_mailer.smtp_settings = {
       address: ENV.fetch("SMTP_HOST"),
@@ -79,4 +79,7 @@ Rails.application.configure do
 
   # Raise error when a before_action's only/except options reference missing actions
   config.action_controller.raise_on_missing_callback_actions = true
+
+  # Allow connections to the moderation portal
+  config.hosts << "moderate.petitions.localhost"
 end

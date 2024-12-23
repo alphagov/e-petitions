@@ -2,25 +2,49 @@ x-application: &application
   image: e-petitions/ruby
   build: docker/ruby
   volumes:
-    - .:/app
-    - bundle:/bundle
-    - cache:/cache
-    - node_modules:/app/node_modules
+    - type: bind
+      source: .
+      target: /app
+    - type: volume
+      source: bundle
+      target: /bundle
+    - type: volume
+      source: cache
+      target: /cache
+    - type: volume
+      source: node_modules
+      target: /app/node_modules
   tmpfs:
     - /tmp/pids/
   depends_on:
+    - dnsmasq
     - postgres
     - mailcatcher
+  dns:
+    - 172.24.99.53
 
 x-environment: &environment
   DATABASE_URL: "postgres://postgres:ZW4IvOPrXcbp2hyp@postgres:5432"
   DATABASE_CLEANER_ALLOW_REMOTE_DATABASE_URL: "true"
-  SMTP_HOST: "mailcatcher"
+  SMTP_HOST: "mailcatcher.localhost"
   SMTP_PORT: "1025"
   SPROCKETS_CACHE: "/cache"
   PIDFILE: "/tmp/pids/server.pid"
 
 services:
+  dnsmasq:
+    image: e-petitions/dnsmasq
+    build: docker/dnsmasq
+    volumes:
+      - type: bind
+        source: docker/dnsmasq/dnsmasq.conf
+        target: /etc/dnsmasq.conf
+    cap_add:
+      - NET_ADMIN
+    networks:
+      default:
+        ipv4_address: 172.24.99.53
+
   postgres:
     image: postgres:16
     restart: always
@@ -31,7 +55,9 @@ services:
     ports:
       - "127.0.0.1:5432:5432"
     volumes:
-      - db:/var/lib/postgresql/data
+      - type: volume
+        source: db
+        target: /var/lib/postgresql/data
 
   mailcatcher:
     image: e-petitions/mailcatcher
@@ -40,6 +66,9 @@ services:
       - "1025"
     ports:
       - "127.0.0.1:1080:1080"
+    networks:
+      default:
+        ipv4_address: 172.24.99.30
 
   web:
     <<: *application
@@ -51,9 +80,32 @@ services:
     ]
     ports:
       - "127.0.0.1:3000:3000"
+    networks:
+      default:
+        ipv4_address: 172.24.99.31
     stdin_open: true
     tty: true
     init: true
+
+  console:
+    <<: *application
+    environment:
+      <<: *environment
+    command: ["/bin/bash"]
+    profiles:
+      - console
+    stdin_open: true
+    tty: true
+    dns:
+      - 172.24.99.53
+
+networks:
+  default:
+    ipam:
+      config:
+        - subnet: 172.24.0.0/16
+          ip_range: 172.24.99.0/24
+          gateway: 172.24.99.254
 
 volumes:
   bundle:
