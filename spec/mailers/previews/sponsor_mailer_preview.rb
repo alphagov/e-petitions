@@ -1,4 +1,4 @@
-# Preview all emails at http://localhost:3000/rails/mailers/sponsor_mailer
+# Preview all emails at http://petitions.localhost:3000/rails/mailers/sponsor_mailer
 class SponsorMailerPreview < ActionMailer::Preview
   def petition_and_email_confirmation_for_sponsor
     petition = Petition.validated_state.last
