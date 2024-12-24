@@ -26,8 +26,6 @@ x-application: &application
 x-environment: &environment
   DATABASE_URL: "postgres://postgres:ZW4IvOPrXcbp2hyp@postgres:5432"
   DATABASE_CLEANER_ALLOW_REMOTE_DATABASE_URL: "true"
-  SMTP_HOST: "mailcatcher.localhost"
-  SMTP_PORT: "1025"
   SPROCKETS_CACHE: "/cache"
   PIDFILE: "/tmp/pids/server.pid"
 
@@ -98,6 +96,33 @@ services:
     tty: true
     dns:
       - 172.24.99.53
+
+  e2e:
+    <<: *application
+    environment:
+      <<: *environment
+      DISABLE_FORCE_SSL: "true"
+      RAILS_ENV: "production"
+      RAILS_SERVE_STATIC_FILES: "true"
+      SECRET_KEY_BASE: "6a5e319d068ceb629ce3cf4683b296a9"
+      STORAGE_ADAPTER: "test"
+      WEB_CONCURRENCY: "0"
+      WEB_CONCURRENCY_MIN_THREADS: "5"
+      WEB_CONCURRENCY_MAX_THREADS: "5"
+    command: [
+      "foreman", "start",
+      "-f", "Procfile.dev"
+    ]
+    ports:
+      - "127.0.0.1:3000:3000"
+    networks:
+      default:
+        ipv4_address: 172.24.99.31
+    profiles:
+      - e2e
+    stdin_open: true
+    tty: true
+    init: true
 
 networks:
   default:
