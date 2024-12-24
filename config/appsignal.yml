@@ -1,10 +1,9 @@
 default: &defaults
-  # Your push api key, it is possible to set this dynamically using ERB:
-  # push_api_key: "<%= ENV['APPSIGNAL_PUSH_API_KEY'] %>"
+  # Your push api key
   push_api_key: "<%= ENV['APPSIGNAL_PUSH_API_KEY'] %>"
 
   # Your app's name
-  name: "<%= ENV['APPSIGNAL_APP_NAME'] %>"
+  name: "<%= ENV.fetch('APPSIGNAL_APP_NAME', '') %>"
 
   # Your app's revision
   revision: "<%= File.exist?('REVISION') ? File.read('REVISION') : '' %>"
@@ -46,4 +45,4 @@ test:
 
 production:
   <<: *defaults
-  active: true
+  active: <%= ENV.key?("APPSIGNAL_APP_NAME") %>

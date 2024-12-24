@@ -1,0 +1,5 @@
+#!/bin/bash
+
+set -e
+
+docker compose --profile e2e run --service-ports --rm e2e "$@"
