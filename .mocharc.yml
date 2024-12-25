@@ -1,0 +1,8 @@
+ui: 'bdd'
+timeout: 10000
+require:
+  - 'spec/lighthouse/setup/assertions.mjs'
+  - 'spec/lighthouse/setup/fixtures.mjs'
+  - 'spec/lighthouse/setup/lighthouse.mjs'
+spec:
+  - 'spec/lighthouse/**/*.spec.mjs'

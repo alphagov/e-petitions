@@ -23,7 +23,7 @@ RUN apt-get install -y --no-install-recommends \
 RUN mkdir -p "/root/.config/chromium/Crash Reports/pending/"
 
 # Install NPM
-RUN npm install -g npm@10
+RUN npm install -g npm@11
 
 # Install Bundler
 RUN gem install bundler -v 2.3.27

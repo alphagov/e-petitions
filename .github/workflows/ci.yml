@@ -93,3 +93,11 @@ jobs:
       cucumber_opts: "--tags 'not @admin' --profile default"
       save_screenshots: true
       save_logs: true
+
+  lighthouse:
+    uses: ./.github/workflows/e2e.yml
+    with:
+      description: "Run lighthouse specs"
+      command: "rake lighthouse:ci"
+      save_reports: true
+      save_logs: true
