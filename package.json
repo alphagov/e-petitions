@@ -3,6 +3,15 @@
   "private": true,
   "devDependencies": {
     "jasmine-browser-runner": "^2.0.0",
-    "jasmine-core": "^5.0.0"
+    "jasmine-core": "^5.0.0",
+    "lighthouse": "^12.3.0",
+    "mocha": "^11.0.1",
+    "start-server-and-test": "^2.0.9",
+    "unexpected": "^13.2.1"
+  },
+  "scripts": {
+    "start-server": "bin/rails server -b 0.0.0.0 -p 3000",
+    "test": "mocha",
+    "lighthouse:ci": "start-server-and-test start-server http://petitions.localhost:3000 test"
   }
 }
