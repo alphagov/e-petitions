@@ -52,6 +52,11 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - name: Update repository lists
+        shell: bash
+        run: |
+          sudo apt-get update
+
       - name: Install packages
         shell: bash
         run: |
