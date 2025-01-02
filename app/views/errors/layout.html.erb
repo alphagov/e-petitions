@@ -5,16 +5,16 @@
 
 <head>
   <%= yield :title -%>
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <link rel="stylesheet" media="screen" href="/error.css" />
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <link rel="stylesheet" media="screen" href="/error.css">
 </head>
 
 <body>
 <%= render 'application/header' -%>
 
-  <main id="content" role="main">
+  <main id="content">
 <%= yield -%>
   </main>
 

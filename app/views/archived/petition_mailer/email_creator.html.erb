@@ -4,13 +4,13 @@
 
 <p>Dear <%= @signature.name %>,</p>
 
-<p>You recently created the petition “<%= @petition.action %>”:<br />
+<p>You recently created the petition “<%= @petition.action %>”:<br>
 <%= link_to nil, archived_petition_url(@petition) %></p>
 
 <%= markdown_to_html(@email.body) %>
 
-<p>Thanks,<br />
-<%= t("petitions.emails.signoff_prefix") %><br />
+<p>Thanks,<br>
+<%= t("petitions.emails.signoff_prefix") %><br>
 <%= t("petitions.emails.signoff_suffix") %></p>
 
 <hr>

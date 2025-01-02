@@ -3,21 +3,37 @@
   display: block;
   padding: $gutter-one-third;
   background-color: $panel-colour;
+
   @include media(tablet) {
-  margin-top: $gutter;
+    margin-top: $gutter;
     padding: $gutter-one-third $gutter-half;
+  }
+
+  a {
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+    }
   }
 
   summary {
     @include bold-19;
-  }
-
-  ul {
-    padding-top: $gutter-one-third;
+    margin-bottom: 0;
   }
 
   li {
-    padding: $gutter-one-third 0;
+    margin: $gutter-half 0;
+
+    &:last-child {
+      margin-bottom: 5px;
+    }
+  }
+}
+
+.search-pagination + p {
+  a {
+    text-decoration: underline;
   }
 }
 
@@ -38,13 +54,24 @@
 }
 
 #other-search-lists {
-  a {
-    display: block;
-    padding-top: $gutter-one-third;
-    padding-bottom: $gutter-one-third;
-  }
   h1 {
     @include bold-24();
+  }
+
+  a {
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+
+  li {
+    margin: $gutter-half 0;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
   }
 }
 

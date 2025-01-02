@@ -1,5 +1,13 @@
+<!-- SEO meta description -->
+<% if archived_petition_page? %>
+<%= tag.meta name: 'description', content: @petition.background? ? @petition.background : @petition.additional_details %>
+<% elsif defined?(@petition) %>
+<%= tag.meta name: 'description', content: @petition.background %>
+<% else %>
+<%= tag.meta name: 'description', content: 'Official online petitions in response to issues of the day, listing the number that got a Government response, and those that have been debated in the House of Parliament' %>
+<% end %>
 <!-- Facebook analytics access -->
-<meta property="fb:admins" content="204502059" />
+<meta property="fb:admins" content="204502059">
 <!-- Open Graph -->
 <%= open_graph_tag 'site_name', :site_name %>
 <%= open_graph_tag 'locale', 'en_GB' %>

@@ -18,15 +18,15 @@
 
 <p>Once your petition has <%= Site.maximum_number_of_signatures %> signatures it won’t be able to add more until it’s been checked by the petitions team. So, please wait until it’s been checked and published before sharing it more widely.</p>
 
-<p>Thanks,<br />
-<%= t("petitions.emails.signoff_prefix") %><br />
+<p>Thanks,<br>
+<%= t("petitions.emails.signoff_prefix") %><br>
 <%= t("petitions.emails.signoff_suffix") %></p>
 
-<hr />
+<hr>
 
 <p>I’ve made a petition – will you sign it?</p>
 
-<p>Click this link to sign the petition:<br />
+<p>Click this link to sign the petition:<br>
 <%= link_to nil, new_petition_sponsor_url(@petition, token: @petition.sponsor_token) %></p>
 
 <p>My petition:</p>
@@ -39,7 +39,7 @@
   <p><%= @petition.additional_details %></p>
 <% end %>
 
-<hr />
+<hr>
 
-<p>Click this link to sign the petition:<br />
+<p>Click this link to sign the petition:<br>
 <%= link_to nil, new_petition_sponsor_url(@petition, token: @petition.sponsor_token) %></p>

@@ -16,11 +16,19 @@ details {
     @include media(desktop){
       &:hover {
         color: $link-hover-colour;
+        text-decoration: underline;
+        text-decoration-thickness: 2px;
+        text-underline-offset: 3px;
       }
     }
 
     &:focus {
+      background-color: $focus-colour;
       outline: 3px solid $focus-colour;
+
+      &:hover {
+        text-decoration: none;
+      }
     }
   }
 

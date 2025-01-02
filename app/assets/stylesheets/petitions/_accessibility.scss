@@ -6,6 +6,7 @@ a {
 a:focus {
   background-color: $focus-colour;
   outline: 3px solid $focus-colour;
+  outline-offset: 0px;
 }
 
 input:focus,

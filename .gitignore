@@ -30,8 +30,8 @@
 /pkg
 
 # Dotenv 2.0 uses a .env.local for local overrides
-.env.local
-.env.*.local
+/.env.local
+/.env.*.local
 
 # Add back any keep files that might have been excluded by the above
 !.keep

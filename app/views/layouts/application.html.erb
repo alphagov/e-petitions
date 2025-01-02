@@ -2,7 +2,7 @@
 <html lang="en-GB">
   <head>
     <title><%= page_title %></title>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 
     <%= preload_link_tag 'application.css', nopush: true %>
     <%= preload_link_tag 'application.js', nopush: true %>
@@ -14,18 +14,13 @@
       <%= preload_link_tag 'character-counter.js', nopush: true %>
     <% end %>
 
-    <!--[if gt IE 8]><!--><%= stylesheet_link_tag 'application' %><!--<![endif]-->
-    <!--[if IE 7]><%= stylesheet_link_tag 'application-ie7' %><![endif]-->
-    <!--[if IE 8]><%= stylesheet_link_tag 'application-ie8' %><![endif]-->
+    <%= stylesheet_link_tag 'application' %>
 
-    <!--[if lt IE 9]><%= javascript_include_tag 'ie.js' %><![endif]-->
-    <!--[if IE]><%= javascript_include_tag 'details.js' %><![endif]-->
-
-    <meta name="viewport" content="width = device-width" />
+    <meta name="viewport" content="width = device-width">
     <%= render 'application/os' %>
     <%= render 'application/social_meta' %>
     <% if noindex_page? %>
-      <meta name="robots" content="noindex" />
+      <meta name="robots" content="noindex">
     <% end %>
     <meta name="theme-color" content="#080">
   </head>
@@ -38,7 +33,7 @@
 
     <%= render 'application/header' %>
 
-    <main id="content" role="main">
+    <main id="content">
       <%= render 'application/messages' %>
       <%= yield %>
     </main>

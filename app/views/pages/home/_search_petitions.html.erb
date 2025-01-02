@@ -10,7 +10,11 @@
       <input type="hidden" name="state" value="published">
     <% end %>
 
-    <%= label_tag 'search', 'Search petitions', id: 'search-petitions-heading' %>
+    <h2 id="search-petitions-heading">
+      <%= label_tag 'search' do %>
+        Search petitions
+      <% end %>
+    </h2>
 
     <div class="search-inline">
       <%= search_field_tag 'q', nil, class: 'form-control', id: 'search' %>

@@ -86,7 +86,7 @@
       <section class="about-item about-item-count-debate" id="debate-threshold" aria-labelledby="debate-threshold-heading">
         <% if debate_outcome.debated? %>
           <h2 id="debate-threshold-heading">Parliament debated this topic</h2>
-          <section class="debate-outcome">
+          <div class="debate-outcome">
             <p class="secondary">This topic was debated on <%= short_date_format(debate_outcome.debated_on) %></p>
             <% if debate_outcome.video_url? %>
               <%= link_to debate_outcome.video_url, rel: 'external' do %>
@@ -108,7 +108,7 @@
             <% if debate_outcome.overview? %>
               <%= auto_link(simple_format(h(debate_outcome.overview)), html: { rel: 'nofollow' }) %>
             <% end %>
-          </section>
+          </div>
         <% else %>
           <h2 id="debate-threshold-heading">The Petitions Committee decided not to debate this petition</h2>
           <% if debate_outcome.overview? %>

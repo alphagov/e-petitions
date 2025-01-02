@@ -111,7 +111,9 @@ p {
 // Link styles
 a {
   color: $link-colour;
-  text-decoration: none;
+  text-decoration: underline;
+  text-decoration-thickness: 2px !important;
+  text-underline-offset: 3px !important;
 }
 
 a:visited {
@@ -120,6 +122,12 @@ a:visited {
 
 a:hover {
   color: $link-hover-colour;
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+}
+
+a:hover:focus {
+  text-decoration: none;
 }
 
 a:active {

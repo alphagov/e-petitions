@@ -224,6 +224,7 @@ GEM
     ffi-compiler (1.3.2)
       ffi (>= 1.15.5)
       rake
+    foreman (0.88.1)
     globalid (1.2.1)
       activesupport (>= 6.1)
     hashdiff (1.1.1)
@@ -498,6 +499,7 @@ DEPENDENCIES
   faker
   faraday
   faraday_middleware
+  foreman
   image_processing
   jbuilder
   jquery-rails

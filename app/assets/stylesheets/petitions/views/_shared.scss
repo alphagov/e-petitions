@@ -193,80 +193,99 @@ input.back-page {
 // Pagination
 // ==========
 .search-pagination {
-  @extend %contain-floats;
   @include bold-27();
+
   margin-top: $gutter;
   padding-bottom: $gutter-half;
-}
 
-.search-pagination a {
-  width: 40%;
-}
+  display: flex;
+  justify-content: flex-end;
 
-.search-pagination a:visited {
-  color: $link-colour
-}
+  .previous, .next {
+    position: relative;
+    width: 20%;
+    height: 60px;
+    text-decoration: none;
 
-.paginate {
-  display: block;
-  line-height: 55px;
-}
+    &:focus {
+      outline: none;
+    }
 
-.disabled .paginate {
-  display: none;
-}
+    .paginate-label {
+      display: inline-block;
+      margin-top: 5px;
+    }
 
-.previous {
-  float: left;
-  text-align: left;
-  margin-top: 5px;
-}
+    .paginate {
+      display: block;
+      font-size: 14px;
+      line-height: 20px;
+      font-weight: 500;
+    }
 
-.previous::before {
-  content: " ";
-  float: left;
-  display: block;
-  width: 32px;
-  height: 57px;
-  margin-right: 20px;
-  background-image: image-url("icons/icon_paginate-previous.png");
+    &::before, &::after {
+      content: "";
+      position: absolute;
+      height: 0;
+      width: 42px;
+      border-top: 6px solid $link-colour;
+    }
 
-  @include device-pixel-ratio() {
-    background-image: image-url("icons/icon_paginate-previous-2x.png");
-    background-size: 32px 57px;
+    &::before {
+      top: 30px;
+    }
+
+    &::after {
+      top: 24px;
+    }
+
+    &:hover {
+      text-decoration: underline;
+
+      &::before, &::after {
+        border-top: 6px solid $link-hover-colour;
+      }
+    }
   }
-}
 
-.next {
-  float: right;
-  text-align: right;
-  margin-top: 5px;
-}
+  .previous {
+    margin-right: auto;
+    padding-left: 52px;
 
-.next::before {
-  content: " ";
-  float: right;
-  display: block;
-  width: 32px;
-  height: 57px;
-  margin-left: 20px;
-  background-image: image-url("icons/icon_paginate-next.png");
+    &::before, &::after {
+      left: 0;
+    }
 
-  @include device-pixel-ratio() {
-    background-image: image-url("icons/icon_paginate-next-2x.png");
-    background-size: 32px 57px;
+    &::before {
+      transform-origin: top left;
+      transform: rotate(-45deg);
+    }
+
+    &::after {
+      transform-origin: bottom left;
+      transform: rotate(45deg);
+    }
   }
-}
 
-.paginate-label {
-  display: inline-block;
-  margin-top: 5px;
-}
+  .next {
+    margin-left: auto;
+    padding-right: 52px;
+    text-align: right;
 
-.page-count {
-  font-size: 14px;
-  line-height: 20px;
-  font-weight: 500;
+    &::before, &::after {
+      right: 0;
+    }
+
+    &::before {
+      transform-origin: top right;
+      transform: rotate(45deg);
+    }
+
+    &::after {
+      transform-origin: bottom right;
+      transform: rotate(-45deg);
+    }
+  }
 }
 
 // About petitions

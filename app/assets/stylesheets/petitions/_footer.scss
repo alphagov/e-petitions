@@ -8,9 +8,11 @@
 
   a {
     color: $black;
+    text-decoration: none;
 
     &:hover {
       text-decoration: underline;
+      text-decoration-thickness: 2px;
     }
   }
 
@@ -43,6 +45,12 @@
         @include background-image("graphics/graphic_open-government-licence", 41px, 17px);
         background-position: 0 0;
         background-repeat: no-repeat;
+
+        &:hover {
+          border-bottom: 2px solid $text-colour;
+          padding-bottom: 3px;
+          margin-bottom: -5px;
+        }
       }
     }
 
