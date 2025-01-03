@@ -414,6 +414,10 @@ FactoryBot.define do
       moderation_threshold_reached_at { Site.moderation_overdue_in_days.ago + 5.minutes }
     end
 
+    trait :delayed do
+      moderation_threshold_reached_at { Site.moderation_near_overdue_in_days.ago + 5.minutes }
+    end
+
     trait :recent do
       moderation_threshold_reached_at { Time.current }
     end
