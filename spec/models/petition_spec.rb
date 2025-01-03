@@ -653,12 +653,13 @@ RSpec.describe Petition, type: :model do
     describe ".in_moderation" do
       let!(:open_petition) { FactoryBot.create(:open_petition) }
       let!(:recent_petition) { FactoryBot.create(:sponsored_petition, :recent) }
-      let!(:overdue_petition) { FactoryBot.create(:sponsored_petition, :overdue) }
+      let!(:delayed_petition) { FactoryBot.create(:sponsored_petition, :delayed) }
       let!(:nearly_overdue_petition) { FactoryBot.create(:sponsored_petition, :nearly_overdue) }
+      let!(:overdue_petition) { FactoryBot.create(:sponsored_petition, :overdue) }
 
       context "with no arguments" do
         it "returns all petitions awaiting moderation" do
-          expect(Petition.in_moderation).to include(recent_petition, overdue_petition, nearly_overdue_petition)
+          expect(Petition.in_moderation).to include(recent_petition, delayed_petition, nearly_overdue_petition, overdue_petition)
         end
 
         it "doesn't return petitions in other states" do
@@ -668,47 +669,47 @@ RSpec.describe Petition, type: :model do
 
       context "with a :from argument" do
         it "returns all petitions awaiting moderation after the timestamp" do
-          expect(Petition.in_moderation(from: 7.days.ago)).to include(recent_petition)
+          expect(Petition.in_moderation(from: 11.days.ago)).to include(recent_petition, delayed_petition)
         end
 
         it "doesn't return petitions awaiting moderation before the timestamp" do
-          expect(Petition.in_moderation(from: 7.days.ago)).not_to include(overdue_petition, nearly_overdue_petition)
+          expect(Petition.in_moderation(from: 11.days.ago)).not_to include(nearly_overdue_petition, overdue_petition)
         end
 
         it "doesn't return petitions in other states" do
-          expect(Petition.in_moderation(from: 7.days.ago)).not_to include(open_petition)
+          expect(Petition.in_moderation(from: 11.days.ago)).not_to include(open_petition)
         end
       end
 
       context "with a :to argument" do
         it "returns all petitions awaiting moderation before the timestamp" do
-          expect(Petition.in_moderation(to: 10.days.ago)).to include(overdue_petition)
+          expect(Petition.in_moderation(to: 14.days.ago)).to include(overdue_petition)
         end
 
         it "doesn't return petitions awaiting moderation after the timestamp" do
-          expect(Petition.in_moderation(to: 10.days.ago)).not_to include(recent_petition, nearly_overdue_petition)
+          expect(Petition.in_moderation(to: 14.days.ago)).not_to include(recent_petition, delayed_petition, nearly_overdue_petition)
         end
 
         it "doesn't return petitions in other states" do
-          expect(Petition.in_moderation(to: 10.days.ago)).not_to include(open_petition)
+          expect(Petition.in_moderation(to: 14.days.ago)).not_to include(open_petition)
         end
       end
 
       context "with both a :from and :to argument" do
         it "returns all petitions awaiting moderation between the timestamps" do
-          expect(Petition.in_moderation(from: 10.days.ago, to: 8.days.ago)).to include(nearly_overdue_petition)
+          expect(Petition.in_moderation(from: 14.days.ago, to: 11.days.ago)).to include(nearly_overdue_petition)
         end
 
-        it "doesn't return petitions awaiting moderation before the timestamp" do
-          expect(Petition.in_moderation(from: 10.days.ago, to: 8.days.ago)).not_to include(overdue_petition)
+        it "doesn't return petitions awaiting moderation before the 'from' timestamp" do
+          expect(Petition.in_moderation(from: 14.days.ago, to: 11.days.ago)).not_to include(overdue_petition)
         end
 
-        it "doesn't return petitions awaiting moderation after the timestamp" do
-          expect(Petition.in_moderation(from: 10.days.ago, to: 8.days.ago)).not_to include(recent_petition)
+        it "doesn't return petitions awaiting moderation after the 'to' timestamp" do
+          expect(Petition.in_moderation(from: 14.days.ago, to: 11.days.ago)).not_to include(recent_petition, delayed_petition)
         end
 
         it "doesn't return petitions in other states" do
-          expect(Petition.in_moderation(from: 10.days.ago, to: 8.days.ago)).not_to include(open_petition)
+          expect(Petition.in_moderation(from: 14.days.ago, to: 11.days.ago)).not_to include(open_petition)
         end
       end
     end

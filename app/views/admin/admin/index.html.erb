@@ -115,7 +115,7 @@
                 <% unless recently_in_moderation_untagged_count.zero? %>
                  / <%= recently_in_moderation_untagged_count %>
                 <% end %>
-                <span class="label">0-7 days</span>
+                <span class="label">0-11 days</span>
               <% end %>
             </div>
 
@@ -125,7 +125,7 @@
                 <% unless nearly_overdue_in_moderation_untagged_count.zero? %>
                  / <%= nearly_overdue_in_moderation_untagged_count %>
                 <% end %>
-                <span class="label">8-10 days</span>
+                <span class="label">11-14 days</span>
               <% end %>
             </div>
 
@@ -135,7 +135,7 @@
                 <% unless overdue_in_moderation_untagged_count.zero? %>
                  / <%= overdue_in_moderation_untagged_count %>
                 <% end %>
-                <span class="label">&gt; 10 days</span>
+                <span class="label">&gt; 14 days</span>
               <% end %>
             </div>
 
