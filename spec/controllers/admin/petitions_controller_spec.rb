@@ -120,11 +120,11 @@ RSpec.describe Admin::PetitionsController, type: :controller, admin: true do
         end
 
         it "resends the email to the petition creator" do
-          expect(mailbox_for("bob@example.com").last).to have_subject("Action required: Petition “Do Stuff!”")
+          expect(mailbox_for("bob@example.com").last).to have_subject("Get supporters for: “Do Stuff!”")
         end
 
         it "sends a copy of the email to the feedback address" do
-          expect(mailbox_for("petitionscommittee@parliament.uk").last).to have_subject("Action required: Petition “Do Stuff!”")
+          expect(mailbox_for("petitionscommittee@parliament.uk").last).to have_subject("Get supporters for: “Do Stuff!”")
         end
       end
     end

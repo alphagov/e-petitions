@@ -354,7 +354,7 @@ RSpec.describe SponsorsController, type: :controller do
 
           it "sends a confirmation email" do
             expect(last_email_sent).to deliver_to("ted@example.com")
-            expect(last_email_sent).to have_subject("Please confirm your email address")
+            expect(last_email_sent).to have_subject("Sign to support: “#{petition.action}”")
           end
 
           it "redirects to the thank you page" do
@@ -397,7 +397,7 @@ RSpec.describe SponsorsController, type: :controller do
 
           it "re-sends the confirmation email" do
             expect(last_email_sent).to deliver_to("ted@example.com")
-            expect(last_email_sent).to have_subject("Please confirm your email address")
+            expect(last_email_sent).to have_subject("Sign to support: “#{petition.action}”")
           end
 
           it "redirects to the thank you page" do
@@ -426,7 +426,7 @@ RSpec.describe SponsorsController, type: :controller do
 
           it "re-sends the confirmation email" do
             expect(last_email_sent).to deliver_to("ted@example.com")
-            expect(last_email_sent).to have_subject("Please confirm your email address")
+            expect(last_email_sent).to have_subject("Sign to support: “#{petition.action}”")
           end
 
           it "redirects to the thank you page" do
@@ -780,7 +780,7 @@ RSpec.describe SponsorsController, type: :controller do
 
       it "sends email notification to the petition creator" do
         expect(last_email_sent).to deliver_to("bob@example.com")
-        expect(last_email_sent).to have_subject("Alice supported your petition")
+        expect(last_email_sent).to have_subject("Someone supported: “#{petition.action}”")
       end
 
       it "redirects to the signed signature page" do
@@ -854,7 +854,7 @@ RSpec.describe SponsorsController, type: :controller do
 
       it "sends email notification to the petition creator" do
         expect(last_email_sent).to deliver_to("bob@example.com")
-        expect(last_email_sent).to have_subject("Alice supported your petition")
+        expect(last_email_sent).to have_subject("Someone supported: “#{petition.action}”")
       end
 
       it "redirects to the signed signature page" do
@@ -906,7 +906,7 @@ RSpec.describe SponsorsController, type: :controller do
 
         it "sends email notification to the petition creator" do
           expect(last_email_sent).to deliver_to("bob@example.com")
-          expect(last_email_sent).to have_subject("We’re checking your petition")
+          expect(last_email_sent).to have_subject("Your petition has five supporters: “#{petition.action}”")
         end
 
         it "redirects to the signed signature page" do
@@ -939,7 +939,7 @@ RSpec.describe SponsorsController, type: :controller do
 
         it "sends email notification to the petition creator" do
           expect(last_email_sent).to deliver_to("bob@example.com")
-          expect(last_email_sent).to have_subject("We’re checking your petition")
+          expect(last_email_sent).to have_subject("Your petition has five supporters: “#{petition.action}”")
         end
 
         it "redirects to the signed signature page" do

@@ -1,4 +1,6 @@
 class SponsorMailer < ApplicationMailer
+  include NumberHelper
+
   def sponsor_signed_email_below_threshold(sponsor)
     @petition, @sponsor = sponsor.petition, sponsor
     @sponsor_count = @petition.sponsor_count
@@ -37,9 +39,14 @@ class SponsorMailer < ApplicationMailer
   def i18n_options
     {}.tap do |options|
       options[:scope] = :"petitions.emails.subjects"
+      options[:threshold] = number_to_word(Site.threshold_for_moderation)
 
       if defined?(@sponsor)
         options[:name] = @sponsor.name
+      end
+
+      if defined?(@petition)
+        options[:action] = @petition.action
       end
     end
   end
