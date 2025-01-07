@@ -1,10 +1,11 @@
-Click this link to sign the petition "<%= @petition.action %>"
+Dear <%= @sponsor.name %>,
 
+Please confirm your email:
 <%= verify_sponsor_url(@sponsor, token: @sponsor.perishable_token) %>
 
---
+to support and sign <%= @petition.creator.name %>’s petition:
 
-<%= @petition.creator.name %>’s petition:
+--
 
 <%= @petition.action %>
 
@@ -16,5 +17,4 @@ Click this link to sign the petition "<%= @petition.action %>"
 
 --
 
-Click this link to sign the petition:
-<%= verify_sponsor_url(@sponsor, token: @sponsor.perishable_token) %>
+<%= render "footer" %>

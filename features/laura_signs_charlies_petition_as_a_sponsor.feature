@@ -15,7 +15,7 @@ Feature: As Laura, a sponsor of my friend Charlie's petition
     When I say I am happy with my email address
     Then I should have a pending signature on the petition as a sponsor
     And I should receive an email explaining the petition I am sponsoring
-    When I confirm my email address
+    When I confirm my email address as a sponsor
     Then I should see a heading called "Thanks"
     And I should have fully signed the petition as a sponsor
 
@@ -78,11 +78,11 @@ Feature: As Laura, a sponsor of my friend Charlie's petition
 
   Scenario: Laura sees notice that she has already signed when she validates more than once
     When I have sponsored a petition
-    When I confirm my email address
+    When I confirm my email address as a sponsor
     Then I should see a heading called "Thanks"
     And I should see "Your signature has been added to this petition as a supporter"
     And I should have fully signed the petition as a sponsor
-    When I confirm my email address again
+    When I confirm my email address as a sponsor again
     Then I should see a heading called "Thanks"
     And I should see "Your signature has been added to this petition as a supporter"
     And I should see /This petition needs [0-9]+ supporters to go live/

@@ -12,6 +12,4 @@ The petitions site will reopen when a new Petitions Committee is appointed, but 
 You can find out more about what the General Election means for your petitions on our website: <%= Parliament.dissolution_faq_url %>
 <% end %>
 
-Many thanks,
-<%= t("petitions.emails.signoff_prefix") %>
-<%= t("petitions.emails.signoff_suffix") %>
+<%= render "footer", closing: "Many thanks" %>

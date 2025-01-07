@@ -334,7 +334,7 @@ RSpec.describe PetitionMailer, type: :mailer do
     subject(:mail) { described_class.gather_sponsors_for_petition(petition) }
 
     it "has the correct subject" do
-      expect(mail).to have_subject(%{Action required: Petition “Allow organic vegetable vans to use red diesel”})
+      expect(mail).to have_subject(%{Get supporters for: “Allow organic vegetable vans to use red diesel”})
     end
 
     it "has the addresses the creator by name" do
@@ -364,118 +364,11 @@ RSpec.describe PetitionMailer, type: :mailer do
     end
 
     it "includes information about moderation" do
-      expect(mail).to have_body_text(%r[Once you’ve gained the required number of supporters])
+      expect(mail).to have_body_text(%r[Once you’ve gained five signatures])
     end
 
     it "includes information about how long the moderation will take" do
-      expect(mail).to have_body_text(%r[This usually takes a week or less])
-    end
-
-    it "doesn't include information about delayed moderation" do
-      expect(mail).not_to have_body_text(%r[We have a very large number of petitions to check])
-    end
-
-    context "during Christmas" do
-      before do
-        allow(Holiday).to receive(:christmas?).and_return(true)
-      end
-
-      it "includes information about delayed moderation" do
-        expect(mail).to have_body_text(%r[but over the Christmas period it will take us a little longer])
-      end
-
-      context "when there is a moderation delay" do
-        let(:moderation_queue) { 500 }
-
-        it "includes information about delayed moderation" do
-          expect(mail).to have_body_text(%r[We have a very large number of petitions to check])
-        end
-
-        it "doesn't include information about Christmas" do
-          expect(mail).not_to have_body_text(%r[but over the Christmas period it will take us a little longer])
-        end
-
-        context "and the moderation delay message has been customized" do
-          before do
-            allow(Site).to receive(:moderation_delay_message).and_return <<~MESSAGE.squish
-              Due to recent world events we have a very large number of petitions to
-              check at the moment so it may take a few weeks. Thank you for your patience.
-            MESSAGE
-          end
-
-          it "includes the custom message" do
-            expect(mail).to have_body_text(%r[Due to recent world events])
-          end
-
-          it "doesn't include the normal message" do
-            expect(mail).not_to have_body_text(%r[This usually takes a week or less])
-          end
-        end
-      end
-    end
-
-    context "during Easter" do
-      before do
-        allow(Holiday).to receive(:easter?).and_return(true)
-      end
-
-      it "includes information about delayed moderation" do
-        expect(mail).to have_body_text(%r[but over the Easter period it will take us a little longer])
-      end
-
-      context "when there is a moderation delay" do
-        let(:moderation_queue) { 500 }
-
-        it "includes information about delayed moderation" do
-          expect(mail).to have_body_text(%r[We have a very large number of petitions to check])
-        end
-
-        it "doesn't include information about Christmas" do
-          expect(mail).not_to have_body_text(%r[but over the Easter period it will take us a little longer])
-        end
-
-        context "and the moderation delay message has been customized" do
-          before do
-            allow(Site).to receive(:moderation_delay_message).and_return <<~MESSAGE.squish
-              Due to recent world events we have a very large number of petitions to
-              check at the moment so it may take a few weeks. Thank you for your patience.
-            MESSAGE
-          end
-
-          it "includes the custom message" do
-            expect(mail).to have_body_text(%r[Due to recent world events])
-          end
-
-          it "doesn't include the normal message" do
-            expect(mail).not_to have_body_text(%r[This usually takes a week or less])
-          end
-        end
-      end
-    end
-
-    context "when there is a moderation delay" do
-      let(:moderation_queue) { 500 }
-
-      it "includes information about delayed moderation" do
-        expect(mail).to have_body_text(%r[We have a very large number of petitions to check])
-      end
-
-      context "and the moderation delay message has been customized" do
-        before do
-          allow(Site).to receive(:moderation_delay_message).and_return <<~MESSAGE.squish
-            Due to recent world events we have a very large number of petitions to
-            check at the moment so it may take a few weeks. Thank you for your patience.
-          MESSAGE
-        end
-
-        it "includes the custom message" do
-          expect(mail).to have_body_text(%r[Due to recent world events])
-        end
-
-        it "doesn't include the normal message" do
-          expect(mail).not_to have_body_text(%r[This usually takes a week or less])
-        end
-      end
+      expect(mail).to have_body_text(%r[This can take up to 10 working days])
     end
 
     context "when a BCC address is passed" do

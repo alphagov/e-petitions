@@ -1,0 +1,8 @@
+<% if @signature.creator? %>
+<p><small>You’re receiving this email because you created the petition: “<%= link_to @petition.action, [@petition] %>”.</small></p>
+<% elsif @signature.sponsor? %>
+<p><small>You’re receiving this email because you supported the petition: “<%= link_to @petition.action, [@petition] %>”.</small></p>
+<% else %>
+<p><small>You’re receiving this email because you signed the petition: “<%= link_to @petition.action, [@petition] %>”.</small></p>
+<% end %>
+<hr>

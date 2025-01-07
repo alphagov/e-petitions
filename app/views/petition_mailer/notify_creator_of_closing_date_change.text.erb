@@ -29,6 +29,4 @@ You can find out more about what the General Election means for your petitions o
 <% end %>
 Ahead of the General Election on <%= @election_date %>, make sure you’re registered to vote. You can check whether you’re eligible to vote and find out how to register at: https://www.gov.uk/register-to-vote. The deadline to register to vote is <%= @registration_deadline %>.
 
-Many thanks,
-<%= t("petitions.emails.signoff_prefix") %>
-<%= t("petitions.emails.signoff_suffix") %>
+<%= render "footer", closing: "Many thanks" %>

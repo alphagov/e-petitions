@@ -12,6 +12,4 @@
 <p>You can find out more about what the General Election means for your petitions on our website: <%= link_to(nil, Parliament.dissolution_faq_url) %></p>
 <% end %>
 
-<p>Many thanks,<br />
-<%= t("petitions.emails.signoff_prefix") %><br />
-<%= t("petitions.emails.signoff_suffix") %></p>
+<%= render "footer", closing: "Many thanks" %>

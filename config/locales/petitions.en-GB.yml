@@ -185,7 +185,7 @@ en-GB:
 
         # Emails to people who support a petition
         gather_sponsors_for_petition: |-
-          Action required: Petition “%{action}”
+          Get supporters for: “%{action}”
         notify_creator_that_petition_is_published: |-
           We published your petition “%{action}”
         notify_sponsor_that_petition_is_published: |-
@@ -194,6 +194,12 @@ en-GB:
           We rejected your petition “%{action}”
         notify_sponsor_that_petition_was_rejected: |-
           We rejected the petition “%{action}” that you supported
+        petition_and_email_confirmation_for_sponsor: |-
+          Sign to support: “%{action}”
+        sponsor_signed_email_below_threshold: |-
+          Someone supported: “%{action}”
+        sponsor_signed_email_on_threshold: |-
+          Your petition has %{threshold} supporters: “%{action}”
 
         # Re-send confirmation emails
         special_resend_of_email_confirmation_for_signer: |-
@@ -208,8 +214,8 @@ en-GB:
           We’ve stopped your petition early
         notify_creator_of_validated_petition_being_stopped: |-
           We’ve stopped your petition early
-      signoff_prefix: "The Petitions team"
-      signoff_suffix: "UK Government and Parliament"
+      signoff_prefix: "The Petitions Team"
+      signoff_suffix: "House of Commons"
 
     waiting_for_in_words:
       zero: "Waiting for less than a day"

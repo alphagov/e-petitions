@@ -27,6 +27,13 @@ When(/^I confirm my email address(?: again)?$/) do
   )
 end
 
+When(/^I confirm my email address as a sponsor(?: again)?$/) do
+  steps %Q(
+    And I open the email with subject "Sign to support:"
+    When I click the first link in the email
+  )
+end
+
 def should_be_signature_count_of(count)
   expect(Petition.find(@petition.id).signature_count).to eq(count)
 end

@@ -5,6 +5,4 @@ We published the petition you supported – “<%= @petition.action %>”.
 Click this link to see the petition and start sharing it:
 <%= petition_url(@petition) %>
 
-Thanks,
-<%= t("petitions.emails.signoff_prefix") %>
-<%= t("petitions.emails.signoff_suffix") %>
+<%= render "footer" %>
