@@ -15,11 +15,6 @@ RSpec.describe 'Link header', type: :request do
       expect(link_header).to include("</assets/application.css>; rel=preload; as=style; type=text/css; nopush")
       expect(link_header).to include("</assets/application.js>; rel=preload; as=script; type=text/javascript; nopush")
 
-      expect(link_header).not_to include("</assets/application-ie7.css>; rel=preload; as=style; type=text/css; nopush")
-      expect(link_header).not_to include("</assets/application-ie8.css>; rel=preload; as=style; type=text/css; nopush")
-      expect(link_header).not_to include("</assets/ie.js>; rel=preload; as=script; type=text/javascript; nopush")
-      expect(link_header).not_to include("</assets/details.js>; rel=preload; as=script; type=text/javascript; nopush")
-
       expect(link_header).not_to include("</assets/auto-updater.js>; rel=preload; as=script; type=text/javascript; nopush")
       expect(link_header).not_to include("</assets/character-counter.js>; rel=preload; as=script; type=text/javascript; nopush")
     end
@@ -36,11 +31,6 @@ RSpec.describe 'Link header', type: :request do
       expect(link_header).to include("</assets/application.css>; rel=preload; as=style; type=text/css; nopush")
       expect(link_header).to include("</assets/application.js>; rel=preload; as=script; type=text/javascript; nopush")
 
-      expect(link_header).not_to include("</assets/application-ie7.css>; rel=preload; as=style; type=text/css; nopush")
-      expect(link_header).not_to include("</assets/application-ie8.css>; rel=preload; as=style; type=text/css; nopush")
-      expect(link_header).not_to include("</assets/ie.js>; rel=preload; as=script; type=text/javascript; nopush")
-      expect(link_header).not_to include("</assets/details.js>; rel=preload; as=script; type=text/javascript; nopush")
-
       expect(link_header).not_to include("</assets/auto-updater.js>; rel=preload; as=script; type=text/javascript; nopush")
       expect(link_header).not_to include("</assets/character-counter.js>; rel=preload; as=script; type=text/javascript; nopush")
     end
@@ -56,11 +46,6 @@ RSpec.describe 'Link header', type: :request do
       expect(link_header).to be_present
       expect(link_header).to include("</assets/application.css>; rel=preload; as=style; type=text/css; nopush")
       expect(link_header).to include("</assets/application.js>; rel=preload; as=script; type=text/javascript; nopush")
-
-      expect(link_header).not_to include("</assets/application-ie7.css>; rel=preload; as=style; type=text/css; nopush")
-      expect(link_header).not_to include("</assets/application-ie8.css>; rel=preload; as=style; type=text/css; nopush")
-      expect(link_header).not_to include("</assets/ie.js>; rel=preload; as=script; type=text/javascript; nopush")
-      expect(link_header).not_to include("</assets/details.js>; rel=preload; as=script; type=text/javascript; nopush")
 
       expect(link_header).not_to include("</assets/auto-updater.js>; rel=preload; as=script; type=text/javascript; nopush")
       expect(link_header).to include("</assets/character-counter.js>; rel=preload; as=script; type=text/javascript; nopush")
@@ -80,11 +65,6 @@ RSpec.describe 'Link header', type: :request do
       expect(link_header).to include("</assets/application.css>; rel=preload; as=style; type=text/css; nopush")
       expect(link_header).to include("</assets/application.js>; rel=preload; as=script; type=text/javascript; nopush")
 
-      expect(link_header).not_to include("</assets/application-ie7.css>; rel=preload; as=style; type=text/css; nopush")
-      expect(link_header).not_to include("</assets/application-ie8.css>; rel=preload; as=style; type=text/css; nopush")
-      expect(link_header).not_to include("</assets/ie.js>; rel=preload; as=script; type=text/javascript; nopush")
-      expect(link_header).not_to include("</assets/details.js>; rel=preload; as=script; type=text/javascript; nopush")
-
       expect(link_header).to include("</assets/auto-updater.js>; rel=preload; as=script; type=text/javascript; nopush")
       expect(link_header).not_to include("</assets/character-counter.js>; rel=preload; as=script; type=text/javascript; nopush")
     end
@@ -103,11 +83,6 @@ RSpec.describe 'Link header', type: :request do
       expect(link_header).to include("</assets/application.css>; rel=preload; as=style; type=text/css; nopush")
       expect(link_header).to include("</assets/application.js>; rel=preload; as=script; type=text/javascript; nopush")
 
-      expect(link_header).not_to include("</assets/application-ie7.css>; rel=preload; as=style; type=text/css; nopush")
-      expect(link_header).not_to include("</assets/application-ie8.css>; rel=preload; as=style; type=text/css; nopush")
-      expect(link_header).not_to include("</assets/ie.js>; rel=preload; as=script; type=text/javascript; nopush")
-      expect(link_header).not_to include("</assets/details.js>; rel=preload; as=script; type=text/javascript; nopush")
-
       expect(link_header).not_to include("</assets/auto-updater.js>; rel=preload; as=script; type=text/javascript; nopush")
       expect(link_header).not_to include("</assets/character-counter.js>; rel=preload; as=script; type=text/javascript; nopush")
     end
@@ -125,11 +100,6 @@ RSpec.describe 'Link header', type: :request do
       expect(link_header).to be_present
       expect(link_header).to include("</assets/application.css>; rel=preload; as=style; type=text/css; nopush")
       expect(link_header).to include("</assets/application.js>; rel=preload; as=script; type=text/javascript; nopush")
-
-      expect(link_header).not_to include("</assets/application-ie7.css>; rel=preload; as=style; type=text/css; nopush")
-      expect(link_header).not_to include("</assets/application-ie8.css>; rel=preload; as=style; type=text/css; nopush")
-      expect(link_header).not_to include("</assets/ie.js>; rel=preload; as=script; type=text/javascript; nopush")
-      expect(link_header).not_to include("</assets/details.js>; rel=preload; as=script; type=text/javascript; nopush")
 
       expect(link_header).not_to include("</assets/auto-updater.js>; rel=preload; as=script; type=text/javascript; nopush")
       expect(link_header).not_to include("</assets/character-counter.js>; rel=preload; as=script; type=text/javascript; nopush")

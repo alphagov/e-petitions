@@ -36,9 +36,9 @@ test:
         first_name: ["first_name"]
         last_name: ["last_name"]
         groups: ["groups"]
-      assertion_consumer_service_url: "http://localhost:3000/admin/auth/example/callback"
-      sp_entity_id: "http://localhost:3000/admin/auth/example"
-      idp_sso_service_url: "http://localhost:3000/sso"
+      assertion_consumer_service_url: "http://moderate.petitions.localhost:3000/admin/auth/example/callback"
+      sp_entity_id: "http://moderate.petitions.localhost:3000/admin/auth/example"
+      idp_sso_service_url: "http://moderate.petitions.localhost:3000/sso"
       idp_cert: |-
         -----BEGIN CERTIFICATE-----
         MIIDeDCCAmCgAwIBAgIBADANBgkqhkiG9w0BAQUFADA1MQswCQYDVQQGEwJHQjES
@@ -61,3 +61,5 @@ test:
         xyXv04lILZ9fJ8jy30mHT8jesS6LlNioufs0XM3pJQ/tY3/hWHNaQLs8vseULFWV
         +ZKWSqrGoR6dQZtg67X/Hv4V62tJTEhzqFwQnw==
         -----END CERTIFICATE-----
+
+production: []

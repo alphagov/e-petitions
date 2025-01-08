@@ -1,4 +1,4 @@
-# Preview all emails at http://localhost:3000/rails/mailers/archived/petition_mailer
+# Preview all emails at http://petitions.localhost:3000/rails/mailers/archived/petition_mailer
 
 module Archived
   class PetitionMailerPreview < ActionMailer::Preview

@@ -3,7 +3,7 @@
 <p>You recently signed the <%= "petition".pluralize(@count) %>:</p>
 
 <% @petitions.each do |petition| %>
-<p><strong><%= petition.action %></strong><br />
+<p><strong><%= petition.action %></strong><br>
 <%= link_to(nil, petition_url(petition)) %></p>
 
 <% end %>

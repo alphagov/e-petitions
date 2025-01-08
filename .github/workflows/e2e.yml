@@ -1,0 +1,108 @@
+name: E2E
+
+on:
+  workflow_call:
+    inputs:
+      description:
+        type: string
+        required: true
+      command:
+        type: string
+        required: true
+      save_reports:
+        type: boolean
+        required: false
+        default: false
+      save_logs:
+        type: boolean
+        required: false
+        default: false
+
+env:
+  DATABASE_URL: postgres://postgres:postgres@localhost:5432/epets_production
+  DISABLE_FORCE_SSL: "true"
+  RAILS_ENV: "production"
+  RAILS_SERVE_STATIC_FILES: "true"
+  SECRET_KEY_BASE: "6a5e319d068ceb629ce3cf4683b296a9"
+  STORAGE_ADAPTER: "test"
+  WEB_CONCURRENCY: "0"
+  WEB_CONCURRENCY_MIN_THREADS: "5"
+  WEB_CONCURRENCY_MAX_THREADS: "5"
+
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+
+    services:
+      postgres:
+        image: postgres:16
+        ports: ["5432:5432"]
+        env:
+          POSTGRES_PASSWORD: postgres
+          PGUSER: postgres
+          PGPASSWORD: postgres
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Update repository lists
+        shell: bash
+        run: |
+          sudo apt-get update
+
+      - name: Install packages
+        shell: bash
+        run: |
+          sudo apt-get -yqq install libpq-dev imagemagick libvips
+
+      - name: Setup ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: "3.2"
+          bundler-cache: true
+          cache-version: 1
+
+      - name: Setup node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20.x"
+          cache: "npm"
+
+      - name: Install node packages
+        shell: bash
+        run: |
+          npm ci
+
+      - name: Setup database
+        shell: bash
+        run: |
+          bundle exec rake db:setup
+
+      - name: Save lighthouse reports
+        if: ${{ inputs.save_reports && failure() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: lighthouse-reports-public
+          path: ${{ github.workspace }}/tmp/lighthouse/*
+          retention-days: 7
+          if-no-files-found: ignore
+
+      - name: Save rails logs
+        if: ${{ inputs.save_logs && failure() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: rails-logs-public
+          path: ${{ github.workspace }}/log/production.log
+          retention-days: 7
+          if-no-files-found: ignore
+
+      - name: ${{ inputs.description }}
+        shell: bash
+        run: |
+          bundle exec ${{ inputs.command }}

@@ -1,7 +1,7 @@
 <%= render "reason" %>
 <p>Dear <%= @signature.name %>,</p>
 
-<p>You recently created the petition “<%= @petition.action %>”:<br />
+<p>You recently created the petition “<%= @petition.action %>”:<br>
 <%= link_to nil, petition_url(@petition) %></p>
 
 <%= markdown_to_html(@mailshot.body) %>

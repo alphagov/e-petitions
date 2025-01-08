@@ -46,7 +46,7 @@ Rails.application.configure do
   # config.assume_ssl = true
 
   # Force all access to the app over SSL, use Strict-Transport-Security, and use secure cookies.
-  config.force_ssl = true
+  config.force_ssl = ENV["DISABLE_FORCE_SSL"].blank?
 
   # Set the HSTS headers to include subdomains
   config.ssl_options[:hsts] = { expires: 365.days, subdomains: true }
@@ -99,14 +99,23 @@ Rails.application.configure do
   # Set this to true and configure the email server for immediate delivery to raise delivery errors.
   # config.action_mailer.raise_delivery_errors = false
   config.action_mailer.delivery_method = :smtp
-  config.action_mailer.smtp_settings = {
-    address: ENV.fetch("SMTP_HOSTNAME"),
-    port: ENV.fetch("SMTP_PORT"),
-    user_name: ENV.fetch("SMTP_USERNAME"),
-    password: ENV.fetch("SMTP_PASSWORD"),
-    authentication: :login,
-    enable_starttls_auto: true
-  }
+
+  # The production environment file is used in e2e tests but we don't want to send out emails
+  if ENV["SMTP_HOST"] == "mailcatcher.localhost"
+    config.action_mailer.smtp_settings = {
+      address: ENV.fetch("SMTP_HOST"),
+      port: ENV.fetch("SMTP_PORT")
+    }
+  else
+    config.action_mailer.smtp_settings = {
+      address: ENV.fetch("SMTP_HOSTNAME"),
+      port: ENV.fetch("SMTP_PORT"),
+      user_name: ENV.fetch("SMTP_USERNAME"),
+      password: ENV.fetch("SMTP_PASSWORD"),
+      authentication: :login,
+      enable_starttls_auto: true
+    }
+  end
 
   # Enable locale fallbacks for I18n (makes lookups for any locale fall back to
   # the I18n.default_locale when a translation cannot be found).
@@ -119,7 +128,7 @@ Rails.application.configure do
   config.active_record.dump_schema_after_migration = false
 
   # Store files on Amazon S3.
-  config.active_storage.service = :amazon
+  config.active_storage.service = ENV.fetch("STORAGE_ADAPTER", "amazon").to_sym
 
   # Enable DNS rebinding protection and other `Host` header attacks.
   # config.hosts = [

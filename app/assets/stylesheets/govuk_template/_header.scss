@@ -255,10 +255,15 @@
   background-color: $light-blue-25;
   padding-top: 10px;
   padding-bottom: 10px;
+
   p {
     @extend %site-width-container;
     @include core-16;
     margin-top: 0;
     margin-bottom: 0;
+  }
+
+  a:hover {
+    text-decoration: underline;
   }
 }

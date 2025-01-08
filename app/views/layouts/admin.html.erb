@@ -6,10 +6,10 @@
   <%= javascript_include_tag "admin" %>
   <%= yield :admin_scripts %>
   <%= csrf_meta_tag %>
-  <link rel="shortcut icon" type="image/x-icon" href="/favicon-admin.ico" />
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon-admin.ico">
   <%= yield :js %>
-  <meta name="viewport" content="width = device-width" />
-  <meta name="robots" content="noindex" />
+  <meta name="viewport" content="width = device-width">
+  <meta name="robots" content="noindex">
   <meta name="theme-color" content="#080">
 </head>
 <body class="admin">
@@ -22,7 +22,7 @@
   </noscript>
 
   <%= render '/admin/shared/header' %>
-  <main id="content" role="main">
+  <main id="content">
     <%= render '/admin/shared/messages' %>
     <%= yield %>
   </main>
