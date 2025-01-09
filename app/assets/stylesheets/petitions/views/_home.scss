@@ -140,6 +140,10 @@ a.threshold-panel:hover, a.threshold-panel:focus {
   .pull-quote:before, .pull-quote p {
     color: $black;
   }
+
+  a[rel=external] {
+    text-decoration: underline;
+  }
 }
 
 .get-involved,
