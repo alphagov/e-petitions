@@ -2,13 +2,17 @@
   <section class="about-item about-item-other-business" id="other-business" aria-labelledby="petition-related-activity-heading">
     <h2 id="petition-related-activity-heading">Related activity</h2>
 
-    <% petition.emails.each do |email| %>
-      <details>
-        <summary><span class="summary"><%= email.subject %></span></summary>
-        <div class="panel-indent panel-no-border">
-          <%= markdown_to_html(email.body, link_attributes: { rel: 'nofollow' }) %>
-        </div>
-      </details>
-    <% end %>
+    <ol>
+      <% petition.emails.each do |email| %>
+        <li>
+          <details>
+            <summary><span class="summary"><%= email.subject %></span></summary>
+            <div class="panel-indent panel-no-border">
+              <%= markdown_to_html(email.body, link_attributes: { rel: 'nofollow' }) %>
+            </div>
+          </details>
+        </li>
+      <% end %>
+    </ol>
   </section>
 <% end %>
