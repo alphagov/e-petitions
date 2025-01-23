@@ -1,0 +1,53 @@
+// Buttons
+// ==========================================================================
+// GOV.UK front end toolkit dependencies
+@import "../govuk/design-patterns/buttons";
+@import "../govuk/measurements";
+@import "../govuk/typography";
+
+@mixin button-override($colour) {
+  @include button($colour);
+  @include box-sizing(border-box);
+  margin: 0 0 $gutter-half 0;
+  padding: em(10, 24) em(15, 24);
+  vertical-align: top;
+  @include bold-24;
+  text-align: center;
+  width: 100%;
+
+  @include media($min-width: 420px) {
+    width: inherit;
+    margin-right: $gutter-half;
+  }
+}
+
+.button {
+  @include button-override($petitions-button-colour);
+}
+
+// Fix unwanted button padding in Firefox
+.button::-moz-focus-inner {
+  border: 0;
+  padding: 0;
+}
+
+.button:focus {
+  outline: 3px solid $focus-colour;
+}
+
+// Disabled buttons
+.button[disabled="disabled"] {
+  background: $button-colour;
+}
+
+.button[disabled="disabled"]:focus {
+  outline: none;
+}
+
+.button-secondary {
+  @include button-override($panel-colour);
+}
+
+.button-warning{
+  @include button-override($red);
+}
