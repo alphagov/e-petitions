@@ -17,7 +17,7 @@ RUN echo 'deb [signed-by=/usr/share/keyrings/nodesource.gpg] https://deb.nodesou
 
 # Install packages
 RUN apt-get install -y --no-install-recommends \
-    chromium chromium-driver nodejs postgresql-client-16
+    chromium chromium-driver nodejs postgresql-client-16 libvips-dev
 
 # Create the crash reports directory - without it Chromium complains on startup
 RUN mkdir -p "/root/.config/chromium/Crash Reports/pending/"
