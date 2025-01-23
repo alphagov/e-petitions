@@ -1,0 +1,80 @@
+#global-header {
+  background-color: $petitions-header-colour;
+  padding-top: $gutter-half;
+  margin-top: -1px;
+  margin-bottom: -1px;
+  padding-bottom: $gutter-half;
+  h1 {
+    margin: 0;
+  }
+  .proposition {
+    color: $white;
+    font-size: 24px;
+    font-weight: 700;
+    display: block;
+    position: relative;
+    overflow: visible;
+    vertical-align: baseline;
+    line-height: 34px;
+    padding-left: $text-indent;
+  }
+  a {
+    text-decoration: none;
+  }
+  a:focus {
+    background-color: transparent;
+    text-decoration: underline;
+  }
+  .graphic {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 28px;
+    height: 34px;
+  }
+
+  .strapline {
+    color: $white;
+    margin: $gutter-one-third -5px 5px $text-indent;
+  }
+}
+
+#global-cookie-message {
+  width: 100%;
+  background-color: $light-blue-25;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  p {
+    @extend %site-width-container;
+    @include core-16;
+    margin-top: 0;
+    margin-bottom: 0;
+    a {
+      white-space: nowrap;
+    }
+  }
+}
+
+.admin {
+  #global-header {
+    background-color: $black;
+    a {
+      display: inline-block;
+    }
+    ul {
+      margin: 7px 0 0 0;
+      float: right;
+    }
+    li {
+      color: $white;
+      display: inline;
+      margin-left: $gutter-one-third;
+      a {
+        @include core-19();
+        color: $white;
+        display: inline;
+        padding: 0;
+      }
+    }
+  }
+}

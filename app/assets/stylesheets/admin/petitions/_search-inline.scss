@@ -1,0 +1,48 @@
+.search-inline {
+  position: relative;
+  @extend %contain-floats;
+
+  input.form-control {
+    @include appearance(none);
+    @include box-sizing(border-box);
+    float: left;
+    min-width: 0;
+    margin: 0;
+    padding: 6px 50px 6px 6px;
+    height: 42px;
+    width: 100%;
+  }
+
+  #postcode {
+    text-transform: uppercase;
+  }
+
+  .inline-submit {
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 42px;
+    height: 42px;
+    border: 0;
+    border-left: 2px solid $text-colour;
+    overflow: hidden;
+    text-indent: -5000px;
+    cursor: pointer;
+    color: $white;
+    background-color: $petitions-brand;
+    background-repeat: no-repeat;
+    background-position: 45% 50%;
+    @include background-image("icons/icon_search-white", 18px, 18px);
+    &:hover, &:focus {
+      background-color: darken($petitions-panel-colour, 5%);
+    }
+  }
+
+  .inline-button {
+    @include bold-19;
+    width: auto;
+    height: 40px;
+    line-height: 40px;
+    padding: 0px em(19, 24);
+  }
+}

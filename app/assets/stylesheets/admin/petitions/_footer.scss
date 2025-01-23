@@ -1,0 +1,97 @@
+/* Global footer */
+
+#footer {
+  border-top: 10px solid $house-of-commons-green;
+  background-color: $panel-colour;
+  padding-top: $gutter;
+  padding-bottom: $gutter *1.5;
+
+  a {
+    color: $black;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+
+  ul {
+    margin-bottom: $gutter;
+  }
+  li {
+    @include core-16;
+    margin-bottom: $gutter-one-third;
+  }
+
+  .open-government-licence {
+    clear: left;
+    position: relative;
+
+    @include ie(6) {
+      zoom: 1;
+    }
+
+    .logo {
+      margin-bottom: 1em;
+      padding-top: 0;
+
+      a {
+        display: block;
+        width: 41px;
+        height: 17px;
+        overflow:hidden;
+        text-indent: -999em;
+        @include background-image("graphics/graphic_open-government-licence", 41px, 17px);
+        background-position: 0 0;
+        background-repeat: no-repeat;
+      }
+    }
+
+    p {
+      @include core-16;
+      margin: 0;
+      padding-top: 0.1em;
+    }
+  }
+
+  @include media(tablet) {
+    .wrapper {
+      position: relative;
+    }
+  }
+}
+
+.copyright {
+  @include core-16;
+
+  margin: $gutter*1.5 0 0 0;
+  width: 100%;
+  display: block;
+  text-align: center;
+
+  @include media(tablet) {
+    max-width: 200px;
+    position: absolute;
+    top: 0;
+    right: 0;
+    margin-top: 0;
+    text-align: right;
+  }
+
+  @include ie-lte(7) {
+    float: right;
+    height: 150px;
+    width: 24%;
+  }
+
+  .graphic-portcullis-large-grey {
+    margin-right: $gutter *1.5;
+  }
+
+  a {
+    display: block;
+    text-decoration: none;
+
+    margin-top: $gutter-half;
+
+  }
+}
