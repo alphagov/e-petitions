@@ -105,6 +105,20 @@
     }
   }
 
+  .petition-emails,
+  .domain-list,
+  .petition-emails,
+  .rejection-reason-list {
+    .button {
+      margin: 0;
+      font-size: 12px;
+      padding: 2px 8px;
+      line-height: 16px;
+      white-space: nowrap;
+      width: auto;
+    }
+  }
+
   .edit-petition-link {
     margin-top: 15px;
   }

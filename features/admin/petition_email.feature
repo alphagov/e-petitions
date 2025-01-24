@@ -68,7 +68,7 @@ Feature: Emailing petitioner supporters
     Then I should be on the admin email petitioners form page for "Ban Badger Baiting"
     And the markup should be valid
     And I should see "This will be debated"
-    When I press "Edit"
+    When I follow "Edit"
     Then I should see "Edit related activity"
     When I fill in "Subject" with "This will not be debated"
     And I press "Save"

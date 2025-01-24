@@ -14,10 +14,10 @@
       <% petition.emails.select(&:persisted?).each do |email| %>
         <tr>
           <td><%= email.subject %></td>
+          <td><%= number_with_delimiter(email.email_count) || "–" %></td>
+          <td><%= date_format(email.emails_enqueued_at) || "–" %></td>
           <td>
-            <%= button_to 'Edit', edit_admin_archived_petition_email_path(petition, email), method: :get, class: 'button' %>
-            <td><%= number_with_delimiter(email.email_count) || "–" %></td>
-            <td><%= date_format(email.emails_enqueued_at) || "–" %></td>
+            <%= link_to 'Edit', edit_admin_archived_petition_email_path(petition, email), class: 'button' %>
             <%= button_to 'Delete', admin_archived_petition_email_path(petition, email), method: :delete, class: 'button-warning', data: { confirm: 'Delete related activity?' } %>
           </td>
         </tr>

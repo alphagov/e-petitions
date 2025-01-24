@@ -37,8 +37,8 @@
               <% end %>
             </td>
             <td>
-              <%= button_to 'Edit', edit_admin_rejection_reason_path(rejection_reason), method: :get, class: 'button edit-action' %>
-              <%= button_to 'Delete', admin_rejection_reason_path(rejection_reason), method: :delete, class: 'button-warning delete-action', data: { confirm: 'Delete rejection reason?' } %>
+              <%= link_to 'Edit', edit_admin_rejection_reason_path(rejection_reason), class: 'button' %>
+              <%= button_to 'Delete', admin_rejection_reason_path(rejection_reason), method: :delete, class: 'button-warning', data: { confirm: 'Delete rejection reason?' } %>
             </td>
           </tr>
         <% end %>
