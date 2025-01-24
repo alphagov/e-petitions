@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_12_21_160446) do
+ActiveRecord::Schema[7.2].define(version: 2025_01_24_074734) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "intarray"
   enable_extension "plpgsql"
@@ -445,6 +445,15 @@ ActiveRecord::Schema[7.2].define(version: 2024_12_21_160446) do
     t.datetime "created_at", precision: nil, null: false
     t.datetime "updated_at", precision: nil, null: false
     t.index ["petition_id"], name: "index_notes_on_petition_id", unique: true
+  end
+
+  create_table "pages", force: :cascade do |t|
+    t.string "slug", limit: 100, null: false
+    t.string "title", limit: 100, null: false
+    t.text "content", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["slug"], name: "index_pages_on_slug", unique: true
   end
 
   create_table "parliament_constituencies", force: :cascade do |t|

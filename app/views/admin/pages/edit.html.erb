@@ -1,0 +1,30 @@
+<h1>Edit Site</h1>
+
+<div class="grid-row">
+  <div class="grid-column">
+    <%= render "admin/shared/site_tabs" %>
+  </div>
+</div>
+
+<h2>Edit Page</h2>
+
+<div class="grid-row">
+  <div class="column-two-thirds">
+    <%= form_for [:admin, @page] do |form| %>
+      <%= form_row for: [@page, :title] do %>
+        <%= form.label :title, class: 'form-label' %>
+        <%= error_messages_for_field @page, :title %>
+        <%= form.text_field :title, tabindex: increment, maxlength: 100, class: 'form-control' %>
+      <% end %>
+
+      <%= form_row for: [@page, :content] do %>
+        <%= form.label :content, class: 'form-label' %>
+        <%= error_messages_for_field @page, :n %>
+        <%= form.text_area :content, tabindex: increment, rows: 8, class: 'form-control' %>
+      <% end %>
+
+      <%= form.submit 'Save', class: 'button' %>
+      <%= link_to 'Cancel', admin_pages_path, class: 'button-secondary' %>
+    <% end %>
+  </div>
+</div>

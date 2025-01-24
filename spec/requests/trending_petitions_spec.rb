@@ -22,12 +22,12 @@ RSpec.describe "API request to trending petitions", type: :request, show_excepti
 
     it "does not respond to HTML" do
       get "/trending"
-      expect(response.status).to eq(406)
+      expect(response.status).to eq(404)
     end
 
     it "does not respond to XML" do
       get "/trending.xml"
-      expect(response.status).to eq(406)
+      expect(response.status).to eq(404)
     end
   end
 

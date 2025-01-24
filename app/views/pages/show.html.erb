@@ -1,0 +1,5 @@
+<%= render 'parliament_dissolution_warning' if @page.show_dissolution_warning? %>
+
+<div class="text-page">
+  <%= markdown_to_html(@page.content, tables: true) %>
+</div>

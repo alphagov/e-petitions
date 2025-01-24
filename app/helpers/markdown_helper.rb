@@ -15,8 +15,38 @@ module MarkdownHelper
     underline: false, highlight: false, quote: false, footnotes: false
   }
 
+  DEFAULT_ALLOWED_TAGS = Rails::HTML::SafeListSanitizer::DEFAULT_ALLOWED_TAGS
+  EXTRA_ALLOWED_TAGS = Set.new(%w[table thead tbody tr th td])
+  ALLOWED_TAGS = DEFAULT_ALLOWED_TAGS + EXTRA_ALLOWED_TAGS
+
+  DEFAULT_ALLOWED_ATTRIBUTES = Rails::HTML::SafeListSanitizer::DEFAULT_ALLOWED_ATTRIBUTES
+  EXTRA_ALLOWED_ATTRIBUTES = Set.new(%w[id])
+  ALLOWED_ATTRIBUTES = DEFAULT_ALLOWED_ATTRIBUTES + EXTRA_ALLOWED_ATTRIBUTES
+
+  SANITIZE_DEFAULTS = {
+    tags: ALLOWED_TAGS, attributes: ALLOWED_ATTRIBUTES, scrubber: nil
+  }
+
+  class CustomHTMLRenderer < Redcarpet::Render::HTML
+    def header(text, level)
+      text, id = text.split('|', 2)
+
+      if id.present?
+        %(<h#{level} id="#{id}">#{text}</h#{level}>\n)
+      else
+        %(<h#{level}>#{text}</h#{level}>\n)
+      end
+    end
+  end
+
+  class CustomTextRenderer < Redcarpet::Render::StripDown
+    def header(text, level)
+      %(#{text.split('|', 2).first}\n)
+    end
+  end
+
   def markdown_to_html(markup, options = {})
-    sanitize(markdown_parser(html_renderer(options), options).render(markup))
+    sanitize_markdown(markdown_parser(html_renderer(options), options).render(markup), options)
   end
 
   def markdown_to_text(markup, options = {})
@@ -26,11 +56,11 @@ module MarkdownHelper
   private
 
   def html_renderer(options)
-    Redcarpet::Render::HTML.new(options_for_renderer(options))
+    CustomHTMLRenderer.new(options_for_renderer(options))
   end
 
   def text_renderer
-    Redcarpet::Render::StripDown.new
+    CustomTextRenderer.new
   end
 
   def markdown_parser(renderer, options)
@@ -43,5 +73,13 @@ module MarkdownHelper
 
   def options_for_renderer(options)
     HTML_DEFAULTS.merge(options.slice(*HTML_DEFAULTS.keys))
+  end
+
+  def sanitize_markdown(html, options)
+    sanitize(html, options_for_sanitize(options))
+  end
+
+  def options_for_sanitize(options)
+    SANITIZE_DEFAULTS.merge(options.slice(*SANITIZE_DEFAULTS.keys))
   end
 end

@@ -79,7 +79,7 @@ Before('@skip') do
 end
 
 Before do
-  ActiveRecord::FixtureSet.create_fixtures("#{::Rails.root}/spec/fixtures", ["rejection_reasons"])
+  ActiveRecord::FixtureSet.create_fixtures("#{::Rails.root}/spec/fixtures", %w[pages rejection_reasons])
 end
 
 After do

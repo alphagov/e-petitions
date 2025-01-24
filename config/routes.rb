@@ -18,17 +18,28 @@ Rails.application.routes.draw do
     end
 
     controller 'pages' do
-      get '/',         action: 'index', as: :home
-      get '/cookies',  action: 'cookie_policy'
-      get '/help',     action: 'help'
-      get '/privacy',  action: 'privacy'
-      get '/trending', action: 'trending'
+      get '/', action: 'index', as: :home
 
-      get '/accessibility', action: 'accessibility'
+      scope action: 'show' do
+        get '/accessibility', defaults: { slug: 'accessibility' }
+        get '/cookies',       defaults: { slug: 'cookies' }
+        get '/help',          defaults: { slug: 'help' }
+        get '/privacy',       defaults: { slug: 'privacy' }
+      end
 
       scope format: true do
-        get '/browserconfig', action: 'browserconfig', constraints: { format: 'xml'  }
-        get '/manifest',      action: 'manifest',      constraints: { format: 'json' }
+        constraints format: 'xml' do
+          defaults format: 'xml' do
+            get '/browserconfig', action: 'browserconfig'
+          end
+        end
+
+        constraints format: 'json' do
+          defaults format: 'json' do
+            get '/manifest', action: 'manifest'
+            get '/trending', action: 'trending'
+          end
+        end
       end
     end
 
@@ -190,6 +201,7 @@ Rails.application.routes.draw do
       end
 
       resources :domains, except: %i[show]
+      resources :pages, only: %i[index edit update], param: 'slug'
       resources :rejection_reasons, except: %i[show]
 
       resource :rate_limits, path: 'rate-limits', only: %i[edit update]

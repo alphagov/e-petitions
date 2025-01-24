@@ -984,6 +984,32 @@ FactoryBot.define do
     end
   end
 
+  factory :page do
+    slug { Faker::Lorem.unique.word.parameterize }
+    title { Faker::Lorem.unique.sentence }
+    content { Faker::Lorem.paragraph }
+
+    trait :accessibility do
+      slug { "accessibility" }
+      title { "# Accessibility statement" }
+    end
+
+    trait :cookies do
+      slug { "cookies" }
+      title { "# Cookies" }
+    end
+
+    trait :help do
+      slug { "help" }
+      title { "# How petitions work" }
+    end
+
+    trait :privacy do
+      slug { "privacy" }
+      title { "# Privacy notice" }
+    end
+  end
+
   factory :rejection_reason do
     code { Faker::Lorem.unique.word.dasherize }
     title { Faker::Lorem.unique.sentence }
