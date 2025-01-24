@@ -1,0 +1,31 @@
+<h1>Edit Site</h1>
+
+<div class="grid-row">
+  <div class="grid-column">
+    <%= render "admin/shared/site_tabs" %>
+  </div>
+</div>
+<div class="grid-row">
+  <div class="grid-column">
+    <table class="page-list">
+      <thead>
+        <tr>
+          <th>Slug</th>
+          <th>Title</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @pages.each do |page| %>
+          <tr class="page">
+            <td><%= page.slug %></td>
+            <td><%= page.title %></td>
+            <td>
+              <%= link_to 'Edit', edit_admin_page_path(page), class: 'button' %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>

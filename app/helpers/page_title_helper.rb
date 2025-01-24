@@ -55,10 +55,14 @@ module PageTitleHelper
             opts[:creator] = petition.creator.name
           end
         end
+
+        if page?
+          opts[:title] = page.title
+        end
       end
     end
 
-    %w[constituency petition postcode].each do |object|
+    %w[constituency petition postcode page].each do |object|
       define_method :"#{object}?" do
         send(:"#{object}").present?
       end

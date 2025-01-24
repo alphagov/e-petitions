@@ -6,6 +6,10 @@ RSpec.describe 'Requests for pages when we do not support the format on that pag
 
   before do
     FactoryBot.create(:parliament, :archived)
+
+    %i[accessibility cookies help privacy].each do |page|
+      FactoryBot.create(:page, page)
+    end
   end
 
   shared_examples 'a route that only supports html formats' do |headers_only: false|
@@ -159,6 +163,7 @@ RSpec.describe 'Requests for pages when we do not support the format on that pag
   end
 
   simple_html_only_urls = %w[
+    accessibility
     help
     privacy
     feedback

@@ -3,10 +3,7 @@ require 'uri'
 module ApplicationHelper
   INDEXED_PAGES = [
     %w[pages index],
-    %w[pages help],
-    %w[pages privacy],
-    %w[pages cookie_policy],
-    %w[pages accessibility],
+    %w[pages show],
     %w[feedback new],
     %w[local_petitions index],
     %w[local_petitions show],

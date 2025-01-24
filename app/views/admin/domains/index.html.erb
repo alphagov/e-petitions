@@ -51,8 +51,8 @@
             </td>
             <td><%= domain.alias? ? domain.alias : "&nbsp;".html_safe %></td>
             <td>
-              <%= button_to 'Edit', edit_admin_domain_path(domain), method: :get, class: 'button edit-action' %>
-              <%= button_to 'Delete', admin_domain_path(domain), method: :delete, class: 'button-warning delete-action', data: { confirm: 'Delete domain?' } %>
+              <%= link_to 'Edit', edit_admin_domain_path(domain), class: 'button' %>
+              <%= button_to 'Delete', admin_domain_path(domain), method: :delete, class: 'button-warning', data: { confirm: 'Delete domain?' } %>
             </td>
           </tr>
         <% end %>

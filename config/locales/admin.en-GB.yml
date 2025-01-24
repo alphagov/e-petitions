@@ -83,6 +83,7 @@ en-GB:
       moderation_delay_preview_sent: "A preview email of the moderation delay has been sent to the feedback address"
       missing_tasks: "Please select one or more tasks to execute"
       password_updated: "Password was successfully updated"
+      page_updated: "Page updated successfully"
       petitions_archiving: "Archiving of petitions was successfully started"
       petitions_not_archiving: "Archiving of petitions could not be started - please contact support"
       petitions_anonymizing: "Anonymizing of petitions was successfully started"
