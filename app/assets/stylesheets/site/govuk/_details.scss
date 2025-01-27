@@ -1,7 +1,7 @@
 // Details
 // ==========================================================================
 // GOV.UK front end toolkit dependencies
-@import "../govuk_frontend_toolkit/colours";
+@import "colours";
 
 details {
   display: block;
@@ -13,28 +13,18 @@ details {
     position: relative;
     margin-bottom: em(5);
 
-    @include media(desktop){
-      &:hover {
-        color: $link-hover-colour;
-        text-decoration: underline;
-        text-decoration-thickness: 2px;
-        text-underline-offset: 3px;
-      }
+    &:hover {
+      color: $link-hover-colour;
     }
 
     &:focus {
-      background-color: $focus-colour;
       outline: 3px solid $focus-colour;
-
-      &:hover {
-        text-decoration: none;
-      }
     }
   }
 
   // Underline only summary text (not the arrow)
   .summary {
-    text-decoration: none;
+    text-decoration: underline;
   }
 
   // Match fallback arrow spacing with -webkit default
@@ -45,7 +35,6 @@ details {
 
   // Remove top margin from bordered panel
   .panel-indent {
-    margin-top: $gutter-half;
-    margin-bottom: 0;
+    margin-top: 0;
   }
 }

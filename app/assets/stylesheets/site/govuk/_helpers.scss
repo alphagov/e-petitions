@@ -1,11 +1,11 @@
 // Helpers
 // ==========================================================================
 // GOV.UK front end toolkit dependencies
-@import "../govuk_frontend_toolkit/colours";
-@import "../govuk_frontend_toolkit/shims";
-@import "../govuk_frontend_toolkit/measurements";
-@import "../govuk_frontend_toolkit/typography";
-@import "../govuk_frontend_toolkit/css3";
+@import "colours";
+@import "shims";
+@import "measurements";
+@import "typography";
+@import "css3";
 
 // Path to assets for use with file-url()
 $path: "/public/images/";

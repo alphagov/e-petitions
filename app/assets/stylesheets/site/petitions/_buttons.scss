@@ -1,9 +1,9 @@
 // Buttons
 // ==========================================================================
 // GOV.UK front end toolkit dependencies
-@import "../govuk_frontend_toolkit/design-patterns/buttons";
-@import "../govuk_frontend_toolkit/measurements";
-@import "../govuk_frontend_toolkit/typography";
+@import "../govuk/design-patterns/buttons";
+@import "../govuk/measurements";
+@import "../govuk/typography";
 
 @mixin button-override($colour) {
   @include button($colour);
