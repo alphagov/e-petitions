@@ -6,11 +6,15 @@
 
 <p><%= number_to_word(Site.threshold_for_moderation).titleize %> people need to sign your petition for us to check it.</p>
 
-<p>Share <%= link_to "your petition", new_petition_sponsor_url(@petition, token: @petition.sponsor_token) %> with your potential supporters, or send them the information at the bottom of this email.</p>
+<p>Send your potential supporters the information at the bottom of this email.</p>
 
 <p>Once you’ve gained <%= number_to_word(Site.threshold_for_moderation) %> signatures, we’ll check your petition to make sure it meets the <%= link_to "petition standards", help_url(anchor: 'standards') %>. If it does, we’ll publish it. If it doesn’t, we’ll let you know why.</p>
 
-<p>This can take up to 10 working days. During holiday periods, this may take longer. Thank you for your patience.</p>
+<% if moderation_delay? %>
+  <p>We currently have a very large number of petitions to check, so it may take longer than 10 working days to check your petition. Thank you for your patience.</p>
+<% else %>
+  <p>This can take up to 10 working days. During holiday periods, this may take longer. Thank you for your patience.</p>
+<% end %>
 
 <p>Up to <%= Site.maximum_number_of_sponsors %> people can sign your petition while we are checking it. Please wait until it’s been checked and published before sharing it more widely.</p>
 

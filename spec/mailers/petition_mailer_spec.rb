@@ -371,6 +371,14 @@ RSpec.describe PetitionMailer, type: :mailer do
       expect(mail).to have_body_text(%r[This can take up to 10 working days])
     end
 
+    context "when there is a moderation delay" do
+      let(:moderation_queue) { 500 }
+
+      it "includes information about delayed moderation" do
+        expect(mail).to have_body_text(%r[We currently have a very large number of petitions to check])
+      end
+    end
+
     context "when a BCC address is passed" do
       subject(:mail) { described_class.gather_sponsors_for_petition(petition, Site.feedback_email) }
 
