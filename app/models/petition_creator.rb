@@ -36,6 +36,10 @@ class PetitionCreator
     @stage ||= stage_param.in?(STAGES) ? stage_param : STAGES.first
   end
 
+  def persisted?
+    false
+  end
+
   def save
     if moving_backwards?
       @stage = previous_stage and return false

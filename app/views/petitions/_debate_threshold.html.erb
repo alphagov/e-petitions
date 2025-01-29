@@ -6,11 +6,8 @@
       <div class="debate-outcome">
         <p class="secondary">This topic was debated on <%= short_date_format debate_outcome.debated_on %></p>
         <% if debate_outcome.video_url? -%>
-          <%= link_to debate_outcome.video_url, rel: 'external' do %>
-            <span class="debate-video graphic graphic-house-of-commons">
-              <%= debate_outcome_image(debate_outcome) %>
-              <span class="play-button icon icon-play-white" aria-hidden="true"></span>
-            </span>
+          <%= link_to debate_outcome.video_url, rel: 'external', class: 'debate-video' do %>
+            <%= debate_outcome_image(debate_outcome) %>
           <% end -%>
         <% end -%>
 

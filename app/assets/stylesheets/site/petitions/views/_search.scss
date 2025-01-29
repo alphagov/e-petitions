@@ -9,14 +9,6 @@
     padding: $gutter-one-third $gutter-half;
   }
 
-  a {
-    text-decoration: none;
-
-    &:hover {
-      text-decoration: underline;
-    }
-  }
-
   summary {
     @include bold-19;
     margin-bottom: 0;
@@ -24,16 +16,7 @@
 
   li {
     margin: $gutter-half 0;
-
-    &:last-child {
-      margin-bottom: 5px;
-    }
-  }
-}
-
-.search-pagination + p {
-  a {
-    text-decoration: underline;
+    padding-left: $gutter-two-thirds + 3px;
   }
 }
 
@@ -56,14 +39,6 @@
 #other-search-lists {
   h1 {
     @include bold-24();
-  }
-
-  a {
-    text-decoration: none;
-
-    &:hover {
-      text-decoration: underline;
-    }
   }
 
   li {

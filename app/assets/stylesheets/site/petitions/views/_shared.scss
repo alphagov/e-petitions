@@ -30,32 +30,118 @@
   @include bold-27();
   margin-bottom: em(35, 27);
 }
-.back-page + .page-title {
-  margin-top: em(30, 36);
-}
 
 // Back
 // =================
+$chevron-size: em(7, 16);
+$chevron-border-min-width: 1px;
+$chevron-border-width: em(1, 16);
+$chevron-border-colour: $secondary-text-colour;
+
 .back-page {
-  @include core-16();
-  margin-top: em(20, 16);
-  color: $secondary-text-colour;
-}
-a.back-page {
-  display: block;
-}
-input.back-page {
-  border-width: 0px;
-  background-color: $white;
+  @include core-16;
+
+  display: inline-block;
+  position: relative;
+
+  margin-top: spacing(3);
+  margin-bottom: spacing(3);
+
   padding: 0;
+  padding-left: em(14, 16);
+
+  -webkit-appearance: none;
+  background-color: transparent;
+  border: none;
   cursor: pointer;
+  text-decoration-line: underline;
+  text-decoration-thickness: max(1px, .05rem);
+  text-underline-offset: 0.1578em;
+
+  &:link,
+  &:visited {
+    color: $text-colour;
+  }
+
+  &:hover {
+    text-decoration-thickness: max(3px, .15rem);
+    text-decoration-skip-ink: none;
+    text-decoration-skip: none;
+  }
+
+  &:before {
+    content: "";
+    display: block;
+
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: em(3, 16);
+
+    width: $chevron-size;
+    height: $chevron-size;
+
+    margin: auto 0;
+
+    transform: rotate(225deg);
+
+    $border-width-eval: "max(#{$chevron-border-min-width}, #{$chevron-border-width})";
+
+    border: solid;
+    border-width: $chevron-border-min-width $chevron-border-min-width 0 0;
+    border-color: $chevron-border-colour;
+    border-width: unquote($border-width-eval) unquote($border-width-eval) 0 0;
+    font-size: unquote("max(16px, 1em)");
+  }
+
+  &:focus {
+    @include focused-text;
+
+    &:before {
+      border-color: $focus-text-colour;
+    }
+  }
+
+  &:after {
+    content: "";
+    position: absolute;
+    top: -14px;
+    right: 0;
+    bottom: -14px;
+    left: 0;
+  }
+
+  & + .page-title {
+    margin-top: spacing(3);
+  }
 }
-.back-page:visited {
-  color: $secondary-text-colour;
-}
-.back-page:hover {
-  color: $text-colour;
-}
+
+
+
+// .back-page {
+//   @include core-16();
+//   margin-top: em(20, 16);
+//   color: $secondary-text-colour;
+// }
+// a.back-page {
+//   display: block;
+//   width: fit-content;
+// }
+// input.back-page, button.back-page {
+//   border-width: 0px;
+//   background-color: $white;
+//   padding: 0;
+//   cursor: pointer;
+//   text-decoration: underline;
+//   text-decoration-thickness: max(1px, .05rem);
+//   text-underline-offset: 0.1578em;
+// }
+// .back-page:visited {
+//   color: $secondary-text-colour;
+// }
+// .back-page:hover {
+//   color: $text-colour;
+// }
 
 // Section panel
 // =================
@@ -109,7 +195,6 @@ input.back-page {
 
   a {
     color: $white;
-    text-decoration: underline;
   }
 
   details {
@@ -122,14 +207,6 @@ input.back-page {
     &:hover {
       color: $white;
     }
-
-    &:focus {
-      outline: 3px solid $focus-colour;
-    }
-  }
-
-  .summary {
-    text-decoration: underline;
   }
 
   .list-of-parliaments {
@@ -137,12 +214,33 @@ input.back-page {
     display: block;
     @include core-16();
 
+    summary {
+      .summary {
+        color: $white;
+      }
+
+      &:before {
+        color: $white;
+      }
+
+      &:focus {
+        .summary {
+          color: $text-colour;
+        }
+
+        &:before {
+          color: $text-colour;
+        }
+      }
+    }
+
     ul {
       padding: $gutter/6 0;
     }
 
     li {
       padding: $gutter/6 0;
+      padding-left: $gutter-two-thirds + 3px;
     }
   }
 }
@@ -182,7 +280,6 @@ input.back-page {
   }
   a {
     color: $white;
-    text-decoration: underline;
   }
 }
 
@@ -205,7 +302,6 @@ input.back-page {
     position: relative;
     width: 20%;
     height: 60px;
-    text-decoration: none;
 
     &:focus {
       outline: none;
@@ -240,10 +336,14 @@ input.back-page {
     }
 
     &:hover {
-      text-decoration: underline;
-
       &::before, &::after {
         border-top: 6px solid $link-hover-colour;
+      }
+    }
+
+    &:focus {
+      &::before, &::after {
+        border-top: 6px solid $text-colour;
       }
     }
   }
@@ -368,33 +468,65 @@ input.back-page {
 // Video panel thing
 
 .debate-video {
+  background-color: $text-colour;
+  display: block;
   position: relative;
   width: 100%;
   @include inline-block;
-  &:hover, &:focus {
-    opacity: 0.9;
-  }
 
   img {
+    background-color: $text-colour;
     width: 100%;
     height: 100%;
     vertical-align: bottom;
   }
 
-  .play-button {
+  &:before {
+    @extend .icon;
+    @extend .icon-play-white;
+
     background-color: $petitions-brand;
+    background-position: 50% 50%;
+    content: "";
     width: $gutter * 2.5;
     height: $gutter * 2;
     position: absolute;
     bottom: 0;
     left: 0;
-    background-position: 50% 50%;
-    &:hover, &:focus {
-      background-color: darken($petitions-panel-colour, 5%);
-    }
+    z-index: 1;
+
     @include media(tablet) {
       width: $gutter * 3;
       height: $gutter * 2;
+    }
+  }
+
+  &:hover {
+    img {
+      opacity: 0.9;
+    }
+
+    &::before {
+      background-color: darken($petitions-panel-colour, 5%);
+    }
+  }
+
+  &:focus {
+    box-shadow: none !important;
+    outline: $focus-width solid $focus-colour;
+    outline-offset: 0;
+
+    &:before {
+      @extend .icon-play;
+
+      background-color: $focus-colour;
+      width: $gutter * 2.5;
+      height: $gutter * 2;
+
+      @include media(tablet) {
+        width: $gutter * 3;
+        height: $gutter * 2;
+      }
     }
   }
 }

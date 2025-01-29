@@ -98,9 +98,8 @@ p {
 // Link styles
 a {
   color: $link-colour;
-  text-decoration: underline;
-  text-decoration-thickness: 2px !important;
-  text-underline-offset: 3px !important;
+  text-decoration-thickness: max(1px, .05rem);
+  text-underline-offset: 0.1578em;
 }
 
 a:visited {
@@ -109,16 +108,13 @@ a:visited {
 
 a:hover {
   color: $link-hover-colour;
-  text-decoration: underline;
-  text-decoration-thickness: 2px;
-}
-
-a:hover:focus {
-  text-decoration: none;
+  text-decoration-thickness: max(3px, .15rem);
+  text-decoration-skip-ink: none;
+  text-decoration-skip: none;
 }
 
 a:active {
-  color: $link-colour;
+  color: $link-active-colour;
 }
 
 .secondary, .inline-terms {

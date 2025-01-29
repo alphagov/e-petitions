@@ -1,4 +1,4 @@
-<%= form.submit raw("&#9664; Back"), name: "move_back", class: "back-page" %>
+<%= form.button "Back", name: "move_back", class: "back-page" %>
 
 <%= form.hidden_field :action %>
 <%= form.hidden_field :background %>
@@ -53,7 +53,7 @@
   </div>
 <% end %>
 
-<%= form.submit "Continue", name: "move_next", class: "button" %>
+<%= form.button "Continue", name: "move_next", class: "button" %>
 
 <div>
   <p>Your name will be published on this petition as the petition creator.</p>

@@ -23,12 +23,6 @@
     @include media(desktop) {
       margin-bottom: $gutter-half 0 $gutter-one-third *-1;
     }
-    a {
-      text-decoration: none;
-      &:hover {
-        text-decoration: underline;
-      }
-    }
   }
   .signatures-on-a-map {
     float: left;
@@ -77,15 +71,10 @@
   .note {
     color: $secondary-text-colour;
     margin-top: 10px;
-    a {
-      text-decoration: none;
-      &:hover {
-        text-decoration: underline;
-      }
-    }
   }
   details {
     @include core-14;
+    margin-top: $gutter;
   }
   summary {
     margin-bottom: 0;
@@ -140,10 +129,6 @@
       @include media(tablet) {
         margin: 0 0 em(10, 19);
       }
-    }
-
-    .panel-indent {
-      margin: 0;
     }
 
     hr {

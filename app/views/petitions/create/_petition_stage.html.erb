@@ -1,6 +1,4 @@
-<%= link_to check_results_petitions_path(q: petition.action), class: "back-page" do %>
-  &#9664; Back
-<% end %>
+<%= link_to "Back", check_results_petitions_path(q: petition.action), class: "back-page" %>
 
 <h1 class="page-title">Start a petition</h1>
 
@@ -43,4 +41,4 @@
   </details>
 <% end %>
 
-<%= form.submit "Preview petition", name: "move_next", class: "button" %>
+<%= form.button "Preview petition", name: "move_next", class: "button" %>

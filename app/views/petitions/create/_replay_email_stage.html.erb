@@ -1,4 +1,4 @@
-<%= form.submit raw("&#9664; Back"), name: "move_back", class: "back-page" %>
+<%= form.button "Back", name: "move_back", class: "back-page" %>
 
 <%= form.hidden_field :action %>
 <%= form.hidden_field :background %>
@@ -18,6 +18,6 @@
   <%= form.text_field :email, inputmode: "email", class: "form-control", autocomplete: "email" %>
 <% end %>
 
-<%= form.submit "Yes – this is my email address", name: "move_next", class: "button" %>
+<%= form.button "Yes – this is my email address", name: "move_next", class: "button" %>
 
 <p>If your email address is wrong, just change it above</p>

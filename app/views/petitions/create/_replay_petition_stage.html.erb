@@ -1,8 +1,8 @@
-<%= form.submit raw("&#9664; Back"), name: "move_back", class: "back-page" %>
-
 <%= form.hidden_field :action %>
 <%= form.hidden_field :background %>
 <%= form.hidden_field :additional_details %>
+
+<%= form.button "Back", name: "move_back", class: "back-page" %>
 
 <h1 class="page-title">Check your petition</h1>
 
@@ -17,8 +17,10 @@
   <% end %>
 </div>
 
-<%= form.submit "This looks good", name: "move_next", class: "button" %>
-<%= form.submit "Go back and make changes", name: "move_back", class: "button-secondary" %>
+<div class="button-group">
+  <%= form.button "This looks good", name: "move_next", class: "button" %>
+  <%= form.button "Go back and make changes", name: "move_back", class: "button button-secondary" %>
+</div>
 
 <p class="secondary">You can’t change your petition after this point.</p>
 <p class="secondary">If you’ve included personal information, such as details about your health, your family or your job, think carefully about whether you are happy for this to be published.</p>
