@@ -29,7 +29,7 @@
 <% end %>
 
 <div class="signature-count">
-  <p class="signature-count-number">
+  <p class="signature-count-number" role="status" aria-atomic="true">
     <%= signature_count(:default, petition.signature_count) %>
   </p>
   <div class="signature-count-graph" aria-hidden="true">
