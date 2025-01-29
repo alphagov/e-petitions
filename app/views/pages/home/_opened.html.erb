@@ -6,7 +6,9 @@
 
 <% if Site.show_home_page_message? %>
   <div class="notification notification-<%= Site.home_page_message_colour %>">
-    <span class="icon icon-warning-white"></span>
+    <span class="icon icon-warning-white">
+      <span class="visuallyhidden">Important:</span>
+    </span>
     <%= markdown_to_html(Site.home_page_message) %>
   </div>
 <% end %>
