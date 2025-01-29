@@ -18,7 +18,7 @@ describe('Character counter', function() {
   describe("When called", function () {
     it("Puts the max characters into the character counter", function () {
       GOVUK.PETS.characterCounter();
-      expect($counter.text()).toEqual("50");
+      expect($counter.text()).toEqual('50 characters remaining');
     });
 
     it("Adds an id to the character counter based on the textbox id", function () {
@@ -34,13 +34,13 @@ describe('Character counter', function() {
     it("Sets the count to what's in the data-max-length attribute on the textbox", function () {
       $textbox.attr('data-max-length', '40');
       GOVUK.PETS.characterCounter();
-      expect($counter.text()).toEqual('40');
+      expect($counter.text()).toEqual('40 characters remaining');
     });
 
     it("Gives the correct character count for a textbox that has content when the page loads", function () {
       $textbox.val('Words entered');
       GOVUK.PETS.characterCounter();
-      expect($counter.text()).toEqual('37');
+      expect($counter.text()).toEqual('37 characters remaining');
     });
   });
 
@@ -49,49 +49,49 @@ describe('Character counter', function() {
       GOVUK.PETS.characterCounter();
       $textbox.val('Word entered');
       $textbox.trigger('keyup');
-      expect($counter.text()).toEqual('38');
+      expect($counter.text()).toEqual('38 characters remaining');
     });
 
     it("Has the correct character count if some words are entered by paste event", function () {
       GOVUK.PETS.characterCounter();
       $textbox.val('Words entered');
       $textbox.trigger('paste');
-      expect($counter.text()).toEqual('37');
+      expect($counter.text()).toEqual('37 characters remaining');
     });
 
     it("Has the correct character count if some words are entered by change event", function () {
       GOVUK.PETS.characterCounter();
       $textbox.val('Words entered');
       $textbox.trigger('change');
-      expect($counter.text()).toEqual('37');
+      expect($counter.text()).toEqual('37 characters remaining');
     });
 
     it("Has the correct character count if a single character is entered", function () {
       GOVUK.PETS.characterCounter();
       $textbox.val('w');
       $textbox.trigger('keyup');
-      expect($counter.text()).toEqual('49');
+      expect($counter.text()).toEqual('49 characters remaining');
     });
 
     it("Has the correct character count if 50 characters are entered", function () {
       GOVUK.PETS.characterCounter();
       $textbox.val("Vestibulum vel eleifend nunc. Aliquam fermentum nu");
       $textbox.trigger('keyup');
-      expect($counter.text()).toEqual('0');
+      expect($counter.text()).toEqual('0 characters remaining');
     });
 
     it("Has the correct character count if 51 characters are entered", function () {
       GOVUK.PETS.characterCounter();
       $textbox.val("Vestibulum vel eleifend nunc. Aliquam fermentum num");
       $textbox.trigger('keyup');
-      expect($counter.text()).toEqual('-1');
+      expect($counter.text()).toEqual('-1 character remaining');
     });
 
     it("Has the correct character count if 52 characters are entered", function () {
       GOVUK.PETS.characterCounter();
       $textbox.val("Vestibulum vel eleifend nunc. Aliquam fermentum numb");
       $textbox.trigger('keyup');
-      expect($counter.text()).toEqual('-2');
+      expect($counter.text()).toEqual('-2 characters remaining');
     });
   });
 });
