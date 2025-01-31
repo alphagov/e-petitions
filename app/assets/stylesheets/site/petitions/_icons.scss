@@ -30,7 +30,7 @@
 // .icon .icon-paginate-previous
 
 .icon, .graphic {
-  background-position: 0 0;
+  background-position: 50% 50%;
   background-repeat: no-repeat;
   @include inline-block;
 }
@@ -42,7 +42,7 @@
 
   @include device-pixel-ratio() {
     background-image: image-url("graphics/graphic_portcullis-2x.png");
-    background-size: 100%;
+    background-size: 26px 32px;
   }
 }
 .graphic-portcullis-white {
@@ -52,7 +52,7 @@
 
   @include device-pixel-ratio() {
     background-image: image-url("graphics/graphic_portcullis-white-2x.png");
-    background-size: 100%;
+    background-size: 26px 32px;
   }
 }
 .graphic-portcullis-large-white {
@@ -62,7 +62,7 @@
 
   @include device-pixel-ratio() {
     background-image: image-url("graphics/graphic_portcullis-large-white-2x.png");
-    background-size: 100%;
+    background-size: 52px 64px;
   }
 }
 .graphic-portcullis-large-grey {
@@ -72,7 +72,7 @@
 
   @include device-pixel-ratio() {
     background-image: image-url("graphics/graphic_portcullis-large-grey-2x.png");
-    background-size: 100%;
+    background-size: 52px 64px;
   }
 }
 .graphic-crown {
@@ -82,7 +82,7 @@
 
   @include device-pixel-ratio() {
     background-image: image-url("graphics/graphic_crown-2x.png");
-    background-size: 100%;
+    background-size: 27px 25px;
   }
 }
 .graphic-crown-white {
@@ -92,7 +92,7 @@
 
   @include device-pixel-ratio() {
     background-image: image-url("graphics/graphic_crown-white-2x.png");
-    background-size: 100%;
+    background-size: 27px 25px;
   }
 }
 .graphic-crest-large-white {
@@ -102,7 +102,7 @@
 
   @include device-pixel-ratio() {
     background-image: image-url("graphics/graphic_crest-large-white-2x.png");
-    background-size: 100%;
+    background-size: 80px 64px;
   }
 }
 .graphic-crest-large-grey {
@@ -112,7 +112,7 @@
 
   @include device-pixel-ratio() {
     background-image: image-url("graphics/graphic_crest-large-grey-2x.png");
-    background-size: 100%;
+    background-size: 80px 64px;
   }
 }
 .graphic-pen {
@@ -122,7 +122,7 @@
 
   @include device-pixel-ratio() {
     background-image: image-url("graphics/graphic_pen-2x.png");
-    background-size: 100%;
+    background-size: 25px 35px;
   }
 }
 .graphic-open-government-licence {
@@ -132,7 +132,7 @@
 
   @include device-pixel-ratio() {
     background-image: image-url("graphics/graphic_open-government-licence-2x.png");
-    background-size: 100%;
+    background-size: 42px 17px;
   }
 }
 .icon-share-facebook {
@@ -215,6 +215,16 @@
     background-size: 22px 17px;
   }
 }
+.icon-search {
+  width: 18px;
+  height: 18px;
+  background-image: image-url("icons/icon_search.png");
+
+  @include device-pixel-ratio() {
+    background-image: image-url("icons/icon_search-2x.png");
+    background-size: 18px 18px;
+  }
+}
 .icon-search-white {
   width: 18px;
   height: 18px;
@@ -233,6 +243,16 @@
   @include device-pixel-ratio() {
     background-image: image-url("icons/icon_location-white-2x.png");
     background-size: 18px 18px;
+  }
+}
+.icon-play {
+  width: 18px;
+  height: 23px;
+  background-image: image-url("icons/icon_play.png");
+
+  @include device-pixel-ratio() {
+    background-image: image-url("icons/icon_play-2x.png");
+    background-size: 18px 23px;
   }
 }
 .icon-play-white {

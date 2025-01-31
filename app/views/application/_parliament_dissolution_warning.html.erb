@@ -1,6 +1,8 @@
 <% if Parliament.dissolution_announced? %>
   <div class="notification">
-    <span class="icon icon-warning-white"></span>
+    <span class="icon icon-warning-white">
+      <span class="visuallyhidden">Important:</span>
+    </span>
     <% if Parliament.dissolved? %>
       <h2 class="header"><%= Parliament.dissolved_heading %></h2>
       <p class="content"><%= Parliament.dissolved_message %></p>

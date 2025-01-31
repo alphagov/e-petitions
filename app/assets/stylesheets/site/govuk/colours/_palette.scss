@@ -56,11 +56,12 @@ $white: #fff;
 
 // Semantic colour names
 $link-colour: $govuk-blue;
-$link-active-colour: $light-blue;
-$link-hover-colour: $light-blue;
+$link-active-colour: #0b0c0c;
+$link-hover-colour: #003078;
 $link-visited-colour: #4c2c92;
 $button-colour: #00823b;
-$focus-colour: $yellow;
+$focus-colour: #ffdd00;
+$focus-text-colour: $black;
 $text-colour: $black;             // Standard text colour
 $secondary-text-colour: $grey-1;  // Section headers, help text etc.
 $border-colour: $grey-2;          // Borders, seperators, rules, keylines etc.

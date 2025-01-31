@@ -1,51 +1,82 @@
-// Details
-// ==========================================================================
-// GOV.UK front end toolkit dependencies
 @import "../govuk/colours";
+@import "helpers";
 
 details {
   display: block;
+  margin: $gutter-one-third 0;
 
-  summary {
-    display: inline-block;
-    color: $govuk-blue;
+  @include media(tablet) {
+    margin: $gutter-half 0;
+  }
+
+  & > summary {
     cursor: pointer;
+    display: block;
     position: relative;
-    margin-bottom: em(5);
+    width: fit-content;
+    padding-left: $gutter-two-thirds + 3px;
 
-    @include media(desktop){
-      &:hover {
+
+    &::-webkit-details-marker {
+      display: none;
+    }
+
+    &:before {
+      @include shape-arrow($direction: right, $base: 14px);
+
+      color: $link-colour;
+      content: "";
+      position: absolute;
+
+      top: -1px;
+      bottom: 0;
+      left: 0;
+
+      margin: auto;
+    }
+
+    .summary {
+      color: $link-colour;
+      text-decoration: underline;
+      text-decoration-thickness: max(1px, .05rem);
+      text-underline-offset: 0.1578em;
+    }
+
+    &:hover {
+      &:before {
         color: $link-hover-colour;
-        text-decoration: underline;
-        text-decoration-thickness: 2px;
-        text-underline-offset: 3px;
+      }
+
+      .summary {
+        color: $link-hover-colour;
+        text-decoration-thickness: max(3px, .15rem);
+        text-decoration-skip-ink: none;
+        text-decoration-skip: none;
       }
     }
 
     &:focus {
-      background-color: $focus-colour;
-      outline: 3px solid $focus-colour;
+      @include focused-text;
 
-      &:hover {
+      &:before {
+        color: $text-colour;
+      }
+
+      .summary {
+        color: $text-colour;
         text-decoration: none;
       }
     }
   }
 
-  // Underline only summary text (not the arrow)
-  .summary {
-    text-decoration: none;
+  &[open] > summary {
+    &:before {
+      @include shape-arrow($direction: down, $base: 14px);
+    }
   }
 
-  // Match fallback arrow spacing with -webkit default
-  .arrow {
-    margin-right: .35em;
-    font-style: normal;
-  }
-
-  // Remove top margin from bordered panel
   .panel-indent {
-    margin-top: $gutter-half;
+    margin-top: $gutter-one-third;
     margin-bottom: 0;
   }
 }

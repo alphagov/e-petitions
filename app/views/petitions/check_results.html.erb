@@ -1,6 +1,4 @@
-<%= link_to check_petitions_path(q: @new_petition.action), class: "back-page" do %>
-  &#9664; Back
-<% end %>
+<%= link_to "Back", check_petitions_path(q: @new_petition.action), class: "back-page" %>
 
 <% if petitions = @new_petition.duplicates %>
 

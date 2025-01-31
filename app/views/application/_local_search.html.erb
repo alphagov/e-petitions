@@ -2,6 +2,8 @@
   <%= label_tag 'postcode', 'UK postcode', class: 'form-label' %>
   <div class="search-inline">
     <%= search_field_tag 'postcode', @postcode, class: 'form-control' %>
-    <%= submit_tag 'Search', class: 'inline-submit', name: nil %>
+    <%= button_tag name: nil do %>
+      <span class="visuallyhidden">Search</span>
+    <% end %>
   </div>
 <% end %>

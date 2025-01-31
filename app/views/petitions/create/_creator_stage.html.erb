@@ -1,4 +1,4 @@
-<%= form.submit raw("&#9664; Back"), name: "move_back", class: "back-page" %>
+<%= form.button "Back", name: "move_back", class: "back-page" %>
 
 <%= form.hidden_field :action %>
 <%= form.hidden_field :background %>
@@ -22,10 +22,12 @@
 <% end %>
 
 <%= form_row for: [petition, :name] do %>
-  <%= form.label :name, class: "form-label" %>
+  <%= form.label :name, class: "form-label" do %>
+    Name
+    <span class="form-hint">You must use your full name</span>
+  <% end %>
   <%= error_messages_for_field petition, :name %>
   <%= form.text_field :name, maxlength: 255, size: nil, class: "form-control", autocomplete: "name" %>
-  <span class="form-hint">You must use your full name</span>
 <% end %>
 
 <%= form_row for: [petition, :email] do %>
@@ -53,7 +55,7 @@
   </div>
 <% end %>
 
-<%= form.submit "Continue", name: "move_next", class: "button" %>
+<%= form.button "Continue", name: "move_next", class: "button" %>
 
 <div>
   <p>Your name will be published on this petition as the petition creator.</p>

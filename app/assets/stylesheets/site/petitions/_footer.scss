@@ -8,56 +8,38 @@
 
   a {
     color: $black;
-    text-decoration: none;
-
-    &:hover {
-      text-decoration: underline;
-      text-decoration-thickness: 2px;
-    }
   }
 
   ul {
     margin-bottom: $gutter;
   }
+
   li {
     @include core-16;
     margin-bottom: $gutter-one-third;
   }
 
   .open-government-licence {
-    clear: left;
+    padding-top: 30px;
     position: relative;
 
-    @include ie(6) {
-      zoom: 1;
-    }
+    &:before {
+      @extend .graphic;
+      @extend .graphic-open-government-licence;
 
-    .logo {
-      margin-bottom: 1em;
-      padding-top: 0;
-
-      a {
-        display: block;
-        width: 41px;
-        height: 17px;
-        overflow:hidden;
-        text-indent: -999em;
-        @include background-image("graphics/graphic_open-government-licence", 41px, 17px);
-        background-position: 0 0;
-        background-repeat: no-repeat;
-
-        &:hover {
-          border-bottom: 2px solid $text-colour;
-          padding-bottom: 3px;
-          margin-bottom: -5px;
-        }
-      }
+      content: "";
+      position: absolute;
+      top: 0;
     }
 
     p {
       @include core-16;
       margin: 0;
       padding-top: 0.1em;
+
+      span {
+        white-space: nowrap;
+      }
     }
   }
 
@@ -66,40 +48,49 @@
       position: relative;
     }
   }
-}
 
-.copyright {
-  @include core-16;
+  .copyright {
+    @include core-16;
 
-  margin: $gutter*1.5 0 0 0;
-  width: 100%;
-  display: block;
-  text-align: center;
 
-  @include media(tablet) {
+    margin: $gutter * 1.5 auto 0;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    text-align: center;
     max-width: 200px;
-    position: absolute;
-    top: 0;
-    right: 0;
-    margin-top: 0;
-    text-align: right;
-  }
 
-  @include ie-lte(7) {
-    float: right;
-    height: 150px;
-    width: 24%;
-  }
+    &:before {
+      @extend .graphic;
+      @extend .graphic-portcullis-large-grey;
 
-  .graphic-portcullis-large-grey {
-    margin-right: $gutter *1.5;
-  }
+      content: "";
+      display: block;
+      order: 1;
+      margin-right: $gutter * 1.5;
+      margin-bottom: $gutter-half;
+    }
 
-  a {
-    display: block;
-    text-decoration: none;
+    &:after {
+      @extend .graphic;
+      @extend .graphic-crest-large-grey;
 
-    margin-top: $gutter-half;
+      content: "";
+      display: block;
+      order: 2;
+      margin-bottom: $gutter-half;;
+    }
 
+    a {
+      order: 3;
+    }
+
+    @include media(tablet) {
+      justify-content: flex-end;
+      position: absolute;
+      top: 0;
+      right: 0;
+      margin-top: 0;
+    }
   }
 }

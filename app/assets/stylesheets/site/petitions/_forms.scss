@@ -6,11 +6,18 @@
 }
 
 select.form-control {
+  border-radius: 0;
+  color: $text-colour;
+  background-color: $white;
   height: 40px;
   padding: 0 0.5em;
+  position: relative;
+
+  min-width: 11.5em;
+  max-width: 100%;
 
   @include media(tablet) {
-    height: 52px;
+    height: 48px;
   }
 }
 
@@ -41,6 +48,36 @@ select.form-control {
   .suffix {
     display: inline-block;
     margin-left: $gutter-one-quarter;
+  }
+}
+
+.button-group {
+  $horizontal-gap: spacing(3);
+  $vertical-gap: spacing(3);
+
+  $button-padding: spacing(2);
+  $button-shadow-size: 2px;
+
+  @include responsive-margin(6, "bottom", $adjustment: $vertical-gap * -1);
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  .button {
+    margin-bottom: $vertical-gap + $button-shadow-size;
+  }
+
+  @include media(tablet) {
+    margin-right: ($horizontal-gap * -1);
+
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: baseline;
+
+    .button {
+      margin-right: $horizontal-gap;
+    }
   }
 }
 

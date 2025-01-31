@@ -3,6 +3,10 @@
 .petition-item {
   color: $secondary-text-colour;
   margin: $gutter-two-thirds 0 $gutter;
+  h2, h3 {
+    @include bold-24();
+    margin-top: 1em;
+  }
   h2, h3, p {
     margin-bottom: em(5, 16);
     @include media(tablet) {
@@ -21,13 +25,6 @@
   }
   p {
     margin-bottom: 0;
-  }
-  a {
-    text-decoration: none;
-
-    &:hover {
-      text-decoration: underline;
-    }
   }
 }
 .petition-item-existing {

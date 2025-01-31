@@ -1,6 +1,8 @@
 <% if Site.show_petition_page_message? %>
   <div class="notification notification-<%= Site.petition_page_message_colour %>">
-    <span class="icon icon-warning-white"></span>
+    <span class="icon icon-warning-white">
+      <span class="visuallyhidden">Important:</span>
+    </span>
     <%= markdown_to_html(Site.petition_page_message) %>
   </div>
 <% end %>
@@ -28,21 +30,7 @@
   <%= link_to "Sign this petition", new_petition_signature_path(petition), :class => 'button button-sign-petition' %>
 <% end %>
 
-<div class="signature-count">
-  <p class="signature-count-number">
-    <%= signature_count(:default, petition.signature_count) %>
-  </p>
-  <div class="signature-count-graph" aria-hidden="true">
-    <span class="signature-count-current" style="width: <%= signatures_threshold_percentage(petition) %>"></span>
-  </div>
-  <p class="signatures-on-a-map">
-    <a href="https://petitionmap.unboxedconsulting.com/?petition=<%= petition.id %>">Show on a map</a>
-  </p>
-  <p class="signature-count-goal">
-    <%= number_with_delimiter(current_threshold(petition)) %>
-  </p>
-</div>
-
+<%= render "signature_count", petition: petition %>
 <%= render 'threshold_details', petition: petition %>
 <%= render 'related_activity_details', petition: petition %>
 <%= render 'share_petition', petition: petition %>

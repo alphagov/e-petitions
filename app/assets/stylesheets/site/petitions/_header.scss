@@ -11,28 +11,36 @@
     color: $white;
     font-size: 24px;
     font-weight: 700;
-    display: block;
+    display: inline-block;
     position: relative;
     overflow: visible;
     vertical-align: baseline;
     line-height: 34px;
     padding-left: $text-indent;
-  }
-  a {
-    text-decoration: none;
-  }
-  a:focus {
-    background-color: transparent;
-    text-decoration: underline;
-  }
-  .graphic {
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: 28px;
-    height: 34px;
-  }
+    text-decoration-line: none;
+    &:before {
+      @extend .graphic;
+      @extend .graphic-portcullis-white;
 
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 0;
+    }
+  }
+  a.proposition {
+    &:hover {
+      text-decoration-line: underline;
+    }
+    &:focus {
+      color: $focus-text-colour;
+      text-decoration-line: none;
+
+      &:before {
+        @extend .graphic-portcullis;
+      }
+    }
+  }
   .strapline {
     color: $white;
     margin: $gutter-one-third -5px 5px $text-indent;

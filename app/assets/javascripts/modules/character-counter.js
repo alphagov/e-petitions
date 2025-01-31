@@ -24,8 +24,7 @@
             .text($textarea.data('max-length'))
             .attr({
                 'role': 'status',
-                'aria-live': 'polite',
-                'aria-relevant': 'text',
+                'aria-atomic': 'true',
                 'id': ariaId
             });
 
@@ -34,9 +33,16 @@
           .on('change keyup paste', updateCount);
 
         updateCount.call(this);
-          
+
       });
 
+    },
+    statusMessage = function($characters) {
+      if (Math.abs($characters) == 1) {
+        return $characters + ' character remaining';
+      } else {
+        return $characters + ' characters remaining';
+      }
     },
     updateCount = function() {
       var $textarea = $(this),
@@ -47,7 +53,7 @@
 
       $textarea
         .next('.' + COUNTER_CLASS)
-        .html(charsRemaining)
+        .html(statusMessage(charsRemaining))
         .toggleClass('too-many-characters', charsRemaining < 0);
     };
 

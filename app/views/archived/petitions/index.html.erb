@@ -1,5 +1,7 @@
 <div class="notification">
-  <span class="icon icon-warning-white"></span>
+  <span class="icon icon-warning-white">
+    <span class="visuallyhidden">Important:</span>
+  </span>
   <p class="content">
     These petitions were submitted during the <%= @parliament.period %> parliament
   </p>
@@ -40,7 +42,9 @@
     <%= search_field_tag  'q', @petitions.query, class: 'form-control', id: 'search' %>
     <%= hidden_field_tag 'state', @petitions.scope %>
     <%= hidden_field_tag 'parliament', @parliament.id %>
-    <%= submit_tag 'Search', name: nil, class: 'inline-submit' %>
+    <%= button_tag name: nil do %>
+      <span class="visuallyhidden">Search</span>
+    <% end %>
   </div>
 <% end %>
 
