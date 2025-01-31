@@ -1,0 +1,35 @@
+<div class="signature-count">
+  <p class="signature-count-number" role="status" aria-atomic="true">
+    <%= signature_count(:default, petition.signature_count) %>
+  </p>
+
+  <label class="signature-count-progress">
+    <span class="visuallyhidden">Progress of the petition towards its next target:</span>
+    <% if petition.response_threshold_reached_at? || petition.government_response_at? %>
+      <%= tag.progress(value: petition.signature_count, max: Site.threshold_for_debate) do %>
+        <%= number_with_delimiter(petition.signature_count) %> of <%= Site.formatted_threshold_for_debate %> signatures required to be considered for a debate in Parliament
+      <% end %>
+    <% else %>
+      <%= tag.progress(value: petition.signature_count, max: Site.threshold_for_response) do %>
+        <%= number_with_delimiter(petition.signature_count) %> of <%= Site.formatted_threshold_for_response %> signatures required to get a government response
+      <% end %>
+    <% end %>
+  </label>
+
+  <p class="signatures-on-a-map">
+    <a href="https://petitionmap.unboxedconsulting.com/?petition=<%= petition.id %>">
+      Show on a map
+      <span class="visuallyhidden">the geographical breakdown of signatures by constituency</span>
+    </a>
+  </p>
+
+  <p class="signature-count-goal">
+    <%= number_with_delimiter(current_threshold(petition)) %>
+
+    <% if petition.response_threshold_reached_at? || petition.government_response_at? %>
+      <span class="visuallyhidden"> signatures required to be considered for a debate in Parliament</span>
+    <% else %>
+      <span class="visuallyhidden"> signatures required to get a government response</span>
+    <% end %>
+  </p>
+</div>
