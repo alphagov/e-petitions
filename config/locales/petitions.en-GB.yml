@@ -60,6 +60,10 @@ en-GB:
         <p class="text-secondary">
           The Petitions Committee decided not to debate these petitions
         </p>
+      semantic_html: |-
+        <p class="text-secondary">
+          These petitions are sorted by relevance.
+        </p>
 
     facets:
       archived:
