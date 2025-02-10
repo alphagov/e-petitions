@@ -112,7 +112,9 @@ class PetitionCreator
 
       unless rate_limit.exceeded?(@petition.creator)
         @petition.save!
+
         send_email_to_gather_sponsors(@petition)
+        enqueue_job_to_update_embedding(@petition)
       end
 
       true
@@ -159,6 +161,10 @@ class PetitionCreator
 
   def creator_errors?
     (CREATOR_ATTRIBUTES & errors.attribute_names).present?
+  end
+
+  def enqueue_job_to_update_embedding(petition)
+    UpdatePetitionEmbeddingJob.perform_later(petition)
   end
 
   def rate_limit

@@ -78,6 +78,9 @@ GEM
       rack
     aws-eventstream (1.4.0)
     aws-partitions (1.1165.0)
+    aws-sdk-bedrockruntime (1.59.0)
+      aws-sdk-core (~> 3, >= 3.231.0)
+      aws-sigv4 (~> 1.5)
     aws-sdk-cloudwatchlogs (1.127.0)
       aws-sdk-core (~> 3, >= 3.231.0)
       aws-sigv4 (~> 1.5)
@@ -344,6 +347,8 @@ GEM
     omniauth-saml (2.2.4)
       omniauth (~> 2.1)
       ruby-saml (~> 1.18)
+    openai (0.23.2)
+      connection_pool
     orm_adapter (0.5.0)
     pg (1.6.2)
     pg (1.6.2-aarch64-linux)
@@ -534,6 +539,7 @@ PLATFORMS
 
 DEPENDENCIES
   appsignal
+  aws-sdk-bedrockruntime
   aws-sdk-cloudwatchlogs
   aws-sdk-codedeploy
   aws-sdk-s3
@@ -567,6 +573,7 @@ DEPENDENCIES
   omniauth
   omniauth-rails_csrf_protection
   omniauth-saml
+  openai
   pg
   propshaft
   pry
@@ -605,6 +612,7 @@ CHECKSUMS
   appsignal (3.13.1) sha256=de220a1359b393b8da30ab34ab06dadb116673d37c56d62f799c932cd5c87c57
   aws-eventstream (1.4.0) sha256=116bf85c436200d1060811e6f5d2d40c88f65448f2125bc77ffce5121e6e183b
   aws-partitions (1.1165.0) sha256=e7e6d067094d3b5b30a52614913d031565c2f79ffef7de85d56e90eae9eca9b6
+  aws-sdk-bedrockruntime (1.59.0) sha256=f9fa92f05069f035a53f62a683e433f4388dec5c8386f29ade084a4e5f26948e
   aws-sdk-cloudwatchlogs (1.127.0) sha256=bd06ee072bae5a1ed4504fb4af83ea27ee565e7c132fa7f5bbdda3e5f3b1c8bb
   aws-sdk-codedeploy (1.90.0) sha256=fc9f44be34f8e575cd0884182718724abf14390a482e850efa932bc44b5750bc
   aws-sdk-core (3.233.0) sha256=798db4e867d15dceb6504317867fc8013042984988199600c78e310d0058018a
@@ -727,6 +735,7 @@ CHECKSUMS
   omniauth (2.1.4) sha256=42a05b0496f0d22e1dd85d42aaf602f064e36bb47a6826a27ab55e5ba608763c
   omniauth-rails_csrf_protection (1.0.2) sha256=1170fd672aff092b9b7ebebc1453559f073ed001e3ce62a1df616e32f8dc5fe0
   omniauth-saml (2.2.4) sha256=5acc45aee728ecc5c8f9f02b56c424cb359b62d9a25fb8039f15432c1a61f6eb
+  openai (0.23.2) sha256=376d435ebef1c17f4d4c9e09e26165629b4a88d23e5dce37f8406c1ec2e1a647
   orm_adapter (0.5.0) sha256=aa5d0be5d540cbb46d3a93e88061f4ece6a25f6e97d6a47122beb84fe595e9b9
   pg (1.6.2) sha256=58614afd405cc9c2c9e15bffe8432e0d6cfc58b722344ad4a47c73a85189c875
   pg (1.6.2-aarch64-linux) sha256=0503c6be5b0ca5ca3aaf91f2ed638f90843313cb81e8e7d7b60ad4bb62c3d131
