@@ -245,6 +245,10 @@ module Archived
       end
     end
 
+    def content
+      "#{action} - #{background}"
+    end
+
     def notes?
       note && note.details.present?
     end

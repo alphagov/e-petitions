@@ -16,6 +16,7 @@ class ArchivePetitionJob < ApplicationJob
         p.action = petition.action
         p.background = petition.background
         p.additional_details = petition.additional_details
+        p.embedding = petition.embedding
         p.committee_note = petition.committee_note
         p.departments = petition.departments
         p.tags = petition.tags

@@ -119,3 +119,13 @@ After do
   OmniAuth.config.mock_auth[:example] = nil
   OmniAuth.config.test_mode = false
 end
+
+Before do
+  Embedding.reload
+
+  client = Aws::BedrockRuntime::Client.new(stub_responses: true)
+  body = StringIO.new({ embedding: 1024.times.map { rand } }.to_json)
+  client.stub_responses(:invoke_model, client.stub_data(:invoke_model, body: body))
+
+  allow(Aws::BedrockRuntime::Client).to receive(:new).and_return(client)
+end

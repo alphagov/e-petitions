@@ -516,6 +516,10 @@ class Petition < ActiveRecord::Base
     end
   end
 
+  def content
+    "#{action} - #{background}"
+  end
+
   def statistics
     super || create_statistics!
   rescue ActiveRecord::RecordNotUnique => e
