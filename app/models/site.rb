@@ -141,6 +141,10 @@ class Site < ActiveRecord::Base
       disable_collecting_signatures?
     end
 
+    def semantic_searching?
+      !!instance.semantic_searching
+    end
+
     def home_page_message
       instance.home_page_message
     end
@@ -383,6 +387,7 @@ class Site < ActiveRecord::Base
     end
   end
 
+  store_accessor :feature_flags, :semantic_searching
   store_accessor :feature_flags, :home_page_message
   store_accessor :feature_flags, :home_page_message_colour
   store_accessor :feature_flags, :show_home_page_message
@@ -395,6 +400,14 @@ class Site < ActiveRecord::Base
   store_accessor :feature_flags, :moderation_delay_message
 
   attr_reader :password
+
+  def semantic_searching
+    super || false
+  end
+
+  def semantic_searching=(value)
+    super(type_cast_feature_flag(value))
+  end
 
   def home_page_message_colour
     super || 'default'

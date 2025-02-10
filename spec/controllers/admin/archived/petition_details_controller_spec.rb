@@ -106,6 +106,11 @@ RSpec.describe Admin::Archived::PetitionDetailsController, type: :controller, ad
             expect(petition.background).to eq('New background')
             expect(petition.additional_details).to eq('New additional_details')
           end
+
+          it 'enqueues a job to update the embedding' do
+            do_update
+            expect(UpdatePetitionEmbeddingJob).to have_been_enqueued.with(petition)
+          end
         end
 
         describe 'for a published petition' do

@@ -69,7 +69,9 @@ class PetitionCreator
 
       unless rate_limit.exceeded?(@petition.creator)
         @petition.save!
+
         send_email_to_gather_sponsors(@petition)
+        enqueue_job_to_update_embedding(@petition)
       end
 
       return true
@@ -253,6 +255,10 @@ class PetitionCreator
 
   def send_email_to_gather_sponsors(petition)
     GatherSponsorsForPetitionEmailJob.perform_later(petition)
+  end
+
+  def enqueue_job_to_update_embedding(petition)
+    UpdatePetitionEmbeddingJob.perform_later(petition)
   end
 
   private
