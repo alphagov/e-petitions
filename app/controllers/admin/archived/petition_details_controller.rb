@@ -1,5 +1,6 @@
 class Admin::Archived::PetitionDetailsController < Admin::AdminController
   before_action :fetch_petition
+  after_action :enqueue_job_to_update_embedding, only: :update
 
   def show
   end
@@ -31,5 +32,11 @@ class Admin::Archived::PetitionDetailsController < Admin::AdminController
 
   def petition_params
     params.require(:archived_petition).permit(*petition_attributes)
+  end
+
+  def enqueue_job_to_update_embedding
+    if @petition.saved_changes?
+      UpdatePetitionEmbeddingJob.perform_later(@petition)
+    end
   end
 end

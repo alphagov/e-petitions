@@ -80,6 +80,19 @@
   </div>
 
   <div class="column-half extra-gutter">
+    <%= form_row for: [form.object, :semantic_searching], class: "inline" do %>
+      <%= form.label :semantic_searching, "Enable semantic searching of petitions?", class: "form-label" %>
+      <%= error_messages_for_field @site, :semantic_searching %>
+      <div class="multiple-choice">
+        <%= form.radio_button :semantic_searching, true %>
+        <%= form.label :semantic_searching, "Yes", for: "site_semantic_searching_true" %>
+      </div>
+      <div class="multiple-choice">
+        <%= form.radio_button :semantic_searching, false %>
+        <%= form.label :semantic_searching, "No", for: "site_semantic_searching_false" %>
+      </div>
+    <% end %>
+
     <%= form_row for: [form.object, :petition_duration] do %>
       <%= form.label :petition_duration, "Duration", class: "form-label" %>
       <%= error_messages_for_field @site, :petition_duration %>
