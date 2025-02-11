@@ -5,7 +5,7 @@ Someone supported your petition: “[<%= @petition.action %>][1]”.
 <% if moderation_delay? -%>
 <%= pluralize(@sponsor_count, "person", locale: :en) %> have supported your petition. We’re checking it to make sure it meets the [petition standards][2]. If it does, we’ll publish it. If it doesn’t, we’ll let you know why.
 
-We currently have a very large number of petitions to check, so it may take longer than 10 working days to check your petition. Thank you for your patience.
+We currently have a very large number of petitions to check, so it may take a number of weeks to check your petition. Thank you for your patience.
 <% else -%>
 <%= pluralize(@sponsor_count, "person", locale: :en) %> have supported your petition.
 
