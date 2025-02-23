@@ -1,5 +1,5 @@
 class SponsorSignedEmailOnThresholdEmailJob < EmailJob
-  self.mailer = SponsorMailer
+  self.mailer = PetitionMailer
   self.email = :sponsor_signed_email_on_threshold
 
   def perform(signature)
