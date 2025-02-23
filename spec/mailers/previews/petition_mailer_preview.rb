@@ -12,27 +12,6 @@ class PetitionMailerPreview < ActionMailer::Preview
     PetitionMailer.gather_sponsors_for_petition(Petition.last)
   end
 
-  def petition_and_email_confirmation_for_sponsor
-    petition = Petition.validated_state.last
-    sponsor = petition.sponsors.last
-
-    PetitionMailer.petition_and_email_confirmation_for_sponsor(sponsor)
-  end
-
-  def sponsor_signed_email_below_threshold
-    petition = Petition.validated_state.last
-    sponsor = petition.sponsors.last
-
-    PetitionMailer.sponsor_signed_email_below_threshold(sponsor)
-  end
-
-  def sponsor_signed_email_on_threshold
-    petition = Petition.sponsored_state.last
-    sponsor = petition.sponsors.last
-
-    PetitionMailer.sponsor_signed_email_on_threshold(sponsor)
-  end
-
   def email_signer
     email = Petition::Email.last
     petition = email.petition

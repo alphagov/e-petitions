@@ -1,6 +1,5 @@
 class PetitionMailer < ApplicationMailer
   include ActiveSupport::NumberHelper
-  include NumberHelper
 
   after_action do
     if @signature && @signature.anonymized?
@@ -208,35 +207,6 @@ class PetitionMailer < ApplicationMailer
     )
   end
 
-  def sponsor_signed_email_below_threshold(sponsor)
-    @petition, @sponsor = sponsor.petition, sponsor
-    @sponsor_count = @petition.sponsor_count
-
-    mail(
-      subject: subject_for(:sponsor_signed_email_below_threshold),
-      to: @petition.creator.email
-    )
-  end
-
-  def sponsor_signed_email_on_threshold(sponsor)
-    @petition, @sponsor = sponsor.petition, sponsor
-    @sponsor_count = @petition.sponsor_count
-
-    mail(
-      subject: subject_for(:sponsor_signed_email_on_threshold),
-      to: @petition.creator.email
-    )
-  end
-
-  def petition_and_email_confirmation_for_sponsor(sponsor)
-    @petition, @sponsor = sponsor.petition, sponsor
-
-    mail(
-      subject: subject_for(:petition_and_email_confirmation_for_sponsor),
-      to: @sponsor.email
-    )
-  end
-
   private
 
   def subject_for(key, options = {})
@@ -250,16 +220,11 @@ class PetitionMailer < ApplicationMailer
   def i18n_options
     {}.tap do |options|
       options[:scope] = :"petitions.emails.subjects"
-      options[:threshold] = number_to_word(Site.threshold_for_moderation)
 
       if defined?(@petition)
         options[:count] = @petition.signature_count
         options[:formatted_count] = number_to_delimited(@petition.signature_count)
         options[:action] = @petition.action
-      end
-
-      if defined?(@sponsor)
-        options[:name] = @sponsor.name
       end
 
       if defined?(@email)

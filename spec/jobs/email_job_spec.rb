@@ -446,8 +446,8 @@ RSpec.describe PetitionAndEmailConfirmationForSponsorEmailJob, type: :job do
   let(:petition) { FactoryBot.create(:petition) }
   let(:sponsor) { FactoryBot.create(:sponsor, :pending, petition: petition) }
 
-  it "sends the PetitionMailer#petition_and_email_confirmation_for_sponsor email" do
-    expect(PetitionMailer).to receive(:petition_and_email_confirmation_for_sponsor).with(sponsor).and_call_original
+  it "sends the SponsorMailer#petition_and_email_confirmation_for_sponsor email" do
+    expect(SponsorMailer).to receive(:petition_and_email_confirmation_for_sponsor).with(sponsor).and_call_original
 
     perform_enqueued_jobs do
       described_class.perform_later(sponsor)
@@ -459,8 +459,8 @@ RSpec.describe SponsorSignedEmailBelowThresholdEmailJob, type: :job do
   let(:petition) { FactoryBot.create(:petition) }
   let(:sponsor) { FactoryBot.create(:sponsor, :validated, petition: petition) }
 
-  it "sends the PetitionMailer#sponsor_signed_email_below_threshold email" do
-    expect(PetitionMailer).to receive(:sponsor_signed_email_below_threshold).with(sponsor).and_call_original
+  it "sends the SponsorMailer#sponsor_signed_email_below_threshold email" do
+    expect(SponsorMailer).to receive(:sponsor_signed_email_below_threshold).with(sponsor).and_call_original
 
     perform_enqueued_jobs do
       described_class.perform_later(sponsor)
@@ -472,8 +472,8 @@ RSpec.describe SponsorSignedEmailOnThresholdEmailJob, type: :job do
   let(:petition) { FactoryBot.create(:petition) }
   let(:sponsor) { FactoryBot.create(:sponsor, :validated, petition: petition) }
 
-  it "sends the PetitionMailer#sponsor_signed_email_on_threshold email" do
-    expect(PetitionMailer).to receive(:sponsor_signed_email_on_threshold).with(sponsor).and_call_original
+  it "sends the SponsorMailer#sponsor_signed_email_on_threshold email" do
+    expect(SponsorMailer).to receive(:sponsor_signed_email_on_threshold).with(sponsor).and_call_original
 
     perform_enqueued_jobs do
       described_class.perform_later(sponsor)
