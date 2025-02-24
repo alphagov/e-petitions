@@ -1090,4 +1090,8 @@ class Petition < ActiveRecord::Base
   def time_for_publishing(time)
     open_at || time
   end
+
+  def to_liquid
+    PetitionDrop.new(self)
+  end
 end

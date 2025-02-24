@@ -5,29 +5,23 @@ class SponsorMailer < ApplicationMailer
     @petition, @sponsor = sponsor.petition, sponsor
     @sponsor_count = @petition.sponsor_count
 
-    mail(
-      subject: subject_for(:sponsor_signed_email_below_threshold),
-      to: @petition.creator.email
-    )
+    mail to: @petition.creator.email,
+      subject: subject_for(:sponsor_signed_email_below_threshold)
   end
 
   def sponsor_signed_email_on_threshold(sponsor)
     @petition, @sponsor = sponsor.petition, sponsor
     @sponsor_count = @petition.sponsor_count
 
-    mail(
-      subject: subject_for(:sponsor_signed_email_on_threshold),
-      to: @petition.creator.email
-    )
+    mail to: @petition.creator.email,
+      subject: subject_for(:sponsor_signed_email_on_threshold)
   end
 
   def petition_and_email_confirmation_for_sponsor(sponsor)
     @petition, @sponsor = sponsor.petition, sponsor
 
-    mail(
-      subject: subject_for(:petition_and_email_confirmation_for_sponsor),
-      to: @sponsor.email
-    )
+    mail to: @sponsor.email,
+      subject: subject_for(:petition_and_email_confirmation_for_sponsor)
   end
 
   private

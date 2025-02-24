@@ -1,0 +1,9 @@
+<h1>Edit Partial</h1>
+
+<div class="grid-row">
+  <div class="grid-column">
+    <%= form_for @partial, as: :partial, url: admin_email_partial_path(@partial) do |form| %>
+      <%= render 'form', form: form %>
+    <% end %>
+  </div>
+</div>
