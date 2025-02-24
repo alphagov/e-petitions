@@ -1,0 +1,9 @@
+<h1>New Template</h1>
+
+<div class="grid-row">
+  <div class="grid-column">
+    <%= form_for @template, as: :template, url: admin_email_templates_path do |form| %>
+      <%= render 'form', form: form %>
+    <% end %>
+  </div>
+</div>

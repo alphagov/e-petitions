@@ -228,6 +228,16 @@ Rails.application.routes.draw do
       resources :tags, except: %i[show]
       resources :topics, except: %i[show]
 
+      with_options except: %i[show] do
+        resources :email_templates, path: 'email/templates' do
+          post :activate, :deactivate, on: :member
+        end
+
+        resources :email_partials, path: 'email/partials'
+      end
+
+      resource :email_settings, path: 'email/settings', only: %i[show update]
+
       namespace :archived do
         root to: redirect('/admin/archived/petitions')
 
