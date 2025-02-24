@@ -407,6 +407,10 @@ module Archived
       end
     end
 
+    def to_liquid
+      PetitionDrop.new(self)
+    end
+
     private
 
     def evaluate_debate_state
