@@ -228,6 +228,19 @@ Rails.application.routes.draw do
       resources :tags, except: %i[show]
       resources :topics, except: %i[show]
 
+      namespace :email do
+        resources :templates, except: %i[show] do
+          post :activate, :deactivate, on: :member
+
+          resource :preview, only: %i[show] do
+            resources :parts, only: %i[show], param: 'part'
+          end
+        end
+
+        resource :settings, only: %i[show update]
+        resources :partials, except: %i[show]
+      end
+
       namespace :archived do
         root to: redirect('/admin/archived/petitions')
 
