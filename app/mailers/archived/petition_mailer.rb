@@ -89,6 +89,24 @@ module Archived
         list_unsubscribe_post: one_click_unsubscribe
     end
 
+    def notify_signer_of_negative_debate_outcome(petition, signature)
+      @petition, @debate_outcome, @signature = petition, petition.debate_outcome, signature
+
+      mail to: @signature.email,
+        subject: subject_for(:notify_signer_of_negative_debate_outcome),
+        list_unsubscribe: unsubscribe_url,
+        list_unsubscribe_post: one_click_unsubscribe
+    end
+
+    def notify_signer_of_positive_debate_outcome(petition, signature)
+      @petition, @debate_outcome, @signature = petition, petition.debate_outcome, signature
+
+      mail to: @signature.email,
+        subject: subject_for(:notify_signer_of_positive_debate_outcome),
+        list_unsubscribe: unsubscribe_url,
+        list_unsubscribe_post: one_click_unsubscribe
+    end
+
     def notify_creator_of_debate_outcome(petition, signature)
       @petition, @debate_outcome, @signature = petition, petition.debate_outcome, signature
 
@@ -99,6 +117,24 @@ module Archived
       end
 
       mail to: @signature.email, subject: subject,
+        list_unsubscribe: unsubscribe_url,
+        list_unsubscribe_post: one_click_unsubscribe
+    end
+
+    def notify_creator_of_negative_debate_outcome(petition, signature)
+      @petition, @debate_outcome, @signature = petition, petition.debate_outcome, signature
+
+      mail to: @signature.email,
+        subject: subject_for(:notify_creator_of_negative_debate_outcome),
+        list_unsubscribe: unsubscribe_url,
+        list_unsubscribe_post: one_click_unsubscribe
+    end
+
+    def notify_creator_of_positive_debate_outcome(petition, signature)
+      @petition, @debate_outcome, @signature = petition, petition.debate_outcome, signature
+
+      mail to: @signature.email,
+        subject: subject_for(:notify_creator_of_positive_debate_outcome),
         list_unsubscribe: unsubscribe_url,
         list_unsubscribe_post: one_click_unsubscribe
     end

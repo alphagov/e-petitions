@@ -1,0 +1,15 @@
+<%= render "reason" %>
+<p>Dear <%= @signature.name %>,</p>
+
+<p>The Petitions Committee decided not to debate your petition – “<%= @petition.action %>”</p>
+
+<% if @debate_outcome.overview? %>
+<blockquote><%= auto_link(simple_format(h(@debate_outcome.overview))) %></blockquote>
+
+<% end %>
+<p>The petition: <%= link_to nil, petition_url(@petition) %></p>
+
+<p>Find out more about the Petitions Committee: <%= link_to nil, help_url(anchor: "petitions-committee") %></p>
+
+<%= render "footer" %>
+<%= render "unsubscribe" %>

@@ -11,7 +11,7 @@
   },
   "scripts": {
     "start-server": "bin/rails server -b 0.0.0.0 -p 3000",
-    "test": "mocha",
+    "test": "mocha --timeout 30000",
     "lighthouse:ci": "start-server-and-test start-server http-get://petitions.localhost:3000 test"
   }
 }

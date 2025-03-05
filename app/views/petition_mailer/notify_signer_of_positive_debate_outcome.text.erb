@@ -1,8 +1,7 @@
 <%= render "reason" %>
 Dear <%= @signature.name %>,
 
-<% if @debate_outcome.debated? %>
-Parliament debated your petition – “<%= @petition.action %>”
+Parliament debated the petition you signed – “<%= @petition.action %>”
 
 <% if @debate_outcome.overview? %>
 <%= @debate_outcome.overview %>
@@ -28,19 +27,7 @@ Read what the public said: <%= @debate_outcome.public_engagement_url %>
 Read a summary of the debate: <%= @debate_outcome.debate_summary_url %>
 
 <% end %>
-The petition: <%= archived_petition_url(@petition) %>
+The petition: <%= petition_url(@petition) %>
 
-<% else %>
-The Petitions Committee decided not to debate your petition – "<%= @petition.action %>"
-
-<% if @debate_outcome.overview? %>
-<%= @debate_outcome.overview %>
-
-<% end %>
-The petition: <%= archived_petition_url(@petition) %>
-
-Find out more about the Petitions Committee: <%= help_url(anchor: "petitions-committee") %>
-
-<% end %>
 <%= render "footer" %>
 <%= render "unsubscribe" %>

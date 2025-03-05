@@ -1,7 +1,6 @@
 <%= render "reason" %>
 <p>Dear <%= @signature.name %>,</p>
 
-<% if @debate_outcome.debated? %>
 <p>Parliament debated the petition you signed – “<%= @petition.action %>”</p>
 
 <% if @debate_outcome.overview? %>
@@ -30,17 +29,5 @@
 <% end %>
 <p>The petition: <%= link_to nil, archived_petition_url(@petition) %></p>
 
-<% else %>
-<p>The Petitions Committee decided not to debate the petition you signed – “<%= @petition.action %>”</p>
-
-<% if @debate_outcome.overview? %>
-<blockquote><%= auto_link(simple_format(h(@debate_outcome.overview))) %></blockquote>
-
-<% end %>
-<p>The petition: <%= link_to nil, archived_petition_url(@petition) %></p>
-
-<p>Find out more about the Petitions Committee: <%= link_to nil, help_url(anchor: "petitions-committee") %></p>
-
-<% end %>
 <%= render "footer" %>
 <%= render "unsubscribe" %>

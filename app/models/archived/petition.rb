@@ -407,6 +407,14 @@ module Archived
       end
     end
 
+    def debate_outcome?
+      debate_outcome_at? && debate_outcome
+    end
+
+    def positive_debate_outcome?
+      debate_outcome? && debate_outcome.debated?
+    end
+
     private
 
     def evaluate_debate_state

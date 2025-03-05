@@ -29,9 +29,22 @@ RSpec.describe DeliverDebateOutcomeEmailJob, type: :job do
       allow(signature).to receive(:creator?).and_return(true)
     end
 
-    it "uses the correct mailer method to generate the email" do
-      expect(subject).to receive_message_chain(:mailer, :notify_creator_of_debate_outcome).with(petition, signature).and_return double.as_null_object
-      subject.perform(**arguments)
+    context "and the petition is debated" do
+      let(:petition) { FactoryBot.create(:debated_petition) }
+
+      it "uses the correct mailer method to generate the email" do
+        expect(subject).to receive_message_chain(:mailer, :notify_creator_of_positive_debate_outcome).with(petition, signature).and_return double.as_null_object
+        subject.perform(**arguments)
+      end
+    end
+
+    context "and the petition is not debated" do
+      let(:petition) { FactoryBot.create(:not_debated_petition) }
+
+      it "uses the correct mailer method to generate the email" do
+        expect(subject).to receive_message_chain(:mailer, :notify_creator_of_negative_debate_outcome).with(petition, signature).and_return double.as_null_object
+        subject.perform(**arguments)
+      end
     end
   end
 
@@ -40,9 +53,22 @@ RSpec.describe DeliverDebateOutcomeEmailJob, type: :job do
       allow(signature).to receive(:creator?).and_return(false)
     end
 
-    it "uses the correct mailer method to generate the email" do
-      expect(subject).to receive_message_chain(:mailer, :notify_signer_of_debate_outcome).with(petition, signature).and_return double.as_null_object
-      subject.perform(**arguments)
+    context "and the petition is debated" do
+      let(:petition) { FactoryBot.create(:debated_petition) }
+
+      it "uses the correct mailer method to generate the email" do
+        expect(subject).to receive_message_chain(:mailer, :notify_signer_of_positive_debate_outcome).with(petition, signature).and_return double.as_null_object
+        subject.perform(**arguments)
+      end
+    end
+
+    context "and the petition is not debated" do
+      let(:petition) { FactoryBot.create(:not_debated_petition) }
+
+      it "uses the correct mailer method to generate the email" do
+        expect(subject).to receive_message_chain(:mailer, :notify_signer_of_negative_debate_outcome).with(petition, signature).and_return double.as_null_object
+        subject.perform(**arguments)
+      end
     end
   end
 end
