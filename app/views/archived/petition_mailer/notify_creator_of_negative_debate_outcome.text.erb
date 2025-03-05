@@ -1,0 +1,15 @@
+<%= render "reason" %>
+Dear <%= @signature.name %>,
+
+The Petitions Committee decided not to debate your petition – "<%= @petition.action %>"
+
+<% if @debate_outcome.overview? %>
+<%= @debate_outcome.overview %>
+
+<% end %>
+The petition: <%= archived_petition_url(@petition) %>
+
+Find out more about the Petitions Committee: <%= help_url(anchor: "petitions-committee") %>
+
+<%= render "footer" %>
+<%= render "unsubscribe" %>

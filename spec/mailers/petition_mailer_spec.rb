@@ -644,6 +644,342 @@ RSpec.describe PetitionMailer, type: :mailer do
     end
   end
 
+  describe "notifying signature of a negative debate outcome" do
+    let(:petition) { FactoryBot.create(:open_petition, attributes) }
+
+    context "when the signature is the creator" do
+      let(:signature) { petition.creator }
+      subject(:mail) { described_class.notify_creator_of_negative_debate_outcome(petition, signature) }
+
+      shared_examples_for "a debate outcome email" do
+        it "addresses the signatory by name" do
+          expect(mail).to have_body_text("Dear Barry Butler,")
+        end
+
+        it "sends it only to the creator" do
+          expect(mail.to).to eq(%w[bazbutler@gmail.com])
+          expect(mail.cc).to be_blank
+          expect(mail.bcc).to be_blank
+        end
+
+        it "includes a link to the petition page" do
+          expect(mail).to have_body_text(%r[https://petition.parliament.uk/petitions/#{petition.id}])
+        end
+
+        it "includes the petition action" do
+          expect(mail).to have_body_text(%r[Allow organic vegetable vans to use red diesel])
+        end
+
+        it "includes an unsubscribe link" do
+          expect(mail).to have_body_text(%r[https://petition.parliament.uk/signatures/#{signature.id}/unsubscribe\?token=#{signature.unsubscribe_token}])
+        end
+
+        it "has a List-Unsubscribe header" do
+          expect(mail).to have_header("List-Unsubscribe", "<https://petition.parliament.uk/signatures/#{signature.id}/unsubscribe?token=#{signature.unsubscribe_token}>")
+        end
+
+        it "has a List-Unsubscribe-Post header" do
+          expect(mail).to have_header("List-Unsubscribe-Post", "List-Unsubscribe=One-Click")
+        end
+      end
+
+      shared_examples_for "a negative debate outcome email" do
+        it "has the correct subject" do
+          expect(mail).to have_subject('Parliament didn’t debate “Allow organic vegetable vans to use red diesel”')
+        end
+
+        it "has the negative message in the body" do
+          expect(mail).to have_body_text("The Petitions Committee decided not to debate your petition")
+        end
+      end
+
+      context "when the debate outcome is not filled out" do
+        before do
+          FactoryBot.create(:debate_outcome, petition: petition)
+        end
+
+        it_behaves_like "a debate outcome email"
+        it_behaves_like "a negative debate outcome email"
+      end
+
+      context "when the debate outcome is filled out" do
+        before do
+          FactoryBot.create(:debate_outcome,
+            debated_on: "2015-09-24",
+            overview: "Discussion of the 2015 Christmas Adjournment",
+            transcript_url: "http://www.publications.parliament.uk/pa/cm201509/cmhansrd/cm20150924/debtext/20150924-0003.htm#2015092449#000001",
+            video_url: "http://parliamentlive.tv/event/index/20150924000001",
+            debate_pack_url: "http://researchbriefings.parliament.uk/ResearchBriefing/Summary/CDP-2015-0001",
+            public_engagement_url: "https://committees.parliament.uk/public-engagement",
+            debate_summary_url: "https://ukparliament.shorthandstories.com/about-a-petition",
+            petition: petition,
+          )
+        end
+
+        it_behaves_like "a debate outcome email"
+        it_behaves_like "a negative debate outcome email"
+
+        it "includes the debate outcome overview" do
+          expect(mail).to have_body_text(%r[Discussion of the 2015 Christmas Adjournment])
+        end
+      end
+    end
+
+    context "when the signature is not the creator" do
+      let(:signature) { FactoryBot.create(:validated_signature, petition: petition, name: "Laura Palmer", email: "laura@red-room.example.com") }
+      subject(:mail) { described_class.notify_signer_of_negative_debate_outcome(petition, signature) }
+
+      shared_examples_for "a debate outcome email" do
+        it "addresses the signatory by name" do
+          expect(mail).to have_body_text("Dear Laura Palmer,")
+        end
+
+        it "sends it only to the signatory" do
+          expect(mail.to).to eq(%w[laura@red-room.example.com])
+          expect(mail.cc).to be_blank
+          expect(mail.bcc).to be_blank
+        end
+
+        it "includes a link to the petition page" do
+          expect(mail).to have_body_text(%r[https://petition.parliament.uk/petitions/#{petition.id}])
+        end
+
+        it "includes the petition action" do
+          expect(mail).to have_body_text(%r[Allow organic vegetable vans to use red diesel])
+        end
+
+        it "includes an unsubscribe link" do
+          expect(mail).to have_body_text(%r[https://petition.parliament.uk/signatures/#{signature.id}/unsubscribe\?token=#{signature.unsubscribe_token}])
+        end
+
+        it "has a List-Unsubscribe header" do
+          expect(mail).to have_header("List-Unsubscribe", "<https://petition.parliament.uk/signatures/#{signature.id}/unsubscribe?token=#{signature.unsubscribe_token}>")
+        end
+
+        it "has a List-Unsubscribe-Post header" do
+          expect(mail).to have_header("List-Unsubscribe-Post", "List-Unsubscribe=One-Click")
+        end
+      end
+
+      shared_examples_for "a negative debate outcome email" do
+        it "has the correct subject" do
+          expect(mail).to have_subject("Parliament didn’t debate “Allow organic vegetable vans to use red diesel”")
+        end
+
+        it "has the negative message in the body" do
+          expect(mail).to have_body_text("The Petitions Committee decided not to debate the petition you signed")
+        end
+      end
+
+      context "when the debate outcome is not filled out" do
+        before do
+          FactoryBot.create(:debate_outcome, petition: petition)
+        end
+
+        it_behaves_like "a debate outcome email"
+        it_behaves_like "a negative debate outcome email"
+      end
+
+      context "when the debate outcome is filled out" do
+        before do
+          FactoryBot.create(:debate_outcome,
+            debated_on: "2015-09-24",
+            overview: "Discussion of the 2015 Christmas Adjournment",
+            transcript_url: "http://www.publications.parliament.uk/pa/cm201509/cmhansrd/cm20150924/debtext/20150924-0003.htm#2015092449#000001",
+            video_url: "http://parliamentlive.tv/event/index/20150924000001",
+            debate_pack_url: "http://researchbriefings.parliament.uk/ResearchBriefing/Summary/CDP-2015-0001",
+            public_engagement_url: "https://committees.parliament.uk/public-engagement",
+            debate_summary_url: "https://ukparliament.shorthandstories.com/about-a-petition",
+            petition: petition,
+          )
+        end
+
+        it_behaves_like "a debate outcome email"
+        it_behaves_like "a negative debate outcome email"
+
+        it "includes the debate outcome overview" do
+          expect(mail).to have_body_text(%r[Discussion of the 2015 Christmas Adjournment])
+        end
+      end
+    end
+  end
+
+  describe "notifying signature of a positive debate outcome" do
+    let(:petition) { FactoryBot.create(:open_petition, attributes) }
+
+    context "when the signature is the creator" do
+      let(:signature) { petition.creator }
+      subject(:mail) { described_class.notify_creator_of_positive_debate_outcome(petition, signature) }
+
+      shared_examples_for "a debate outcome email" do
+        it "addresses the signatory by name" do
+          expect(mail).to have_body_text("Dear Barry Butler,")
+        end
+
+        it "sends it only to the creator" do
+          expect(mail.to).to eq(%w[bazbutler@gmail.com])
+          expect(mail.cc).to be_blank
+          expect(mail.bcc).to be_blank
+        end
+
+        it "includes a link to the petition page" do
+          expect(mail).to have_body_text(%r[https://petition.parliament.uk/petitions/#{petition.id}])
+        end
+
+        it "includes the petition action" do
+          expect(mail).to have_body_text(%r[Allow organic vegetable vans to use red diesel])
+        end
+
+        it "includes an unsubscribe link" do
+          expect(mail).to have_body_text(%r[https://petition.parliament.uk/signatures/#{signature.id}/unsubscribe\?token=#{signature.unsubscribe_token}])
+        end
+
+        it "has a List-Unsubscribe header" do
+          expect(mail).to have_header("List-Unsubscribe", "<https://petition.parliament.uk/signatures/#{signature.id}/unsubscribe?token=#{signature.unsubscribe_token}>")
+        end
+
+        it "has a List-Unsubscribe-Post header" do
+          expect(mail).to have_header("List-Unsubscribe-Post", "List-Unsubscribe=One-Click")
+        end
+      end
+
+      shared_examples_for "a positive debate outcome email" do
+        it "has the correct subject" do
+          expect(mail).to have_subject("Parliament debated “Allow organic vegetable vans to use red diesel”")
+        end
+
+        it "has the positive message in the body" do
+          expect(mail).to have_body_text("Parliament debated your petition")
+        end
+      end
+
+      context "when the debate outcome is not filled out" do
+        before do
+          FactoryBot.create(:debate_outcome, petition: petition)
+        end
+
+        it_behaves_like "a debate outcome email"
+        it_behaves_like "a positive debate outcome email"
+      end
+
+      context "when the debate outcome is filled out" do
+        before do
+          FactoryBot.create(:debate_outcome,
+            debated_on: "2015-09-24",
+            overview: "Discussion of the 2015 Christmas Adjournment",
+            transcript_url: "http://www.publications.parliament.uk/pa/cm201509/cmhansrd/cm20150924/debtext/20150924-0003.htm#2015092449#000001",
+            video_url: "http://parliamentlive.tv/event/index/20150924000001",
+            debate_pack_url: "http://researchbriefings.parliament.uk/ResearchBriefing/Summary/CDP-2015-0001",
+            public_engagement_url: "https://committees.parliament.uk/public-engagement",
+            debate_summary_url: "https://ukparliament.shorthandstories.com/about-a-petition",
+            petition: petition,
+          )
+        end
+
+        it_behaves_like "a debate outcome email"
+        it_behaves_like "a positive debate outcome email"
+
+        it "includes the debate outcome overview" do
+          expect(mail).to have_body_text(%r[Discussion of the 2015 Christmas Adjournment])
+        end
+
+        it "includes a link to the transcript of the debate" do
+          expect(mail).to have_body_text(%r[http://www.publications.parliament.uk/pa/cm201509/cmhansrd/cm20150924/debtext/20150924-0003.htm#2015092449#000001])
+        end
+
+        it "includes a link to the video of the debate" do
+          expect(mail).to have_body_text(%r[http://parliamentlive.tv/event/index/20150924000001])
+        end
+      end
+    end
+
+    context "when the signature is not the creator" do
+      let(:signature) { FactoryBot.create(:validated_signature, petition: petition, name: "Laura Palmer", email: "laura@red-room.example.com") }
+      subject(:mail) { described_class.notify_signer_of_positive_debate_outcome(petition, signature) }
+
+      shared_examples_for "a debate outcome email" do
+        it "addresses the signatory by name" do
+          expect(mail).to have_body_text("Dear Laura Palmer,")
+        end
+
+        it "sends it only to the signatory" do
+          expect(mail.to).to eq(%w[laura@red-room.example.com])
+          expect(mail.cc).to be_blank
+          expect(mail.bcc).to be_blank
+        end
+
+        it "includes a link to the petition page" do
+          expect(mail).to have_body_text(%r[https://petition.parliament.uk/petitions/#{petition.id}])
+        end
+
+        it "includes the petition action" do
+          expect(mail).to have_body_text(%r[Allow organic vegetable vans to use red diesel])
+        end
+
+        it "includes an unsubscribe link" do
+          expect(mail).to have_body_text(%r[https://petition.parliament.uk/signatures/#{signature.id}/unsubscribe\?token=#{signature.unsubscribe_token}])
+        end
+
+        it "has a List-Unsubscribe header" do
+          expect(mail).to have_header("List-Unsubscribe", "<https://petition.parliament.uk/signatures/#{signature.id}/unsubscribe?token=#{signature.unsubscribe_token}>")
+        end
+
+        it "has a List-Unsubscribe-Post header" do
+          expect(mail).to have_header("List-Unsubscribe-Post", "List-Unsubscribe=One-Click")
+        end
+      end
+
+      shared_examples_for "a positive debate outcome email" do
+        it "has the correct subject" do
+          expect(mail).to have_subject("Parliament debated “Allow organic vegetable vans to use red diesel”")
+        end
+
+        it "has the positive message in the body" do
+          expect(mail).to have_body_text("Parliament debated the petition you signed")
+        end
+      end
+
+      context "when the debate outcome is not filled out" do
+        before do
+          FactoryBot.create(:debate_outcome, petition: petition)
+        end
+
+        it_behaves_like "a debate outcome email"
+        it_behaves_like "a positive debate outcome email"
+      end
+
+      context "when the debate outcome is filled out" do
+        before do
+          FactoryBot.create(:debate_outcome,
+            debated_on: "2015-09-24",
+            overview: "Discussion of the 2015 Christmas Adjournment",
+            transcript_url: "http://www.publications.parliament.uk/pa/cm201509/cmhansrd/cm20150924/debtext/20150924-0003.htm#2015092449#000001",
+            video_url: "http://parliamentlive.tv/event/index/20150924000001",
+            debate_pack_url: "http://researchbriefings.parliament.uk/ResearchBriefing/Summary/CDP-2015-0001",
+            public_engagement_url: "https://committees.parliament.uk/public-engagement",
+            debate_summary_url: "https://ukparliament.shorthandstories.com/about-a-petition",
+            petition: petition,
+          )
+        end
+
+        it_behaves_like "a debate outcome email"
+        it_behaves_like "a positive debate outcome email"
+
+        it "includes the debate outcome overview" do
+          expect(mail).to have_body_text(%r[Discussion of the 2015 Christmas Adjournment])
+        end
+
+        it "includes a link to the transcript of the debate" do
+          expect(mail).to have_body_text(%r[http://www.publications.parliament.uk/pa/cm201509/cmhansrd/cm20150924/debtext/20150924-0003.htm#2015092449#000001])
+        end
+
+        it "includes a link to the video of the debate" do
+          expect(mail).to have_body_text(%r[http://parliamentlive.tv/event/index/20150924000001])
+        end
+      end
+    end
+  end
+
   describe "notifying signature of debate scheduled" do
     let(:petition) { FactoryBot.create(:open_petition, :scheduled_for_debate, attributes) }
 
