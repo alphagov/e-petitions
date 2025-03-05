@@ -21,12 +21,12 @@ Read the research: <%= @debate_outcome.debate_pack_url %>
 
 <% end %>
 <% if @debate_outcome.public_engagement_url? %>
+Read what the public said: <%= @debate_outcome.public_engagement_url %>
 
-<p>Read what the public said: <%= @debate_outcome.public_engagement_url %></p>
 <% end %>
 <% if @debate_outcome.debate_summary_url? %>
+Read a summary of the debate: <%= @debate_outcome.debate_summary_url %>
 
-<p>Read a summary of the debate: <%= @debate_outcome.debate_summary_url %></p>
 <% end %>
 The petition: <%= petition_url(@petition) %>
 
