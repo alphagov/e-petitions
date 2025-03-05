@@ -113,28 +113,28 @@ class PetitionMailerPreview < ActionMailer::Preview
     petition = Petition.debated.last
     signature = petition.signatures.validated.last
 
-    PetitionMailer.notify_signer_of_debate_outcome(petition, signature)
+    PetitionMailer.notify_signer_of_positive_debate_outcome(petition, signature)
   end
 
   def debated_petition_creator_notification
     petition = Petition.debated.last
     signature = petition.creator
 
-    PetitionMailer.notify_creator_of_debate_outcome(petition, signature)
+    PetitionMailer.notify_creator_of_positive_debate_outcome(petition, signature)
   end
 
   def not_debated_petition_signer_notification
     petition = Petition.not_debated.last
     signature = petition.signatures.validated.last
 
-    PetitionMailer.notify_signer_of_debate_outcome(petition, signature)
+    PetitionMailer.notify_signer_of_negative_debate_outcome(petition, signature)
   end
 
   def not_debated_petition_creator_notification
     petition = Petition.not_debated.last
     signature = petition.signatures.validated.last
 
-    PetitionMailer.notify_creator_of_debate_outcome(petition, signature)
+    PetitionMailer.notify_creator_of_negative_debate_outcome(petition, signature)
   end
 
   def privacy_policy_update_email

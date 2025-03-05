@@ -66,28 +66,28 @@ module Archived
       petition = Archived::Petition.debated.last
       signature = petition.signatures.validated.last
 
-      Archived::PetitionMailer.notify_signer_of_debate_outcome(petition, signature)
+      Archived::PetitionMailer.notify_signer_of_positive_debate_outcome(petition, signature)
     end
 
     def notify_creator_of_positive_debate_outcome
       petition = Archived::Petition.debated.last
       signature = petition.creator
 
-      Archived::PetitionMailer.notify_creator_of_debate_outcome(petition, signature)
+      Archived::PetitionMailer.notify_creator_of_positive_debate_outcome(petition, signature)
     end
 
     def notify_signer_of_negative_debate_outcome
       petition = Archived::Petition.not_debated.last
       signature = petition.signatures.validated.last
 
-      Archived::PetitionMailer.notify_signer_of_debate_outcome(petition, signature)
+      Archived::PetitionMailer.notify_signer_of_negative_debate_outcome(petition, signature)
     end
 
     def notify_creator_of_negative_debate_outcome
       petition = Archived::Petition.not_debated.last
       signature = petition.creator
 
-      Archived::PetitionMailer.notify_creator_of_debate_outcome(petition, signature)
+      Archived::PetitionMailer.notify_creator_of_negative_debate_outcome(petition, signature)
     end
   end
 end

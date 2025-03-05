@@ -969,6 +969,10 @@ class Petition < ActiveRecord::Base
     debate_outcome_at? && debate_outcome
   end
 
+  def positive_debate_outcome?
+    debate_outcome && debate_outcome.debated?
+  end
+
   def deadline
     open_at && (closed_at || Site.closed_at_for_opening(open_at) + deadline_extension)
   end
