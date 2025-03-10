@@ -17,6 +17,10 @@ module Archived
         signature = FeedbackSignature.new(petition, name, email)
         Archived::PetitionMailer.mailshot_for_signer(petition, signature, self).deliver_now
       end
+
+      def to_liquid
+        Archived::PetitionEmailDrop.new(self)
+      end
     end
   end
 end

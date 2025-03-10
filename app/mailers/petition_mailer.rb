@@ -130,6 +130,7 @@ class PetitionMailer < ApplicationMailer
     @signature, @petitions = signature, petitions
     @count, @remaining = @petitions.size, remaining
 
+    @parliament = parliament
     @closing_time = parliament.dissolution_at.strftime('%H:%M%P')
     @closing_date = parliament.dissolution_at.strftime('%-d %B')
     @last_response_date = parliament.dissolution_at.yesterday.strftime('%-d %B')
@@ -144,6 +145,7 @@ class PetitionMailer < ApplicationMailer
     @signature, @petitions = signature, petitions
     @count, @remaining = @petitions.size, remaining
 
+    @parliament = parliament
     @closing_time = parliament.dissolution_at.strftime('%H:%M%P')
     @closing_date = parliament.dissolution_at.strftime('%-d %B')
     @last_response_date = parliament.dissolution_at.yesterday.strftime('%-d %B')
@@ -154,15 +156,15 @@ class PetitionMailer < ApplicationMailer
       subject: subject_for(:notify_signer_of_closing_date_change, count: @count)
   end
 
-  def notify_creator_of_sponsored_petition_being_stopped(signature)
-    @signature, @petition = signature, signature.petition
+  def notify_creator_of_sponsored_petition_being_stopped(signature, parliament = Parliament.instance)
+    @signature, @petition, @parliament = signature, signature.petition, parliament
 
     mail to: @signature.email,
       subject: subject_for(:notify_creator_of_sponsored_petition_being_stopped)
   end
 
-  def notify_creator_of_validated_petition_being_stopped(signature)
-    @signature, @petition = signature, signature.petition
+  def notify_creator_of_validated_petition_being_stopped(signature, parliament = Parliament.instance)
+    @signature, @petition, @parliament = signature, signature.petition, parliament
 
     mail to: @signature.email,
       subject: subject_for(:notify_creator_of_validated_petition_being_stopped)

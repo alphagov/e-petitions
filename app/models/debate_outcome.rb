@@ -56,6 +56,10 @@ class DebateOutcome < ActiveRecord::Base
     debated_on
   end
 
+  def to_liquid
+    DebateOutcomeDrop.new(self)
+  end
+
   private
 
   def debate_state
