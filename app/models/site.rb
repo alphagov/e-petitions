@@ -141,6 +141,14 @@ class Site < ActiveRecord::Base
       disable_collecting_signatures?
     end
 
+    def enhanced_email_formatting?
+      !!instance.enhanced_email_formatting
+    end
+
+    def email_header_style
+      instance.email_header_style
+    end
+
     def home_page_message
       instance.home_page_message
     end
@@ -383,6 +391,8 @@ class Site < ActiveRecord::Base
     end
   end
 
+  store_accessor :feature_flags, :enhanced_email_formatting
+  store_accessor :feature_flags, :email_header_style
   store_accessor :feature_flags, :home_page_message
   store_accessor :feature_flags, :home_page_message_colour
   store_accessor :feature_flags, :show_home_page_message
@@ -395,6 +405,18 @@ class Site < ActiveRecord::Base
   store_accessor :feature_flags, :moderation_delay_message
 
   attr_reader :password
+
+  def enhanced_email_formatting
+    super || false
+  end
+
+  def enhanced_email_formatting=(value)
+    super(type_cast_feature_flag(value))
+  end
+
+  def email_header_style
+    super || 'white'
+  end
 
   def home_page_message_colour
     super || 'default'
@@ -580,6 +602,10 @@ class Site < ActiveRecord::Base
     else
       false
     end
+  end
+
+  def to_liquid
+    SiteDrop.new(self)
   end
 
   private

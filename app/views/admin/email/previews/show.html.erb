@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+  <title><%= page_title %></title>
+  <%= stylesheet_link_tag 'admin' %>
+  <%= javascript_include_tag "admin" %>
+  <%= yield :admin_scripts %>
+  <%= csrf_meta_tag %>
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon-admin.ico">
+  <%= yield :js %>
+  <meta name="viewport" content="width = device-width">
+  <meta name="robots" content="noindex">
+  <meta name="theme-color" content="#080">
+
+  <style>
+    html {
+      height: 100%;
+    }
+
+    body {
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+    }
+
+    #content {
+      border-bottom: 1px solid #0B0C0C;
+      padding-bottom: 15px;
+
+      @media (min-width: 1220px) {
+        width: 100%;
+      }
+    }
+
+    iframe {
+      margin: 0 30px;
+      display: block;
+      flex: 1;
+
+      @media (max-width: 640px) {
+        margin: 0 15px;
+      }
+
+      @media (min-width: 1220px) {
+        margin: 0 auto;
+        width: 1160px;
+      }
+    }
+
+    dl {
+      margin: 15px 0;
+    }
+
+    dl > div {
+      display: flex;
+      margin-bottom: 3px;
+    }
+
+    dt {
+      font-weight: bold;
+      font-size: 16px;
+      padding-right: 15px;
+      text-transform: lowercase;
+      width: 200px;
+      flex: 0 0 auto;
+    }
+
+    dd {
+      font-size: 16px;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      overflow: hidden;
+      flex: 1 1 auto;
+    }
+
+    p {
+      margin: 0;
+    }
+  </style>
+</head>
+<body class="admin">
+  <noscript>
+    <style>
+      .js-only {
+        display: none;
+      }
+    </style>
+  </noscript>
+
+  <%= render '/admin/shared/header' %>
+
+  <main id="content">
+    <% if inline_preview? %>
+      <%= link_to 'Back', edit_admin_email_template_path(@template), class: 'back-link' %>
+    <% else %>
+      <%= link_to 'Back', admin_email_templates_path, class: 'back-link' %>
+    <% end %>
+
+    <dl>
+      <% @headers.each do |header| %>
+        <% next if ignore_email_header?(header.name) %>
+        <div>
+          <dt><%= header.name %>:</dt>
+          <dd><%= header.value %></dd>
+        </div>
+      <% end %>
+      <div>
+        <dt>Format:</dt>
+        <dd>
+          <select id="part" onchange="refreshBody();">
+            <%= tag.option("View as HTML email", value: 'html', selected: (params[:part] != 'text')) %>
+            <%= tag.option("View as plain-text email", value: 'text', selected: (params[:part] == 'text')) %>
+          </select>
+        </dd>
+      </div>
+    </dl>
+
+    <% if inline_preview? %>
+      <p>
+        <%= link_to 'Continue', admin_email_templates_path, class: 'button button-small' %>
+      </p>
+    <% end %>
+  </main>
+
+  <% if inline_preview? %>
+    <% if params[:part] == 'text' %>
+      <%= tag.iframe(id: 'messageBody', src: admin_email_template_preview_part_path(@template, 'text', inline: 'true')) %>
+    <% else %>
+      <%= tag.iframe(id: 'messageBody', src: admin_email_template_preview_part_path(@template, 'html', inline: 'true')) %>
+    <% end %>
+  <% else %>
+    <% if params[:part] == 'text' %>
+      <%= tag.iframe(id: 'messageBody', src: admin_email_template_preview_part_path(@template, 'text')) %>
+    <% else %>
+      <%= tag.iframe(id: 'messageBody', src: admin_email_template_preview_part_path(@template, 'html')) %>
+    <% end %>
+  <% end %>
+
+  <script>
+    function refreshBody() {
+      var select = document.querySelector('select#part');
+      var iframe = document.getElementById('messageBody');
+      var url = URL.parse(window.location.href);
+      var inline = url.searchParams.get('inline') == 'true';
+
+      if (select.value == 'text') {
+        url.searchParams.set('part', 'text');
+
+        if (inline) {
+          iframe.contentWindow.location = url.pathname + '/parts/text?inline=true';
+        } else {
+          iframe.contentWindow.location = url.pathname + '/parts/text';
+        }
+      } else {
+        url.searchParams.set('part', 'html');
+
+        if (inline) {
+          iframe.contentWindow.location = url.pathname + '/parts/html?inline=true';
+        } else {
+          iframe.contentWindow.location = url.pathname + '/parts/html';
+        }
+      }
+
+      window.history.replaceState({}, '', url);
+    }
+  </script>
+</body>
+</html>

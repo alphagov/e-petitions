@@ -91,6 +91,35 @@ en-GB:
             aliased_domain:
               not_found: "The aliased domain was not found - please check the spelling and try again"
 
+        email/partial:
+          attributes:
+            name:
+              blank: "Name must be completed"
+              invalid: "The name must start with a letter and can only contain letters, numbers and hyphens/underscores"
+            content:
+              blank: "Content must be completed"
+              too_long:
+                other: "Content is too long (maximum is %{count} characters)"
+
+        email/template:
+          attributes:
+            name:
+              blank: "Email must be selected"
+            mailer_name:
+              blank: "Email must be selected"
+            action_name:
+              blank: "Email must be selected"
+              taken:
+                "A template for this email already exists"
+            subject:
+              blank: "Subject must be completed"
+              too_long:
+                other: "Content is too long (maximum is %{count} characters)"
+            content:
+              blank: "Content must be completed"
+              too_long:
+                other: "Content is too long (maximum is %{count} characters)"
+
         page:
           attributes:
             redirect_url:
