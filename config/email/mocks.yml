@@ -1,0 +1,908 @@
+feedback: !ruby/object:Mocks::Feedback
+  id: 1
+  comment: "I haven't received my confirmation email"
+  petition_link_or_title: "http://petitions.localhost:3000/petitions/1000"
+  email: "johndoe@example.com"
+  user_agent: "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/133.0.0.0 Safari/537.36"
+  ip_address: "192.168.1.2"
+  created_at: 2025-02-26T12:25:30Z
+
+petition: !ruby/object:Mocks::Petition &petition
+  id: 1000
+  state: "open"
+  sponsor_token: "DixGjsygZBtFgnX3vpaP"
+  action: "Keep the UK on BST year-round and abolish the switch to GMT"
+  background: >-
+    The biannual clock change disrupts sleep, increases accidents, and harms
+    mental health. Staying on BST would provide more daylight in the evenings,
+    boosting productivity, tourism, and well-being.
+  additional_details: |-
+    Studies show permanent daylight saving time reduces energy use and improves public health. Countries like Scotland would benefit from extended evening light. Let’s align with modern lifestyles and end this outdated practice.
+
+    Resources:
+
+    Royal Society for the Prevention of Accidents
+    https://www.rospa.com
+
+    BBC: The Case for Permanent BST
+    https://www.bbc.co.uk
+
+    Sleep Foundation: Clock Change Impacts
+    https://www.sleepfoundation.org
+  signature_count: 123456
+  scheduled_debate_date: 2025-03-30
+  created_at: 2025-02-26T12:25:30Z
+  updated_at: 2025-02-26T12:25:30Z
+  creator: !ruby/object:Mocks::Signature &creator
+    id: 1000
+    state: "validated"
+    name: "Michael Brown"
+    email: "michaelb@example.com"
+    postcode: "G21AB"
+    ip_address: "192.168.1.2"
+    perishable_token: "tmuty1ZgGJ5UQCwp9ZPQ"
+    unsubscribe_token: "3bdiV349hgXaMXMQiHvf"
+    creator: true
+    created_at: 2025-02-26T12:25:30Z
+    updated_at: 2025-02-26T12:25:30Z
+    validated_at: 2025-02-26T12:25:30Z
+    petition:
+      *petition
+  sponsors:
+    - !ruby/object:Mocks::Signature &sponsor
+      id: 1001
+      state: "validated"
+      name: "John Doe"
+      email: "johndoe@example.com"
+      postcode: "CF101BH"
+      ip_address: "192.168.1.2"
+      perishable_token: "1yjqkBZZZocra6guonqx"
+      unsubscribe_token: "fi3GxtTt9dLoUJGwyA4E"
+      sponsor: true
+      created_at: 2025-02-26T12:25:30Z
+      updated_at: 2025-02-26T12:25:30Z
+      validated_at: 2025-02-26T12:25:30Z
+      petition:
+        *petition
+    - !ruby/object:Mocks::Signature &other_sponsor
+      id: 1002
+      state: "validated"
+      name: "David Wilson"
+      email: "davidw@example.com"
+      postcode: "B11BB"
+      ip_address: "192.168.1.2"
+      perishable_token: "2bB4bzhGkmXLy3pL97xS"
+      unsubscribe_token: "yTqDJDq1t745vW1wCXvD"
+      sponsor: true
+      created_at: 2025-02-26T12:25:30Z
+      updated_at: 2025-02-26T12:25:30Z
+      validated_at: 2025-02-26T12:25:30Z
+      petition:
+        *petition
+  signatures:
+    - *creator
+    - *sponsor
+    - *other_sponsor
+    - !ruby/object:Mocks::Signature &signature
+      id: 1003
+      state: "validated"
+      name: "Jane Smith"
+      email: "janesmith@example.com"
+      postcode: "E16AN"
+      ip_address: "192.168.1.2"
+      perishable_token: "Y82G3HZuWhguEAcX65zt"
+      unsubscribe_token: "ceucD4PVpT7VF94gsH6T"
+      created_at: 2025-02-26T12:25:30Z
+      updated_at: 2025-02-26T12:25:30Z
+      validated_at: 2025-02-26T12:25:30Z
+      petition:
+        *petition
+  government_response: !ruby/object:Mocks::GovernmentResponse
+    id: 1000
+    summary: >-
+      The UK Government has carefully considered the petition calling for
+      the permanent adoption of British Summer Time (BST) throughout the
+      year. While we recognise the benefits that some associate with lighter
+      evenings, particularly in terms of leisure activities and potential
+      energy savings, the Government does not support the permanent adoption
+      of BST for the following reasons.
+    details: |-
+      1.  Impact on Northern Regions
+
+          The UK spans a wide range of latitudes, and the effects of permanent BST would be felt disproportionately across the country. In northern regions, such as Scotland, permanent BST would result in significantly later sunrises during the winter months. For example, sunrise in some areas could occur as late as 10:00 AM, leading to extended periods of darkness in the morning. This would have adverse effects on commuting, school attendance, and outdoor activities, particularly for children and vulnerable groups.
+
+      2.  Public Health and Safety
+
+          Later sunrises in winter could pose risks to public health and safety. Studies have shown that darker mornings are associated with an increase in road accidents, particularly involving pedestrians and cyclists. The safety of schoolchildren travelling to school in the dark would be a particular concern. Additionally, darker mornings can negatively impact mental health, as reduced exposure to morning sunlight has been linked to Seasonal Affective Disorder (SAD) and other mood-related conditions.
+
+      3.  Economic and Social Disruption
+
+          The introduction of permanent BST would require significant adjustments across various sectors, including transport, education, and business. For example, timetables for public transport and school schedules would need to be revised, potentially causing widespread disruption. Furthermore, aligning with other countries’ time zones could create complications for international trade and communication, particularly with European partners who may not adopt similar changes.
+
+      4.  Lack of Consensus
+
+          Previous consultations and trials, such as the 1968–71 experiment with permanent BST, have shown that public opinion is divided on this issue. While some people appreciate the lighter evenings, others strongly oppose the darker mornings, particularly in northern and rural areas. The Government believes that any change to the current system would need broad public support, which is currently lacking.
+
+      5.  Energy Savings Are Unclear
+
+          While proponents of permanent BST often cite potential energy savings due to reduced lighting and heating needs in the evenings, the evidence for this is inconclusive. Modern energy consumption patterns, including the widespread use of electric lighting and heating, mean that the energy savings associated with permanent BST are likely to be minimal. Any marginal gains would need to be weighed against the broader social and economic impacts.
+
+      6.  Current System Balances Competing Interests
+
+          The existing system of switching between Greenwich Mean Time (GMT) in winter and BST in summer strikes a balance between the benefits of lighter evenings in summer and the need for reasonable daylight hours in winter. This approach has been in place for over a century and is widely understood and accepted by the public.
+
+      In conclusion, while the Government acknowledges the arguments in favour of permanent BST, the potential negative consequences for public health, safety, and social cohesion, particularly in northern regions, outweigh the perceived benefits. The current system of alternating between GMT and BST remains the most practical and balanced approach for the UK as a whole.
+
+      Thank you for raising this important issue. The Government remains committed to ensuring that any decisions regarding timekeeping are made in the best interests of all citizens across the United Kingdom.
+    petition:
+      *petition
+  debate_outcome: !ruby/object:Mocks::DebateOutcome
+    id: 1000
+    debated: true
+    debated_on: 2025-03-30
+    video_url: https://www.youtube.com/
+    transcript_url: https://hansard.parliament.uk/
+    debate_pack_url: https://commonslibrary.parliament.uk/
+    public_engagement_url: https://ukparliament.shorthandstories.com/
+    debate_summary_url: https://ukparliament.shorthandstories.com/
+    created_at: 2025-02-26T12:25:30Z
+    updated_at: 2025-02-26T12:25:30Z
+    petition:
+      *petition
+  emails:
+    - !ruby/object:Mocks::Petition::Email
+      id: 1000
+      subject: "Important Update: Science, Innovation and Technology Committee Evidence Session on Year-Round BST"
+      body: |-
+        We letting you know that the Science, Innovation and Technology Committee will be holding an evidence session to explore the implications of adopting BST year-round. This session will take place on **30th March 2025**, and it represents a significant opportunity to discuss the potential benefits and challenges of this proposal.
+
+        The committee will hear from experts, stakeholders, and representatives to better understand the scientific, economic, and social impacts of abolishing the switch to GMT. Your voice, along with the thousands of others who signed the petition, has helped bring this issue to the forefront of parliamentary discussion.
+
+        We encourage you to stay engaged with this process. The outcome of this evidence session could play a key role in shaping future decisions on this matter. If you would like to follow the session or learn more about the committee’s work, you can visit the UK Parliament website for updates at https://www.parliament.uk/
+      sent_by: "Anne Admin"
+      email_count: 4
+      emails_enqueued_at: 2025-02-26T12:25:30Z
+      created_at: 2025-02-26T12:25:30Z
+      updated_at: 2025-02-26T12:25:30Z
+      petition:
+        *petition
+  mailshots:
+    - !ruby/object:Mocks::Petition::Mailshot
+      id: 1000
+      subject: "Share Your Views: Should the UK Stay on British Summer Time (BST) Year-Round?"
+      body: |-
+        We are reaching out to gather opinions on a proposal that has been gaining attention: keeping the UK on British Summer Time (BST) year-round, abolishing the switch to Greenwich Mean Time (GMT).
+
+        This change would mean brighter evenings throughout the year, potentially benefiting leisure activities, mental health, and energy consumption. However, it could also mean darker mornings during the winter months, which may impact commuting, schools, and certain industries.
+
+        We value your perspective and would appreciate it if you could take a moment to share your thoughts on the following questions:
+
+        1. Do you support the idea of staying on BST year-round? Why or why not?
+
+        2. What potential benefits or challenges do you foresee with this change?
+
+        3. How do you think this would impact your daily life, work, or routines?
+
+        Your feedback will help us better understand the diverse opinions on this topic and contribute to a more informed discussion. Please feel free to reply to this email with your thoughts by [insert deadline, if applicable].
+
+        Thank you for taking the time to share your views. We look forward to hearing from you!
+      sent_by: "Anne Admin"
+      created_at: 2025-02-26T12:25:30Z
+      updated_at: 2025-02-26T12:25:30Z
+      petition:
+        *petition
+
+rejected_petition: !ruby/object:Mocks::Petition &rejected_petition
+  id: 1000
+  state: "rejected"
+  sponsor_token: "DixGjsygZBtFgnX3vpaP"
+  action: "Keep the UK on BST year-round and abolish the switch to GMT"
+  background: >-
+    The biannual clock change disrupts sleep, increases accidents, and harms
+    mental health. Staying on BST would provide more daylight in the evenings,
+    boosting productivity, tourism, and well-being.
+  additional_details: |-
+    Studies show permanent daylight saving time reduces energy use and improves public health. Countries like Scotland would benefit from extended evening light. Let’s align with modern lifestyles and end this outdated practice.
+
+    Resources:
+
+    Royal Society for the Prevention of Accidents
+    https://www.rospa.com
+
+    BBC: The Case for Permanent BST
+    https://www.bbc.co.uk
+
+    Sleep Foundation: Clock Change Impacts
+    https://www.sleepfoundation.org
+  signature_count: 123456
+  scheduled_debate_date: 2025-03-30
+  created_at: 2025-02-26T12:25:30Z
+  updated_at: 2025-02-26T12:25:30Z
+  creator: !ruby/object:Mocks::Signature &rejected_creator
+    id: 1000
+    state: "validated"
+    name: "Michael Brown"
+    email: "michaelb@example.com"
+    postcode: "G21AB"
+    ip_address: "192.168.1.2"
+    perishable_token: "tmuty1ZgGJ5UQCwp9ZPQ"
+    unsubscribe_token: "3bdiV349hgXaMXMQiHvf"
+    creator: true
+    created_at: 2025-02-26T12:25:30Z
+    updated_at: 2025-02-26T12:25:30Z
+    validated_at: 2025-02-26T12:25:30Z
+    petition:
+      *rejected_petition
+  sponsors:
+    - !ruby/object:Mocks::Signature &rejected_sponsor
+      id: 1001
+      state: "validated"
+      name: "John Doe"
+      email: "johndoe@example.com"
+      postcode: "CF101BH"
+      ip_address: "192.168.1.2"
+      perishable_token: "1yjqkBZZZocra6guonqx"
+      unsubscribe_token: "fi3GxtTt9dLoUJGwyA4E"
+      sponsor: true
+      created_at: 2025-02-26T12:25:30Z
+      updated_at: 2025-02-26T12:25:30Z
+      validated_at: 2025-02-26T12:25:30Z
+      petition:
+        *rejected_petition
+  signatures:
+    - *rejected_creator
+    - *rejected_sponsor
+  rejection: !ruby/object:Mocks::Rejection
+    id: 1000
+    code: "duplicate"
+    details: |-
+      You may wish to sign this petition which calls for a similar action: https://petition.parliament.uk/petitions/1001
+    created_at: 2025-02-26T12:25:30Z
+    updated_at: 2025-02-26T12:25:30Z
+    petition:
+      *rejected_petition
+
+hidden_petition: !ruby/object:Mocks::Petition &hidden_petition
+  id: 1000
+  state: "hidden"
+  sponsor_token: "DixGjsygZBtFgnX3vpaP"
+  action: "Keep the UK on BST year-round and abolish the switch to GMT"
+  background: >-
+    The biannual clock change disrupts sleep, increases accidents, and harms
+    mental health. Staying on BST would provide more daylight in the evenings,
+    boosting productivity, tourism, and well-being.
+  additional_details: |-
+    Studies show permanent daylight saving time reduces energy use and improves public health. Countries like Scotland would benefit from extended evening light. Let’s align with modern lifestyles and end this outdated practice.
+
+    Resources:
+
+    Royal Society for the Prevention of Accidents
+    https://www.rospa.com
+
+    BBC: The Case for Permanent BST
+    https://www.bbc.co.uk
+
+    Sleep Foundation: Clock Change Impacts
+    https://www.sleepfoundation.org
+  signature_count: 123456
+  scheduled_debate_date: 2025-03-30
+  created_at: 2025-02-26T12:25:30Z
+  updated_at: 2025-02-26T12:25:30Z
+  creator: !ruby/object:Mocks::Signature &hidden_creator
+    id: 1000
+    state: "validated"
+    name: "Michael Brown"
+    email: "michaelb@example.com"
+    postcode: "G21AB"
+    ip_address: "192.168.1.2"
+    perishable_token: "tmuty1ZgGJ5UQCwp9ZPQ"
+    unsubscribe_token: "3bdiV349hgXaMXMQiHvf"
+    creator: true
+    created_at: 2025-02-26T12:25:30Z
+    updated_at: 2025-02-26T12:25:30Z
+    validated_at: 2025-02-26T12:25:30Z
+    petition:
+      *hidden_petition
+  sponsors:
+    - !ruby/object:Mocks::Signature &hidden_sponsor
+      id: 1001
+      state: "validated"
+      name: "John Doe"
+      email: "johndoe@example.com"
+      postcode: "CF101BH"
+      ip_address: "192.168.1.2"
+      perishable_token: "1yjqkBZZZocra6guonqx"
+      unsubscribe_token: "fi3GxtTt9dLoUJGwyA4E"
+      sponsor: true
+      created_at: 2025-02-26T12:25:30Z
+      updated_at: 2025-02-26T12:25:30Z
+      validated_at: 2025-02-26T12:25:30Z
+      petition:
+        *hidden_petition
+  signatures:
+    - *hidden_creator
+    - *hidden_sponsor
+  rejection: !ruby/object:Mocks::Rejection
+    id: 1000
+    code: "libellous"
+    details: |-
+      We can't publish petitions that include false or unverified information, especially where it makes unproven claims about public health.
+    created_at: 2025-02-26T12:25:30Z
+    updated_at: 2025-02-26T12:25:30Z
+    petition:
+      *hidden_petition
+
+not_debated_petition: !ruby/object:Mocks::Petition &not_debated_petition
+  id: 1000
+  state: "open"
+  sponsor_token: "DixGjsygZBtFgnX3vpaP"
+  action: "Keep the UK on BST year-round and abolish the switch to GMT"
+  background: >-
+    The biannual clock change disrupts sleep, increases accidents, and harms
+    mental health. Staying on BST would provide more daylight in the evenings,
+    boosting productivity, tourism, and well-being.
+  additional_details: |-
+    Studies show permanent daylight saving time reduces energy use and improves public health. Countries like Scotland would benefit from extended evening light. Let’s align with modern lifestyles and end this outdated practice.
+
+    Resources:
+
+    Royal Society for the Prevention of Accidents
+    https://www.rospa.com
+
+    BBC: The Case for Permanent BST
+    https://www.bbc.co.uk
+
+    Sleep Foundation: Clock Change Impacts
+    https://www.sleepfoundation.org
+  signature_count: 123456
+  scheduled_debate_date: 2025-03-30
+  created_at: 2025-02-26T12:25:30Z
+  updated_at: 2025-02-26T12:25:30Z
+  creator: !ruby/object:Mocks::Signature &creator
+    id: 1000
+    state: "validated"
+    name: "Michael Brown"
+    email: "michaelb@example.com"
+    postcode: "G21AB"
+    ip_address: "192.168.1.2"
+    perishable_token: "tmuty1ZgGJ5UQCwp9ZPQ"
+    unsubscribe_token: "3bdiV349hgXaMXMQiHvf"
+    creator: true
+    created_at: 2025-02-26T12:25:30Z
+    updated_at: 2025-02-26T12:25:30Z
+    validated_at: 2025-02-26T12:25:30Z
+    petition:
+      *not_debated_petition
+  sponsors:
+    - !ruby/object:Mocks::Signature &sponsor
+      id: 1001
+      state: "validated"
+      name: "John Doe"
+      email: "johndoe@example.com"
+      postcode: "CF101BH"
+      ip_address: "192.168.1.2"
+      perishable_token: "1yjqkBZZZocra6guonqx"
+      unsubscribe_token: "fi3GxtTt9dLoUJGwyA4E"
+      sponsor: true
+      created_at: 2025-02-26T12:25:30Z
+      updated_at: 2025-02-26T12:25:30Z
+      validated_at: 2025-02-26T12:25:30Z
+      petition:
+        *not_debated_petition
+    - !ruby/object:Mocks::Signature &other_sponsor
+      id: 1002
+      state: "validated"
+      name: "David Wilson"
+      email: "davidw@example.com"
+      postcode: "B11BB"
+      ip_address: "192.168.1.2"
+      perishable_token: "2bB4bzhGkmXLy3pL97xS"
+      unsubscribe_token: "yTqDJDq1t745vW1wCXvD"
+      sponsor: true
+      created_at: 2025-02-26T12:25:30Z
+      updated_at: 2025-02-26T12:25:30Z
+      validated_at: 2025-02-26T12:25:30Z
+      petition:
+        *not_debated_petition
+  signatures:
+    - *creator
+    - *sponsor
+    - *other_sponsor
+    - !ruby/object:Mocks::Signature &signature
+      id: 1003
+      state: "validated"
+      name: "Jane Smith"
+      email: "janesmith@example.com"
+      postcode: "E16AN"
+      ip_address: "192.168.1.2"
+      perishable_token: "Y82G3HZuWhguEAcX65zt"
+      unsubscribe_token: "ceucD4PVpT7VF94gsH6T"
+      created_at: 2025-02-26T12:25:30Z
+      updated_at: 2025-02-26T12:25:30Z
+      validated_at: 2025-02-26T12:25:30Z
+      petition:
+        *not_debated_petition
+  government_response: !ruby/object:Mocks::GovernmentResponse
+    id: 1000
+    summary: >-
+      The UK Government has carefully considered the petition calling for
+      the permanent adoption of British Summer Time (BST) throughout the
+      year. While we recognise the benefits that some associate with lighter
+      evenings, particularly in terms of leisure activities and potential
+      energy savings, the Government does not support the permanent adoption
+      of BST for the following reasons.
+    details: |-
+      1.  Impact on Northern Regions
+
+          The UK spans a wide range of latitudes, and the effects of permanent BST would be felt disproportionately across the country. In northern regions, such as Scotland, permanent BST would result in significantly later sunrises during the winter months. For example, sunrise in some areas could occur as late as 10:00 AM, leading to extended periods of darkness in the morning. This would have adverse effects on commuting, school attendance, and outdoor activities, particularly for children and vulnerable groups.
+
+      2.  Public Health and Safety
+
+          Later sunrises in winter could pose risks to public health and safety. Studies have shown that darker mornings are associated with an increase in road accidents, particularly involving pedestrians and cyclists. The safety of schoolchildren travelling to school in the dark would be a particular concern. Additionally, darker mornings can negatively impact mental health, as reduced exposure to morning sunlight has been linked to Seasonal Affective Disorder (SAD) and other mood-related conditions.
+
+      3.  Economic and Social Disruption
+
+          The introduction of permanent BST would require significant adjustments across various sectors, including transport, education, and business. For example, timetables for public transport and school schedules would need to be revised, potentially causing widespread disruption. Furthermore, aligning with other countries’ time zones could create complications for international trade and communication, particularly with European partners who may not adopt similar changes.
+
+      4.  Lack of Consensus
+
+          Previous consultations and trials, such as the 1968–71 experiment with permanent BST, have shown that public opinion is divided on this issue. While some people appreciate the lighter evenings, others strongly oppose the darker mornings, particularly in northern and rural areas. The Government believes that any change to the current system would need broad public support, which is currently lacking.
+
+      5.  Energy Savings Are Unclear
+
+          While proponents of permanent BST often cite potential energy savings due to reduced lighting and heating needs in the evenings, the evidence for this is inconclusive. Modern energy consumption patterns, including the widespread use of electric lighting and heating, mean that the energy savings associated with permanent BST are likely to be minimal. Any marginal gains would need to be weighed against the broader social and economic impacts.
+
+      6.  Current System Balances Competing Interests
+
+          The existing system of switching between Greenwich Mean Time (GMT) in winter and BST in summer strikes a balance between the benefits of lighter evenings in summer and the need for reasonable daylight hours in winter. This approach has been in place for over a century and is widely understood and accepted by the public.
+
+      In conclusion, while the Government acknowledges the arguments in favour of permanent BST, the potential negative consequences for public health, safety, and social cohesion, particularly in northern regions, outweigh the perceived benefits. The current system of alternating between GMT and BST remains the most practical and balanced approach for the UK as a whole.
+
+      Thank you for raising this important issue. The Government remains committed to ensuring that any decisions regarding timekeeping are made in the best interests of all citizens across the United Kingdom.
+    petition:
+      *not_debated_petition
+  debate_outcome: !ruby/object:Mocks::DebateOutcome
+    id: 1000
+    debated: false
+    overview: |-
+      The Petitions Committee have decided not to schedule a debate on this petition.
+
+      The Committee recognised the support that the petition had received. However, the issue raised by the petition has already recently been debated in Parliament on 13th July 2024, which you can read here: https://hansard.parliament.uk/
+    created_at: 2025-02-26T12:25:30Z
+    updated_at: 2025-02-26T12:25:30Z
+    petition:
+      *not_debated_petition
+
+archived_petition: !ruby/object:Mocks::Archived::Petition &archived_petition
+  id: 1000
+  state: "open"
+  action: "Keep the UK on BST year-round and abolish the switch to GMT"
+  background: >-
+    The biannual clock change disrupts sleep, increases accidents, and harms
+    mental health. Staying on BST would provide more daylight in the evenings,
+    boosting productivity, tourism, and well-being.
+  additional_details: |-
+    Studies show permanent daylight saving time reduces energy use and improves public health. Countries like Scotland would benefit from extended evening light. Let’s align with modern lifestyles and end this outdated practice.
+
+    Resources:
+
+    Royal Society for the Prevention of Accidents
+    https://www.rospa.com
+
+    BBC: The Case for Permanent BST
+    https://www.bbc.co.uk
+
+    Sleep Foundation: Clock Change Impacts
+    https://www.sleepfoundation.org
+  signature_count: 123456
+  scheduled_debate_date: 2025-03-30
+  created_at: 2025-02-26T12:25:30Z
+  updated_at: 2025-02-26T12:25:30Z
+  creator: !ruby/object:Mocks::Archived::Signature &archived_creator
+    id: 1000
+    state: "validated"
+    name: "Michael Brown"
+    email: "michaelb@example.com"
+    postcode: "G21AB"
+    ip_address: "192.168.1.2"
+    perishable_token: "tmuty1ZgGJ5UQCwp9ZPQ"
+    unsubscribe_token: "3bdiV349hgXaMXMQiHvf"
+    creator: true
+    created_at: 2025-02-26T12:25:30Z
+    updated_at: 2025-02-26T12:25:30Z
+    validated_at: 2025-02-26T12:25:30Z
+    petition:
+      *archived_petition
+  sponsors:
+    - !ruby/object:Mocks::Archived::Signature &archived_sponsor
+      id: 1001
+      state: "validated"
+      name: "John Doe"
+      email: "johndoe@example.com"
+      postcode: "CF101BH"
+      ip_address: "192.168.1.2"
+      perishable_token: "1yjqkBZZZocra6guonqx"
+      unsubscribe_token: "fi3GxtTt9dLoUJGwyA4E"
+      sponsor: true
+      created_at: 2025-02-26T12:25:30Z
+      updated_at: 2025-02-26T12:25:30Z
+      validated_at: 2025-02-26T12:25:30Z
+      petition:
+        *archived_petition
+    - !ruby/object:Mocks::Archived::Signature &archived_other_sponsor
+      id: 1002
+      state: "validated"
+      name: "David Wilson"
+      email: "davidw@example.com"
+      postcode: "B11BB"
+      ip_address: "192.168.1.2"
+      perishable_token: "2bB4bzhGkmXLy3pL97xS"
+      unsubscribe_token: "yTqDJDq1t745vW1wCXvD"
+      sponsor: true
+      created_at: 2025-02-26T12:25:30Z
+      updated_at: 2025-02-26T12:25:30Z
+      validated_at: 2025-02-26T12:25:30Z
+      petition:
+        *archived_petition
+  signatures:
+    - *archived_creator
+    - *archived_sponsor
+    - *archived_other_sponsor
+    - !ruby/object:Mocks::Archived::Signature &archived_signature
+      id: 1003
+      state: "validated"
+      name: "Jane Smith"
+      email: "janesmith@example.com"
+      postcode: "E16AN"
+      ip_address: "192.168.1.2"
+      perishable_token: "Y82G3HZuWhguEAcX65zt"
+      unsubscribe_token: "ceucD4PVpT7VF94gsH6T"
+      created_at: 2025-02-26T12:25:30Z
+      updated_at: 2025-02-26T12:25:30Z
+      validated_at: 2025-02-26T12:25:30Z
+      petition:
+        *archived_petition
+  government_response: !ruby/object:Mocks::Archived::GovernmentResponse
+    id: 1000
+    summary: >-
+      The UK Government has carefully considered the petition calling for
+      the permanent adoption of British Summer Time (BST) throughout the
+      year. While we recognise the benefits that some associate with lighter
+      evenings, particularly in terms of leisure activities and potential
+      energy savings, the Government does not support the permanent adoption
+      of BST for the following reasons.
+    details: |-
+      1.  Impact on Northern Regions
+
+          The UK spans a wide range of latitudes, and the effects of permanent BST would be felt disproportionately across the country. In northern regions, such as Scotland, permanent BST would result in significantly later sunrises during the winter months. For example, sunrise in some areas could occur as late as 10:00 AM, leading to extended periods of darkness in the morning. This would have adverse effects on commuting, school attendance, and outdoor activities, particularly for children and vulnerable groups.
+
+      2.  Public Health and Safety
+
+          Later sunrises in winter could pose risks to public health and safety. Studies have shown that darker mornings are associated with an increase in road accidents, particularly involving pedestrians and cyclists. The safety of schoolchildren travelling to school in the dark would be a particular concern. Additionally, darker mornings can negatively impact mental health, as reduced exposure to morning sunlight has been linked to Seasonal Affective Disorder (SAD) and other mood-related conditions.
+
+      3.  Economic and Social Disruption
+
+          The introduction of permanent BST would require significant adjustments across various sectors, including transport, education, and business. For example, timetables for public transport and school schedules would need to be revised, potentially causing widespread disruption. Furthermore, aligning with other countries’ time zones could create complications for international trade and communication, particularly with European partners who may not adopt similar changes.
+
+      4.  Lack of Consensus
+
+          Previous consultations and trials, such as the 1968–71 experiment with permanent BST, have shown that public opinion is divided on this issue. While some people appreciate the lighter evenings, others strongly oppose the darker mornings, particularly in northern and rural areas. The Government believes that any change to the current system would need broad public support, which is currently lacking.
+
+      5.  Energy Savings Are Unclear
+
+          While proponents of permanent BST often cite potential energy savings due to reduced lighting and heating needs in the evenings, the evidence for this is inconclusive. Modern energy consumption patterns, including the widespread use of electric lighting and heating, mean that the energy savings associated with permanent BST are likely to be minimal. Any marginal gains would need to be weighed against the broader social and economic impacts.
+
+      6.  Current System Balances Competing Interests
+
+          The existing system of switching between Greenwich Mean Time (GMT) in winter and BST in summer strikes a balance between the benefits of lighter evenings in summer and the need for reasonable daylight hours in winter. This approach has been in place for over a century and is widely understood and accepted by the public.
+
+      In conclusion, while the Government acknowledges the arguments in favour of permanent BST, the potential negative consequences for public health, safety, and social cohesion, particularly in northern regions, outweigh the perceived benefits. The current system of alternating between GMT and BST remains the most practical and balanced approach for the UK as a whole.
+
+      Thank you for raising this important issue. The Government remains committed to ensuring that any decisions regarding timekeeping are made in the best interests of all citizens across the United Kingdom.
+    created_at: 2025-02-26T12:25:30Z
+    updated_at: 2025-02-26T12:25:30Z
+    petition:
+      *archived_petition
+  debate_outcome: !ruby/object:Mocks::Archived::DebateOutcome
+    id: 1000
+    debated: true
+    debated_on: 2025-03-30
+    video_url: https://www.youtube.com/
+    transcript_url: https://hansard.parliament.uk/
+    debate_pack_url: https://commonslibrary.parliament.uk/
+    public_engagement_url: https://ukparliament.shorthandstories.com/
+    debate_summary_url: https://ukparliament.shorthandstories.com/
+    created_at: 2025-02-26T12:25:30Z
+    updated_at: 2025-02-26T12:25:30Z
+    petition:
+      *archived_petition
+  emails:
+    - !ruby/object:Mocks::Archived::Petition::Email
+      id: 1000
+      subject: "Important Update: Science, Innovation and Technology Committee Evidence Session on Year-Round BST"
+      body: |-
+        We letting you know that the Science, Innovation and Technology Committee will be holding an evidence session to explore the implications of adopting BST year-round. This session will take place on **30th March 2025**, and it represents a significant opportunity to discuss the potential benefits and challenges of this proposal.
+
+        The committee will hear from experts, stakeholders, and representatives to better understand the scientific, economic, and social impacts of abolishing the switch to GMT. Your voice, along with the thousands of others who signed the petition, has helped bring this issue to the forefront of parliamentary discussion.
+
+        We encourage you to stay engaged with this process. The outcome of this evidence session could play a key role in shaping future decisions on this matter. If you would like to follow the session or learn more about the committee’s work, you can visit the UK Parliament website for updates at https://www.parliament.uk/
+      sent_by: "Anne Admin"
+      email_count: 4
+      emails_enqueued_at: 2025-02-26T12:25:30Z
+      created_at: 2025-02-26T12:25:30Z
+      updated_at: 2025-02-26T12:25:30Z
+      petition:
+        *archived_petition
+  mailshots:
+    - !ruby/object:Mocks::Archived::Petition::Mailshot
+      id: 1000
+      subject: "Share Your Views: Should the UK Stay on British Summer Time (BST) Year-Round?"
+      body: |-
+        We are reaching out to gather opinions on a proposal that has been gaining attention: keeping the UK on British Summer Time (BST) year-round, abolishing the switch to Greenwich Mean Time (GMT).
+
+        This change would mean brighter evenings throughout the year, potentially benefiting leisure activities, mental health, and energy consumption. However, it could also mean darker mornings during the winter months, which may impact commuting, schools, and certain industries.
+
+        We value your perspective and would appreciate it if you could take a moment to share your thoughts on the following questions:
+
+        1. Do you support the idea of staying on BST year-round? Why or why not?
+
+        2. What potential benefits or challenges do you foresee with this change?
+
+        3. How do you think this would impact your daily life, work, or routines?
+
+        Your feedback will help us better understand the diverse opinions on this topic and contribute to a more informed discussion. Please feel free to reply to this email with your thoughts by [insert deadline, if applicable].
+
+        Thank you for taking the time to share your views. We look forward to hearing from you!
+      sent_by: "Anne Admin"
+      created_at: 2025-02-26T12:25:30Z
+      updated_at: 2025-02-26T12:25:30Z
+      petition:
+        *archived_petition
+  parliament: !ruby/object:Mocks::Parliament
+    dissolution_at: 2024-05-26T20:40:00Z
+    dissolution_message: >-
+      There will be a General Election on Thursday 4 July.
+      This means that Parliament has to be dissolved and that all parliamentary
+      business – including petitions – will stop.
+    created_at: 2024-05-10T11:09:48Z
+    updated_at: 2024-05-30T04:33:01Z
+    dissolution_heading: "All petitions will close at 00.01am on Thursday 30 May."
+    dissolution_faq_url: "https://www.parliament.uk/about/how/elections-and-voting/general/dissolution/"
+    dissolved_heading: "The petitions site is closed."
+    dissolved_message: >-
+      There will be a General Election on Thursday 4 July.
+      This means that Parliament has been dissolved and that all parliamentary
+      business – including petitions – has been stopped.
+    notification_cutoff_at: 2024-04-30T23:00:00Z
+    registration_closed_at: 2024-06-18T22:59:00Z
+    government: "Conservative"
+    state_opening_at: 2019-12-19T11:30:00Z
+    opening_at: 2020-03-03T10:55:00Z
+    archived_at: 2024-05-31T15:19:52Z
+    threshold_for_response: 10000
+    threshold_for_debate: 100000
+    petition_duration: 6
+    archiving_started_at: 2024-05-28T21:06:49Z
+    election_date: 2024-07-04
+    show_dissolution_notification: 1
+    dissolution_emails_sent_at: 2024-05-28T20:39:35Z
+    closure_scheduled_at: 2024-05-28T20:40:38Z
+    period: "2019-2024"
+
+not_debated_archived_petition: !ruby/object:Mocks::Archived::Petition &not_debated_archived_petition
+  id: 1000
+  state: "open"
+  action: "Keep the UK on BST year-round and abolish the switch to GMT"
+  background: >-
+    The biannual clock change disrupts sleep, increases accidents, and harms
+    mental health. Staying on BST would provide more daylight in the evenings,
+    boosting productivity, tourism, and well-being.
+  additional_details: |-
+    Studies show permanent daylight saving time reduces energy use and improves public health. Countries like Scotland would benefit from extended evening light. Let’s align with modern lifestyles and end this outdated practice.
+
+    Resources:
+
+    Royal Society for the Prevention of Accidents
+    https://www.rospa.com
+
+    BBC: The Case for Permanent BST
+    https://www.bbc.co.uk
+
+    Sleep Foundation: Clock Change Impacts
+    https://www.sleepfoundation.org
+  signature_count: 123456
+  scheduled_debate_date: 2025-03-30
+  created_at: 2025-02-26T12:25:30Z
+  updated_at: 2025-02-26T12:25:30Z
+  creator: !ruby/object:Mocks::Archived::Signature &archived_creator
+    id: 1000
+    state: "validated"
+    name: "Michael Brown"
+    email: "michaelb@example.com"
+    postcode: "G21AB"
+    ip_address: "192.168.1.2"
+    perishable_token: "tmuty1ZgGJ5UQCwp9ZPQ"
+    unsubscribe_token: "3bdiV349hgXaMXMQiHvf"
+    creator: true
+    created_at: 2025-02-26T12:25:30Z
+    updated_at: 2025-02-26T12:25:30Z
+    validated_at: 2025-02-26T12:25:30Z
+    petition:
+      *not_debated_archived_petition
+  sponsors:
+    - !ruby/object:Mocks::Archived::Signature &archived_sponsor
+      id: 1001
+      state: "validated"
+      name: "John Doe"
+      email: "johndoe@example.com"
+      postcode: "CF101BH"
+      ip_address: "192.168.1.2"
+      perishable_token: "1yjqkBZZZocra6guonqx"
+      unsubscribe_token: "fi3GxtTt9dLoUJGwyA4E"
+      sponsor: true
+      created_at: 2025-02-26T12:25:30Z
+      updated_at: 2025-02-26T12:25:30Z
+      validated_at: 2025-02-26T12:25:30Z
+      petition:
+        *not_debated_archived_petition
+    - !ruby/object:Mocks::Archived::Signature &archived_other_sponsor
+      id: 1002
+      state: "validated"
+      name: "David Wilson"
+      email: "davidw@example.com"
+      postcode: "B11BB"
+      ip_address: "192.168.1.2"
+      perishable_token: "2bB4bzhGkmXLy3pL97xS"
+      unsubscribe_token: "yTqDJDq1t745vW1wCXvD"
+      sponsor: true
+      created_at: 2025-02-26T12:25:30Z
+      updated_at: 2025-02-26T12:25:30Z
+      validated_at: 2025-02-26T12:25:30Z
+      petition:
+        *not_debated_archived_petition
+  signatures:
+    - *archived_creator
+    - *archived_sponsor
+    - *archived_other_sponsor
+    - !ruby/object:Mocks::Archived::Signature &archived_signature
+      id: 1003
+      state: "validated"
+      name: "Jane Smith"
+      email: "janesmith@example.com"
+      postcode: "E16AN"
+      ip_address: "192.168.1.2"
+      perishable_token: "Y82G3HZuWhguEAcX65zt"
+      unsubscribe_token: "ceucD4PVpT7VF94gsH6T"
+      created_at: 2025-02-26T12:25:30Z
+      updated_at: 2025-02-26T12:25:30Z
+      validated_at: 2025-02-26T12:25:30Z
+      petition:
+        *not_debated_archived_petition
+  government_response: !ruby/object:Mocks::Archived::GovernmentResponse
+    id: 1000
+    summary: >-
+      The UK Government has carefully considered the petition calling for
+      the permanent adoption of British Summer Time (BST) throughout the
+      year. While we recognise the benefits that some associate with lighter
+      evenings, particularly in terms of leisure activities and potential
+      energy savings, the Government does not support the permanent adoption
+      of BST for the following reasons.
+    details: |-
+      1.  Impact on Northern Regions
+
+          The UK spans a wide range of latitudes, and the effects of permanent BST would be felt disproportionately across the country. In northern regions, such as Scotland, permanent BST would result in significantly later sunrises during the winter months. For example, sunrise in some areas could occur as late as 10:00 AM, leading to extended periods of darkness in the morning. This would have adverse effects on commuting, school attendance, and outdoor activities, particularly for children and vulnerable groups.
+
+      2.  Public Health and Safety
+
+          Later sunrises in winter could pose risks to public health and safety. Studies have shown that darker mornings are associated with an increase in road accidents, particularly involving pedestrians and cyclists. The safety of schoolchildren travelling to school in the dark would be a particular concern. Additionally, darker mornings can negatively impact mental health, as reduced exposure to morning sunlight has been linked to Seasonal Affective Disorder (SAD) and other mood-related conditions.
+
+      3.  Economic and Social Disruption
+
+          The introduction of permanent BST would require significant adjustments across various sectors, including transport, education, and business. For example, timetables for public transport and school schedules would need to be revised, potentially causing widespread disruption. Furthermore, aligning with other countries’ time zones could create complications for international trade and communication, particularly with European partners who may not adopt similar changes.
+
+      4.  Lack of Consensus
+
+          Previous consultations and trials, such as the 1968–71 experiment with permanent BST, have shown that public opinion is divided on this issue. While some people appreciate the lighter evenings, others strongly oppose the darker mornings, particularly in northern and rural areas. The Government believes that any change to the current system would need broad public support, which is currently lacking.
+
+      5.  Energy Savings Are Unclear
+
+          While proponents of permanent BST often cite potential energy savings due to reduced lighting and heating needs in the evenings, the evidence for this is inconclusive. Modern energy consumption patterns, including the widespread use of electric lighting and heating, mean that the energy savings associated with permanent BST are likely to be minimal. Any marginal gains would need to be weighed against the broader social and economic impacts.
+
+      6.  Current System Balances Competing Interests
+
+          The existing system of switching between Greenwich Mean Time (GMT) in winter and BST in summer strikes a balance between the benefits of lighter evenings in summer and the need for reasonable daylight hours in winter. This approach has been in place for over a century and is widely understood and accepted by the public.
+
+      In conclusion, while the Government acknowledges the arguments in favour of permanent BST, the potential negative consequences for public health, safety, and social cohesion, particularly in northern regions, outweigh the perceived benefits. The current system of alternating between GMT and BST remains the most practical and balanced approach for the UK as a whole.
+
+      Thank you for raising this important issue. The Government remains committed to ensuring that any decisions regarding timekeeping are made in the best interests of all citizens across the United Kingdom.
+    created_at: 2025-02-26T12:25:30Z
+    updated_at: 2025-02-26T12:25:30Z
+    petition:
+      *not_debated_archived_petition
+  debate_outcome: !ruby/object:Mocks::Archived::DebateOutcome
+    id: 1000
+    debated: false
+    overview: |-
+      The Petitions Committee have decided not to schedule a debate on this petition.
+
+      The Committee recognised the support that the petition had received. However, the issue raised by the petition has already recently been debated in Parliament on 13th July 2024, which you can read here: https://hansard.parliament.uk/
+    created_at: 2025-02-26T12:25:30Z
+    updated_at: 2025-02-26T12:25:30Z
+    petition:
+      *not_debated_archived_petition
+  parliament: !ruby/object:Mocks::Parliament
+    dissolution_at: 2024-05-26T20:40:00Z
+    dissolution_message: >-
+      There will be a General Election on Thursday 4 July.
+      This means that Parliament has to be dissolved and that all parliamentary
+      business – including petitions – will stop.
+    created_at: 2024-05-10T11:09:48Z
+    updated_at: 2024-05-30T04:33:01Z
+    dissolution_heading: "All petitions will close at 00.01am on Thursday 30 May."
+    dissolution_faq_url: "https://www.parliament.uk/about/how/elections-and-voting/general/dissolution/"
+    dissolved_heading: "The petitions site is closed."
+    dissolved_message: >-
+      There will be a General Election on Thursday 4 July.
+      This means that Parliament has been dissolved and that all parliamentary
+      business – including petitions – has been stopped.
+    notification_cutoff_at: 2024-04-30T23:00:00Z
+    registration_closed_at: 2024-06-18T22:59:00Z
+    government: "Conservative"
+    state_opening_at: 2019-12-19T11:30:00Z
+    opening_at: 2020-03-03T10:55:00Z
+    archived_at: 2024-05-31T15:19:52Z
+    threshold_for_response: 10000
+    threshold_for_debate: 100000
+    petition_duration: 6
+    archiving_started_at: 2024-05-28T21:06:49Z
+    election_date: 2024-07-04
+    show_dissolution_notification: 1
+    dissolution_emails_sent_at: 2024-05-28T20:39:35Z
+    closure_scheduled_at: 2024-05-28T20:40:38Z
+    period: "2019-2024"
+
+parliament: !ruby/object:Mocks::Parliament
+  id: 1
+  dissolution_at: 2024-05-26T20:40:00Z
+  dissolution_message: >-
+    There will be a General Election on Thursday 4 July.
+    This means that Parliament has to be dissolved and that all parliamentary
+    business – including petitions – will stop.
+  created_at: 2024-05-10T11:09:48Z
+  updated_at: 2024-05-30T04:33:01Z
+  dissolution_heading: "All petitions will close at 00.01am on Thursday 30 May."
+  dissolution_faq_url: "https://www.parliament.uk/about/how/elections-and-voting/general/dissolution/"
+  dissolved_heading: "The petitions site is closed."
+  dissolved_message: >-
+    There will be a General Election on Thursday 4 July.
+    This means that Parliament has been dissolved and that all parliamentary
+    business – including petitions – has been stopped.
+  notification_cutoff_at: 2024-04-30T23:00:00Z
+  registration_closed_at: 2024-06-18T22:59:00Z
+  government: "Conservative"
+  state_opening_at: 2019-12-19T11:30:00Z
+  opening_at: 2020-03-03T10:55:00Z
+  archived_at: 2024-05-31T15:19:52Z
+  threshold_for_response: 10000
+  threshold_for_debate: 100000
+  petition_duration: 6
+  archiving_started_at: 2024-05-28T21:06:49Z
+  election_date: 2024-07-04
+  show_dissolution_notification: 1
+  dissolution_emails_sent_at: 2024-05-28T20:39:35Z
+  closure_scheduled_at: 2024-05-28T20:40:38Z
+  period: "2019-2024"
+
+privacy_notification: !ruby/object:Mocks::PrivacyNotification
+  id: "d2d29fc5-3888-5518-94b0-4a3b028f5df2"
+  ignore_petitions_before: 2025-01-01T00:00:00Z
+  created_at: 2025-02-26T12:25:30Z
+  updated_at: 2025-02-26T12:25:30Z
+  signature:
+    *creator
+  signatures:
+    - *creator
+  petitions: !ruby/struct:Mocks::PrivacyNotification::Petitions
+    sample:
+      - *petition
+    remaining_count: 0

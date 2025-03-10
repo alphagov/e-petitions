@@ -664,7 +664,7 @@ class Petition < ActiveRecord::Base
   end
 
   def sponsor_count
-    @sponsor_count ||= sponsors.validated.count
+    @sponsor_count ||= sponsors.select(&:validated?).size
   end
 
   def sponsors_required

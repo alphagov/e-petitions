@@ -11,5 +11,6 @@ unless Rails.application.config.cache_classes
     autoloader.on_unload("Holiday") { Thread.current[:__holiday__] = nil }
     autoloader.on_unload("Parliament") { Thread.current[:__parliament__] = nil }
     autoloader.on_unload("Site") { Thread.current[:__site__] = nil }
+    autoloader.on_unload("Mocks") { Mocks.reset! }
   end
 end

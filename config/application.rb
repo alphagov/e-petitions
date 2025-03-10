@@ -86,5 +86,8 @@ module Epets
 
     # Don't generate system test files.
     config.generators.system_tests = nil
+
+    # Add application mailer previews path
+    config.action_mailer.preview_paths << "#{Rails.root}/app/previews"
   end
 end
