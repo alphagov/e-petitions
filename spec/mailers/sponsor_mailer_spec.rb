@@ -56,8 +56,16 @@ RSpec.describe SponsorMailer, type: :mailer do
     subject(:mail) { described_class.sponsor_signed_email_below_threshold(sponsor) }
 
     context "when the number of supporters is 1" do
+      let(:sponsors) { double }
+
       before do
-        allow(petition).to receive_message_chain(:sponsors, :validated, :count).and_return(1)
+        validated = -> (&block) {
+          expect(block).to eq(:validated?.to_proc)
+        }
+
+        allow(petition).to receive(:sponsors).and_return(sponsors)
+        allow(sponsors).to receive(:select, &validated).and_return(sponsors)
+        allow(sponsors).to receive(:size).and_return(1)
       end
 
       it "pluralizes supporters correctly" do
@@ -66,8 +74,16 @@ RSpec.describe SponsorMailer, type: :mailer do
     end
 
     context "when the number of supporters is more than 1" do
+      let(:sponsors) { double }
+
       before do
-        allow(petition).to receive_message_chain(:sponsors, :validated, :count).and_return(2)
+        validated = -> (&block) {
+          expect(block).to eq(:validated?.to_proc)
+        }
+
+        allow(petition).to receive(:sponsors).and_return(sponsors)
+        allow(sponsors).to receive(:select, &validated).and_return(sponsors)
+        allow(sponsors).to receive(:size).and_return(2)
       end
 
       it "pluralizes supporters correctly" do

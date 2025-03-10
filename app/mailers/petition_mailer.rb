@@ -9,12 +9,16 @@ class PetitionMailer < ApplicationMailer
 
   def email_confirmation_for_signer(signature)
     @signature, @petition = signature, signature.petition
-    mail to: @signature.email, subject: subject_for(:email_confirmation_for_signer)
+
+    mail to: @signature.email,
+      subject: subject_for(:email_confirmation_for_signer)
   end
 
   def email_duplicate_signatures(signature)
     @signature, @petition = signature, signature.petition
-    mail to: @signature.email, subject: subject_for(:email_duplicate_signatures)
+
+    mail to: @signature.email,
+      subject: subject_for(:email_duplicate_signatures)
   end
 
   def email_signer(petition, signature, email)
@@ -55,7 +59,9 @@ class PetitionMailer < ApplicationMailer
 
   def special_resend_of_email_confirmation_for_signer(signature)
     @signature, @petition = signature, signature.petition
-    mail to: @signature.email, subject: subject_for(:special_resend_of_email_confirmation_for_signer)
+
+    mail to: @signature.email,
+      subject: subject_for(:special_resend_of_email_confirmation_for_signer)
   end
 
   def notify_creator_that_petition_is_published(signature)
@@ -69,17 +75,23 @@ class PetitionMailer < ApplicationMailer
 
   def notify_sponsor_that_petition_is_published(signature)
     @signature, @petition = signature, signature.petition
-    mail to: @signature.email, subject: subject_for(:notify_sponsor_that_petition_is_published)
+
+    mail to: @signature.email,
+      subject: subject_for(:notify_sponsor_that_petition_is_published)
   end
 
   def notify_creator_that_petition_was_rejected(signature)
     @signature, @petition, @rejection = signature, signature.petition, signature.petition.rejection
-    mail to: @signature.email, subject: subject_for(:notify_creator_that_petition_was_rejected)
+
+    mail to: @signature.email,
+      subject: subject_for(:notify_creator_that_petition_was_rejected)
   end
 
   def notify_sponsor_that_petition_was_rejected(signature)
     @signature, @petition, @rejection = signature, signature.petition, signature.petition.rejection
-    mail to: @signature.email, subject: subject_for(:notify_sponsor_that_petition_was_rejected)
+
+    mail to: @signature.email,
+      subject: subject_for(:notify_sponsor_that_petition_was_rejected)
   end
 
   def notify_signer_of_threshold_response(petition, signature)
@@ -100,45 +112,53 @@ class PetitionMailer < ApplicationMailer
       list_unsubscribe_post: one_click_unsubscribe
   end
 
-  def notify_creator_of_closing_date_change(signature, petitions, remaining = 0)
+  def notify_creator_of_closing_date_change(signature, petitions, remaining = 0, parliament = Parliament)
     @signature, @petitions = signature, petitions
     @count, @remaining = @petitions.size, remaining
 
-    @closing_time = Parliament.dissolution_at.strftime('%H:%M%P')
-    @closing_date = Parliament.dissolution_at.strftime('%-d %B')
-    @last_response_date = Parliament.dissolution_at.yesterday.strftime('%-d %B')
-    @registration_deadline = Parliament.registration_closed_at.strftime('%A %-d %B')
-    @election_date = Parliament.election_date.strftime('%-d %B')
+    @closing_time = parliament.dissolution_at.strftime('%H:%M%P')
+    @closing_date = parliament.dissolution_at.strftime('%-d %B')
+    @last_response_date = parliament.dissolution_at.yesterday.strftime('%-d %B')
+    @registration_deadline = parliament.registration_closed_at.strftime('%A %-d %B')
+    @election_date = parliament.election_date.strftime('%-d %B')
 
-    mail to: @signature.email, subject: subject_for(:notify_creator_of_closing_date_change, count: @count)
+    mail to: @signature.email,
+      subject: subject_for(:notify_creator_of_closing_date_change, count: @count)
   end
 
-  def notify_signer_of_closing_date_change(signature, petitions, remaining = 0)
+  def notify_signer_of_closing_date_change(signature, petitions, remaining = 0, parliament = Parliament)
     @signature, @petitions = signature, petitions
     @count, @remaining = @petitions.size, remaining
 
-    @closing_time = Parliament.dissolution_at.strftime('%H:%M%P')
-    @closing_date = Parliament.dissolution_at.strftime('%-d %B')
-    @last_response_date = Parliament.dissolution_at.yesterday.strftime('%-d %B')
-    @registration_deadline = Parliament.registration_closed_at.strftime('%A %-d %B')
-    @election_date = Parliament.election_date.strftime('%-d %B')
+    @closing_time = parliament.dissolution_at.strftime('%H:%M%P')
+    @closing_date = parliament.dissolution_at.strftime('%-d %B')
+    @last_response_date = parliament.dissolution_at.yesterday.strftime('%-d %B')
+    @registration_deadline = parliament.registration_closed_at.strftime('%A %-d %B')
+    @election_date = parliament.election_date.strftime('%-d %B')
 
-    mail to: @signature.email, subject: subject_for(:notify_signer_of_closing_date_change, count: @count)
+    mail to: @signature.email,
+      subject: subject_for(:notify_signer_of_closing_date_change, count: @count)
   end
 
   def notify_creator_of_sponsored_petition_being_stopped(signature)
     @signature, @petition = signature, signature.petition
-    mail to: @signature.email, subject: subject_for(:notify_creator_of_sponsored_petition_being_stopped)
+
+    mail to: @signature.email,
+      subject: subject_for(:notify_creator_of_sponsored_petition_being_stopped)
   end
 
   def notify_creator_of_validated_petition_being_stopped(signature)
     @signature, @petition = signature, signature.petition
-    mail to: @signature.email, subject: subject_for(:notify_creator_of_validated_petition_being_stopped)
+
+    mail to: @signature.email,
+      subject: subject_for(:notify_creator_of_validated_petition_being_stopped)
   end
 
   def gather_sponsors_for_petition(petition, bcc = nil)
     @petition, @creator = petition, petition.creator
-    mail to: @creator.email, bcc: bcc, subject: subject_for(:gather_sponsors_for_petition)
+
+    mail to: @creator.email, bcc: bcc,
+      subject: subject_for(:gather_sponsors_for_petition)
   end
 
   def notify_signer_of_debate_outcome(petition, signature)
@@ -216,6 +236,7 @@ class PetitionMailer < ApplicationMailer
 
   def notify_creator_of_debate_scheduled(petition, signature)
     @petition, @signature = petition, signature
+
     mail to: @signature.email,
       subject: subject_for(:notify_creator_of_debate_scheduled),
       list_unsubscribe: unsubscribe_url,
@@ -237,10 +258,8 @@ class PetitionMailer < ApplicationMailer
     @petitions = privacy_notification.petitions.sample
     @remaining_petition_count = privacy_notification.petitions.remaining_count
 
-    mail(
-      to: privacy_notification.email,
+    mail to: privacy_notification.email,
       subject: subject_for(:privacy_policy_update_email)
-    )
   end
 
   private
