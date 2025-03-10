@@ -11,5 +11,9 @@ class Petition < ActiveRecord::Base
         order(:created_at)
       end
     end
+
+    def to_liquid
+      PetitionEmailDrop.new(self)
+    end
   end
 end

@@ -23,6 +23,10 @@ module Archived
       super || default_responded_on
     end
 
+    def to_liquid
+      Archived::GovernmentResponseDrop.new(self)
+    end
+
     private
 
     def default_responded_on

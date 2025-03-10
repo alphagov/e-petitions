@@ -55,11 +55,11 @@ class PetitionMailerPreview < ActionMailer::Preview
   end
 
   def notify_creator_of_closing_date_change
-    PetitionMailer.notify_creator_of_closing_date_change(creator, [petition], 0, parliament)
+    PetitionMailer.notify_creator_of_closing_date_change(creator, [petition], 5, parliament)
   end
 
   def notify_signer_of_closing_date_change
-    PetitionMailer.notify_signer_of_closing_date_change(signature, [petition], 0, parliament)
+    PetitionMailer.notify_signer_of_closing_date_change(signature, [petition], 5, parliament)
   end
 
   def notify_creator_of_sponsored_petition_being_stopped
@@ -70,19 +70,19 @@ class PetitionMailerPreview < ActionMailer::Preview
     PetitionMailer.notify_creator_of_validated_petition_being_stopped(creator)
   end
 
-  def debated_petition_signer_notification
+  def notify_signer_of_positive_debate_outcome
     PetitionMailer.notify_signer_of_positive_debate_outcome(petition, creator)
   end
 
-  def debated_petition_creator_notification
+  def notify_creator_of_positive_debate_outcome
     PetitionMailer.notify_creator_of_positive_debate_outcome(petition, creator)
   end
 
-  def not_debated_petition_signer_notification
+  def notify_signer_of_negative_debate_outcome
     PetitionMailer.notify_signer_of_negative_debate_outcome(not_debated_petition, not_debated_signature)
   end
 
-  def not_debated_petition_creator_notification
+  def notify_creator_of_negative_debate_outcome
     PetitionMailer.notify_creator_of_negative_debate_outcome(not_debated_petition, not_debated_creator)
   end
 
@@ -94,11 +94,11 @@ class PetitionMailerPreview < ActionMailer::Preview
     PetitionMailer.notify_creator_that_petition_is_published(creator)
   end
 
-  def notify_creator_that_petition_is_rejected
+  def notify_creator_that_petition_was_rejected
     PetitionMailer.notify_creator_that_petition_was_rejected(rejected_creator)
   end
 
-  def notify_creator_that_petition_is_hidden
+  def notify_creator_that_petition_was_hidden
     PetitionMailer.notify_creator_that_petition_was_hidden(hidden_creator)
   end
 
@@ -106,11 +106,11 @@ class PetitionMailerPreview < ActionMailer::Preview
     PetitionMailer.notify_sponsor_that_petition_is_published(sponsor)
   end
 
-  def notify_sponsor_that_petition_is_rejected
+  def notify_sponsor_that_petition_was_rejected
     PetitionMailer.notify_sponsor_that_petition_was_rejected(rejected_sponsor)
   end
 
-  def notify_sponsor_that_petition_is_hidden
+  def notify_sponsor_that_petition_was_hidden
     PetitionMailer.notify_sponsor_that_petition_was_hidden(hidden_sponsor)
   end
 

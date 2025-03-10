@@ -1,0 +1,55 @@
+<h1>Edit Email</h1>
+
+<div class="grid-row">
+  <div class="grid-column">
+    <%= render "admin/shared/email_tabs" %>
+  </div>
+</div>
+
+<div class="grid-row">
+  <%= form_tag admin_email_partials_path, method: :get, class: 'search-email-partials' do %>
+    <div class="column-half">
+      <div class="search-inline">
+        <%= label_tag :q, "Search partials", class: "visuallyhidden" %>
+        <%= search_field_tag 'q', params[:q], class: 'form-control', placeholder:"Enter a search query" %>
+        <%= submit_tag 'Search', class: 'inline-submit', name: nil %>
+      </div>
+    </div>
+    <div class="column-half actions-right search-inline">
+      <%= link_to "Download", admin_email_partials_path(format: :yml), class: 'button-secondary inline-button' %>
+      <%= link_to "New Partial", new_admin_email_partial_path, class: 'button inline-button' %>
+    </div>
+  <% end %>
+</div>
+
+<%= will_paginate @partials %>
+
+<table class="partial-list">
+  <thead>
+    <tr>
+      <th>Partial</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% if @partials.present? %>
+      <% @partials.each do |partial| %>
+        <tr>
+          <td>
+            <%= link_to partial.name, edit_admin_email_partial_path(partial) %>
+          </td>
+          <td>
+            <%= link_to 'Edit', edit_admin_email_partial_path(partial), class: 'button-secondary' %>
+            <%= button_to 'Delete', admin_email_partial_path(partial), method: :delete, class: 'button-warning', data: { confirm: 'Delete partial?' } %>
+          </td>
+        </tr>
+      <% end %>
+    <% else %>
+      <tr>
+        <td colspan="2">No partials found</td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<%= will_paginate @partials %>

@@ -130,6 +130,7 @@ class PetitionMailer < ApplicationMailer
     @signature, @petitions = signature, petitions
     @count, @remaining = @petitions.size, remaining
 
+    @parliament = parliament
     @closing_time = parliament.dissolution_at.strftime('%H:%M%P')
     @closing_date = parliament.dissolution_at.strftime('%-d %B')
     @last_response_date = parliament.dissolution_at.yesterday.strftime('%-d %B')
@@ -144,6 +145,7 @@ class PetitionMailer < ApplicationMailer
     @signature, @petitions = signature, petitions
     @count, @remaining = @petitions.size, remaining
 
+    @parliament = parliament
     @closing_time = parliament.dissolution_at.strftime('%H:%M%P')
     @closing_date = parliament.dissolution_at.strftime('%-d %B')
     @last_response_date = parliament.dissolution_at.yesterday.strftime('%-d %B')
