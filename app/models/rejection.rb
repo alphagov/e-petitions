@@ -33,6 +33,10 @@ class Rejection < ActiveRecord::Base
     hide_petition? ? Petition::HIDDEN_STATE : Petition::REJECTED_STATE
   end
 
+  def to_liquid
+    RejectionDrop.new(self)
+  end
+
   private
 
   def rejection_codes

@@ -163,7 +163,9 @@
     }
   }
 
-  .department-list, .tag-list, .topic-list {
+  .department-list, .tag-list, .topic-list, .partial-list, .template-list {
+    margin-bottom: em(24, 16);
+
     th, td {
       text-align: left;
     }

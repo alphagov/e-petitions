@@ -16,5 +16,9 @@ class Petition < ActiveRecord::Base
       signature = FeedbackSignature.new(petition, name, email)
       PetitionMailer.mailshot_for_signer(petition, signature, self).deliver_now
     end
+
+    def to_liquid
+      PetitionMailshotDrop.new(self)
+    end
   end
 end

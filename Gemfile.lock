@@ -254,6 +254,9 @@ GEM
     json (2.12.2)
     launchy (2.5.2)
       addressable (~> 2.8)
+    liquid (5.7.2)
+      bigdecimal
+      strscan (>= 3.1.1)
     logger (1.7.0)
     lograge (0.14.0)
       actionpack (>= 4)
@@ -452,6 +455,7 @@ GEM
       activesupport (>= 6.1)
       sprockets (>= 3.0.0)
     stringio (3.1.7)
+    strscan (3.1.2)
     sys-uname (1.3.1)
       ffi (~> 1.1)
     terser (1.2.6)
@@ -516,6 +520,7 @@ DEPENDENCIES
   jquery-rails
   json
   launchy
+  liquid
   lograge
   logstash-logger
   maxminddb
