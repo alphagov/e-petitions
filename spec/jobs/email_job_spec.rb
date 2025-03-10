@@ -429,12 +429,38 @@ RSpec.describe NotifyCreatorThatPetitionWasRejectedEmailJob, type: :job do
   end
 end
 
+RSpec.describe NotifyCreatorThatPetitionWasHiddenEmailJob, type: :job do
+  let(:petition) { FactoryBot.create(:hidden_petition) }
+  let(:signature) { FactoryBot.create(:signature, petition: petition) }
+
+  it "sends the PetitionMailer#notify_creator_that_petition_was_hidden email" do
+    expect(PetitionMailer).to receive(:notify_creator_that_petition_was_hidden).with(signature).and_call_original
+
+    perform_enqueued_jobs do
+      described_class.perform_later(signature)
+    end
+  end
+end
+
 RSpec.describe NotifySponsorThatPetitionWasRejectedEmailJob, type: :job do
   let(:petition) { FactoryBot.create(:rejected_petition) }
   let(:signature) { FactoryBot.create(:validated_signature, petition: petition) }
 
   it "sends the PetitionMailer#notify_sponsor_that_petition_was_rejected email" do
     expect(PetitionMailer).to receive(:notify_sponsor_that_petition_was_rejected).with(signature).and_call_original
+
+    perform_enqueued_jobs do
+      described_class.perform_later(signature)
+    end
+  end
+end
+
+RSpec.describe NotifySponsorThatPetitionWasHiddenEmailJob, type: :job do
+  let(:petition) { FactoryBot.create(:hidden_petition) }
+  let(:signature) { FactoryBot.create(:validated_signature, petition: petition) }
+
+  it "sends the PetitionMailer#notify_sponsor_that_petition_was_hidden email" do
+    expect(PetitionMailer).to receive(:notify_sponsor_that_petition_was_hidden).with(signature).and_call_original
 
     perform_enqueued_jobs do
       described_class.perform_later(signature)

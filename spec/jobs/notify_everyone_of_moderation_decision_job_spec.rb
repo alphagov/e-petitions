@@ -72,7 +72,7 @@ RSpec.describe NotifyEveryoneOfModerationDecisionJob, type: :job do
     end
 
     it "notifies the creator" do
-      expect(PetitionMailer).to receive(:notify_creator_that_petition_was_rejected).with(creator).and_call_original
+      expect(PetitionMailer).to receive(:notify_creator_that_petition_was_hidden).with(creator).and_call_original
 
       perform_enqueued_jobs do
         described_class.perform_later(petition)
@@ -80,7 +80,7 @@ RSpec.describe NotifyEveryoneOfModerationDecisionJob, type: :job do
     end
 
     it "notifies the validated sponsors" do
-      expect(PetitionMailer).to receive(:notify_sponsor_that_petition_was_rejected).with(validated_sponsor).and_call_original
+      expect(PetitionMailer).to receive(:notify_sponsor_that_petition_was_hidden).with(validated_sponsor).and_call_original
 
       perform_enqueued_jobs do
         described_class.perform_later(petition)
@@ -88,7 +88,7 @@ RSpec.describe NotifyEveryoneOfModerationDecisionJob, type: :job do
     end
 
     it "doesn't notify the pending sponsors" do
-      expect(PetitionMailer).not_to receive(:notify_sponsor_that_petition_was_rejected).with(pending_sponsor)
+      expect(PetitionMailer).not_to receive(:notify_sponsor_that_petition_was_hidden).with(pending_sponsor)
 
       perform_enqueued_jobs do
         described_class.perform_later(petition)

@@ -9,8 +9,10 @@ class NotifyEveryoneOfModerationDecisionJob < ApplicationJob
 
     if petition.published?
       notify_everyone_of_publication(creator, sponsors)
-    elsif petition.rejection?
-      notify_everyone_of_rejection(creator, sponsors)
+    elsif petition.hidden?
+      notify_everyone_of_hidden_rejection(creator, sponsors)
+    elsif petition.rejected?
+      notify_everyone_of_public_rejection(creator, sponsors)
     end
   end
 
@@ -24,7 +26,15 @@ class NotifyEveryoneOfModerationDecisionJob < ApplicationJob
     end
   end
 
-  def notify_everyone_of_rejection(creator, sponsors)
+  def notify_everyone_of_hidden_rejection(creator, sponsors)
+    NotifyCreatorThatPetitionWasHiddenEmailJob.perform_later(creator)
+
+    sponsors.each do |sponsor|
+      NotifySponsorThatPetitionWasHiddenEmailJob.perform_later(sponsor)
+    end
+  end
+
+  def notify_everyone_of_public_rejection(creator, sponsors)
     NotifyCreatorThatPetitionWasRejectedEmailJob.perform_later(creator)
 
     sponsors.each do |sponsor|

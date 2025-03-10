@@ -94,6 +94,20 @@ class PetitionMailer < ApplicationMailer
       subject: subject_for(:notify_sponsor_that_petition_was_rejected)
   end
 
+  def notify_creator_that_petition_was_hidden(signature)
+    @signature, @petition, @rejection = signature, signature.petition, signature.petition.rejection
+
+    mail to: @signature.email,
+      subject: subject_for(:notify_creator_that_petition_was_hidden)
+  end
+
+  def notify_sponsor_that_petition_was_hidden(signature)
+    @signature, @petition, @rejection = signature, signature.petition, signature.petition.rejection
+
+    mail to: @signature.email,
+      subject: subject_for(:notify_sponsor_that_petition_was_hidden)
+  end
+
   def notify_signer_of_threshold_response(petition, signature)
     @petition, @signature, @government_response = petition, signature, petition.government_response
 

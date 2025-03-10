@@ -1,0 +1,22 @@
+Dear <%= @signature.name %>,
+
+Sorry, we can’t accept your petition – "<%= @petition.action %>".
+
+<%= strip_tags(rejection_description(@rejection.code)) %>
+<% if @rejection.details? -%>
+
+<%= @rejection.details %>
+<% end -%>
+<% unless @petition.hidden? -%>
+
+Click this link to see your rejected petition:
+<%= petition_url(@petition) %>
+<% end -%>
+
+We only reject petitions that don’t meet the petition standards:
+<%= help_url(anchor: 'standards') %>
+
+If you want to try again, click here to start a petition:
+<%= check_petitions_url %>
+
+<%= render "footer" %>

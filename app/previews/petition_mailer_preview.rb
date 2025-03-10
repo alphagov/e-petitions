@@ -98,8 +98,8 @@ class PetitionMailerPreview < ActionMailer::Preview
     PetitionMailer.notify_creator_that_petition_was_rejected(rejected_creator)
   end
 
-  def notify_creator_that_petition_is_rejected_and_hidden
-    PetitionMailer.notify_creator_that_petition_was_rejected(hidden_creator)
+  def notify_creator_that_petition_is_hidden
+    PetitionMailer.notify_creator_that_petition_was_hidden(hidden_creator)
   end
 
   def notify_sponsor_that_petition_is_published
@@ -110,8 +110,8 @@ class PetitionMailerPreview < ActionMailer::Preview
     PetitionMailer.notify_sponsor_that_petition_was_rejected(rejected_sponsor)
   end
 
-  def notify_sponsor_that_petition_is_rejected_and_hidden
-    PetitionMailer.notify_sponsor_that_petition_was_rejected(hidden_sponsor)
+  def notify_sponsor_that_petition_is_hidden
+    PetitionMailer.notify_sponsor_that_petition_was_hidden(hidden_sponsor)
   end
 
   private
