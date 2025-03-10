@@ -190,6 +190,10 @@ en-GB:
           We published your petition “%{action}”
         notify_sponsor_that_petition_is_published: |-
           We published the petition “%{action}” that you supported
+        notify_creator_that_petition_was_hidden: |-
+          We rejected your petition “%{action}”
+        notify_sponsor_that_petition_was_hidden: |-
+          We rejected the petition “%{action}” that you supported
         notify_creator_that_petition_was_rejected: |-
           We rejected your petition “%{action}”
         notify_sponsor_that_petition_was_rejected: |-
