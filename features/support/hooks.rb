@@ -47,7 +47,9 @@ Before do
 end
 
 After do
-  page.driver.options[:headers] = nil
+  if page.driver.options.key?(:headers)
+    page.driver.options[:headers] = nil
+  end
 end
 
 After do
@@ -55,7 +57,7 @@ After do
 end
 
 After do
-   OmniAuth.config.mock_auth[:example] = nil
+  OmniAuth.config.mock_auth[:example] = nil
 end
 
 After do |scenario|

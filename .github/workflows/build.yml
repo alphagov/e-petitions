@@ -98,6 +98,9 @@ jobs:
       - name: ${{ inputs.description }}
         shell: bash
         env:
+          SE_BROWSER_VERSION: "131.0.6778.264"
+          SE_DRIVER_VERSION: "131.0.6778.264"
+          SE_FORCE_BROWSER_DOWNLOAD: "true"
           CUCUMBER_FORMAT: "${{ inputs.cucumber_format }}"
           CUCUMBER_OPTS: "${{ inputs.cucumber_opts }}"
           DATABASE_URL: postgres://postgres:postgres@localhost:5432/epets_test

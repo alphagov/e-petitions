@@ -28,9 +28,6 @@ Capybara.register_driver :chrome do |app|
     opts.add_argument('--window-size=1280,960')
     opts.add_argument('--proxy-server=127.0.0.1:8443')
     opts.add_argument('--disable-dev-shm-usage')
-
-    # Workaround https://bugs.chromium.org/p/chromedriver/issues/detail?id=2650&q=load&sort=-id&colspec=ID%20Status%20Pri%20Owner%20Summary
-    opts.add_argument('--disable-site-isolation-trials')
   end
 
   Capybara::Selenium::Driver.new(app, browser: :chrome, options: options)
@@ -51,9 +48,6 @@ Capybara.register_driver :chrome_headless do |app|
       opts.add_argument('--no-sandbox')
       opts.add_argument('--disable-gpu')
     end
-
-    # Workaround https://bugs.chromium.org/p/chromedriver/issues/detail?id=2650&q=load&sort=-id&colspec=ID%20Status%20Pri%20Owner%20Summary
-    opts.add_argument('--disable-site-isolation-trials')
   end
 
   Capybara::Selenium::Driver.new(app, browser: :chrome, options: options)
