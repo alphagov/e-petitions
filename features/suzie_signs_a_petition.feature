@@ -348,4 +348,5 @@ Feature: Suzie signs a petition
     And I press "Continue"
     Then I should see "Make sure this is right"
     When I press "Yes – this is my email address"
-    Then a signature should exist with email: "womboid@wimbledon.com", state: "pending", location_code: "US", postcode: ""
+    Then I should see "We’ve sent you an email"
+    And a signature should exist with email: "womboid@wimbledon.com", state: "pending", location_code: "US", postcode: ""

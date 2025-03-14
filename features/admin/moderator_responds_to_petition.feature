@@ -33,7 +33,8 @@ Feature: Moderator respond to petition
     And I should see "Reduce pollution"
     And I should see "Enforce Kyoto Protocol in more countries"
     And I follow "Edit petition"
-    Then the "Do not anonymize this petition" checkbox should be checked
+    Then I should see "Edit petition"
+    And the "Do not anonymize this petition" checkbox should be checked
 
   Scenario: Moderator edits and tries to save an invalid petition
     Given I am logged in as a moderator named "Ben Macintosh"
@@ -67,7 +68,8 @@ Feature: Moderator respond to petition
     And a pending petition "Remove trolls on the bridge" exists
     When I go to the admin petition page for "Remove trolls on the bridge"
     And I publish the petition
-    Then the petition should still be unmoderated
+    Then I should see "Petition could not be updated - please check the form for errors"
+    And the petition should still be unmoderated
     And the creator should not receive a notification email
     And I should see "You can't publish a petition before the creator has validated their email address"
 
@@ -141,7 +143,8 @@ Feature: Moderator respond to petition
     Given I am logged in as a moderator named "Ben Macintosh"
     When I look at the next petition on my list
     And I mark the petition as dormant
-    Then the petition is not available for searching or viewing
+    Then I should see "Petition has been successfully updated"
+    And the petition is not available for searching or viewing
     And the creator should not receive a notification email
     And the creator should not receive a rejection notification email
     But the petition will still show up in the back-end reporting
@@ -157,7 +160,8 @@ Feature: Moderator respond to petition
     Given I am logged in as a sysadmin named "Ben Macintosh"
     When I look at the next petition on my list
     And I reject the petition
-    Then the creator should receive a rejection notification email
+    Then I should see "Petition has been successfully updated"
+    And the creator should receive a rejection notification email
     And the petition is not available for signing
     But the petition is still available for searching or viewing
     Given no emails have been sent
@@ -176,7 +180,8 @@ Feature: Moderator respond to petition
     Given I am logged in as a sysadmin named "Ben Macintosh"
     When I look at the next petition on my list
     And I reject the petition
-    Then the creator should receive a rejection notification email
+    Then I should see "Petition has been successfully updated"
+    And the creator should receive a rejection notification email
     And the petition is not available for signing
     But the petition is still available for searching or viewing
     Given no emails have been sent
