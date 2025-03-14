@@ -16,6 +16,8 @@ When(/^I search for "([^"]*)" with "([^"]*)"$/) do |facet, term|
   step %{I browse to see only "#{facet}" petitions}
   step %{I fill in "#{term}" as my search term}
   step %{I press "Search"}
+
+  expect(page).to have_selector(:css, "h1.page-title", text: /petitions/i)
 end
 
 Then(/^I should( not)? see an? "([^"]*)" petition count of (\d+)$/) do |see_or_not, state, count|

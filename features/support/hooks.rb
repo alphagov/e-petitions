@@ -46,7 +46,7 @@ Before do
   Parliament.reset!(government: "TBC", opening_at: 2.weeks.ago)
 end
 
-After do
+After('not @javascript') do
   page.driver.options[:headers] = nil
 end
 

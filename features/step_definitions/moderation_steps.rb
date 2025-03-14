@@ -84,6 +84,8 @@ end
 
 Then /^the petition will still show up in the back\-end reporting$/ do
   visit admin_petitions_url
+  expect(page).to have_content("Petitions Admin")
+
   step %{I should see the petition "#{@petition.action}"}
 end
 
