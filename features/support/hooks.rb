@@ -46,6 +46,23 @@ Before do
   Parliament.reset!(government: "TBC", opening_at: 2.weeks.ago)
 end
 
+After('@javascript') do
+  javascript = <<~JS
+    (typeof jQuery == 'defined') ? jQuery.active > 0 : false;
+  JS
+
+  begin
+    Timeout.timeout(5) do
+      loop do
+        break unless page.evaluate_script(javascript)
+        sleep 0.1
+      end
+    end
+  rescue Timeout::Error
+    # Ignore timeouts here as it's likely the page is in an invalid state
+  end
+end
+
 After('not @javascript') do
   page.driver.options[:headers] = nil
 end
