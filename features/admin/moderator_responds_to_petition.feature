@@ -127,7 +127,8 @@ Feature: Moderator respond to petition
     Given I am logged in as a moderator named "Ben Macintosh"
     When I look at the next petition on my list
     And I flag the petition
-    Then the petition is not available for searching or viewing
+    Then I should see "Petition has been successfully updated"
+    And the petition is not available for searching or viewing
     And the creator should not receive a notification email
     And the creator should not receive a rejection notification email
     But the petition will still show up in the back-end reporting
