@@ -393,6 +393,8 @@ module Archived
           update!(locked_by: user, locked_at: now)
         end
       end
+    rescue ActiveRecord::RecordNotFound
+      false
     end
 
     def force_checkout!(user, now = Time.current)
@@ -405,6 +407,8 @@ module Archived
           update!(locked_by: nil, locked_at: nil)
         end
       end
+    rescue ActiveRecord::RecordNotFound
+      false
     end
 
     def debate_outcome?

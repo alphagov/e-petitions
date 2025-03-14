@@ -939,6 +939,8 @@ class Petition < ActiveRecord::Base
         update!(locked_by: user, locked_at: now)
       end
     end
+  rescue ActiveRecord::RecordNotFound
+    false
   end
 
   def force_checkout!(user, now = Time.current)
@@ -951,6 +953,8 @@ class Petition < ActiveRecord::Base
         update!(locked_by: nil, locked_at: nil)
       end
     end
+  rescue ActiveRecord::RecordNotFound
+    false
   end
 
   def can_have_debate_added?
