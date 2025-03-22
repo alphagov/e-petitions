@@ -61,6 +61,18 @@ jobs:
         run: |
           sudo apt-get -yqq install libpq-dev imagemagick libvips
 
+      - name: Setup chrome and chromedriver
+        id: setup-chrome
+        uses: browser-actions/setup-chrome@v1
+        with:
+          chrome-version: 128
+          install-chromedriver: true
+
+      - name: Update chrome path
+        shell: bash
+        run: |
+          sudo ln -sf ${{ steps.setup-chrome.outputs.chrome-path }} /usr/bin/google-chrome
+
       - name: Setup ruby
         uses: ruby/setup-ruby@v1
         with:
