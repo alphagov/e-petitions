@@ -1,0 +1,11 @@
+<%= link_to 'Back', admin_email_templates_path, class: 'back-link' %>
+
+<h1>Edit Template</h1>
+
+<div class="grid-row">
+  <div class="grid-column">
+    <%= form_for @template, as: :template, url: admin_email_template_path(@template) do |form| %>
+      <%= render 'form', form: form %>
+    <% end %>
+  </div>
+</div>
