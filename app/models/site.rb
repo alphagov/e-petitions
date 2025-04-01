@@ -177,6 +177,10 @@ class Site < ActiveRecord::Base
       instance.show_feedback_page_message?
     end
 
+    def moderation_delay?
+      instance.moderation_delay?
+    end
+
     def moderation_delay_message
       instance.moderation_delay_message
     end
@@ -426,6 +430,11 @@ class Site < ActiveRecord::Base
 
   def show_feedback_page_message=(value)
     super(type_cast_feature_flag(value))
+  end
+
+  def moderation_delay?
+    return @moderation_delay if defined?(@moderation_delay)
+    @moderation_delay = Petition.in_moderation.count >= threshold_for_moderation_delay
   end
 
   def moderation_delay_message

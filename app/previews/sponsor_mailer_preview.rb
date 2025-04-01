@@ -15,6 +15,10 @@ class SponsorMailerPreview < ActionMailer::Preview
     SponsorMailer.sponsor_signed_email_on_threshold(sponsor)
   end
 
+  def sponsor_signed_email_on_threshold_with_delay
+    SponsorMailer.sponsor_signed_email_on_threshold_with_delay(sponsor)
+  end
+
   private
 
   def sponsor

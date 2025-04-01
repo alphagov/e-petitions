@@ -323,14 +323,6 @@ RSpec.describe PetitionMailer, type: :mailer do
   describe "gathering sponsors for petition" do
     let(:petition) { FactoryBot.create(:pending_petition, attributes) }
 
-    let(:petition_scope) { double(Petition) }
-    let(:moderation_queue) { 499 }
-
-    before do
-      allow(Petition).to receive(:in_moderation).and_return(petition_scope)
-      allow(petition_scope).to receive(:count).and_return(moderation_queue)
-    end
-
     subject(:mail) { described_class.gather_sponsors_for_petition(petition) }
 
     it "has the correct subject" do
@@ -371,12 +363,64 @@ RSpec.describe PetitionMailer, type: :mailer do
       expect(mail).to have_body_text(%r[This can take up to 10 working days])
     end
 
-    context "when there is a moderation delay" do
-      let(:moderation_queue) { 500 }
+    it "does not includes information about delayed moderation" do
+      expect(mail).not_to have_body_text(%r[We currently have a very large number of petitions to check])
+    end
 
-      it "includes information about delayed moderation" do
-        expect(mail).to have_body_text(%r[We currently have a very large number of petitions to check])
+    context "when a BCC address is passed" do
+      subject(:mail) { described_class.gather_sponsors_for_petition(petition, Site.feedback_email) }
+
+      it "adds the BCC address to the email" do
+        expect(mail.bcc).to eq(%w[petitionscommittee@parliament.uk])
       end
+    end
+  end
+
+  describe "gathering sponsors for petition with a moderation delay" do
+    let(:petition) { FactoryBot.create(:pending_petition, attributes) }
+
+    subject(:mail) { described_class.gather_sponsors_for_petition_with_delay(petition) }
+
+    it "has the correct subject" do
+      expect(mail).to have_subject(%{Get supporters for: “Allow organic vegetable vans to use red diesel”})
+    end
+
+    it "has the addresses the creator by name" do
+      expect(mail).to have_body_text("Dear Barry Butler,")
+    end
+
+    it "sends it only to the petition creator" do
+      expect(mail.to).to eq(%w[bazbutler@gmail.com])
+      expect(mail.cc).to be_blank
+      expect(mail.bcc).to be_blank
+    end
+
+    it "includes a link to pass on to potential sponsors to have them support the petition" do
+      expect(mail).to have_body_text(%r[https://petition.parliament.uk/petitions/#{petition.id}/sponsors/new\?token=#{petition.sponsor_token}])
+    end
+
+    it "includes the petition action" do
+      expect(mail).to have_body_text(%r[Allow organic vegetable vans to use red diesel])
+    end
+
+    it "includes the petition background" do
+      expect(mail).to have_body_text(%r[Add vans to permitted users of red diesel])
+    end
+
+    it "includes the petition additional details" do
+      expect(mail).to have_body_text(%r[To promote organic vegetables])
+    end
+
+    it "includes information about moderation" do
+      expect(mail).to have_body_text(%r[Once you’ve gained five signatures])
+    end
+
+    it "doesn't includes information about how long the moderation will take" do
+      expect(mail).not_to have_body_text(%r[This can take up to 10 working days])
+    end
+
+    it "includes information about delayed moderation" do
+      expect(mail).to have_body_text(%r[We currently have a very large number of petitions to check])
     end
 
     context "when a BCC address is passed" do

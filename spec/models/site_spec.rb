@@ -308,6 +308,11 @@ RSpec.describe Site, type: :model do
       expect(Site.feedback_page_message_colour).to eq("black")
     end
 
+    it "delegates moderation_delay? to the instance" do
+      expect(site).to receive(:moderation_delay?).and_return(true)
+      expect(Site.moderation_delay?).to eq(true)
+    end
+
     it "delegates moderation_delay_message to the instance" do
       expect(site).to receive(:moderation_delay_message).and_return("message")
       expect(Site.moderation_delay_message).to eq("message")
@@ -1021,6 +1026,43 @@ RSpec.describe Site, type: :model do
 
     it "returns the closing date at petition_duration months in the future" do
       expect(site.closed_at_for_opening).to eq(3.months.from_now.end_of_day)
+    end
+  end
+
+  describe "#moderation_delay?" do
+    let(:scope) { double(Petition) }
+
+    subject :site do
+      described_class.create!(threshold_for_moderation_delay: 500)
+    end
+
+    before do
+      allow(Petition).to receive(:in_moderation).and_return(scope)
+      allow(scope).to receive(:count).and_return(moderation_queue)
+    end
+
+    context "when there are less than 500 petitions in the moderation queue" do
+      let(:moderation_queue) { 499 }
+
+      it "returns false" do
+        expect(site.moderation_delay?).to eq(false)
+      end
+    end
+
+    context "when there are 500 petitions in the moderation queue" do
+      let(:moderation_queue) { 500 }
+
+      it "returns true" do
+        expect(site.moderation_delay?).to eq(true)
+      end
+    end
+
+    context "when there are more than 500 petitions in the moderation queue" do
+      let(:moderation_queue) { 501 }
+
+      it "returns true" do
+        expect(site.moderation_delay?).to eq(true)
+      end
     end
   end
 

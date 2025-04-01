@@ -17,6 +17,14 @@ class SponsorMailer < ApplicationMailer
       subject: subject_for(:sponsor_signed_email_on_threshold)
   end
 
+  def sponsor_signed_email_on_threshold_with_delay(sponsor)
+    @petition, @sponsor = sponsor.petition, sponsor
+    @sponsor_count = @petition.sponsor_count
+
+    mail to: @petition.creator.email,
+      subject: subject_for(:sponsor_signed_email_on_threshold_with_delay)
+  end
+
   def petition_and_email_confirmation_for_sponsor(sponsor)
     @petition, @sponsor = sponsor.petition, sponsor
 

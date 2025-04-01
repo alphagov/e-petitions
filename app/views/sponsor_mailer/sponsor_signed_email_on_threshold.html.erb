@@ -2,15 +2,13 @@
 
 <p>Someone supported your petition: “<%= link_to @petition.action, petition_url(@petition) %>”.</p>
 
-<% if moderation_delay? %>
-<p><%= pluralize(@sponsor_count, "person", locale: :en) %> have supported your petition. We’re checking it to make sure it meets the <%= link_to "petition standards", help_url(anchor: 'standards') %>. If it does, we’ll publish it. If it doesn’t, we’ll let you know why.</p>
-<p>We currently have a very large number of petitions to check, so it may take a number of weeks to check your petition. Thank you for your patience.</p>
-<% else %>
 <p><%= pluralize(@sponsor_count, "person", locale: :en) %> have supported your petition.</p>
+
 <p>We’re checking it to make sure it meets the <%= link_to "petition standards", help_url(anchor: 'standards') %>.</p>
+
 <p>If it does, we’ll publish it. If it doesn’t, we’ll let you know why.</p>
+
 <p>This can take up to 10 working days. During holiday periods, this may take longer. Thank you for your patience.</p>
-<% end %>
 
 <p>Once your petition has <%= Site.maximum_number_of_sponsors %> supporters, no one else will be able to sign it until it’s been checked. Please wait until it’s been checked and published before sharing more widely.</p>
 

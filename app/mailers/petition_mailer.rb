@@ -175,6 +175,13 @@ class PetitionMailer < ApplicationMailer
       subject: subject_for(:gather_sponsors_for_petition)
   end
 
+  def gather_sponsors_for_petition_with_delay(petition, bcc = nil)
+    @petition, @creator = petition, petition.creator
+
+    mail to: @creator.email, bcc: bcc,
+      subject: subject_for(:gather_sponsors_for_petition_with_delay)
+  end
+
   def notify_signer_of_debate_outcome(petition, signature)
     @petition, @debate_outcome, @signature = petition, petition.debate_outcome, signature
 

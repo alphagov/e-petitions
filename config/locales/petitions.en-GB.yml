@@ -186,6 +186,8 @@ en-GB:
         # Emails to people who support a petition
         gather_sponsors_for_petition: |-
           Get supporters for: “%{action}”
+        gather_sponsors_for_petition_with_delay: |-
+          Get supporters for: “%{action}”
         notify_creator_that_petition_is_published: |-
           We published your petition “%{action}”
         notify_sponsor_that_petition_is_published: |-
@@ -203,6 +205,8 @@ en-GB:
         sponsor_signed_email_below_threshold: |-
           Someone supported: “%{action}”
         sponsor_signed_email_on_threshold: |-
+          Your petition has %{threshold} supporters: “%{action}”
+        sponsor_signed_email_on_threshold_with_delay: |-
           Your petition has %{threshold} supporters: “%{action}”
 
         # Re-send confirmation emails
