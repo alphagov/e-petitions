@@ -177,20 +177,50 @@ end
 RSpec.describe GatherSponsorsForPetitionEmailJob, type: :job do
   let(:petition) { FactoryBot.create(:petition) }
 
-  it "sends the PetitionMailer#gather_sponsors_for_petition email" do
-    expect(PetitionMailer).to receive(:gather_sponsors_for_petition).with(petition).and_call_original
+  context "when there is no moderation delay" do
+    before do
+      allow(Site).to receive(:moderation_delay?).and_return(false)
+    end
 
-    perform_enqueued_jobs do
-      described_class.perform_later(petition)
+    it "sends the PetitionMailer#gather_sponsors_for_petition email" do
+      expect(PetitionMailer).to receive(:gather_sponsors_for_petition).with(petition).and_call_original
+
+      perform_enqueued_jobs do
+        described_class.perform_later(petition)
+      end
+    end
+
+    context "when passing a BCC address" do
+      it "sends the PetitionMailer#gather_sponsors_for_petition email with a BCC address" do
+        expect(PetitionMailer).to receive(:gather_sponsors_for_petition).with(petition, Site.feedback_email).and_call_original
+
+        perform_enqueued_jobs do
+          described_class.perform_later(petition, Site.feedback_email)
+        end
+      end
     end
   end
 
-  context "when passing a BCC address" do
-    it "sends the PetitionMailer#gather_sponsors_for_petition email with a BCC address" do
-      expect(PetitionMailer).to receive(:gather_sponsors_for_petition).with(petition, Site.feedback_email).and_call_original
+  context "when there is a moderation delay" do
+    before do
+      allow(Site).to receive(:moderation_delay?).and_return(true)
+    end
+
+    it "sends the PetitionMailer#gather_sponsors_for_petition_with_delay email" do
+      expect(PetitionMailer).to receive(:gather_sponsors_for_petition_with_delay).with(petition).and_call_original
 
       perform_enqueued_jobs do
-        described_class.perform_later(petition, Site.feedback_email)
+        described_class.perform_later(petition)
+      end
+    end
+
+    context "when passing a BCC address" do
+      it "sends the PetitionMailer#gather_sponsors_for_petition_with_delay email with a BCC address" do
+        expect(PetitionMailer).to receive(:gather_sponsors_for_petition_with_delay).with(petition, Site.feedback_email).and_call_original
+
+        perform_enqueued_jobs do
+          described_class.perform_later(petition, Site.feedback_email)
+        end
       end
     end
   end
@@ -498,11 +528,31 @@ RSpec.describe SponsorSignedEmailOnThresholdEmailJob, type: :job do
   let(:petition) { FactoryBot.create(:petition) }
   let(:sponsor) { FactoryBot.create(:sponsor, :validated, petition: petition) }
 
-  it "sends the SponsorMailer#sponsor_signed_email_on_threshold email" do
-    expect(SponsorMailer).to receive(:sponsor_signed_email_on_threshold).with(sponsor).and_call_original
+  context "when there is not moderation delay" do
+    before do
+      allow(Site).to receive(:moderation_delay?).and_return(false)
+    end
 
-    perform_enqueued_jobs do
-      described_class.perform_later(sponsor)
+    it "sends the SponsorMailer#sponsor_signed_email_on_threshold email" do
+      expect(SponsorMailer).to receive(:sponsor_signed_email_on_threshold).with(sponsor).and_call_original
+
+      perform_enqueued_jobs do
+        described_class.perform_later(sponsor)
+      end
+    end
+  end
+
+  context "when there is a moderation delay" do
+    before do
+      allow(Site).to receive(:moderation_delay?).and_return(true)
+    end
+
+    it "sends the SponsorMailer#sponsor_signed_email_on_threshold_with_delay email" do
+      expect(SponsorMailer).to receive(:sponsor_signed_email_on_threshold_with_delay).with(sponsor).and_call_original
+
+      perform_enqueued_jobs do
+        described_class.perform_later(sponsor)
+      end
     end
   end
 end

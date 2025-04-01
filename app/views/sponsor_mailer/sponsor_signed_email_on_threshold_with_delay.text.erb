@@ -2,13 +2,9 @@ Dear <%= @petition.creator.name %>,
 
 Someone supported your petition: “[<%= @petition.action %>][1]”.
 
-<%= pluralize(@sponsor_count, "person", locale: :en) %> have supported your petition.
+<%= pluralize(@sponsor_count, "person", locale: :en) %> have supported your petition. We’re checking it to make sure it meets the [petition standards][2]. If it does, we’ll publish it. If it doesn’t, we’ll let you know why.
 
-We’re checking it to make sure it meets the [petition standards][2].
-
-If it does, we’ll publish it. If it doesn’t, we’ll let you know why.
-
-This can take up to 10 working days. During holiday periods, this may take longer. Thank you for your patience.
+We currently have a very large number of petitions to check, so it may take a number of weeks to check your petition. Thank you for your patience.
 
 Once your petition has <%= Site.maximum_number_of_sponsors %> supporters, no one else will be able to sign it until it’s been checked. Please wait until it’s been checked and published before sharing more widely.
 

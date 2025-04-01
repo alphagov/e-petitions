@@ -15,6 +15,10 @@ class PetitionMailerPreview < ActionMailer::Preview
     PetitionMailer.gather_sponsors_for_petition(petition)
   end
 
+  def gather_sponsors_for_petition_with_delay
+    PetitionMailer.gather_sponsors_for_petition_with_delay(petition)
+  end
+
   def email_signer
     PetitionMailer.email_signer(petition, signature, email)
   end
