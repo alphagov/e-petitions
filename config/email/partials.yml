@@ -1,0 +1,19 @@
+---
+footer: |-
+  {{ closing | default: "Thanks" }},
+
+  The Petitions Team
+  House of Commons
+reason: |-
+  {% if signature.creator %}
+  You’re receiving this email because you created the petition: “[{{ petition.action }}]({{ petition.url }})”
+  {% elsif signature.sponsor %}
+  You’re receiving this email because you supported the petition: “[{{ petition.action }}]({{ petition.url }})”
+  {% else %}
+  You’re receiving this email because you signed the petition: “[{{ petition.action }}]({{ petition.url }})”
+  {% endif %}
+  ---
+unsubscribe: |-
+  ---
+
+  [Unsubscribe]({{ signature.unsubscribe_url }}) from emails about this petition

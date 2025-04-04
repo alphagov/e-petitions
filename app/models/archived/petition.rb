@@ -419,6 +419,10 @@ module Archived
       debate_outcome? && debate_outcome.debated?
     end
 
+    def to_liquid
+      PetitionDrop.new(self)
+    end
+
     private
 
     def evaluate_debate_state

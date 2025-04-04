@@ -57,6 +57,10 @@ module Archived
       debated_on
     end
 
+    def to_liquid
+      Archived::DebateOutcomeDrop.new(self)
+    end
+
     private
 
     def debate_state

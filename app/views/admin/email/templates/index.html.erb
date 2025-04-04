@@ -1,0 +1,79 @@
+<h1>Edit Email</h1>
+
+<div class="grid-row">
+  <div class="grid-column">
+    <%= render "admin/shared/email_tabs" %>
+  </div>
+</div>
+
+<div class="grid-row">
+  <%= form_tag admin_email_templates_path, method: :get, class: 'search-email-templates' do %>
+    <div class="column-half">
+      <div class="search-inline">
+        <%= label_tag :q, "Search templates", class: "visuallyhidden" %>
+        <%= search_field_tag 'q', params[:q], class: 'form-control', placeholder:"Enter a search query" %>
+        <%= submit_tag 'Search', class: 'inline-submit', name: nil %>
+      </div>
+    </div>
+    <div class="column-half actions-right search-inline">
+      <%= link_to "Download", admin_email_templates_path(format: :yml), class: 'button-secondary inline-button' %>
+      <%= link_to "New Template", new_admin_email_template_path, class: 'button inline-button' %>
+    </div>
+  <% end %>
+</div>
+
+<%= will_paginate @templates %>
+
+<table class="template-list">
+  <thead>
+    <tr>
+      <th>Mailer</th>
+      <th>Email</th>
+      <th>Active</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% if @templates.present? %>
+      <% @templates.each do |template| %>
+        <tr>
+          <td>
+            <%= template.mailer_description %>
+          </td>
+          <td>
+            <%= template.template_description %>
+          </td>
+          <td>
+            <%= template.active ? 'Yes' : 'No' %>
+          </td>
+          <td>
+            <%= link_to 'Edit', edit_admin_email_template_path(template), class: 'button-secondary' %>
+            <%= link_to 'Preview', admin_email_template_preview_path(template), class: 'button-secondary' %>
+            <% if template.active? %>
+              <%= button_to 'Deactivate', deactivate_admin_email_template_path(template), method: :post, class: 'button-secondary' %>
+            <% else %>
+              <%= button_to 'Activate', activate_admin_email_template_path(template), method: :post, class: 'button-secondary' %>
+            <% end %>
+            <%= button_to 'Delete', admin_email_template_path(template), method: :delete, class: 'button-warning', data: { confirm: 'Delete template?' } %>
+          </td>
+        </tr>
+      <% end %>
+    <% else %>
+      <tr>
+        <td colspan="4">No templates found</td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<div class="inline-actions">
+  <%= form_tag activate_all_admin_email_templates_path, method: :post do %>
+    <%= submit_tag 'Activate all', name: nil, class: 'button-secondary', data: { confirm: 'Activate all templates?' } %>
+  <% end %>
+
+  <%= form_tag deactivate_all_admin_email_templates_path, method: :post do %>
+    <%= submit_tag 'Deactivate all', name: nil, class: 'button-secondary', data: { confirm: 'Deactivate all templates?' } %>
+  <% end %>
+</div>
+
+<%= will_paginate @templates %>
