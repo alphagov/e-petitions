@@ -135,6 +135,10 @@ en-GB:
           other: "%{count} errors prohibited this %{model} from being saved"
   helpers:
     label:
+      page:
+        enabled: "Make this page visible to the public?"
+        redirect: "Redirect this page to a URL on the main Parliament website?"
+        redirect_url: "URL to redirect to"
       tag:
         name: "Tag"
       site:

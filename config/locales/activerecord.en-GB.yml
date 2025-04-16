@@ -91,6 +91,12 @@ en-GB:
             aliased_domain:
               not_found: "The aliased domain was not found - please check the spelling and try again"
 
+        page:
+          attributes:
+            redirect_url:
+              blank: Please enter a URL on the main Parliament website
+              invalid: Please enter a valid URL on the main Parliament website
+
         parliament:
           attributes:
             dissolution_at:

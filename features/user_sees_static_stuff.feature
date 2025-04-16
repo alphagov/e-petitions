@@ -34,3 +34,17 @@ Feature: User views static pages
     Then I should be on the accessibility page
     And I should see "Accessibility statement" in the browser page title
     And the markup should be valid
+
+  @allow-rescue
+  Scenario: I navigate to a disabled page
+    Given the "cookies" page is disabled
+    When I go to the home page
+    And I follow "Cookies"
+    Then I will see a 404 error page
+
+  @javascript
+  Scenario: I navigate to a redirected page
+    Given the "cookies" page is redirected to "https://www.parliament.uk/site-information/privacy/"
+    When I go to the home page
+    And I follow "Cookies"
+    Then I should be redirected to "https://www.parliament.uk/site-information/privacy/"

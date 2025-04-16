@@ -12,7 +12,13 @@ class PagesController < ApplicationController
     fresh_when @page, public: true
 
     respond_to do |format|
-      format.html
+      format.html do
+        if @page.redirect?
+          redirect_to @page.redirect_url, allow_other_host: true
+        else
+          render :show
+        end
+      end
     end
   end
 
@@ -41,6 +47,6 @@ class PagesController < ApplicationController
   private
 
   def retrieve_page
-    @page = Page.find_by!(slug: params[:slug])
+    @page = Page.find_by!(slug: params[:slug], enabled: true)
   end
 end

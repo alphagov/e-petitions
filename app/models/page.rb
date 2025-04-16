@@ -4,6 +4,11 @@ class Page < ActiveRecord::Base
   validates :slug, length: { maximum: 100 }
   validates :title, presence: true, length: { maximum: 100 }
   validates :content, presence: true
+  validates :redirect_url, presence: true, if: :redirect?
+
+  with_options allow_blank: true do
+    validates :redirect_url, format: { with: /\Ahttps:\/\/www\.parliament\.uk\/.*\z/ }
+  end
 
   DISSOLUTION_PAGES = %w[help]
 

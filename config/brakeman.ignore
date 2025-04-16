@@ -64,7 +64,7 @@
       "check_name": "LinkToHref",
       "message": "Potentially unsafe model attribute in `link_to` href",
       "file": "app/views/local_petitions/all.html.erb",
-      "line": 11,
+      "line": 10,
       "link": "https://brakemanscanner.org/docs/warning_types/link_to_href",
       "code": "link_to(Constituency.current.find_by_slug!(params[:id]).mp_name, Constituency.current.find_by_slug!(params[:id]).mp_url, :rel => \"external\")",
       "render_path": [
@@ -98,7 +98,7 @@
       "check_name": "LinkToHref",
       "message": "Potentially unsafe model attribute in `link_to` href",
       "file": "app/views/local_petitions/show.html.erb",
-      "line": 11,
+      "line": 10,
       "link": "https://brakemanscanner.org/docs/warning_types/link_to_href",
       "code": "link_to(Constituency.current.find_by_slug!(params[:id]).mp_name, Constituency.current.find_by_slug!(params[:id]).mp_url, :rel => \"external\")",
       "render_path": [
@@ -143,8 +143,31 @@
         79
       ],
       "note": ""
+    },
+    {
+      "warning_type": "Redirect",
+      "warning_code": 18,
+      "fingerprint": "f6fc35b70b25a4578657e4e257ccd0c9e657ec41e8cbd71880e0ff2d1963e5e6",
+      "check_name": "Redirect",
+      "message": "Possible unprotected redirect",
+      "file": "app/controllers/pages_controller.rb",
+      "line": 17,
+      "link": "https://brakemanscanner.org/docs/warning_types/redirect/",
+      "code": "redirect_to(Page.find_by!(:slug => params[:slug], :enabled => true).redirect_url, :allow_other_host => true)",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "PagesController",
+        "method": "show"
+      },
+      "user_input": "Page.find_by!(:slug => params[:slug], :enabled => true).redirect_url",
+      "confidence": "Weak",
+      "cwe_id": [
+        601
+      ],
+      "note": ""
     }
   ],
-  "updated": "2024-09-03 13:23:00 +0000",
-  "brakeman_version": "6.2.1"
+  "updated": "2025-04-16 18:27:47 +0000",
+  "brakeman_version": "6.2.2"
 }

@@ -23,6 +23,38 @@
         <%= form.text_area :content, tabindex: increment, rows: 8, class: 'form-control' %>
       <% end %>
 
+      <%= form_row for: [@page, :enabled], class: 'inline' do %>
+        <%= form.label :enabled, class: 'form-label' %>
+        <%= error_messages_for_field @page, :enabled %>
+        <div class="multiple-choice">
+          <%= form.radio_button :enabled, true %>
+          <%= form.label :enabled_true, "Yes", for: "enabled_true" %>
+        </div>
+        <div class="multiple-choice">
+          <%= form.radio_button :enabled, false %>
+          <%= form.label :enabled_false, "No", for: "enabled_false" %>
+        </div>
+      <% end %>
+
+      <%= form_row for: [@page, :redirect], class: 'inline' do %>
+        <%= form.label :redirect, class: 'form-label' %>
+        <%= error_messages_for_field @page, :redirect %>
+        <div class="multiple-choice">
+          <%= form.radio_button :redirect, true %>
+          <%= form.label :redirect_true, "Yes", for: "redirect_true" %>
+        </div>
+        <div class="multiple-choice">
+          <%= form.radio_button :redirect, false %>
+          <%= form.label :redirect_false, "No", for: "redirect_false" %>
+        </div>
+      <% end %>
+
+      <%= form_row for: [@page, :redirect_url] do %>
+        <%= form.label :redirect_url, class: 'form-label' %>
+        <%= error_messages_for_field @page, :redirect_url %>
+        <%= form.text_field :redirect_url, tabindex: increment, maxlength: 100, class: 'form-control' %>
+      <% end %>
+
       <%= form.submit 'Save', class: 'button' %>
       <%= link_to 'Cancel', admin_pages_path, class: 'button-secondary' %>
     <% end %>
