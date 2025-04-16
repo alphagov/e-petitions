@@ -122,3 +122,7 @@ end
 Then(/^I should get a download with the filename "([^\"]*)"$/) do |filename|
   expect(page.response_headers['Content-Disposition']).to include("attachment; filename=#{filename}")
 end
+
+Then('I should be redirected to {string}') do |url|
+  expect(current_url).to eq(url)
+end

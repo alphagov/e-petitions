@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_01_24_074734) do
+ActiveRecord::Schema[7.2].define(version: 2025_04_16_072110) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "intarray"
   enable_extension "plpgsql"
@@ -453,6 +453,9 @@ ActiveRecord::Schema[7.2].define(version: 2025_01_24_074734) do
     t.text "content", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean "enabled", default: true, null: false
+    t.boolean "redirect", default: false, null: false
+    t.string "redirect_url"
     t.index ["slug"], name: "index_pages_on_slug", unique: true
   end
 

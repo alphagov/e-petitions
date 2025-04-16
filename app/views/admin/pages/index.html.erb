@@ -12,6 +12,8 @@
         <tr>
           <th>Slug</th>
           <th>Title</th>
+          <th>Enabled</th>
+          <th>Redirect</th>
           <th>Actions</th>
         </tr>
       </thead>
@@ -20,6 +22,14 @@
           <tr class="page">
             <td><%= page.slug %></td>
             <td><%= page.title %></td>
+            <td><%= page.enabled ? 'Yes' : 'No' %></td>
+            <td>
+              <% if page.redirect? %>
+                <%= link_to 'Yes', page.redirect_url, target: '_blank' %>
+              <% else %>
+                No
+              <% end %>
+            </td>
             <td>
               <%= link_to 'Edit', edit_admin_page_path(page), class: 'button' %>
             </td>
