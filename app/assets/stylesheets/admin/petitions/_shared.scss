@@ -105,12 +105,21 @@
     }
   }
 
+  .button-small {
+    margin: 0;
+    font-size: 14px;
+    padding: 4px 12px;
+    line-height: 18px;
+  }
+
+  .partial-list,
+  .template-list,
   .page-list,
   .petition-emails,
   .domain-list,
   .petition-emails,
   .rejection-reason-list {
-    .button {
+    .button, .button-secondary, .button-warning {
       margin: 0;
       font-size: 12px;
       padding: 2px 8px;

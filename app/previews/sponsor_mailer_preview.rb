@@ -1,8 +1,6 @@
 # Preview all emails at http://petitions.localhost:3000/rails/mailers/sponsor_mailer
 
-class SponsorMailerPreview < ActionMailer::Preview
-  include Mocks
-
+class SponsorMailerPreview < ApplicationMailerPreview
   def petition_and_email_confirmation_for_sponsor
     SponsorMailer.petition_and_email_confirmation_for_sponsor(sponsor)
   end
