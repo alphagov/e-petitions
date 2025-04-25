@@ -278,7 +278,7 @@ GEM
       benchmark
       logger
     mini_mime (1.1.5)
-    minitest (5.25.4)
+    minitest (5.25.5)
     multi_test (1.1.0)
     multipart-post (2.4.1)
     net-http-persistent (4.0.5)
@@ -432,7 +432,7 @@ GEM
       rexml (~> 3.2, >= 3.2.5)
       rubyzip (>= 1.2.2, < 3.0)
       websocket (~> 1.0)
-    shoulda-matchers (6.4.0)
+    shoulda-matchers (6.5.0)
       activesupport (>= 5.2.0)
     simplecov (0.22.0)
       docile (~> 1.1)
