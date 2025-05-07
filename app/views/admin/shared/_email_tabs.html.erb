@@ -1,0 +1,15 @@
+<p class="tabs">
+  <% if controller_name == "settings" %>
+    <%= link_to "Templates", admin_email_templates_path %> |
+    <%= link_to "Partials", admin_email_partials_path %> |
+    Settings
+  <% elsif controller_name == "partials" %>
+    <%= link_to "Templates", admin_email_templates_path %> |
+    Partials |
+    <%= link_to "Settings", admin_email_settings_path %>
+  <% else %>
+    Templates |
+    <%= link_to "Partials", admin_email_partials_path %> |
+    <%= link_to "Settings", admin_email_settings_path %>
+  <% end %>
+</p>

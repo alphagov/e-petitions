@@ -1,0 +1,48 @@
+<%= link_to 'Back', admin_email_templates_path, class: 'back-link' %>
+
+<h1>Edit Settings</h1>
+
+<div class="grid-row">
+  <div class="grid-column">
+    <%= render "admin/shared/email_tabs" %>
+  </div>
+</div>
+
+<div class="grid-row">
+  <div class="column-two-thirds extra-gutter">
+    <%= form_for @site, url: admin_email_settings_url do |form| %>
+      <%= form_row for: [form.object, :enhanced_email_formatting], class: "inline" do %>
+        <%= form.label :enhanced_email_formatting, "Enable enhanced email formatting?", class: "form-label" %>
+        <%= error_messages_for_field @site, :enhanced_email_formatting %>
+        <div class="multiple-choice">
+          <%= form.radio_button :enhanced_email_formatting, true %>
+          <%= form.label :enhanced_email_formatting, "Yes", for: "site_enhanced_email_formatting_true" %>
+        </div>
+        <div class="multiple-choice">
+          <%= form.radio_button :enhanced_email_formatting, false %>
+          <%= form.label :enhanced_email_formatting, "No", for: "site_enhanced_email_formatting_false" %>
+        </div>
+      <% end %>
+
+      <%= form_row for: [form.object, :email_header_style], class: "inline" do %>
+        <%= form.label :email_header_style, "Choose email header style", class: "form-label" %>
+        <%= error_messages_for_field @site, :email_header_style %>
+        <div class="multiple-choice">
+          <%= form.radio_button :email_header_style, 'white' %>
+          <%= form.label :email_header_style, "White", for: "site_email_header_style_white" %>
+        </div>
+        <div class="multiple-choice">
+          <%= form.radio_button :email_header_style, 'green' %>
+          <%= form.label :email_header_style, "Green", for: "site_email_header_style_green" %>
+        </div>
+        <div class="multiple-choice">
+          <%= form.radio_button :email_header_style, 'black' %>
+          <%= form.label :email_header_style, "Black", for: "site_email_header_style_black" %>
+        </div>
+      <% end %>
+
+      <%= form.submit "Save", class: "button" %>
+      <%= link_to "Cancel", admin_root_path, class: "button-secondary" %>
+    <% end %>
+  </div>
+</div>

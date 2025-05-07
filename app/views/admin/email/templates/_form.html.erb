@@ -1,0 +1,38 @@
+<%= form_row for: [form.object, %i[name mailer_name action_name]] do %>
+  <%= form.label :name, "Email", class: 'form-label' %>
+  <%= error_messages_for_field @template, %i[name mailer_name action_name] %>
+  <%= form.select :name, Email::Template.menu, { include_blank: true, disabled: Email::Template.existing }, class: 'form-control' %>
+<% end %>
+
+<%= form_row for: [form.object, :subject] do %>
+  <%= form.label :subject, class: 'form-label' %>
+  <%= error_messages_for_field @template, :subject %>
+  <%= form.text_field :subject, tabindex: increment, maxlength: 150, autofocus: true, class: 'form-control' %>
+<% end %>
+
+<%= form_row for: [form.object, :content] do %>
+  <%= form.label :content, class: 'form-label' %>
+  <%= error_messages_for_field @template, :content %>
+  <%= form.text_area :content, tabindex: increment, rows: 20, data: { max_length: 10000 }, class: 'form-control' %>
+  <p class="character-count">10000 characters max</p>
+<% end %>
+
+<h3 class="petition-action-subheading">Make this template active?</h3>
+
+<%= form_row class: 'inline' do %>
+  <div class="multiple-choice">
+    <%= form.radio_button :active, true %>
+    <%= form.label :active_true, "Yes", for: "active_true" %>
+  </div>
+
+  <div class="multiple-choice">
+    <%= form.radio_button :active, false %>
+    <%= form.label :active_false, "No", for: "active_false" %>
+  </div>
+  <%= error_messages_for_field @template, :active %>
+<% end %>
+
+<%= form.submit 'Save', class: 'button' %>
+<%= link_to 'Cancel', admin_email_templates_path, class: 'button-secondary' %>
+
+<%= javascript_include_tag 'character-counter' %>

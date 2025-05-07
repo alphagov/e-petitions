@@ -12,6 +12,10 @@ module Archived
           order(:created_at)
         end
       end
+
+      def to_liquid
+        Archived::PetitionEmailDrop.new(self)
+      end
     end
   end
 end

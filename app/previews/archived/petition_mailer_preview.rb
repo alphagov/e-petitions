@@ -1,9 +1,7 @@
 # Preview all emails at http://petitions.localhost:3000/rails/mailers/archived/petition_mailer
 
 module Archived
-  class PetitionMailerPreview < ActionMailer::Preview
-    include Mocks
-
+  class PetitionMailerPreview < ApplicationMailerPreview
     def email_signer
       ::Archived::PetitionMailer.email_signer(petition, signature, email)
     end
