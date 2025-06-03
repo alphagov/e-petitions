@@ -321,7 +321,7 @@ class PackageBuilder
     if environment == "production"
       "https://petition.parliament.uk/"
     else
-      "https://#{environment}.petitions.website/"
+      "https://#{environment}.epetitions.website/"
     end
   end
 
