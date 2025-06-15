@@ -1,67 +1,54 @@
-// Appropriated from
-// https://github.com/alphagov/digitalmarketplace-frontend-toolkit/blob/master/toolkit/javascripts/word-counter.js
+class CharacterCounter {
+  constructor(textarea) {
+    this.textarea = textarea;
+    this.counter = textarea.parentNode.querySelector('.character-count');
+    this.maxLength = parseInt(textarea.dataset.maxLength);
 
-(function ($) {
+    const ariaId = `char-count-${textarea.id}`;
 
-  'use strict';
+    this.counter.setAttribute('id', ariaId);
+    this.counter.setAttribute('aria-atomic', 'true');
+    this.counter.setAttribute('role', 'status');
 
-  var characterCounter,
-      COUNTER_CLASS = 'character-count';
+    this.textarea.setAttribute('aria-controls', ariaId);
 
-  if (typeof $ === 'undefined') { return; }
+    textarea.addEventListener('change', () => {
+      this.updateCount();
+    });
 
-  var attach = function() {
-      var $textareas = $('textarea[data-max-length]');
+    textarea.addEventListener('keyup', () => {
+      this.updateCount();
+    });
 
-      if (!$textareas.length) { return; }
+    textarea.addEventListener('paste', () => {
+      this.updateCount();
+    });
 
-      $textareas.each(function () {
-        var $textarea = $(this),
-            ariaId = 'char-count-' + $textarea.attr('id');
+    window.addEventListener('pageshow', () => {
+      this.updateCount();
+    });
 
-        $textarea
-          .next('.' + COUNTER_CLASS)
-            .text($textarea.data('max-length'))
-            .attr({
-                'role': 'status',
-                'aria-atomic': 'true',
-                'id': ariaId
-            });
+    this.updateCount();
+  }
 
-        $textarea
-          .attr('aria-controls', ariaId)
-          .on('change keyup paste', updateCount);
+  updateCount() {
+    const contents = this.textarea.value;
+    const characters = contents.length;
+    const remaining = this.maxLength - characters;
 
-        updateCount.call(this);
+    this.counter.classList.toggle('too-many-characters', remaining < 0);
+    this.textarea.classList.toggle('form-control--error', remaining < 0);
 
-      });
+    this.statusMessage(remaining);
+  }
 
-    },
-    statusMessage = function($characters) {
-      if (Math.abs($characters) == 1) {
-        return $characters + ' character remaining';
-      } else {
-        return $characters + ' characters remaining';
-      }
-    },
-    updateCount = function() {
-      var $textarea = $(this),
-          contents = $textarea.val(),
-          charCount = contents.length,
-          maxCharCount = $textarea.data('max-length'),
-          charsRemaining = maxCharCount - charCount;
+  statusMessage(remaining) {
+    const characters = Math.abs(remaining) == 1 ? 'character' : 'characters';
+    const status = remaining < 0 ? 'too many' : 'remaining';
 
-      $textarea
-        .next('.' + COUNTER_CLASS)
-        .html(statusMessage(charsRemaining))
-        .toggleClass('too-many-characters', charsRemaining < 0);
-    };
+    this.counter.textContent = `You have ${Math.abs(remaining)} ${characters} ${status}`;
+  }
+}
 
-  characterCounter = function () {
-    attach();
-  };
-
-  this.GOVUK = this.GOVUK || {};
-  this.GOVUK.PETS = this.GOVUK.PETS || {};
-  GOVUK.PETS.characterCounter = characterCounter;
-}).call(this, window.jQuery);
+window.PETS = window.PETS || {};
+window.PETS.CharacterCounter = CharacterCounter;
