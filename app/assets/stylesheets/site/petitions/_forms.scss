@@ -108,6 +108,13 @@ select.form-control {
 .character-count.too-many-characters {
   color: $error-colour;
 }
+.form-control--error {
+  border-color: $error-colour;
+
+  &:focus {
+    box-shadow: inset 0 0 0 2px $error-colour;
+  }
+}
 
 .form-label {
   margin-bottom: 10px;
