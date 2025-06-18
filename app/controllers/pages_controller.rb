@@ -1,5 +1,6 @@
 class PagesController < ApplicationController
   before_action :retrieve_page, only: :show
+  before_action :respond_if_fresh, only: :show
   before_action :set_cors_headers, only: :trending, if: :json_request?
 
   def index
@@ -9,8 +10,6 @@ class PagesController < ApplicationController
   end
 
   def show
-    fresh_when @page, public: true
-
     respond_to do |format|
       format.html do
         if @page.redirect?
@@ -48,5 +47,9 @@ class PagesController < ApplicationController
 
   def retrieve_page
     @page = Page.find_by!(slug: params[:slug], enabled: true)
+  end
+
+  def respond_if_fresh
+    fresh_when @page, public: true
   end
 end
