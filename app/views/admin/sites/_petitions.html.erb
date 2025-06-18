@@ -100,7 +100,7 @@
   </div>
 </div>
 
-<%= javascript_tag do %>
+<%= javascript_tag(nonce: true) do %>
   $().ready(function() {
     var $disabled_true = $('input[name="site[disable_collecting_signatures]"][value=true]');
     var $disabled = $('input[name="site[disable_collecting_signatures]"]');

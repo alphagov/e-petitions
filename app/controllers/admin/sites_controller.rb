@@ -38,7 +38,8 @@ class Admin::SitesController < Admin::AdminController
       :show_feedback_page_message, :feedback_page_message, :feedback_page_message_colour,
       :show_home_page_message, :home_page_message, :home_page_message_colour,
       :show_petition_page_message, :petition_page_message, :petition_page_message_colour,
-      :disable_petition_creation, :disable_collecting_signatures, :moderation_delay_message
+      :disable_petition_creation, :disable_collecting_signatures, :moderation_delay_message,
+      :enable_analytics, :google_tag_manager_id, :google_tag_manager_hash
     )
   end
 end

@@ -1,7 +1,7 @@
 require 'postcode_sanitizer'
 require 'csv'
 
-class LocalPetitionsController < ApplicationController
+class LocalPetitionsController < PublicController
   before_action :redirect_to_home_page, if: :parliament_closed?
 
   before_action :sanitize_postcode, only: :index

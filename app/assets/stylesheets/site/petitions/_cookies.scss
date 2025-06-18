@@ -1,0 +1,179 @@
+body.cookie-overlay-open {
+  height: 100vh;
+  overflow: hidden;
+
+  main {
+    display: none;
+  }
+
+  @include media(tablet) {
+    height: auto;
+    overflow: auto;
+
+    main {
+      display: block;
+    }
+  }
+}
+
+.cookie-manager {
+  .cookie-manager-overlay {
+    display: none;
+    background-color: #000;
+    box-sizing: border-box;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    opacity: .35;
+    position: fixed;
+    z-index: 5;
+  }
+}
+
+#cookiebanner {
+  .container {
+    margin: 0 auto;
+    max-width: 630px;
+    padding: $gutter-half;
+    padding-bottom: $gutter-two-thirds;
+
+    @include media(tablet) {
+      padding: $gutter;
+      padding-bottom: $gutter;
+    }
+  }
+
+  h2 {
+    @include bold-24;
+    margin-top: 0;
+  }
+
+  p {
+    @include core-16;
+    text-wrap: pretty;
+  }
+
+  .button {
+    @include bold-16;
+    margin-bottom: 0;
+    margin-right: 5px;
+    margin-top: $gutter-one-third;
+  }
+}
+
+#cookiepreferences {
+  display: none;
+  background-color: #fff;
+  box-sizing: border-box;
+  position: absolute;
+  left: 50%;
+  right: auto;
+  top: 0;
+  bottom: auto;
+  transform: translateX(-50%);
+  z-index: 300;
+
+  margin-top: 0;
+  width: 100%;
+
+  @include media(tablet) {
+    margin-top: $gutter;
+    width: 520px;
+  }
+
+  h2 {
+    @include bold-24;
+    margin-top: 0;
+  }
+
+  h3 {
+    @include bold-19;
+    margin-top: $gutter-half;
+  }
+
+  p {
+    @include core-16;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+
+  label {
+    @include core-16;
+  }
+
+  button {
+    @include bold-16;
+  }
+
+  & .cookie-preferences {
+    &__header {
+      padding: $gutter-two-thirds;
+      padding-bottom: 0;
+    }
+
+    &__settings {
+      padding: 0 $gutter-two-thirds;
+
+      & > div {
+        border-top: 1px solid $border-colour;
+        padding-top: $gutter-two-thirds;
+        margin-top: $gutter-two-thirds;
+      }
+
+      .cookie-toggle {
+        margin-top: $gutter-two-thirds;
+        margin-bottom: $gutter-one-third;
+
+        & > div.multiple-choice {
+          display: flex;
+          float: none;
+          margin: 0;
+          margin-top: $gutter-half;
+          padding: 0;
+          align-items: center;
+
+          & > input {
+            flex: 0 0 38px;
+            position: static;
+          }
+
+          & > label {
+            padding: 0;
+            padding-left: $gutter-one-third;
+          }
+        }
+      }
+    }
+
+    &__footer {
+      display: block;
+      padding: $gutter-two-thirds;
+      padding-bottom: $gutter-one-third;
+
+      button {
+        display: block;
+        margin: 0;
+        margin-bottom: $gutter-one-third;
+        width: 100%;
+      }
+
+      @include media(tablet) {
+        display: flex;
+        padding: $gutter-two-thirds $gutter-one-third;
+
+        button {
+          flex-grow: 1;
+          margin: 0 $gutter-one-third;
+          width: auto;
+        }
+      }
+    }
+  }
+
+  &:focus {
+    outline: none;
+  }
+}

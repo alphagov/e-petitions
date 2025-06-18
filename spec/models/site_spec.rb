@@ -317,6 +317,16 @@ RSpec.describe Site, type: :model do
       expect(site).to receive(:moderation_delay_message).and_return("message")
       expect(Site.moderation_delay_message).to eq("message")
     end
+
+    it "delegates enable_analytics? to the instance" do
+      expect(site).to receive(:enable_analytics?).and_return(true)
+      expect(Site.enable_analytics?).to eq(true)
+    end
+
+    it "delegates google_tag_manager_id to the instance" do
+      expect(site).to receive(:google_tag_manager_id).and_return("GTM-XXXXXX")
+      expect(Site.google_tag_manager_id).to eq("GTM-XXXXXX")
+    end
   end
 
   describe "defaults" do

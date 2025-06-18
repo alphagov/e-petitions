@@ -46,5 +46,6 @@ Feature: User views static pages
   Scenario: I navigate to a redirected page
     Given the "cookies" page is redirected to "https://www.parliament.uk/site-information/privacy/"
     When I go to the home page
-    And I follow "Cookies"
+    And I press "Accept additional cookies"
+    And I follow "Cookie policy"
     Then I should be redirected to "https://www.parliament.uk/site-information/privacy/"

@@ -1,4 +1,4 @@
-class PagesController < ApplicationController
+class PagesController < PublicController
   before_action :retrieve_page, only: :show
   before_action :respond_if_fresh, only: :show
   before_action :set_cors_headers, only: :trending, if: :json_request?
@@ -50,6 +50,6 @@ class PagesController < ApplicationController
   end
 
   def respond_if_fresh
-    request.local? || fresh_when(@page, public: true)
+    local_request? || fresh_when(@page, public: true)
   end
 end

@@ -11,9 +11,9 @@
     </div>
   </div>
 
-  <script>
+  <%= javascript_tag(nonce: true) do %>
     $(document).ready(function() {
       $("#logout-warning").autoLogout();
     });
-  </script>
+  <% end %>
 <% end %>

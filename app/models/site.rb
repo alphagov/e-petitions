@@ -185,6 +185,18 @@ class Site < ActiveRecord::Base
       instance.moderation_delay_message
     end
 
+    def enable_analytics?
+      instance.enable_analytics?
+    end
+
+    def google_tag_manager_id
+      instance.google_tag_manager_id
+    end
+
+    def google_tag_manager_hash
+      instance.google_tag_manager_hash
+    end
+
     def disable_signature_counts!
       instance.update!(update_signature_counts: false)
     end
@@ -393,6 +405,9 @@ class Site < ActiveRecord::Base
   store_accessor :feature_flags, :feedback_page_message_colour
   store_accessor :feature_flags, :show_feedback_page_message
   store_accessor :feature_flags, :moderation_delay_message
+  store_accessor :feature_flags, :enable_analytics
+  store_accessor :feature_flags, :google_tag_manager_id
+  store_accessor :feature_flags, :google_tag_manager_hash
 
   attr_reader :password
 
@@ -446,6 +461,18 @@ class Site < ActiveRecord::Base
 
   def moderation_delay_message=(value)
     super(value.to_s.squish.presence)
+  end
+
+  def enable_analytics
+    !!super
+  end
+
+  def enable_analytics=(value)
+    super(type_cast_feature_flag(value))
+  end
+
+  def enable_analytics?
+    enable_analytics
   end
 
   def authenticate(username, password)
@@ -563,6 +590,8 @@ class Site < ActiveRecord::Base
   validates :feedback_page_message, length: { maximum: 800 }
   validates :feedback_page_message_colour, inclusion: { in: MESSAGE_COLOURS }, allow_blank: true
   validates :moderation_delay_message, presence: true, length: { maximum: 500 }
+  validates :google_tag_manager_id, presence: true, format: { with: /\AGTM-[A-Z0-9]{7,10}\z/ }, if: :enable_analytics?
+  validates :google_tag_manager_hash, presence: true, if: :enable_analytics?
 
   validate if: :protected? do
     errors.add(:password, :blank) unless password_digest?
