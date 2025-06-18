@@ -67,7 +67,7 @@
         </div>
       </details>
 
-      <script>
+      <%= javascript_tag(nonce: true) do %>
         $(document).ready(function() {
           $('.search-petitions input[name="type"]').on('change', function() {
             if (this.checked) {
@@ -89,7 +89,7 @@
             }
           });
         });
-      </script>
+      <% end %>
     <% end %>
   </div>
 

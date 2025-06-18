@@ -1,5 +1,5 @@
 <div class="petition-rejection-controls">
-  <%= javascript_tag do %>
+  <%= javascript_tag(nonce: true) do %>
     var rejection_descriptions = <%= raw json_escape(rejection_descriptions.to_json) %>;
     var hidden_rejections = <%= raw json_escape(hidden_rejections.to_json) %>;
 

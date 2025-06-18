@@ -10,7 +10,7 @@
   </div>
 </div>
 
-<script>
+<%= javascript_tag(nonce: true) do %>
   $(document).ready(function() {
     <% if @petition.is_a?(::Archived::Petition) %>
       $("#edit-lock").editLock(<%= @petition.id %>, <%= current_user.id %>, '/admin/archived/petitions', true);
@@ -18,4 +18,4 @@
       $("#edit-lock").editLock(<%= @petition.id %>, <%= current_user.id %>, '/admin/petitions', <%= @petition.moderated? %>);
     <% end %>
   });
-</script>
+<% end %>

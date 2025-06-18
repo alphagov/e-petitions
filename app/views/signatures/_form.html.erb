@@ -50,7 +50,7 @@
   <p>We will manage your personal data as set out in our <%= link_to "privacy notice", privacy_path, target: "_blank" %>, which includes details of your rights under data protection legislation.</p>
 </div>
 
-<script>
+<%= javascript_tag(nonce: true) do %>
   document.addEventListener('DOMContentLoaded', function() {
     var location = document.getElementById('signature_location_code');
     var postcodeInput = document.getElementById('signature_postcode');
@@ -65,4 +65,4 @@
       }
     });
   });
-</script>
+<% end %>
