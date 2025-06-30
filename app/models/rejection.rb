@@ -1,6 +1,8 @@
 class Rejection < ActiveRecord::Base
   belongs_to :petition, touch: true
 
+  attribute :hidden, :boolean, default: false
+
   validates :petition, presence: true
   validates :code, presence: true, inclusion: { in: :rejection_codes }
   validates :details, length: { maximum: 4000 }, allow_blank: true
@@ -24,7 +26,7 @@ class Rejection < ActiveRecord::Base
   end
 
   def hide_petition?
-    code.in?(hidden_codes)
+    hidden || code.in?(hidden_codes)
   end
 
   def state_for_petition

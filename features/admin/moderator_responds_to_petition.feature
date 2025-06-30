@@ -105,6 +105,15 @@ Feature: Moderator respond to petition
     And the petition is not available for searching or viewing
     But the petition will still show up in the back-end reporting
 
+  Scenario: Moderator rejects petition with a reason code which precludes public searching or viewing manually
+    Given I am logged in as a moderator named "Ben Macintosh"
+    When I look at the next petition on my list
+    And I reject the petition with a reason code "Duplicate petition" and hide it
+    Then I should see "Hidden by Ben Macintosh"
+    And the creator should receive a hidden rejection notification email
+    And the petition is not available for searching or viewing
+    But the petition will still show up in the back-end reporting
+
   Scenario: Moderator rejects petition but with no reason code
     Given I am logged in as a moderator named "Ben Macintosh"
     And a sponsored petition exists with action: "Rupert Murdoch is on the run"
@@ -118,6 +127,15 @@ Feature: Moderator respond to petition
     And a petition "actually libellous" has been rejected with the reason "duplicate"
     When I go to the admin petition page for "actually libellous"
     And I change the rejection status of the petition with a reason code "Confidential, libellous, false, defamatory or references a court case"
+    Then I should see "Hidden by Ben Macintosh"
+    And the petition is not available for searching or viewing
+    But the petition will still show up in the back-end reporting
+
+  Scenario: Moderator rejects and hides previously rejected (and public) petition manually
+    Given I am logged in as a moderator named "Ben Macintosh"
+    And a petition "actually libellous" has been rejected with the reason "duplicate"
+    When I go to the admin petition page for "actually libellous"
+    And I hide the petition manually
     Then I should see "Hidden by Ben Macintosh"
     And the petition is not available for searching or viewing
     But the petition will still show up in the back-end reporting

@@ -23,6 +23,22 @@ Feature: Terry (or Sheila) takes down a petition
     Then the petition is not available for signing
     And I should not be able to take down the petition
 
+  Scenario: A moderator can take down a petition and hide it
+    Given I am logged in as a moderator
+    When I view all petitions
+    And I follow "Mistakenly published petition"
+    And I take down the petition with a reason code "Confidential, libellous, false, defamatory or references a court case"
+    Then the petition is not available for searching or viewing
+    And I should not be able to take down the petition
+
+  Scenario: A moderator can take down a petition and hide it manually
+    Given I am logged in as a moderator
+    When I view all petitions
+    And I follow "Mistakenly published petition"
+    And I take down the petition with a reason code "Duplicate petition" and hide it
+    Then the petition is not available for searching or viewing
+    And I should not be able to take down the petition
+
   Scenario: A sysadmin can restore a petition that has been taken down
     Given I am logged in as a sysadmin
     And a published petition has been taken down

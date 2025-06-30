@@ -30,4 +30,12 @@ module RejectionHelper
       hash[reason.code] = markdown_to_html(reason.description)
     end
   end
+
+  def hidden_rejections
+    @rejection_reasons ||= RejectionReason.all
+
+    @rejection_reasons.each_with_object({}) do |reason, hash|
+      hash[reason.code] = reason.hidden
+    end
+  end
 end
