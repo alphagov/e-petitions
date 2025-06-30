@@ -27,6 +27,10 @@ class GovernmentResponse < ActiveRecord::Base
     super || default_responded_on
   end
 
+  def to_liquid
+    GovernmentResponseDrop.new(self)
+  end
+
   private
 
   def default_responded_on

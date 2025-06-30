@@ -1,0 +1,108 @@
+---
+en-GB:
+  template_menu:
+    "Archived Petitions":
+      - ["Government Response (Creator)", "archived/petition_mailer.notify_creator_of_threshold_response"]
+      - ["Government Response (Signer)", "archived/petition_mailer.notify_signer_of_threshold_response"]
+      - ["Debate Scheduled (Creator)", "archived/petition_mailer.notify_creator_of_debate_scheduled"]
+      - ["Debate Scheduled (Signer)", "archived/petition_mailer.notify_signer_of_debate_scheduled"]
+      - ["Debated Outcome (Creator)", "archived/petition_mailer.notify_creator_of_positive_debate_outcome"]
+      - ["Debated Outcome (Signer)", "archived/petition_mailer.notify_signer_of_positive_debate_outcome"]
+      - ["Not Debated Outcome (Creator)", "archived/petition_mailer.notify_creator_of_negative_debate_outcome"]
+      - ["Not Debated Outcome (Signer)", "archived/petition_mailer.notify_signer_of_negative_debate_outcome"]
+      - ["Petition Update (Creator)", "archived/petition_mailer.email_creator"]
+      - ["Petition Update (Signer)", "archived/petition_mailer.email_signer"]
+      - ["Mailshot (Creator)", "archived/petition_mailer.mailshot_for_creator"]
+      - ["Mailshot (Signer)", "archived/petition_mailer.mailshot_for_signer"]
+
+    "Petitions":
+      - ["Gather Sponsors (Creator)", "petition_mailer.gather_sponsors_for_petition"]
+      - ["Gather Sponsors (Creator, Moderation Delayed)", "petition_mailer.gather_sponsors_for_petition_with_delay"]
+      - ["Moderation Delayed (Creator)", "petition_mailer.notify_creator_that_moderation_is_delayed"]
+      - ["Petition Published (Creator)", "petition_mailer.notify_creator_that_petition_is_published"]
+      - ["Petition Published (Sponsor)", "petition_mailer.notify_sponsor_that_petition_is_published"]
+      - ["Petition Rejected (Creator)", "petition_mailer.notify_creator_that_petition_was_rejected"]
+      - ["Petition Rejected (Sponsor)", "petition_mailer.notify_sponsor_that_petition_was_rejected"]
+      - ["Petition Hidden (Creator)", "petition_mailer.notify_creator_that_petition_was_hidden"]
+      - ["Petition Hidden (Sponsor)", "petition_mailer.notify_sponsor_that_petition_was_hidden"]
+      - ["Signature Confirmation", "petition_mailer.email_confirmation_for_signer"]
+      - ["Duplicate Signature", "petition_mailer.email_duplicate_signatures"]
+      - ["Government Response (Creator)", "petition_mailer.notify_creator_of_threshold_response"]
+      - ["Government Response (Signer)", "petition_mailer.notify_signer_of_threshold_response"]
+      - ["Debate Scheduled (Creator)", "petition_mailer.notify_creator_of_debate_scheduled"]
+      - ["Debate Scheduled (Signer)", "petition_mailer.notify_signer_of_debate_scheduled"]
+      - ["Debated Outcome (Creator)", "petition_mailer.notify_creator_of_positive_debate_outcome"]
+      - ["Debated Outcome (Signer)", "petition_mailer.notify_signer_of_positive_debate_outcome"]
+      - ["Not Debated Outcome (Creator)", "petition_mailer.notify_creator_of_negative_debate_outcome"]
+      - ["Not Debated Outcome (Signer)", "petition_mailer.notify_signer_of_negative_debate_outcome"]
+      - ["Petition Update (Creator)", "petition_mailer.email_creator"]
+      - ["Petition Update (Signer)", "petition_mailer.email_signer"]
+      - ["Mailshot (Creator)", "petition_mailer.mailshot_for_creator"]
+      - ["Mailshot (Signer)", "petition_mailer.mailshot_for_signer"]
+      - ["Parliament Dissolving (Creator)", "petition_mailer.notify_creator_of_closing_date_change"]
+      - ["Parliament Dissolving (Signer)", "petition_mailer.notify_signer_of_closing_date_change"]
+      - ["Parliament Dissolving (Moderation Queue)", "petition_mailer.notify_creator_of_sponsored_petition_being_stopped"]
+      - ["Parliament Dissolving (Collecting Sponsors)", "petition_mailer.notify_creator_of_validated_petition_being_stopped"]
+
+    "Sponsors":
+      - ["Sponsor Confirmation", "sponsor_mailer.petition_and_email_confirmation_for_sponsor"]
+      - ["Sponsor Signed (Below Threshold)", "sponsor_mailer.sponsor_signed_email_below_threshold"]
+      - ["Sponsor Signed (On Threshold)", "sponsor_mailer.sponsor_signed_email_on_threshold"]
+      - ["Sponsor Signed (On Threshold, Moderation Delayed)", "sponsor_mailer.sponsor_signed_email_on_threshold_with_delay"]
+
+  mailer_descriptions:
+    "archived/petition_mailer": "Archived Petitions"
+    "petition_mailer": "Petitions"
+    "sponsor_mailer": "Sponsors"
+
+  template_descriptions:
+    "archived/petition_mailer":
+      "notify_creator_of_threshold_response": "Government Response (Creator)"
+      "notify_signer_of_threshold_response": "Government Response (Signer)"
+      "notify_creator_of_debate_scheduled": "Debate Scheduled (Creator)"
+      "notify_signer_of_debate_scheduled": "Debate Scheduled (Signer)"
+      "notify_creator_of_debate_outcome": "Debate Outcome (Creator)"
+      "notify_signer_of_debate_outcome": "Debate Outcome (Signer)"
+      "notify_creator_of_positive_debate_outcome": "Debated Outcome (Creator)"
+      "notify_signer_of_positive_debate_outcome": "Debated Outcome (Signer)"
+      "notify_creator_of_negative_debate_outcome": "Not Debated Outcome (Creator)"
+      "notify_signer_of_negative_debate_outcome": "Not Debated Outcome (Signer)"
+      "email_creator": "Petition Update (Creator)"
+      "email_signer": "Petition Update (Signer)"
+      "mailshot_for_creator": "Mailshot (Creator)"
+      "mailshot_for_signer": "Mailshot (Signer)"
+    "petition_mailer":
+      "gather_sponsors_for_petition": "Gather Sponsors (Creator)"
+      "gather_sponsors_for_petition_with_delay": "Gather Sponsors (Creator, Moderation Delayed)"
+      "notify_creator_that_moderation_is_delayed": "Moderation Delayed (Creator)"
+      "notify_creator_that_petition_is_published": "Petition Published (Creator)"
+      "notify_sponsor_that_petition_is_published": "Petition Published (Sponsor)"
+      "notify_creator_that_petition_was_rejected": "Petition Rejected (Creator)"
+      "notify_sponsor_that_petition_was_rejected": "Petition Rejected (Sponsor)"
+      "notify_creator_that_petition_was_hidden": "Petition Hidden (Creator)"
+      "notify_sponsor_that_petition_was_hidden": "Petition Hidden (Sponsor)"
+      "email_confirmation_for_signer": "Signature Confirmation"
+      "email_duplicate_signatures": "Duplicate Signature"
+      "notify_creator_of_threshold_response": "Government Response (Creator)"
+      "notify_signer_of_threshold_response": "Government Response (Signer)"
+      "notify_creator_of_debate_scheduled": "Debate Scheduled (Creator)"
+      "notify_signer_of_debate_scheduled": "Debate Scheduled (Signer)"
+      "notify_creator_of_debate_outcome": "Debate Outcome (Creator)"
+      "notify_signer_of_debate_outcome": "Debate Outcome (Signer)"
+      "notify_creator_of_positive_debate_outcome": "Debated Outcome (Creator)"
+      "notify_signer_of_positive_debate_outcome": "Debated Outcome (Signer)"
+      "notify_creator_of_negative_debate_outcome": "Not Debated Outcome (Creator)"
+      "notify_signer_of_negative_debate_outcome": "Not Debated Outcome (Signer)"
+      "email_creator": "Petition Update (Creator)"
+      "email_signer": "Petition Update (Signer)"
+      "mailshot_for_creator": "Mailshot (Creator)"
+      "mailshot_for_signer": "Mailshot (Signer)"
+      "notify_creator_of_closing_date_change": "Parliament Dissolving (Creator)"
+      "notify_signer_of_closing_date_change": "Parliament Dissolving (Signer)"
+      "notify_creator_of_sponsored_petition_being_stopped": "Parliament Dissolving (Moderation Queue)"
+      "notify_creator_of_validated_petition_being_stopped": "Parliament Dissolving (Collecting Sponsors)"
+    "sponsor_mailer":
+      "petition_and_email_confirmation_for_sponsor": "Sponsor Confirmation"
+      "sponsor_signed_email_below_threshold": "Sponsor Signed (Below Threshold)"
+      "sponsor_signed_email_on_threshold": "Sponsor Signed (On Threshold)"
+      "sponsor_signed_email_on_threshold_with_delay": "Sponsor Signed (On Threshold, Moderation Delayed)"

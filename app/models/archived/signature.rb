@@ -318,6 +318,10 @@ module Archived
       nil
     end
 
+    def to_liquid
+      Archived::SignatureDrop.new(self)
+    end
+
     private
 
     def formatted_postcode

@@ -1,0 +1,963 @@
+---
+archived/petition_mailer:
+  email_creator:
+    subject: "{{ email.subject }}"
+    content: |
+      Dear {{ signature.name }},
+
+      You created the petition:
+
+      > # {{ petition.action }}
+      >
+      > {{ petition.background }}
+      >
+      > <{{ petition.url }}>
+
+      {{ email.body }}
+
+      {% render "footer" %}
+
+      {% render "unsubscribe" signature: signature %}
+  email_signer:
+    subject: "{{ email.subject }}"
+    content: |-
+      Dear {{ signature.name }},
+
+      You signed the petition:
+
+      > # {{ petition.action }}
+      >
+      > {{ petition.background }}
+      >
+      > <{{ petition.url }}>
+
+      {{ email.body }}
+
+      {% render "footer" %}
+
+      {% render "unsubscribe" signature: signature %}
+  mailshot_for_creator:
+    subject: "{{ mailshot.subject }}"
+    content: |
+      Dear {{ signature.name }},
+
+      You created the petition:
+
+      > # {{ petition.action }}
+      >
+      > {{ petition.background }}
+      >
+      > <{{ petition.url }}>
+
+      {{ mailshot.body }}
+
+      {% render "footer" %}
+
+      {% render "unsubscribe" signature: signature %}
+  mailshot_for_signer:
+    subject: "{{ mailshot.subject }}"
+    content: |
+      Dear {{ signature.name }},
+
+      You signed the petition:
+
+      > # {{ petition.action }}
+      >
+      > {{ petition.background }}
+      >
+      > <{{ petition.url }}>
+
+      {{ mailshot.body }}
+
+      {% render "footer" %}
+
+      {% render "unsubscribe" signature: signature %}
+  notify_creator_of_debate_scheduled:
+    subject: Parliament will debate “{{ petition.action }}”
+    content: |
+      {% render "reason", petition: petition, signature: signature %}
+
+      Dear {{ signature.name }},
+
+      Parliament is going to debate your petition – “[{{ petition.action }}]({{ petition.url }})”.
+
+      The debate is scheduled for {{ petition.scheduled_debate_date | date: "%d/%m/%Y" }}.
+
+      You can watch it live on [Youtube][1] or [parliamentlive.tv][2].
+
+      You can read a [transcript][3] a few hours after it ends
+
+      After the debate, we’ll email you the video and transcript.
+
+      {% render "footer" %}
+
+      {% render "unsubscribe" signature: signature %}
+
+      [1]: https://www.youtube.com/@ukparliament/streams
+      [2]: https://parliamentlive.tv/Commons
+      [3]: https://hansard.parliament.uk/
+  notify_creator_of_negative_debate_outcome:
+    subject: Parliament didn’t debate “{{ petition.action }}”
+    content: |
+      {% render "reason", petition: petition, signature: signature %}
+
+      Dear {{ signature.name }},
+
+      The Petitions Committee decided not to debate your petition – “{{ petition.action }}”
+
+      {% if outcome.overview %}
+      {{ outcome.overview | blockquote }}
+
+      {% endif %}
+      The petition: <{{ petition.url }}>
+
+      Find out more about the Petitions Committee: {{ site.petitions_committee_url }}
+
+      {% render "footer" %}
+
+      {% render "unsubscribe" signature: signature %}
+  notify_creator_of_positive_debate_outcome:
+    subject: Parliament debated “{{ petition.action }}”
+    content: |
+      {% render "reason", petition: petition, signature: signature %}
+
+      Dear {{ signature.name }},
+
+      Parliament debated your petition – “{{ petition.action }}”
+
+      {% if outcome.overview %}
+      {{ outcome.overview | blockquote }}
+
+      {% endif %}
+      {% if outcome.video_url %}
+      Watch the debate: <{{ outcome.video_url }}>
+
+      {% endif %}
+      {% if outcome.transcript_url %}
+      Read the transcript: <{{ outcome.transcript_url }}>
+
+      {% endif %}
+      {% if outcome.debate_pack_url %}
+      Read the research: <{{ outcome.debate_pack_url }}>
+
+      {% endif %}
+      {% if outcome.public_engagement_url %}
+      Read what the public said: <{{ outcome.public_engagement_url }}>
+
+      {% endif %}
+      {% if outcome.debate_summary_url %}
+      Read a summary of the debate: <{{ outcome.debate_summary_url }}>
+
+      {% endif %}
+      The petition: <{{ petition.url }}>
+
+      {% render "footer" %}
+
+      {% render "unsubscribe" signature: signature %}
+  notify_creator_of_threshold_response:
+    subject: Government responded to “{{ petition.action }}”
+    content: |
+      {% render "reason" petition: petition, signature: signature %}
+
+      Dear {{ signature.name }},
+
+      The Government has responded to your petition – “[{{  petition.action }}]({{ petition.url }})”.
+
+      {{ response.summary | blockquote }}
+      >
+      {{ response.details | blockquote }}
+
+      Click this link to view the response online:
+
+      <{{ response.url }}>
+
+      {% if petition.signature_count >= 100000 %}
+      This petition has over 100,000 signatures. The Petitions Committee will consider it for a debate. They can also gather further evidence and press the government for action.
+      {% endif %}
+
+      The Committee is made up of 11 MPs, from political parties in government and in opposition. It is entirely independent of the Government. Find out more about the Committee: {{ site.petitions_committee_url }}
+
+      {% render "footer" %}
+
+      {% render "unsubscribe" signature: signature %}
+  notify_signer_of_debate_scheduled:
+    subject: Parliament will debate “{{ petition.action }}”
+    content: |
+      {% render "reason", petition: petition, signature: signature %}
+
+      Dear {{ signature.name }},
+
+      Parliament is going to debate the petition you signed – “[{{ petition.action }}]({{ petition.url }})”.
+
+      The debate is scheduled for {{ petition.scheduled_debate_date | date: "%d/%m/%Y" }}.
+
+      You can watch it live on [Youtube][1] or [parliamentlive.tv][2].
+
+      You can read a [transcript][3] a few hours after it ends
+
+      After the debate, we’ll email you the video and transcript.
+
+      {% render "footer" %}
+
+      {% render "unsubscribe" signature: signature %}
+
+      [1]: https://www.youtube.com/@ukparliament/streams
+      [2]: https://parliamentlive.tv/Commons
+      [3]: https://hansard.parliament.uk/
+  notify_signer_of_negative_debate_outcome:
+    subject: Parliament didn’t debate “{{ petition.action }}”
+    content: |
+      {% render "reason", petition: petition, signature: signature %}
+
+      Dear {{ signature.name }},
+
+      The Petitions Committee decided not to debate the petition you signed – “{{ petition.action }}”
+
+      {% if outcome.overview %}
+      {{ outcome.overview | blockquote }}
+
+      {% endif %}
+      The petition: <{{ petition.url }}>
+
+      Find out more about the Petitions Committee: {{ site.petitions_committee_url }}
+
+      {% render "footer" %}
+
+      {% render "unsubscribe" signature: signature %}
+  notify_signer_of_positive_debate_outcome:
+    subject: Parliament debated “{{ petition.action }}”
+    content: |
+      {% render "reason", petition: petition, signature: signature %}
+
+      Dear {{ signature.name }},
+
+      Parliament debated the petition you signed – “{{ petition.action }}”
+
+      {% if outcome.overview %}
+      {{ outcome.overview | blockquote }}
+
+      {% endif %}
+      {% if outcome.video_url %}
+      Watch the debate: <{{ outcome.video_url }}>
+
+      {% endif %}
+      {% if outcome.transcript_url %}
+      Read the transcript: <{{ outcome.transcript_url }}>
+
+      {% endif %}
+      {% if outcome.debate_pack_url %}
+      Read the research: <{{ outcome.debate_pack_url }}>
+
+      {% endif %}
+      {% if outcome.public_engagement_url %}
+      Read what the public said: <{{ outcome.public_engagement_url }}>
+
+      {% endif %}
+      {% if outcome.debate_summary_url %}
+      Read a summary of the debate: <{{ outcome.debate_summary_url }}>
+
+      {% endif %}
+      The petition: <{{ petition.url }}>
+
+      {% render "footer" %}
+
+      {% render "unsubscribe" signature: signature %}
+  notify_signer_of_threshold_response:
+    subject: Government responded to “{{ petition.action }}”
+    content: |
+      {% render "reason" petition: petition, signature: signature %}
+
+      Dear {{ signature.name }},
+
+      The Government has responded to the petition you signed – “[{{  petition.action }}]({{ petition.url }})”.
+
+      {{ response.summary | blockquote }}
+      >
+      {{ response.details | blockquote }}
+
+      Click this link to view the response online:
+
+      <{{ response.url }}>
+
+      {% if petition.signature_count >= 100000 %}
+      This petition has over 100,000 signatures. The Petitions Committee will consider it for a debate. They can also gather further evidence and press the government for action.
+      {% endif %}
+
+      The Committee is made up of 11 MPs, from political parties in government and in opposition. It is entirely independent of the Government. Find out more about the Committee: {{ site.petitions_committee_url }}
+
+      {% render "footer" %}
+
+      {% render "unsubscribe" signature: signature %}
+petition_mailer:
+  email_confirmation_for_signer:
+    subject: Please confirm your email address
+    content: |
+      Click the link to sign this petition:
+
+      > # {{ petition.action }}
+      >
+      > {{ petition.background }}
+
+      <{{ signature.verification_url }}>
+
+      {% render "footer" %}
+  email_creator:
+    subject: "{{ email.subject }}"
+    content: |
+      Dear {{ signature.name }},
+
+      You recently created the petition:
+
+      > # {{ petition.action }}
+      >
+      > {{ petition.background }}
+      >
+      > <{{ petition.url }}>
+
+      {{ email.body }}
+
+      {% render "footer" %}
+
+      {% render "unsubscribe" signature: signature %}
+  email_duplicate_signatures:
+    subject: Duplicate signature of petition
+    content: |
+      You're receiving this email because your email has been used to sign the petition “[{{ petition.action }}]({{ petition.url }})”, but you have already signed this petition.
+
+      {% render "footer" %}
+  email_signer:
+    subject: "{{ email.subject }}"
+    content: |
+      {% render "reason", petition: petition, signature: signature %}
+
+      Dear {{ signature.name }},
+
+      You recently signed the petition “{{ petition.action }}”:
+      <{{ petition.url }}>
+
+      {{ email.body }}
+
+      {% render "footer" %}
+
+      {% render "unsubscribe" signature: signature %}
+  gather_sponsors_for_petition:
+    subject: 'Get supporters for: “{{ petition.action }}”'
+    content: |
+      You’re receiving this email because you created the petition:
+      “[{{ petition.action }}]({{ petition.new_sponsor_url}})”.
+
+      ---
+
+      Dear {{ creator.name }},
+
+      You’re not done yet!
+
+      {{ site.threshold_for_moderation | number_to_word | titleize }} people need to sign your petition for us to check it.
+
+      Send your potential supporters the information at the bottom of this email.
+
+      Once you’ve gained {{ site.threshold_for_moderation | number_to_word }} signatures, we’ll check your petition to make sure it meets the [petition standards]({{ site.standards_url }}). If it does, we’ll publish it. If it doesn’t, we’ll let you know why.
+
+      This can take up to 10 working days. During holiday periods, this may take longer. Thank you for your patience.
+
+      Up to {{ site.maximum_number_of_sponsors }} people can sign your petition while we are checking it. Please wait until it’s been checked and published before sharing it more widely.
+
+      {% render "footer" %}
+
+      ---
+
+      I want to start a petition – will you sign it?
+
+      > # {{ petition.action }}
+      >
+      > {{ petition.background }}
+      {% if petition.additional_details %}
+      >
+      {{ petition.additional_details | blockquote }}
+      {% endif %}
+
+      [Sign the petition]({{ petition.new_sponsor_url }})
+  gather_sponsors_for_petition_with_delay:
+    subject: 'Get supporters for: “{{ petition.action }}”'
+    content: |
+      You’re receiving this email because you created the petition:
+      “[{{ petition.action }}]({{ petition.new_sponsor_url}})”.
+
+      ---
+
+      Dear {{ creator.name }},
+
+      You’re not done yet!
+
+      {{ site.threshold_for_moderation | number_to_word | titleize }} people need to sign your petition for us to check it.
+
+      Send your potential supporters the information at the bottom of this email.
+
+      Once you’ve gained {{ site.threshold_for_moderation | number_to_word }} signatures, we’ll check your petition to make sure it meets the [petition standards]({{ site.standards_url }}). If it does, we’ll publish it. If it doesn’t, we’ll let you know why.
+
+      We currently have a very large number of petitions to check, so it may take a number of weeks to check your petition. Thank you for your patience.
+
+      Up to {{ site.maximum_number_of_sponsors }} people can sign your petition while we are checking it. Please wait until it’s been checked and published before sharing it more widely.
+
+      {% render "footer" %}
+
+      ---
+
+      I want to start a petition – will you sign it?
+
+      > # {{ petition.action }}
+      >
+      > {{ petition.background }}
+      {% if petition.additional_details %}
+      >
+      {{ petition.additional_details | blockquote }}
+      {% endif %}
+
+      [Sign the petition]({{ petition.new_sponsor_url }})
+  mailshot_for_creator:
+    subject: "{{ mailshot.subject }}"
+    content: |
+      Dear {{ signature.name }},
+
+      You recently created the petition:
+
+      > # {{ petition.action }}
+      >
+      > {{ petition.background }}
+      >
+      > <{{ petition.url }}>
+
+      {{ mailshot.body }}
+
+      {% render "footer" %}
+
+      {% render "unsubscribe" signature: signature %}
+  mailshot_for_signer:
+    subject: "{{ mailshot.subject }}"
+    content: |
+      Dear {{ signature.name }},
+
+      You recently signed the petition:
+
+      > # {{ petition.action }}
+      >
+      > {{ petition.background }}
+      >
+      > <{{ petition.url }}>
+
+      {{ mailshot.body }}
+
+      {% render "footer" %}
+
+      {% render "unsubscribe" signature: signature %}
+
+      {% render "reason", petition: petition, signature: signature %}
+  notify_creator_of_closing_date_change:
+    subject: 'We’re closing your {{ "petition" | pluralize: count }} early'
+    content: |
+      Dear {{ signature.name }},
+
+      You recently started the {{ "petition" | pluralize: count }}:
+
+      {% for petition in petitions %}
+      * [{{ petition.action %> }}]({{ petition.url }})
+      {% endfor %}
+
+      {% if remaining > 0 %}
+      Plus another {{ remaining }} {{ "petition" | pluralize: remaining }}
+      {% endif %}
+
+      Because of the General Election, the closing date for your {{ "petition" | pluralize: count }} has changed. All petitions now have to close at {{ closing_time }} on {{ closing_date }}. This is because Parliament will be dissolved, which means all parliamentary business – including petitions – must stop. This means the petitions site will be closed and people will not be able to start or sign petitions.
+
+      We’re sorry we weren’t able to give you more notice that this would happen.
+
+      Your {{ "petition" | pluralize: count }} will be available for people to read on the site even though it will be closed for signatures. Your {{ "petition" | pluralize: count }} can’t be reopened after the election. You are very welcome to start your {{ "petition" | pluralize: count }} again when the site reopens after the election, but we can’t transfer signatures to your new {{ "petition" | pluralize: count }}.
+
+      The Government can’t respond to petitions during the election period. This means if {%if count > 1 %}any of your petitions{% else %}your petition{% endif %} has over {{ site.threshold_for_response }} signatures, {%if count > 1 %}they{% else %}it{% endif %} can’t receive a response from the current Government after {{ last_response_date }}. After the election, the new Government will have to decide whether to respond to petitions from before the election.
+
+      The current Petitions Committee, the group of MPs who decide whether petitions are debated, won’t exist after {{ closing_date }}. This means that if {%if count > 1 %}any of your petitions{% else %}your petition{% endif %} has over {{ site.threshold_for_debate }} signatures, {%if count > 1 %}they{% else %}it{% endif %} can’t be scheduled for debate during this Parliament. After the election, a new Petitions Committee will be responsible for deciding which petitions are debated.
+
+      The petitions site will reopen when a new Petitions Committee is appointed, but at the moment we don’t know exactly when. You can follow us on X [@HoCPetitions](https://x.com/HoCPetitions) for updates, or check back on the petitions site for news.
+
+      {% if parliament.dissolution_faq_url %}
+      You can find out more about what the General Election means for your petitions on our website: <{{ parliament.dissolution_faq_url }}>
+      {% endif %}
+
+      Ahead of the General Election on {{ election_date }}, make sure you’re registered to vote. You can check whether you’re eligible to vote and find out how to register at: <https://www.gov.uk/register-to-vote>. The deadline to register to vote is {{ registration_deadline }}.
+
+      {% render "footer", closing: "Many thanks" %}
+  notify_creator_of_debate_scheduled:
+    subject: Parliament will debate “{{ petition.action }}”
+    content: |
+      {% render "reason", petition: petition, signature: signature %}
+
+      Dear {{ signature.name }},
+
+      Parliament is going to debate your petition – “[{{ petition.action }}]({{ petition.url }})”.
+
+      The debate is scheduled for {{ petition.scheduled_debate_date | date: "%d/%m/%Y" }}.
+
+      You can watch it live on [Youtube][1] or [parliamentlive.tv][2].
+
+      You can read a [transcript][3] a few hours after it ends
+
+      After the debate, we’ll email you the video and transcript.
+
+      {% render "footer" %}
+
+      {% render "unsubscribe" signature: signature %}
+
+      [1]: https://www.youtube.com/@ukparliament/streams
+      [2]: https://parliamentlive.tv/Commons
+      [3]: https://hansard.parliament.uk/
+  notify_creator_of_negative_debate_outcome:
+    subject: Parliament didn’t debate “{{ petition.action }}”
+    content: |
+      {% render "reason", petition: petition, signature: signature %}
+
+      Dear {{ signature.name }},
+
+      The Petitions Committee decided not to debate your petition – “{{ @petition.action }}”
+
+      {% if outcome.overview %}
+      {{ outcome.overview | blockquote }}
+
+      {% endif %}
+      The petition: <{{ petition.url }}>
+
+      Find out more about the Petitions Committee:
+      <{{ site.petitions_committee_url }}>
+
+      {% render "footer" %}
+
+      {% render "unsubscribe" signature: signature %}
+  notify_creator_of_positive_debate_outcome:
+    subject: Parliament debated “{{ petition.action }}”
+    content: |
+      {% render "reason", petition: petition, signature: signature %}
+
+      Dear {{ signature.name }},
+
+      Parliament debated your petition – “{{ petition.action }}”
+
+      {% if outcome.overview %}
+      {{ outcome.overview | blockquote }}
+      {% endif %}
+
+      {% if outcome.video_url %}
+      Watch the debate: <{{ outcome.video_url }}>
+
+      {% endif %}
+      {% if outcome.transcript_url %}
+      Read the transcript: <{{ outcome.transcript_url }}>
+
+      {% endif %}
+      {% if outcome.debate_pack_url %}
+      Read the research: <{{ outcome.debate_pack_url }}>
+
+      {% endif %}
+      {% if outcome.public_engagement_url %}
+      Read what the public said: <{{ outcome.public_engagement_url }}>
+
+      {% endif %}
+      {% if outcome.debate_summary_url %}
+      Read a summary of the debate: <{{ outcome.debate_summary_url }}>
+
+      {% endif %}
+      The petition: <{{ petition.url }}>
+
+      {% render "footer" %}
+
+      {% render "unsubscribe" signature: signature %}
+  notify_creator_of_sponsored_petition_being_stopped:
+    subject: We’ve stopped your petition early
+    content: |
+      Dear {{ signature.name }},
+
+      Because of the General Election, the petitions site had to close. This is because Parliament is now dissolved which means that all parliamentary business – including petitions – must stop.
+
+      We’re very sorry that we didn’t have time to check your petition before this happened.
+
+      Petitions started before the election won’t restart when the site opens again. You are very welcome to resubmit your petition once the site reopens, but you’ll need to collect your five sponsor signatures again.
+
+      The petitions site will reopen when a new Petitions Committee is appointed, but at the moment we don’t know exactly when. You can follow us on X [@HoCPetitions](https://x.com/HoCPetitions) for updates, or check back on the petitions site for news.
+
+      {% if parliament.dissolution_faq_url %}
+      You can find out more about what the General Election means for your petitions on our website: <{{ parliament.dissolution_faq_url) }}>
+      {% endif %}
+
+      {% render "footer", closing: "Many thanks" %}
+  notify_creator_of_threshold_response:
+    subject: Government responded to “{{ petition.action }}”
+    content: |
+      {% render "reason" petition: petition, signature: signature %}
+
+      Dear {{ signature.name }},
+
+      The Government has responded to your petition – “[{{  petition.action }}]({{ petition.url }})”.
+
+      {{ response.summary | blockquote }}
+      >
+      {{ response.details | blockquote }}
+
+      Click this link to view the response online:
+
+      <{{ response.url }}>
+
+      {% if petition.signature_count >= 100000 %}
+      This petition has over 100,000 signatures. The Petitions Committee will consider it for a debate. They can also gather further evidence and press the government for action.
+      {% endif %}
+
+      The Committee is made up of 11 MPs, from political parties in government and in opposition. It is entirely independent of the Government. Find out more about the Committee: {{ site.petitions_committee_url }}
+
+      {% render "footer" %}
+
+      {% render "unsubscribe" signature: signature %}
+  notify_creator_of_validated_petition_being_stopped:
+    subject: We’ve stopped your petition early
+    content: |
+      Dear {{ signature.name }},
+
+      Because of the General Election, the petitions site had to close. This is because Parliament is now dissolved which means that all parliamentary business – including petitions – must stop.
+
+      We’re very sorry that you didn’t have time to collect your five signatures before this happened.
+
+      Petitions started before the election won’t restart when the site opens again. You are very welcome to resubmit your petition once the site reopens, but you’ll need to collect your sponsor signatures again.
+
+      The petitions site will reopen when a new Petitions Committee is appointed, but at the moment we don’t know exactly when. You can follow us on X [@HoCPetitions](https://x.com/HoCPetitions) for updates, or check back on the petitions site for news.
+
+      {% if parliament.dissolution_faq_url %}
+      You can find out more about what the General Election means for your petitions on our website: <{{ parliament.dissolution_faq_url) }}>
+      {% endif %}
+
+      {% render "footer", closing: "Many thanks" %}
+  notify_creator_that_moderation_is_delayed:
+    subject: "{{ subject }}"
+    content: |
+      {% render "reason", petition: petition, signature: signature %}
+
+      Dear {{ signature.name }},
+
+      You recently created the petition “{{ petition.action }}”:
+      <{{ petition.url }}>
+
+      {{ body }}
+
+      {% render "footer" %}
+
+      {% render "unsubscribe" signature: signature %}
+  notify_creator_that_petition_is_published:
+    subject: We published your petition “{{ petition.action }}”
+    content: |
+      Dear {{ signature.name }},
+
+      We published the petition you created – “{{ petition.action }}”
+
+      Click this link to see your petition and start sharing it:
+      <{{ petition.url }}>
+
+      {% render "footer" %}
+  notify_creator_that_petition_was_hidden:
+    subject: We rejected your petition “{{ petition.action }}”
+    content: |
+      Dear {{ signature.name }},
+
+      Sorry, we can’t accept your petition – “{{ petition.action }}”.
+
+      {{ rejection.description }}
+      {% if rejection.details %}
+
+      {{ rejection.details }}
+      {% endif %}
+
+      We only reject petitions that don’t meet the petition standards:
+      <{{ site.standards_url }}>
+
+      If you want to try again, click here to start a petition:
+      <{{ site.check_petitions_url }}>
+
+      {% render "footer" %}
+  notify_creator_that_petition_was_rejected:
+    subject: We rejected your petition “{{ petition.action }}”
+    content: |
+      Dear {{ signature.name }},
+
+      Sorry, we can’t accept your petition – “{{ petition.action }}”.
+
+      {{ rejection.description }}
+      {% if rejection.details %}
+
+      {{ rejection.details }}
+      {% endif %}
+
+      Click this link to see your rejected petition:
+      [View your rejected petition]({{ petition.url }})
+
+      We only reject petitions that don’t meet the petition standards:
+      <{{ site.standards_url }}>
+
+      If you want to try again, click here to start a petition:
+      <{{ site.check_petitions_url }}>
+
+      {% render "footer" %}
+  notify_signer_of_closing_date_change:
+    subject: We’re closing petitions early
+    content: |
+      Dear {{ signature.name }},
+
+      You recently signed the {{ "petition" | pluralize: count }}:
+
+      {% for petition in petitions %}
+      * [{{ petition.action %> }}]({{ petition.url }})
+      {% endfor %}
+
+      {% if remaining > 0 %}
+      Plus another {{ remaining }} {{ "petition" | pluralize: remaining }}
+      {% endif %}
+
+      Because of the General Election, the closing date for the {{ "petition" | pluralize: count }} you signed has changed. All petitions now have to close at {{ closing_time }} on {{ closing_date }}. This is because Parliament will be dissolved, which means all parliamentary business – including petitions – must stop. This means the petitions site will be closed and people will not be able to start or sign petitions.
+
+      We’re sorry we weren’t able to give you more notice that this would happen.
+
+      you signed has changed {{ "petition" | pluralize: count }} will be available for people to read on the site even though it will be closed for signatures. {% if count > 1 %}These petitions{% else %}This petition{% endif%} won’t be reopened after the election.
+
+      The Government can’t respond to petitions during the election period. This means if {%if count > 1 %}any of the petitions{% else %}the petition{% endif %} has over {{ site.threshold_for_response }} signatures, {%if count > 1 %}they{% else %}it{% endif %} can’t receive a response from the current Government after {{ last_response_date }}. After the election, the new Government will have to decide whether to respond to petitions from before the election.
+
+      The current Petitions Committee, the group of MPs who decide whether petitions are debated, won’t exist after {{ closing_date }}. This means that if {%if count > 1 %}any of the petitions{% else %}the petition{% endif %} has over {{ site.threshold_for_debate }} signatures, {%if count > 1 %}they{% else %}it{% endif %} can’t be scheduled for debate during this Parliament. After the election, a new Petitions Committee will be responsible for deciding which petitions are debated.
+
+      The petitions site will reopen when a new Petitions Committee is appointed, but at the moment we don’t know exactly when. You can follow us on X [@HoCPetitions](https://x.com/HoCPetitions) for updates, or check back on the petitions site for news.
+
+      {% if parliament.dissolution_faq_url %}
+      You can find out more about what the General Election means for petitions on our website: <{{ parliament.dissolution_faq_url }}>
+      {% endif %}
+
+      Ahead of the General Election on {{ election_date }}, make sure you’re registered to vote. You can check whether you’re eligible to vote and find out how to register at: <https://www.gov.uk/register-to-vote>. The deadline to register to vote is {{ registration_deadline }}.
+
+      {% render "footer", closing: "Many thanks" %}
+  notify_signer_of_debate_scheduled:
+    subject: Parliament will debate “{{ petition.action }}”
+    content: |
+      {% render "reason", petition: petition, signature: signature %}
+
+      Dear {{ signature.name }},
+
+      Parliament is going to debate the petition you signed – “[{{ petition.action }}]({{ petition.url }})”.
+
+      The debate is scheduled for {{ petition.scheduled_debate_date | date: "%d/%m/%Y" }}.
+
+      You can watch it live on [Youtube][1] or [parliamentlive.tv][2].
+
+      You can read a [transcript][3] a few hours after it ends
+
+      After the debate, we’ll email you the video and transcript.
+
+      {% render "footer" %}
+
+      {% render "unsubscribe" signature: signature %}
+
+      [1]: https://www.youtube.com/@ukparliament/streams
+      [2]: https://parliamentlive.tv/Commons
+      [3]: https://hansard.parliament.uk/
+  notify_signer_of_negative_debate_outcome:
+    subject: Parliament didn’t debate “{{ petition.action }}”
+    content: |
+      {% render "reason", petition: petition, signature: signature %}
+
+      Dear {{ signature.name }},
+
+      The Petitions Committee decided not to debate the petition you signed – “{{ petition.action }}”
+
+      {% if outcome.overview %}
+      {{ outcome.overview | blockquote }}
+
+      {% endif %}
+      The petition: <{{ petition.url }}>
+
+      Find out more about the Petitions Committee: {{ site.petitions_committee_url }}
+
+      {% render "footer" %}
+
+      {% render "unsubscribe" signature: signature %}
+  notify_signer_of_positive_debate_outcome:
+    subject: Parliament debated “{{ petition.action }}”
+    content: |
+      {% render "reason", petition: petition, signature: signature %}
+
+      Dear {{ signature.name }},
+
+      Parliament debated the petition you signed – “{{ petition.action }}”
+
+      {% if outcome.overview %}
+      {{ outcome.overview | blockquote }}
+
+      {% endif %}
+      {% if outcome.video_url %}
+      Watch the debate: <{{ outcome.video_url }}>
+
+      {% endif %}
+      {% if outcome.transcript_url %}
+      Read the transcript: <{{ outcome.transcript_url }}>
+
+      {% endif %}
+      {% if outcome.debate_pack_url %}
+      Read the research: <{{ outcome.debate_pack_url }}>
+
+      {% endif %}
+      {% if outcome.public_engagement_url %}
+      Read what the public said: <{{ outcome.public_engagement_url }}>
+
+      {% endif %}
+      {% if outcome.debate_summary_url %}
+      Read a summary of the debate: <{{ outcome.debate_summary_url }}>
+
+      {% endif %}
+      The petition: <{{ petition.url }}>
+
+      {% render "footer" %}
+
+      {% render "unsubscribe" signature: signature %}
+  notify_signer_of_threshold_response:
+    subject: Government responded to “{{ petition.action }}”
+    content: |
+      {% render "reason" petition: petition, signature: signature %}
+
+      Dear {{ signature.name }},
+
+      The Government has responded to the petition you signed – “[{{  petition.action }}]({{ petition.url }})”.
+
+      {{ response.summary | blockquote }}
+      >
+      {{ response.details | blockquote }}
+
+      Click this link to view the response online:
+
+      <{{ response.url }}>
+
+      {% if petition.signature_count >= 100000 %}
+      This petition has over 100,000 signatures. The Petitions Committee will consider it for a debate. They can also gather further evidence and press the government for action.
+      {% endif %}
+
+      The Committee is made up of 11 MPs, from political parties in government and in opposition. It is entirely independent of the Government. Find out more about the Committee: {{ site.petitions_committee_url }}
+
+      {% render "footer" %}
+
+      {% render "unsubscribe" signature: signature %}
+  notify_sponsor_that_petition_is_published:
+    subject: We published the petition “{{ petition.action }}” that you supported
+    content: |
+      Dear {{ signature.name }},
+
+      We published the petition you supported – “{{ petition.action }}”
+
+      Click this link to see the petition and start sharing it:
+      <{{ petition.url }}>
+
+      {% render "footer" %}
+  notify_sponsor_that_petition_was_hidden:
+    subject: We rejected the petition “{{ petition.action }}” that you supported
+    content: |
+      Dear {{ signature.name }},
+
+      Sorry, we can’t accept the petition you supported – “{{ petition.action }}”.
+
+      {{ rejection.description }}
+      {% if rejection.details %}
+
+      {{ rejection.details }}
+      {% endif %}
+
+      We only reject petitions that don’t meet the petition standards:
+      <{{ site.standards_url }}>
+
+      {% render "footer" %}
+  notify_sponsor_that_petition_was_rejected:
+    subject: We rejected the petition “{{ petition.action }}” that you supported
+    content: |
+      Dear {{ signature.name }},
+
+      Sorry, we can’t accept the petition you supported – “{{ petition.action }}”.
+
+      {{ rejection.description }}
+      {% if rejection.details %}
+
+      {{ rejection.details }}
+      {% endif %}
+
+      Click this link to see the rejected petition:
+      [View the rejected petition]({{ petition.url }})
+
+      We only reject petitions that don’t meet the petition standards:
+      <{{ site.standards_url }}>
+
+      {% render "footer" %}
+sponsor_mailer:
+  petition_and_email_confirmation_for_sponsor:
+    subject: 'Sign to support: “{{ petition.action }}”'
+    content: |
+      Dear {{ sponsor.name }},
+
+      Please [confirm your email]({{ sponsor.verification_url }}), to support and sign {{ petition.creator }}’s petition:
+
+      > # {{ petition.action }}
+      >
+      > {{ petition.background }}
+
+      {% render "footer" %}
+  sponsor_signed_email_below_threshold:
+    subject: 'Someone supported: “{{ petition.action }}”'
+    content: |
+      Dear {{ petition.creator }},
+
+      Someone supported your petition:
+
+      > # {{ petition.action }}
+      >
+      > {{ petition.background }}
+
+      You have {{ petition.sponsor_count }} {{ "supporter" | pluralize: petition.sponsor_count }} so far.
+
+      If {{ site.threshold_for_moderation | number_to_word }} people support your petition, we’ll check it to make sure it meets the [petition standards]({{ site.standards_url }}).
+
+      If it does, we’ll publish it. If it doesn’t, we’ll let you know why.
+
+      {% render "footer" %}
+  sponsor_signed_email_on_threshold:
+    subject: 'Your petition has {{ site.threshold_for_moderation | number_to_word }} supporters: “{{ petition.action }}”'
+    content: |
+      Dear {{ petition.creator }},
+
+      Someone supported your petition:
+
+      > # {{ petition.action }}
+      >
+      > {{ petition.background }}
+
+      {{ petition.sponsor_count }} {% if petition.sponsor_count > 1%}people have{% else %}person has{% endif %} supported your petition.
+
+      We’re checking it to make sure it meets the [petition standards]({{ site.standards_url }}).
+
+      If it does, we’ll publish it. If it doesn’t, we’ll let you know why.
+
+      This can take up to 10 working days. During holiday periods, this may take longer. Thank you for your patience.
+
+      Once your petition has {{ site.maximum_number_of_sponsors }} supporters, no one else will be able to sign it until it’s been checked. Please wait until it’s been checked and published before sharing more widely.
+
+      {% render "footer" %}
+  sponsor_signed_email_on_threshold_with_delay:
+    subject: 'Your petition has {{ site.threshold_for_moderation | number_to_word }} supporters: “{{ petition.action }}”'
+    content: |
+      Dear {{ petition.creator }},
+
+      Someone supported your petition:
+
+      > # {{ petition.action }}
+      >
+      > {{ petition.background }}
+
+      {{ petition.sponsor_count }} {% if petition.sponsor_count > 1%}people have{% else %}person has{% endif %} supported your petition. We’re checking it to make sure it meets the [petition standards]({{ site.standards_url }}). If it does, we’ll publish it. If it doesn’t, we’ll let you know why.
+
+      We currently have a very large number of petitions to check, so it may take a number of weeks to check your petition. Thank you for your patience.
+
+      Once your petition has {{ site.maximum_number_of_sponsors }} supporters, no one else will be able to sign it until it’s been checked. Please wait until it’s been checked and published before sharing more widely.
+
+      {% render "footer" %}

@@ -341,4 +341,8 @@ class Parliament < ActiveRecord::Base
   def midnight
     @midnight ||= Date.tomorrow.beginning_of_day
   end
+
+  def to_liquid
+    ParliamentDrop.new(self)
+  end
 end

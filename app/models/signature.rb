@@ -799,6 +799,10 @@ class Signature < ActiveRecord::Base
     end
   end
 
+  def to_liquid
+    SignatureDrop.new(self)
+  end
+
   private
 
   def normalize_email(value)

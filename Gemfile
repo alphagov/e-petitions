@@ -38,6 +38,7 @@ gem 'nokogiri'
 gem 'omniauth'
 gem 'omniauth-rails_csrf_protection'
 gem 'omniauth-saml'
+gem 'liquid'
 
 gem 'aws-sdk-codedeploy'
 gem 'aws-sdk-cloudwatchlogs'

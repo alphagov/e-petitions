@@ -39,13 +39,13 @@ class AdminUser < ActiveRecord::Base
 
     def find_or_create_from!(provider, auth_data)
       email = auth_data.fetch(:uid).downcase
-      groups = Array.wrap(auth_data.info.fetch(:groups))
+      groups = fetch_multi(auth_data, :groups)
       retried = false
 
       begin
         find_or_initialize_by(email: email).tap do |user|
-          user.first_name = auth_data.info.fetch(:first_name)
-          user.last_name = auth_data.info.fetch(:last_name)
+          user.first_name = fetch_single(auth_data, :first_name)
+          user.last_name = fetch_single(auth_data, :last_name)
 
           if (groups & provider.sysadmin).any?
             user.role = SYSADMIN_ROLE
@@ -64,6 +64,16 @@ class AdminUser < ActiveRecord::Base
       end
     rescue ActiveRecord::RecordInvalid => e
       Appsignal.send_exception(e) and return nil
+    end
+
+    private
+
+    def fetch_single(auth_data, key)
+      fetch_multi(auth_data, key).first
+    end
+
+    def fetch_multi(auth_data, key)
+      Array.wrap(auth_data.info.fetch(key))
     end
   end
 

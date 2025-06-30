@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta content="telephone=no" name="format-detection"> <!-- need to add formatting for real phone numbers -->
+  <meta name="viewport" content="width=device-width">
+  <title><%= @view.subject %></title>
+
+  <style>
+    @media only screen and (min-device-width: 581px) {
+      .content {
+        width: 580px !important;
+      }
+    }
+    body { margin:0 !important; }
+    div[style*="margin: 16px 0"] { margin:0 !important; }
+  </style>
+
+  <!--[if gte mso 9]>
+    <style>
+      li {
+        margin-left: 4px !important;
+      }
+      table {
+        mso-table-lspace: 0pt;
+        mso-table-rspace: 0pt;
+      }
+    </style>
+  <![endif]-->
+
+</head>
+
+<body style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;font-size: 16px;margin: 0;color:#0b0c0c; -webkit-font-smoothing: antialiased;">
+  <span style="display: none;font-size: 1px;color: #fff; max-height: 0;" hidden><%= @view.preheader %>…</span>
+<% if Site.email_header_style == 'black' %>
+  <table role="presentation" bgcolor="#0b0c0c" width="100%" style="border-collapse: collapse;min-width: 100%;width: 100% !important;" cellpadding="0" cellspacing="0" border="0">
+    <tr>
+      <td height="10" width="100%"><br></td>
+    </tr>
+    <tr>
+      <td width="100%">
+        <!--[if (gte mso 9)|(IE)]>
+          <table role="presentation" width="580" align="center" cellpadding="0" cellspacing="0" border="0" style="border-collapse: collapse;width: 580px;">
+            <tr>
+              <td>
+        <![endif]-->
+        <table role="presentation" width="100%" style="border-collapse: collapse;max-width: 580px;" cellpadding="0" cellspacing="0" border="0" align="center">
+          <tr>
+            <td width="10" height="10" valign="middle"></td>
+            <td valign="middle">
+              <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="border-collapse: collapse">
+                <tr>
+                  <td style="padding: 0 15px 0 0;" valign="top">
+                    <%= image_tag("graphics/graphic_portcullis-white-2x.png", height: 32, alt: "Portcullis logo") %>
+                  </td>
+                  <td width="100%" style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 18px; line-height: 18px; color: #ffffff;" valign="center">
+                    <div style="font-weight: bold;">Petitions</div>
+                    <div style="font-size: 16px; margin: 5px 0 0 0;">UK Government and Parliament</div>
+                  </td>
+                </tr>
+              </table>
+            </td>
+            <td width="10" height="10" valign="middle"></td>
+          </tr>
+        </table>
+        <!--[if (gte mso 9)|(IE)]>
+              </td>
+            </tr>
+          </table>
+        <![endif]-->
+      </td>
+    </tr>
+    <tr>
+      <td height="10" width="100%"><br></td>
+    </tr>
+  </table>
+<% elsif Site.email_header_style == 'green' %>
+  <table role="presentation" bgcolor="#008800" width="100%" style="border-collapse: collapse;min-width: 100%;width: 100% !important;" cellpadding="0" cellspacing="0" border="0">
+    <tr>
+      <td height="10" width="100%"><br></td>
+    </tr>
+    <tr>
+      <td width="100%">
+        <!--[if (gte mso 9)|(IE)]>
+          <table role="presentation" width="580" align="center" cellpadding="0" cellspacing="0" border="0" style="border-collapse: collapse;width: 580px;">
+            <tr>
+              <td>
+        <![endif]-->
+        <table role="presentation" width="100%" style="border-collapse: collapse;max-width: 580px;" cellpadding="0" cellspacing="0" border="0" align="center">
+          <tr>
+            <td width="10" height="10" valign="middle"></td>
+            <td valign="middle">
+              <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="border-collapse: collapse">
+                <tr>
+                  <td style="padding: 0 15px 0 0;" valign="top">
+                    <%= image_tag("graphics/graphic_portcullis-white-2x.png", height: 32, alt: "Portcullis logo") %>
+                  </td>
+                  <td width="100%" style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 18px; line-height: 18px; color: #ffffff;" valign="center">
+                    <div style="font-weight: bold;">Petitions</div>
+                    <div style="font-size: 16px; margin: 5px 0 0 0;">UK Government and Parliament</div>
+                  </td>
+                </tr>
+              </table>
+            </td>
+            <td width="10" height="10" valign="middle"></td>
+          </tr>
+        </table>
+        <!--[if (gte mso 9)|(IE)]>
+              </td>
+            </tr>
+          </table>
+        <![endif]-->
+      </td>
+    </tr>
+    <tr>
+      <td height="10" width="100%"><br></td>
+    </tr>
+  </table>
+<% else %>
+  <table
+      role="presentation"
+      class="content"
+      align="center"
+      cellpadding="0"
+      cellspacing="0"
+      border="0"
+      style="border-collapse: collapse;max-width: 580px; width: 100% !important;"
+      width="100%"
+  >
+    <tr>
+      <td width="10" height="10" valign="middle"></td>
+      <td>
+        <!--[if (gte mso 9)|(IE)]>
+          <table role="presentation" width="560" align="center" cellpadding="0" cellspacing="0" border="0" style="border-collapse: collapse;width: 560px;">
+            <tr>
+              <td height="10">
+        <![endif]-->
+                <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-collapse: collapse">
+                  <tr>
+                    <td height="24" width="100%"><br></td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="border-collapse: collapse">
+                        <tr>
+                          <td style="padding: 0 15px 0 0;" valign="top">
+                            <%= image_tag("graphics/graphic_portcullis-2x.png", height: 32, alt: "Portcullis logo") %>
+                          </td>
+                          <td width="100%" style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 18px; line-height: 18px;" valign="center">
+                            <div style="font-weight: bold;">Petitions</div>
+                            <div style="font-size: 16px; margin: 5px 0 0 0;">UK Government and Parliament</div>
+                          </td>
+                        </tr>
+                      </table>
+                    </td>
+                  </tr>
+                </table>
+        <!--[if (gte mso 9)|(IE)]>
+              </td>
+            </tr>
+          </table>
+        <![endif]-->
+      </td>
+      <td width="10" height="10" valign="middle"></td>
+    </tr>
+  </table>
+<% end %>
+  <table
+      role="presentation"
+      class="content"
+      align="center"
+      cellpadding="0"
+      cellspacing="0"
+      border="0"
+      style="border-collapse: collapse;max-width: 580px; width: 100% !important;"
+      width="100%"
+  >
+    <tr>
+      <td height="30"><br></td>
+    </tr>
+    <tr>
+      <td width="10" valign="middle"><br></td>
+      <td style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 19px; line-height: 1.315789474; max-width: 560px;">
+        <!--[if (gte mso 9)|(IE)]>
+          <table role="presentation" width="560" align="center" cellpadding="0" cellspacing="0" border="0" style="border-collapse: collapse;width: 560px;">
+            <tr>
+              <td style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 19px; line-height: 1.315789474;">
+        <![endif]-->
+            <%= @view.html %>
+        <!--[if (gte mso 9)|(IE)]>
+              </td>
+            </tr>
+          </table>
+        <![endif]-->
+      </td>
+      <td width="10" valign="middle"><br></td>
+    </tr>
+    <tr>
+      <td height="30"><br></td>
+    </tr>
+  </table>
+</body>
+</html>

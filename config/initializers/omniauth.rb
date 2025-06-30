@@ -8,3 +8,6 @@ Rails.application.config.middleware.use OmniAuth::Builder do
     provider idp.name, idp.config
   end
 end
+
+# Allow multiple values for attributes
+OneLogin::RubySaml::Attributes.single_value_compatibility = false
