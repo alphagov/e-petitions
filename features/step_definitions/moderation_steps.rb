@@ -38,6 +38,20 @@ When(/^I reject the petition with a reason code "([^"]*)" and some explanatory t
   click_button "Email petition creator"
 end
 
+When('I reject the petition with a reason code {string} and hide it') do |reason_code|
+  choose "Reject"
+  select reason_code, :from => :petition_rejection_code
+  fill_in :petition_rejection_details, :with => "See guidelines at http://direct.gov.uk"
+  check 'Hide this petition from the public'
+  click_button "Email petition creator"
+end
+
+When('I hide the petition manually') do
+  click_on 'Change rejection reason'
+  check 'Hide this petition from the public'
+  click_button "Email petition creator"
+end
+
 Then /^the petition is not available for signing$/ do
   visit petition_url(@petition)
   expect(page).not_to have_css("a", :text => "Sign")
@@ -142,7 +156,7 @@ Then(/^the creator should not receive a notification email$/) do
   step %{"#{@petition.creator.email}" should receive no email with subject "We published your petition"}
 end
 
-Then(/^the creator should receive a (libel\/profanity )?rejection notification email$/) do |petition_is_libellous|
+Then(/^the creator should receive a (libel\/profanity |hidden )?rejection notification email$/) do |petition_is_hidden|
   @petition.reload
   steps %Q(
     Then "#{@petition.creator.email}" should receive an email
@@ -151,7 +165,7 @@ Then(/^the creator should receive a (libel\/profanity )?rejection notification e
     And they should see "#{strip_tags(rejection_description(@petition.rejection.code)).split("\n").first}" in the email body
     And they should see /We rejected your petition/ in the email subject
   )
-  if petition_is_libellous
+  if petition_is_hidden
     step %{they should not see "#{petition_url(@petition)}" in the email body}
   else
     step %{they should see "#{petition_url(@petition)}" in the email body}

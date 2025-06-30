@@ -1,6 +1,7 @@
 <div class="petition-rejection-controls">
   <%= javascript_tag do %>
     var rejection_descriptions = <%= raw json_escape(rejection_descriptions.to_json) %>;
+    var hidden_rejections = <%= raw json_escape(hidden_rejections.to_json) %>;
 
     $().ready(function() {
       // Ensure that we get the onchange event when the users uses the keyboard
@@ -13,6 +14,12 @@
       $('#petition_rejection_code').change(function() {
         $('#rejection_preview').show();
         $('#rejection_preview .content').html(rejection_descriptions[$(this).val()]);
+
+        if (hidden_rejections[$(this).val()]) {
+          $('#hide-petition-option').hide();
+        } else {
+          $('#hide-petition-option').show();
+        }
       });
     });
   <% end -%>
@@ -33,6 +40,14 @@
       <%= r.label :details, 'Additional details (optional)', class: 'form-label' %>
       <%= error_messages_for_field r.object, :details %>
       <%= r.text_area :details, rows: 8, cols: 70, class: 'form-control' %>
+    <% end %>
+
+    <%= form_row for: [r.object, :hidden], id: 'hide-petition-option' do %>
+      <div class="multiple-choice">
+        <%= r.check_box :hidden, tabindex: increment %>
+        <%= r.label :hidden, 'Hide this petition from the public' %>
+      </div>
+      <%= error_messages_for_field r.object, :hidden %>
     <% end %>
   <% end %>
 </div>

@@ -30,7 +30,7 @@ class Admin::TakeDownController < Admin::AdminController
   end
 
   def rejection_attributes
-    [ rejection: [:code, :details] ]
+    [ rejection: [:code, :details, :hidden] ]
   end
 
   def send_notifications
