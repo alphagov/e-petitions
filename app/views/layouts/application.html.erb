@@ -25,12 +25,6 @@
     <meta name="theme-color" content="#080">
   </head>
   <body>
-    <% if show_cookie_message? %>
-      <div id="global-cookie-message">
-        <p>We use cookies to make this service simpler. <a href="/cookies">Find out more about cookies</a></p>
-      </div>
-    <% end %>
-
     <%= render 'application/header' %>
 
     <main id="content">
@@ -39,10 +33,15 @@
     </main>
 
     <%= render 'application/footer' %>
+    <%= render 'application/cookie_banner' %>
+    <%= render 'application/cookie_preferences' %>
+
     <%= javascript_include_tag 'application' %>
+
     <% if open_petition_page? %>
       <%= javascript_include_tag 'auto-updater' %>
     <% end %>
+
     <% if create_petition_page? %>
       <%= javascript_include_tag 'character-counter' %>
     <% end %>
