@@ -90,6 +90,9 @@ RSpec.describe PetitionsController, type: :controller do
 
         expect(petition).not_to be_nil
         expect(response).to redirect_to("https://petition.parliament.uk/petitions/thank-you")
+
+        expect(UpdatePetitionEmbeddingJob).to have_been_performed.with(petition)
+        expect(petition.embedding).not_to be_nil
       end
 
       it "should strip a petition action on petition creation" do
