@@ -23,7 +23,11 @@ module PetitionHelper
   end
 
   def petition_list_header
-    @_petition_list_header ||= t(:"#{@petitions.scope}_html", scope: :"petitions.list_headers", query: @petitions.url_safe_query, default: "")
+    @_petition_list_header ||= if @petitions.semantic_search?
+      t(:"semantic_html", scope: :"petitions.list_headers", query: @petitions.url_safe_query, default: "")
+    else
+      t(:"#{@petitions.scope}_html", scope: :"petitions.list_headers", query: @petitions.url_safe_query, default: "")
+    end
   end
 
   def petition_list_header?

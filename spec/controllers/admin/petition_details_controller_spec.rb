@@ -129,6 +129,11 @@ RSpec.describe Admin::PetitionDetailsController, type: :controller, admin: true 
             expect(petition.creator.name).to eq('New Creator')
             expect(petition.creator.email).to eq('new.creator@example.com')
           end
+
+          it 'enqueues a job to update the embedding' do
+            do_update
+            expect(UpdatePetitionEmbeddingJob).to have_been_enqueued.with(petition)
+          end
         end
 
         describe 'for a sponsored petition' do

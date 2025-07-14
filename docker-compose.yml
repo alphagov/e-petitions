@@ -14,6 +14,9 @@ x-application: &application
     - type: volume
       source: node_modules
       target: /app/node_modules
+    - type: volume
+      source: models
+      target: /models
   tmpfs:
     - /tmp/pids/
   depends_on:
@@ -28,6 +31,7 @@ x-environment: &environment
   DATABASE_CLEANER_ALLOW_REMOTE_DATABASE_URL: "true"
   SPROCKETS_CACHE: "/cache"
   PIDFILE: "/tmp/pids/server.pid"
+  XDG_CACHE_HOME: "/models"
 
 services:
   dnsmasq:
@@ -44,7 +48,12 @@ services:
         ipv4_address: 172.24.99.53
 
   postgres:
-    image: postgres:16
+    image: e-petitions/postgres
+    build: docker/postgres
+    command: >
+      -c ssl=on
+      -c ssl_cert_file=/etc/ssl/certs/ssl-cert-snakeoil.pem
+      -c ssl_key_file=/etc/ssl/private/ssl-cert-snakeoil.key
     restart: always
     environment:
       - POSTGRES_USER=postgres
@@ -136,4 +145,5 @@ volumes:
   bundle:
   db:
   cache:
+  models:
   node_modules:
