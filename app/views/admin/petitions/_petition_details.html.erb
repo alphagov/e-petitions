@@ -61,16 +61,6 @@
   <% if @petition.open? %>
     <dt>Deadline</dt>
     <dd><%= date_format_admin(@petition.deadline) %></dd>
-
-    <% if @petition.response_threshold_reached_at? %>
-      <dt>Response threshold</dt>
-      <dd><%= date_time_format(@petition.response_threshold_reached_at) %></dd>
-    <% end %>
-
-    <% if @petition.debate_threshold_reached_at? %>
-      <dt>Debate threshold</dt>
-      <dd><%= date_time_format(@petition.debate_threshold_reached_at) %></dd>
-    <% end %>
   <% elsif @petition.rejection? %>
     <dt>Rejected on</dt>
     <dd><%= date_format_admin(@petition.rejected_at) %></dd>
@@ -80,6 +70,16 @@
   <% elsif @petition.closed? %>
     <dt>Closed on</dt>
     <dd><%= date_format_admin(@petition.closed_at) %></dd>
+  <% end %>
+
+  <% if @petition.response_threshold_reached_at? %>
+    <dt>Response threshold</dt>
+    <dd><%= date_time_format(@petition.response_threshold_reached_at) %></dd>
+  <% end %>
+
+  <% if @petition.debate_threshold_reached_at? %>
+    <dt>Debate threshold</dt>
+    <dd><%= date_time_format(@petition.debate_threshold_reached_at) %></dd>
   <% end %>
 
   <% if @petition.visible? %>
