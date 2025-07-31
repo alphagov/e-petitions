@@ -1,9 +1,42 @@
-Then(/^I should see the cookie message$/) do
-  expect(page).to have_text('We use cookies to make this service simpler')
+Then('I should see the cookie banner') do
+  within(".//div[@id='cookiebanner']") do
+    expect(page).to have_selector(".//h2", text: "Our use of cookies")
+  end
 end
 
-Then(/^I should not see the cookie message$/) do
-  expect(page).not_to have_text('We use cookies to make this service simpler')
+Then('I should not see the cookie banner') do
+  expect(page).not_to have_selector(".//div[@id='cookiebanner']", visible: true)
+end
+
+Then('the analytics cookie preference should not be set') do
+  expect(cookie_preferences["analytics"]).to be_nil
+end
+
+Then('the analytics cookie preference should be set to true') do
+  expect(cookie_preferences["analytics"]).to eq(true)
+end
+
+Then('the analytics cookie preference should be set to false') do
+  expect(cookie_preferences["analytics"]).to eq(false)
+end
+
+Then('I should see the cookie settings') do
+  within(".//div[@id='cookiepreferences']") do
+    expect(page).to have_selector(".//h2", text: "Cookie settings")
+  end
+end
+
+Then('I should not see the cookie settings') do
+  expect(page).not_to have_selector(".//div[@id='cookiepreferences']", visible: true)
+end
+
+When('I choose {string}') do |field|
+  choose field
+  expect(page).to have_checked_field(field, visible: false)
+end
+
+Then('{string} is chosen') do |field|
+  expect(page).to have_checked_field(field, visible: false)
 end
 
 Given(/^the site is disabled$/) do
