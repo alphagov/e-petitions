@@ -4,7 +4,7 @@
 
 <p>You have <%= pluralize(@sponsor_count, "supporter", locale: :en) %> so far.</p>
 
-<p>If <%= number_to_word(Site.threshold_for_moderation) %> people support your petition, we’ll check it to make sure it meets the <%= link_to "petition standards", help_url(anchor: 'standards') %>.
+<p>If <%= number_to_word(Site.threshold_for_moderation) %> people support your petition, we’ll check it to make sure it meets the <%= link_to "petition standards", help_url(anchor: 'standards') %>.</p>
 
 <p>If it does, we’ll publish it. If it doesn’t, we’ll let you know why.</p>
 
