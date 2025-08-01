@@ -19,10 +19,6 @@ module AdminHelper
     @selected_tags ||= Array(params[:tags]).flatten.map(&:to_i).compact.reject(&:zero?)
   end
 
-  def mandatory_field
-    content_tag :span, raw(' *'), class: 'mandatory'
-  end
-
   def cms_delete_link(model, options = {})
     options[:model_name] ||= model.name
     options[:url] ||= resource_path(model)
