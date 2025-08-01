@@ -36,7 +36,7 @@
   <% end %>
 <% else %>
   <% if @petition.additional_details? %>
-    <details open="open">
+    <details open>
       <summary><span class="summary">More details</span></summary>
       <div><%= auto_link(simple_format(h(@petition.additional_details)), html: { rel: 'nofollow' }) %></div>
     </details>
