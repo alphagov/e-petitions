@@ -109,7 +109,7 @@ class Parliament < ActiveRecord::Base
 
     def government_response_description
       instance.government_response_description.to_s % { count: Site.formatted_threshold_for_response }
-    rescue KeyError => e
+    rescue KeyError
       instance.government_response_description
     end
 
@@ -123,7 +123,7 @@ class Parliament < ActiveRecord::Base
 
     def parliamentary_debate_description
       instance.parliamentary_debate_description.to_s % { count: Site.formatted_threshold_for_debate }
-    rescue KeyError => e
+    rescue KeyError
       instance.parliamentary_debate_description
     end
 
