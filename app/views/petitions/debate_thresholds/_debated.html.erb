@@ -1,0 +1,23 @@
+<section class="about-item about-item-count-debate" id="debate-threshold" aria-labelledby="debate-threshold-heading">
+  <h2 id="debate-threshold-heading">Parliament debated this topic</h2>
+  <div class="debate-outcome">
+    <p class="secondary">This topic was debated on <%= short_date_format debate_outcome.debated_on %></p>
+    <% if debate_outcome.video_url? -%>
+      <%= link_to debate_outcome.video_url, rel: 'external', class: 'debate-video' do %>
+        <%= debate_outcome_image(debate_outcome) %>
+      <% end -%>
+    <% end -%>
+
+    <% if debate_outcome_links?(debate_outcome) %>
+      <ul class="debate-outcome-links">
+        <% debate_outcome_links(debate_outcome).each do |link| %>
+          <li><%= link_to link.title, link.url, rel: 'external' %></li>
+        <% end %>
+      </ul>
+    <% end %>
+
+    <% if debate_outcome.overview? -%>
+      <%= auto_link(simple_format(h(debate_outcome.overview)), html: { rel: 'nofollow' }) %>
+    <% end -%>
+  </div>
+</section>

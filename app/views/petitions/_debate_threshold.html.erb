@@ -1,69 +1,13 @@
-<section class="about-item about-item-count-debate" id="debate-threshold" aria-labelledby="debate-threshold-heading">
-  <% if debate_outcome = petition.debate_outcome? -%>
-    <% if debate_outcome.debated? %>
-      <h2 id="debate-threshold-heading">Parliament debated this topic</h2>
-      <div class="debate-outcome">
-        <p class="secondary">This topic was debated on <%= short_date_format debate_outcome.debated_on %></p>
-        <% if debate_outcome.video_url? -%>
-          <%= link_to debate_outcome.video_url, rel: 'external', class: 'debate-video' do %>
-            <%= debate_outcome_image(debate_outcome) %>
-          <% end -%>
-        <% end -%>
-
-        <% if debate_outcome_links?(debate_outcome) %>
-          <ul class="debate-outcome-links">
-            <% debate_outcome_links(debate_outcome).each do |link| %>
-              <li><%= link_to link.title, link.url, rel: 'external' %></li>
-            <% end %>
-          </ul>
-        <% end %>
-
-        <% if debate_outcome.overview? -%>
-          <%= auto_link(simple_format(h(debate_outcome.overview)), html: { rel: 'nofollow' }) %>
-        <% end -%>
-      </div>
-    <% else %>
-      <h2 id="debate-threshold-heading">The Petitions Committee decided not to debate this petition</h2>
-      <% if debate_outcome.overview? -%>
-        <%= auto_link(simple_format(h(debate_outcome.overview)), html: { rel: 'nofollow' }) %>
-      <% end -%>
-    <% end %>
-  <% elsif petition.scheduled_debate_date? -%>
-
-    <% if petition.scheduled_debate_date.past? %>
-      <h2 id="debate-threshold-heading">Parliament debated this topic</h2>
-      <p class="about-item-scheduled-debate-date">
-        Parliament debated this petition on <%= short_date_format(petition.scheduled_debate_date) %>
-      </p>
-      <p>
-        You’ll be able to watch the debate online at <a href="http://parliamentlive.tv" rel="external">parliamentlive.tv</a>
-      </p>
-      <p class="secondary"><%= waiting_for_in_words(petition.scheduled_debate_date) %> for Parliament to publish the debate outcome</p>
-
-    <% else %>
-      <h2 id="debate-threshold-heading">Parliament will debate this petition</h2>
-      <p class="about-item-scheduled-debate-date">
-        Parliament will debate this petition on <%= short_date_format(petition.scheduled_debate_date) %>.
-      </p>
-      <p>
-        You’ll be able to watch online on the <a href="https://www.youtube.com/UKParliament" rel="external">UK Parliament YouTube channel</a>.
-      </p>
-    <% end %>
-
-  <% elsif petition.debate_threshold_reached_at? -%>
-    <% if Parliament.closed? %>
-      <h2 id="response-threshold-heading"><%= Parliament.parliamentary_debate_heading.presence || "Parliament will consider this for a debate" %></h2>
-      <p><%= Parliament.parliamentary_debate_description.presence || "Parliament considers all petitions that get more than #{Site.formatted_threshold_for_debate} signatures for a debate" %></p>
-      <p class="secondary"><%= Parliament.parliamentary_debate_status.presence || "#{waiting_for_in_words(petition.debate_threshold_reached_at)} for a debate date" %></p>
-    <% else %>
-      <h2 id="debate-threshold-heading">Parliament will consider this for a debate</h2>
-      <p>Parliament considers all petitions that get more than <%= Site.formatted_threshold_for_debate %> signatures for a debate</p>
-      <p class="secondary"><%= waiting_for_in_words(petition.debate_threshold_reached_at) %> for a debate date</p>
-    <% end %>
-  <% else -%>
-    <% if !@petition.closed? %>
-      <h2 id="debate-threshold-heading">At <%= Site.formatted_threshold_for_debate %> signatures...</h2>
-      <p>At <%= Site.formatted_threshold_for_debate %> signatures, this petition will be considered for debate in Parliament</p>
-    <% end %>
-  <% end -%>
-</section>
+<% if debate_outcome = petition.debate_outcome? %>
+  <% if debate_outcome.debated? %>
+    <%= render "petitions/debate_thresholds/debated", petition: petition, debate_outcome: debate_outcome %>
+  <% else %>
+    <%= render "petitions/debate_thresholds/not_debated", petition: petition, debate_outcome: debate_outcome %>
+  <% end %>
+<% elsif petition.scheduled_debate_date? %>
+  <%= render "petitions/debate_thresholds/scheduled", petition: petition %>
+<% elsif petition.debate_threshold_reached_at? %>
+  <%= render "petitions/debate_thresholds/awaiting", petition: petition %>
+<% elsif !petition.closed? %>
+  <%= render "petitions/debate_thresholds/open", petition: petition %>
+<% end %>

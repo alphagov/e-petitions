@@ -391,7 +391,8 @@ $chevron-border-colour: $secondary-text-colour;
 // About petitions
 // ==========
 .about-petitions {
-  margin: $gutter 0;
+  margin: $gutter-two-thirds 0 $gutter;
+  padding-top: $gutter-one-third
 }
 
 .about-item {

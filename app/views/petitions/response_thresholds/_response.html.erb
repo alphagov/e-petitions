@@ -1,0 +1,20 @@
+<section class="about-item about-item-count-response" id="response-threshold" aria-labelledby="response-threshold-heading">
+  <h2 id="response-threshold-heading">Government responded</h2>
+  <p class="secondary">This response was given on <%= short_date_format government_response.responded_on %></p>
+  <blockquote class="pull-quote">
+    <%= auto_link(simple_format(h(government_response.summary)), html: { rel: 'nofollow' } ) %>
+  </blockquote>
+
+  <% if government_response.details? %>
+    <% if params["reveal_response"] == "yes" %>
+      <%= auto_link(simple_format(h(government_response.details)), html: { rel: 'nofollow' }) %>
+    <% else %>
+      <details>
+        <summary><span class="summary">Read the response in full</span></summary>
+        <div class="panel-indent panel-no-border">
+          <%= auto_link(simple_format(h(government_response.details)), html: { rel: 'nofollow' }) %>
+        </div>
+      </details>
+    <% end %>
+  <% end %>
+</section>

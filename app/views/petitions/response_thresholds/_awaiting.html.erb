@@ -1,0 +1,5 @@
+<section class="about-item about-item-count-response" id="response-threshold" aria-labelledby="response-threshold-heading">
+  <h2 id="response-threshold-heading"><%= Parliament.government_response_heading.presence || "Government will respond" %></h2>
+  <p><%= Parliament.government_response_description.presence || "Government responds to all petitions that get more than #{Site.formatted_threshold_for_response} signatures" %></p>
+  <p class="secondary"><%= Parliament.government_response_status.presence || "#{waiting_for_in_words(petition.response_threshold_reached_at)} for a government response" %></p>
+</section>
