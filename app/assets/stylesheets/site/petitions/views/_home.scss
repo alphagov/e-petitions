@@ -90,7 +90,7 @@
 }
 
 // Threshold panel links
-a.threshold-panel {
+.threshold-panel {
   color: $white;
   display: block;
   @extend %outdent-to-full-width;
@@ -114,6 +114,14 @@ a.threshold-panel {
 
   p {
     margin: 0;
+    text-decoration: none;
+  }
+}
+
+a.threshold-panel {
+  color: $white;
+
+  p {
     text-decoration: underline;
     text-decoration-thickness: max(1px, .05rem);
     text-underline-offset: 0.1578em;
@@ -143,7 +151,7 @@ a.threshold-panel:focus {
   color: $focus-text-colour;
 }
 
-a.threshold-panel-response {
+.threshold-panel-response {
   background-position: 15px 16px;
   background-image: image-url("graphics/graphic_crown-white.png");
 
@@ -160,7 +168,7 @@ a.threshold-panel-response {
   }
 }
 
-a.threshold-panel-debate {
+.threshold-panel-debate {
   background-position: 15px 12px;
   background-image: image-url("graphics/graphic_portcullis-white.png");
 

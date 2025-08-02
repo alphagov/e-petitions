@@ -1,0 +1,5 @@
+<section class="about-item about-item-count-debate" id="debate-threshold" aria-labelledby="debate-threshold-heading">
+  <h2 id="debate-threshold-heading">Parliament will consider this for a debate</h2>
+  <p>Parliament considers all petitions that get more than <%= @parliament.formatted_threshold_for_debate %> signatures for a debate</p>
+  <p class="secondary"><%= waiting_for_in_words(@petition.debate_threshold_reached_at) %> for a debate date</p>
+</section>
