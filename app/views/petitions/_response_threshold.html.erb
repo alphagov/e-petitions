@@ -1,5 +1,4 @@
 <section class="about-item about-item-count-response" id="response-threshold" aria-labelledby="response-threshold-heading">
-  <%# Has a government response #%>
   <% if government_response = petition.government_response? -%>
     <h2 id="response-threshold-heading">Government responded</h2>
     <p class="secondary">This response was given on <%= short_date_format government_response.responded_on %></p>
@@ -20,7 +19,6 @@
       <% end -%>
     <% end -%>
 
-  <%# Waiting for a government response #%>
   <% elsif petition.response_threshold_reached_at? -%>
     <% if Parliament.closed? %>
       <h2 id="response-threshold-heading"><%= Parliament.government_response_heading.presence || "Government will respond" %></h2>
@@ -32,7 +30,6 @@
       <p class="secondary"><%= waiting_for_in_words(petition.response_threshold_reached_at) %> for a government response</p>
     <% end %>
 
-  <%# Needs more signatures #%>
   <% else -%>
     <% if !@petition.closed? %>
       <h2 id="response-threshold-heading">At <%= Site.formatted_threshold_for_response %> signatures...</h2>
