@@ -42,7 +42,7 @@ RSpec.describe FeedbackMailer, type: :mailer do
       let(:comment) { "Line 1\nLine 2\n\nLine 3" }
 
       it "converts the line breaks to HTML" do
-        expect(mail.html).to match("<p>Line 1\r\n<br>Line 2</p>\r\n\r\n<p>Line 3</p>")
+        expect(mail.html).to match("<p>Line 1\n<br>Line 2</p>\n\n<p>Line 3</p>")
       end
     end
 
