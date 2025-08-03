@@ -5,7 +5,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
 
   for (const counter of counters) {
     new PETS.SignatureCounter(
-      container,
+      counter,
       <%= Site.threshold_for_response %>,
       <%= Site.threshold_for_debate %>,
       10000

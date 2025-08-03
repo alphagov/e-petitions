@@ -2,7 +2,8 @@ class SignatureCounter {
   constructor(container, responseThreshold, debateThreshold, interval) {
     this.responseThreshold = responseThreshold;
     this.debateThreshold = debateThreshold;
-    this.jsonUrl = window.location.href + '/count.json';
+    this.baseUrl = window.location.origin + window.location.pathname;
+    this.jsonUrl = this.baseUrl + '/count.json';
     this.signatureCount = container.querySelector('.signature-count-number .count');
     this.signatureGoal = container.querySelector('.signature-count-goal');
     this.progressBar = container.querySelector('progress');
