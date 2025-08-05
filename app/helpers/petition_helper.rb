@@ -4,10 +4,12 @@ module PetitionHelper
   end
 
   def current_threshold(petition)
-    if petition.response_threshold_reached_at? || petition.government_response_at?
-      Site.threshold_for_debate
+    if petition.debate_threshold_reached_at? || petition.debate_outcome_at?
+      petition.threshold_for_debate
+    elsif petition.response_threshold_reached_at? || petition.government_response_at?
+      petition.threshold_for_debate
     else
-      Site.threshold_for_response
+      petition.threshold_for_response
     end
   end
 

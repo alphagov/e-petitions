@@ -130,6 +130,10 @@ class Petition < ActiveRecord::Base
     delegate :debate_pack_url, to: :debate_outcome, prefix: false
   end
 
+  delegate :threshold_for_response, :threshold_for_debate, to: :Site
+  delegate :formatted_threshold_for_response, to: :Site
+  delegate :formatted_threshold_for_debate, to: :Site
+
   alias_attribute :opened_at, :open_at
 
   after_create do
