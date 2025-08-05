@@ -49,7 +49,7 @@ class SignatureCounter {
     this.signatureCount.textContent = this.format(this.value);
     this.signatureGoal.textContent = this.format(threshold);
     this.progressBar.value = Math.floor(this.value);
-    this.progressBar.max = threshold;
+    this.progressBar.max = Math.max(threshold, this.value);
   }
 
   countTo(currentCount, newCount) {

@@ -5,7 +5,11 @@
 
   <label class="signature-count-progress">
     <span class="visuallyhidden">Progress of the petition towards its next target:</span>
-    <% if petition.response_threshold_reached_at? || petition.government_response_at? %>
+    <% if petition.debate_threshold_reached_at? %>
+      <%= tag.progress(value: petition.signature_count, max: petition.signature_count) do %>
+        This petition will be considered for a debate in Parliament
+      <% end %>
+    <% elsif petition.response_threshold_reached_at? || petition.government_response_at? %>
       <%= tag.progress(value: petition.signature_count, max: Site.threshold_for_debate) do %>
         <%= number_with_delimiter(petition.signature_count) %> of <%= Site.formatted_threshold_for_debate %> signatures required to be considered for a debate in Parliament
       <% end %>
