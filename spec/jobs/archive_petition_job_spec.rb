@@ -31,6 +31,7 @@ RSpec.describe ArchivePetitionJob, type: :job do
         action: "Make Wombles Great Again",
         background: "The 70s was a great time for kids TV",
         additional_details: "Also the Clangers too",
+        embedding: 384.times.map { 1.0 },
         committee_note: "This petition action was found to be false",
         tags: tags.map(&:id),
         departments: departments.map(&:id),
@@ -64,6 +65,7 @@ RSpec.describe ArchivePetitionJob, type: :job do
       expect(archived_petition.action).to eq(petition.action)
       expect(archived_petition.background).to eq(petition.background)
       expect(archived_petition.additional_details).to eq(petition.additional_details)
+      expect(archived_petition.embedding).to eq(petition.embedding)
       expect(archived_petition.committee_note).to eq(petition.committee_note)
       expect(archived_petition.tags).to eq(petition.tags)
       expect(archived_petition.tags).not_to be_empty

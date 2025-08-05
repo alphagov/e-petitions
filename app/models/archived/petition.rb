@@ -51,7 +51,7 @@ module Archived
     before_save :update_debate_state, if: :scheduled_debate_date_changed?
 
     extend Searchable(:action, :background, :additional_details)
-    include Browseable, Taggable, Departments, Topics, Anonymization
+    include Browseable, NearestNeighbours, Taggable, Departments, Topics, Anonymization
 
     facet :all, -> { by_most_signatures }
     facet :awaiting_response, -> { awaiting_response.by_waiting_for_response_longest }
@@ -241,6 +241,10 @@ module Archived
       def scheduled_for_debate
         arel_table[:scheduled_debate_date].not_eq(nil)
       end
+    end
+
+    def content
+      "#{action} - #{background}"
     end
 
     def notes?

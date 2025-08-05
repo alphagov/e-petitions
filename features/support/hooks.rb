@@ -119,3 +119,7 @@ After do
   OmniAuth.config.mock_auth[:example] = nil
   OmniAuth.config.test_mode = false
 end
+
+Before do
+  Embedding.reload
+end
