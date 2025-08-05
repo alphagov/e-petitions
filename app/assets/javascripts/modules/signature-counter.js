@@ -21,10 +21,14 @@ class SignatureCounter {
       }
 
       const data = await response.json();
-      const current = this.progressBar.value;
+      const currentCount = this.progressBar.value;
+      const newCount = data.signature_count;
+      const threshold = this.currentThreshold(data);
 
-      if (data.signature_count != current) {
-        this.countTo(current, data.signature_count)
+      if (newCount != currentCount) {
+        this.countTo(currentCount, newCount, threshold);
+        this.updateSignatureGoal(threshold);
+        this.updateProgressText(data);
       }
     } catch (error) {
       console.error(error.message);
@@ -35,24 +39,13 @@ class SignatureCounter {
     return this.formatter.format(number);
   }
 
-  getThreshold(signatureCount) {
-    if (signatureCount >= this.responseThreshold) {
-      return this.debateThreshold;
-    } else {
-      return this.responseThreshold;
-    }
-  }
-
-  render() {
-    const threshold = this.getThreshold(this.value);
-
+  render(threshold) {
     this.signatureCount.textContent = this.format(this.value);
-    this.signatureGoal.textContent = this.format(threshold);
     this.progressBar.value = Math.floor(this.value);
     this.progressBar.max = Math.max(threshold, this.value);
   }
 
-  countTo(currentCount, newCount) {
+  countTo(currentCount, newCount, threshold) {
     this.value = currentCount;
     this.loopCount = 0;
     this.increment = (newCount - currentCount) / 20;
@@ -60,15 +53,66 @@ class SignatureCounter {
     this.interval = setInterval(() => {
       this.value += this.increment;
       this.loopCount++;
-      this.render();
+      this.render(threshold);
 
       if (this.loopCount >= 20) {
         clearInterval(this.interval);
 
         this.value = newCount
-        this.render();
+        this.render(threshold);
       }
     }, 50);
+  }
+
+  currentThreshold(data) {
+    if (data.debate_threshold_reached_at || data.debate_outcome_at) {
+      return this.debateThreshold;
+    } else if (data.response_threshold_reached_at || data.government_response_at) {
+      return this.debateThreshold;
+    } else {
+      return this.responseThreshold;
+    }
+  }
+
+  updateSignatureGoal(threshold) {
+    const hiddenText = document.createElement('span');
+
+    hiddenText.classList.add('visuallyhidden');
+    hiddenText.textContent = this.signatureGoalText(threshold);
+
+    this.signatureGoal.textContent = this.format(threshold);
+    this.signatureGoal.appendChild(hiddenText);
+
+  }
+
+  signatureGoalText(threshold) {
+    if (threshold > this.responseThreshold) {
+      return ' signatures required to be considered for a debate in Parliament';
+    } else {
+      return ' signatures required to get a government response';
+    }
+  }
+
+  updateProgressText(data) {
+    this.progressBar.textContent = this.progressText(data);
+  }
+
+  progressText(data) {
+    if (data.debate_outcome_at) {
+      if (data.debated) {
+        return 'Parliament debated this petition';
+      } else {
+        return 'Parliament decided not to debate this petition';
+      }
+    } else if (data.scheduled_debate_date) {
+      return 'Parliament will debate this petition';
+    } else if (data.debate_threshold_reached_at) {
+      return 'This petition will be considered for a debate in Parliament';
+    } else if (data.response_threshold_reached_at || data.government_response_at) {
+      return `${this.format(data.signature_count)} of ${this.format(this.debateThreshold)} signatures required to be considered for a debate in Parliament`;
+    } else {
+      return `${this.format(data.signature_count)} of ${this.format(this.responseThreshold)} signatures required to get a government response`;
+    }
   }
 }
 

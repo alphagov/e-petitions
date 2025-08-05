@@ -75,6 +75,8 @@ module Archived
     default_scope { preload(:parliament) }
 
     delegate :threshold_for_response, :threshold_for_debate, to: :parliament
+    delegate :formatted_threshold_for_response, to: :parliament
+    delegate :formatted_threshold_for_debate, to: :parliament
     delegate :show_on_a_map?, to: :parliament
 
     with_options allow_nil: true, prefix: true do
@@ -417,6 +419,14 @@ module Archived
 
     def positive_debate_outcome?
       debate_outcome? && debate_outcome.debated?
+    end
+
+    def debated?
+      debate_state == 'debated'
+    end
+
+    def not_debated?
+      debate_state == 'not_debated'
     end
 
     private

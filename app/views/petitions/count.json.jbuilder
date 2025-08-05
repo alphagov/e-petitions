@@ -1,1 +1,7 @@
 json.signature_count @petition.signature_count
+json.response_threshold_reached_at @petition.response_threshold_reached_at
+json.government_response_at @petition.government_response_at
+json.debate_threshold_reached_at @petition.debate_threshold_reached_at
+json.scheduled_debate_date @petition.scheduled_debate_date
+json.debate_outcome_at @petition.debate_outcome_at
+json.debated @petition.debated?
