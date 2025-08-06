@@ -50,6 +50,10 @@ class SignatureCounter {
     this.loopCount = 0;
     this.increment = (newCount - currentCount) / 20;
 
+    if (this.interval) {
+      clearInterval(this.interval);
+    }
+
     this.interval = setInterval(() => {
       this.value += this.increment;
       this.loopCount++;
