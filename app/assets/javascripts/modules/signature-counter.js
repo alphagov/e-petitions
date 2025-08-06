@@ -7,6 +7,7 @@ class SignatureCounter {
     this.signatureCount = container.querySelector('.signature-count-number .count');
     this.signatureGoal = container.querySelector('.signature-count-goal');
     this.progressBar = container.querySelector('progress');
+    this.value = this.progressBar.value;
     this.formatter = new Intl.NumberFormat('en-GB', { maximumFractionDigits: 0 });
 
     setInterval(async () => { await this.fetchCount() }, interval);
@@ -21,7 +22,7 @@ class SignatureCounter {
       }
 
       const data = await response.json();
-      const currentCount = this.progressBar.value;
+      const currentCount = this.value;
       const newCount = data.signature_count;
       const threshold = this.currentThreshold(data);
 
@@ -46,7 +47,6 @@ class SignatureCounter {
   }
 
   countTo(currentCount, newCount, threshold) {
-    this.value = currentCount;
     this.loopCount = 0;
     this.increment = (newCount - currentCount) / 20;
 
@@ -58,7 +58,7 @@ class SignatureCounter {
       if (this.loopCount >= 20) {
         clearInterval(this.interval);
 
-        this.value = newCount
+        this.value = newCount;
         this.render(threshold);
       }
     }, 50);
