@@ -3,5 +3,5 @@
 <%= form_row for: [form.object, :blocked_emails] do %>
   <%= error_messages_for_field @rate_limit, :blocked_emails %>
   <%= form.text_area :blocked_emails, tabindex: increment, rows: 15, class: 'form-control' %>
-  <p><small>normalize the email address according to the <%= link_to "domain rules", admin_domains_path %></small><p>
+  <p><small>normalize the email address according to the <%= link_to "domain rules", admin_domains_path %></small></p>
 <% end %>

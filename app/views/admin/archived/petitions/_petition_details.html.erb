@@ -3,7 +3,7 @@
   <dd class="petition-meta-state"><%= @petition.state.capitalize %></dd>
 
   <dt>Signatures</dt>
-  <dd class="petition-meta-signature-count"><%= number_with_delimiter(@petition.signature_count) %> </dd>
+  <dd class="petition-meta-signature-count"><%= number_with_delimiter(@petition.signature_count) %></dd>
 
   <% if @petition.anonymized? %>
     <dt>Anonymized</dt>

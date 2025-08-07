@@ -1,0 +1,26 @@
+<section class="about-item about-item-count-debate" id="debate-threshold" aria-labelledby="debate-threshold-heading">
+  <h2 id="debate-threshold-heading">
+    <% if @petition.scheduled_debate_date.past? %>
+      Parliament debated this topic
+    <% else %>
+      Parliament will debate this petition
+    <% end %>
+  </h2>
+
+  <% if @petition.scheduled_debate_date.past? %>
+    <p class="about-item-scheduled-debate-date">
+      Parliament debated this petition on <%= short_date_format(@petition.scheduled_debate_date) %>
+    </p>
+    <p>
+      You’ll be able to watch the debate online at <a href="http://parliamentlive.tv" rel="external">parliamentlive.tv</a>
+    </p>
+    <p class="secondary"><%= waiting_for_in_words(@petition.scheduled_debate_date) %> for Parliament to publish the debate outcome</p>
+  <% else %>
+    <p class="about-item-scheduled-debate-date">
+      Parliament will debate this petition on <%= short_date_format(@petition.scheduled_debate_date) %>.
+    </p>
+    <p>
+      You’ll be able to watch online on the <a href="https://www.youtube.com/UKParliament" rel="external">UK Parliament YouTube channel</a>.
+    </p>
+  <% end %>
+</section>

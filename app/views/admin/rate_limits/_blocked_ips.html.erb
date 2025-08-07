@@ -3,5 +3,5 @@
 <%= form_row for: [form.object, :blocked_ips] do %>
   <%= error_messages_for_field @rate_limit, :blocked_ips %>
   <%= form.text_area :blocked_ips, tabindex: increment, rows: 15, class: 'form-control' %>
-  <p><small>use CIDR addressing to match ranges, e.g. 192.168.0.0/24</small><p>
+  <p><small>use CIDR addressing to match ranges, e.g. 192.168.0.0/24</small></p>
 <% end %>
