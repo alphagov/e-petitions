@@ -21,7 +21,7 @@
 
 <p>The current Petitions Committee, the group of MPs who decide whether petitions are debated, won’t exist after <%= @closing_date %>. This means that if <%= @count > 1 ? "any of your petitions" : "your petition" %> has over <%= Site.formatted_threshold_for_debate %> signatures, <%= @count > 1 ? "they" : "it" %> can’t be scheduled for debate during this Parliament. After the election, a new Petitions Committee will be responsible for deciding which petitions are debated.</p>
 
-<p>The petitions site will reopen when a new Petitions Committee is appointed, but at the moment we don’t know exactly when. You can follow us on X <a href="https://x.com/HoCPetitions">@HoCPetitions</a> for updates, or check back on the petitions site for news.</p>
+<p>The petitions site will reopen when a new Petitions Committee is appointed, but at the moment we don’t know exactly when. You can follow us on X <a href="https://x.com/HoCPetitions">&commat;HoCPetitions</a> for updates, or check back on the petitions site for news.</p>
 
 <% if Parliament.dissolution_faq_url? %>
 <p>You can find out more about what the General Election means for your petitions on our website: <%= link_to(nil, Parliament.dissolution_faq_url) %></p>

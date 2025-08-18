@@ -104,12 +104,12 @@ class Parliament < ActiveRecord::Base
     end
 
     def government_response_heading
-      instance.government_response_heading
+      closed? && instance.government_response_heading
     end
 
     def government_response_description
-      instance.government_response_description.to_s % { count: Site.formatted_threshold_for_response }
-    rescue KeyError => e
+      closed? && instance.government_response_description.to_s % { count: Site.formatted_threshold_for_response }
+    rescue KeyError
       instance.government_response_description
     end
 
@@ -118,17 +118,17 @@ class Parliament < ActiveRecord::Base
     end
 
     def parliamentary_debate_heading
-      instance.parliamentary_debate_heading
+      closed? && instance.parliamentary_debate_heading
     end
 
     def parliamentary_debate_description
-      instance.parliamentary_debate_description.to_s % { count: Site.formatted_threshold_for_debate }
-    rescue KeyError => e
+      closed? && instance.parliamentary_debate_description.to_s % { count: Site.formatted_threshold_for_debate }
+    rescue KeyError
       instance.parliamentary_debate_description
     end
 
     def parliamentary_debate_status
-      instance.parliamentary_debate_status
+      closed? && instance.parliamentary_debate_status
     end
 
     def reload
