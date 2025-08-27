@@ -52,7 +52,7 @@ Feature: Terry (or Sheila) takes down a petition
     And the petition is not available for searching or viewing
     But the petition will still show up in the back-end reporting
 
-  Scenario: A moderator can't restore a petition that has been taken down
+  Scenario: A moderator can’t restore a petition that has been taken down
     Given I am logged in as a moderator
     And a published petition has been taken down
     When I visit the petition

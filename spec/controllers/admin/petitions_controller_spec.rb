@@ -74,7 +74,7 @@ RSpec.describe Admin::PetitionsController, type: :controller, admin: true do
         end
 
         it "sets the flash alert message" do
-          expect(flash[:alert]).to eq("Sorry, we couldn't find petition 999999")
+          expect(flash[:alert]).to eq("Sorry, we couldn’t find petition 999999")
         end
       end
 
@@ -102,7 +102,7 @@ RSpec.describe Admin::PetitionsController, type: :controller, admin: true do
         end
 
         it "sets the flash alert message" do
-          expect(flash[:alert]).to eq("Sorry, we couldn't find petition 999999")
+          expect(flash[:alert]).to eq("Sorry, we couldn’t find petition 999999")
         end
       end
 

@@ -14,7 +14,7 @@ class Admin::OmniauthCallbacksController < Devise::OmniauthCallbacksController
   end
 
   def passthru
-    raise ActionController::BadRequest, "Couldn't find the provider '#{provider_name}'"
+    raise ActionController::BadRequest, "Couldn’t find the provider '#{provider_name}'"
   end
 
   def saml
@@ -53,7 +53,7 @@ class Admin::OmniauthCallbacksController < Devise::OmniauthCallbacksController
   def find_identity_provider
     @provider = IdentityProvider.find_by!(name: provider_name)
   rescue IdentityProvider::NotFoundError => e
-    raise ActionController::BadRequest, "Couldn't find the provider '#{provider_name}'"
+    raise ActionController::BadRequest, "Couldn’t find the provider '#{provider_name}'"
   end
 
   def verify_authentication_data

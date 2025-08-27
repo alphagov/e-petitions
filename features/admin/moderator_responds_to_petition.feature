@@ -71,7 +71,7 @@ Feature: Moderator respond to petition
     Then I should see "Petition could not be updated - please check the form for errors"
     And the petition should still be unmoderated
     And the creator should not receive a notification email
-    And I should see "You can't publish a petition before the creator has validated their email address"
+    And I should see "You can’t publish a petition before the creator has validated their email address"
 
   Scenario: Moderator rejects petition with a suitable reason code
     Given I am logged in as a moderator named "Ben Macintosh"
@@ -120,7 +120,7 @@ Feature: Moderator respond to petition
     When I go to the admin petition page for "Rupert Murdoch is on the run"
     And I reject the petition with a reason code "-- Select a rejection code --"
     Then a petition should exist with action: "Rupert Murdoch is on the run", state: "sponsored"
-    And I should see "can't be blank"
+    And I should see "can’t be blank"
 
   Scenario: Moderator rejects and hides previously rejected (and public) petition
     Given I am logged in as a moderator named "Ben Macintosh"

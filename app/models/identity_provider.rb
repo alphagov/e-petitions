@@ -27,7 +27,7 @@ class IdentityProvider
     end
 
     def raise_provider_not_found(name)
-      raise NotFoundError, "Couldn't find the provider '#{name}'"
+      raise NotFoundError, "Couldn’t find the provider '#{name}'"
     end
   end
 

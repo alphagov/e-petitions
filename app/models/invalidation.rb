@@ -37,7 +37,7 @@ class Invalidation < ActiveRecord::Base
     end
 
     if petition_id?
-      errors.add :petition_id, "Petition doesn't exist" unless Petition.exists?(petition_id)
+      errors.add :petition_id, "Petition doesn’t exist" unless Petition.exists?(petition_id)
     end
 
     if domain?
@@ -45,11 +45,11 @@ class Invalidation < ActiveRecord::Base
     end
 
     if constituency_id?
-      errors.add :constituency_id, "Constituency doesn't exist" unless Constituency.exists?(external_id: constituency_id)
+      errors.add :constituency_id, "Constituency doesn’t exist" unless Constituency.exists?(external_id: constituency_id)
     end
 
     if location_code?
-      errors.add :location_code, "Location doesn't exist" unless Location.exists?(code: location_code)
+      errors.add :location_code, "Location doesn’t exist" unless Location.exists?(code: location_code)
     end
 
     if created_before? && created_after?

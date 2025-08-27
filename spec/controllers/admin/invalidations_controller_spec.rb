@@ -135,7 +135,7 @@ RSpec.describe Admin::InvalidationsController, type: :controller, admin: true do
         end
 
         it "sets the flash notice message" do
-          expect(flash[:notice]).to eq("Can't edit invalidations that aren't pending")
+          expect(flash[:notice]).to eq("Can’t edit invalidations that aren’t pending")
         end
       end
     end
@@ -187,7 +187,7 @@ RSpec.describe Admin::InvalidationsController, type: :controller, admin: true do
         end
 
         it "sets the flash notice message" do
-          expect(flash[:notice]).to eq("Can't edit invalidations that aren't pending")
+          expect(flash[:notice]).to eq("Can’t edit invalidations that aren’t pending")
         end
       end
     end
@@ -231,7 +231,7 @@ RSpec.describe Admin::InvalidationsController, type: :controller, admin: true do
         end
 
         it "sets the flash notice message" do
-          expect(flash[:notice]).to eq("Can't remove invalidations that have started")
+          expect(flash[:notice]).to eq("Can’t remove invalidations that have started")
         end
       end
 
@@ -280,7 +280,7 @@ RSpec.describe Admin::InvalidationsController, type: :controller, admin: true do
         end
 
         it "sets the flash notice message" do
-          expect(flash[:notice]).to eq("Can't cancel invalidations that have completed")
+          expect(flash[:notice]).to eq("Can’t cancel invalidations that have completed")
         end
       end
 
@@ -329,7 +329,7 @@ RSpec.describe Admin::InvalidationsController, type: :controller, admin: true do
         end
 
         it "sets the flash notice message" do
-          expect(flash[:notice]).to eq("Can't count invalidations that aren't pending")
+          expect(flash[:notice]).to eq("Can’t count invalidations that aren’t pending")
         end
       end
 
@@ -378,7 +378,7 @@ RSpec.describe Admin::InvalidationsController, type: :controller, admin: true do
         end
 
         it "sets the flash notice message" do
-          expect(flash[:notice]).to eq("Can't start invalidations that aren't pending")
+          expect(flash[:notice]).to eq("Can’t start invalidations that aren’t pending")
         end
       end
 

@@ -1,6 +1,6 @@
 <% if form.object.errors.any? -%>
   <div class="error-summary" role="group" aria-labelledby="error-summary-heading">
-    <h2 class="error-summary-heading" id="error-summary-heading">We couldn't create this petition</h2>
+    <h2 class="error-summary-heading" id="error-summary-heading">We couldn’t create this petition</h2>
     <p><%= t(:prompt, scope: :"petitions.errors", count: form.object.errors.size) %></p>
     <ul class="error-summary-list">
       <% form.object.errors.each do |error| -%>

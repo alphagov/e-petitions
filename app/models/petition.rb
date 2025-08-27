@@ -778,7 +778,7 @@ class Petition < ActiveRecord::Base
 
   def close!(time)
     unless open?
-      raise RuntimeError, "can't close a petition that is in the #{state} state"
+      raise RuntimeError, "can’t close a petition that is in the #{state} state"
     end
 
     if deadline <= time
@@ -792,7 +792,7 @@ class Petition < ActiveRecord::Base
       Appsignal.increment_counter("petition.closed", 1)
       update!(state: CLOSED_STATE, closed_at: time)
     else
-      raise RuntimeError, "can't close a petition that is in the #{state} state"
+      raise RuntimeError, "can’t close a petition that is in the #{state} state"
     end
   end
 
@@ -801,7 +801,7 @@ class Petition < ActiveRecord::Base
       Appsignal.increment_counter("petition.stopped", 1)
       update!(state: STOPPED_STATE, stopped_at: time)
     else
-      raise RuntimeError, "can't stop a petition that is in the #{state} state"
+      raise RuntimeError, "can’t stop a petition that is in the #{state} state"
     end
   end
 

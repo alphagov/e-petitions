@@ -70,7 +70,7 @@ RSpec.describe Invalidation, type: :model do
       end
 
       it "adds an error to :petition_id" do
-        expect(subject.errors[:petition_id]).to include("Petition doesn't exist")
+        expect(subject.errors[:petition_id]).to include("Petition doesn’t exist")
       end
     end
 
@@ -82,7 +82,7 @@ RSpec.describe Invalidation, type: :model do
       end
 
       it "adds an error to :constituency_id" do
-        expect(subject.errors[:constituency_id]).to include("Constituency doesn't exist")
+        expect(subject.errors[:constituency_id]).to include("Constituency doesn’t exist")
       end
     end
 
@@ -94,7 +94,7 @@ RSpec.describe Invalidation, type: :model do
       end
 
       it "adds an error to :constituency_id" do
-        expect(subject.errors[:constituency_id]).to include("Constituency doesn't exist")
+        expect(subject.errors[:constituency_id]).to include("Constituency doesn’t exist")
       end
     end
 
@@ -106,7 +106,7 @@ RSpec.describe Invalidation, type: :model do
       end
 
       it "adds an error to :location_code" do
-        expect(subject.errors[:location_code]).to include("Location doesn't exist")
+        expect(subject.errors[:location_code]).to include("Location doesn’t exist")
       end
     end
 

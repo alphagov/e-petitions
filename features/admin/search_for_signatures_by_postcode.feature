@@ -1,6 +1,6 @@
 @admin
 Feature: Searching for signatures as Terry
-  In order to easily find out if someone's signed a petition
+  In order to easily find out if someone’s signed a petition
   As Terry
   I would like to be able to enter a postcode, and see all signatures associated with it
 

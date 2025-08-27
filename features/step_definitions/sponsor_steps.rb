@@ -118,7 +118,7 @@ When(/^I fill in my details as a sponsor(?: with email "(.*?)")?$/) do |email_ad
   }
 end
 
-When(/^I don't fill in my details correctly as a sponsor$/) do
+When(/^I don’t fill in my details correctly as a sponsor$/) do
   step %{I fill in "Name" with ""}
 end
 

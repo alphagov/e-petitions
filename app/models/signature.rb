@@ -376,9 +376,9 @@ class Signature < ActiveRecord::Base
       transaction do
         signatures.each do |signature|
           if signature.creator?
-            raise RuntimeError, "Can't unsubscribe the creator signature"
+            raise RuntimeError, "Can’t unsubscribe the creator signature"
           elsif signature.pending?
-            raise RuntimeError, "Can't unsubscribe a pending signature"
+            raise RuntimeError, "Can’t unsubscribe a pending signature"
           else
             signature.update!(notify_by_email: false)
           end

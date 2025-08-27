@@ -82,7 +82,7 @@ RSpec.describe Admin::SearchesController, type: :controller, admin: true do
         it "redirects to the admin dashboard url" do
           get :show, params: { q: "foo" }
           expect(response).to redirect_to("https://moderate.petition.parliament.uk/admin")
-          expect(flash[:notice]).to eq("Sorry, we didn't understand your query")
+          expect(flash[:notice]).to eq("Sorry, we didn’t understand your query")
         end
       end
     end

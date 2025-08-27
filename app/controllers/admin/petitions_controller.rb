@@ -6,7 +6,7 @@ class Admin::PetitionsController < Admin::AdminController
   after_action :set_back_location, only: [:index]
 
   rescue_from ActiveRecord::RecordNotFound do
-    redirect_to admin_root_url, alert: "Sorry, we couldn't find petition #{params[:id]}"
+    redirect_to admin_root_url, alert: "Sorry, we couldn’t find petition #{params[:id]}"
   end
 
   def index

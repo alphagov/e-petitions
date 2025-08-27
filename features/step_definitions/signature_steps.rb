@@ -203,7 +203,7 @@ Then /^there should be a "([^"]*)" signature with email "([^"]*)" and name "([^"
   expect(Signature.for_email(email).find_by(name: name, state: state)).not_to be_nil
 end
 
-Then /^"([^"]*)" wants to be notified about the petition's progress$/ do |name|
+Then /^"([^"]*)" wants to be notified about the petition’s progress$/ do |name|
   expect(Signature.find_by(name: name).notify_by_email?).to be_truthy
 end
 

@@ -11,7 +11,7 @@ Feature: Sysadmin updates the rate limits
     Then I should see "Edit Rate Limits"
     When I fill in "Length of short period in seconds" with ""
     And I press "Save"
-    Then I should see "Burst period can't be blank"
+    Then I should see "Burst period can’t be blank"
     When I fill in "Length of short period in seconds" with "120"
     And I fill in "Number of signatures created per short period" with "2"
     And I press "Save"
