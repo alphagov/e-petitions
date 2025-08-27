@@ -58,7 +58,7 @@ RSpec.describe "API request to trending petitions", type: :request, show_excepti
       expect(relation).to receive(:pluck).and_return(
         [
           [100123, "Do something!", 128],
-          [100321, "Don't do anything!", 64],
+          [100321, "Don’t do anything!", 64],
           [100213, "Free the wombles!", 32],
           [100231, "Leave the wombles locked up!", 16]
         ]
@@ -80,7 +80,7 @@ RSpec.describe "API request to trending petitions", type: :request, show_excepti
             "type" => "petition", "id" => 100321, "links" => {
               "self" => "https://petition.parliament.uk/petitions/100321.json"
             }, "attributes" => {
-              "action" => "Don't do anything!", "signature_count" => 64
+              "action" => "Don’t do anything!", "signature_count" => 64
             }
           },
           {

@@ -2,7 +2,7 @@
 Feature: Maggie searches for a petition by id
   In order to quickly find a petition and view the contents
   As Maggie, a petition moderator
-  I want to enter an id and be taken to the petition for that id, or shown an error if it doesn't exist
+  I want to enter an id and be taken to the petition for that id, or shown an error if it doesn’t exist
 
   Scenario: A user sees the show page if the petition needs moderation
     Given a sponsored petition "Loose benefits!"
@@ -28,7 +28,7 @@ Feature: Maggie searches for a petition by id
     When I search for a petition by id
     Then I am on the admin petition page for "Fun times!"
 
-  Scenario: A user doing a search for a petition id that doesn't exist gets an error
+  Scenario: A user doing a search for a petition id that doesn’t exist gets an error
     Given I am logged in as a moderator
     When I search for a petition by id
     Then I should be taken back to the id search form with an error

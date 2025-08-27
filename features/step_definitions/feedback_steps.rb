@@ -1,7 +1,7 @@
 Then(/^I should be able to submit feedback$/) do
   page.driver.browser.header('User-Agent', 'Chrome')
 
-  @feedback = FactoryBot.create(:feedback, comment: "I can't submit a petition for some reason")
+  @feedback = FactoryBot.create(:feedback, comment: "I can’t submit a petition for some reason")
 
   fill_in "feedback[email]", with: @feedback.email
   fill_in "feedback[petition_link_or_title]", with: @feedback.petition_link_or_title

@@ -383,7 +383,7 @@ RSpec.describe Archived::Signature, type: :model do
       it "raises an error" do
         expect {
           described_class.unsubscribe!([creator.id])
-        }.to raise_error(RuntimeError, "Can't unsubscribe the creator signature")
+        }.to raise_error(RuntimeError, "Can’t unsubscribe the creator signature")
       end
     end
 
@@ -393,7 +393,7 @@ RSpec.describe Archived::Signature, type: :model do
       it "raises an error" do
         expect {
           described_class.unsubscribe!([signature.id])
-        }.to raise_error(RuntimeError, "Can't unsubscribe a pending signature")
+        }.to raise_error(RuntimeError, "Can’t unsubscribe a pending signature")
       end
     end
 

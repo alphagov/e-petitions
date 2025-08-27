@@ -69,7 +69,7 @@ Given(/^a ?(open|closed)? petition "([^"]*)" exists and has received a governmen
   FactoryBot.create(:responded_petition, petition_attributes)
 end
 
-Given(/^a petition "(.*?)" exists and hasn't passed the threshold for a ?(response|debate)?$/) do |action, response_or_debate|
+Given(/^a petition "(.*?)" exists and hasn’t passed the threshold for a ?(response|debate)?$/) do |action, response_or_debate|
   FactoryBot.create(:open_petition, action: action)
 end
 
@@ -162,7 +162,7 @@ Given(/^a petition "([^"]*)" has been rejected(?: with the reason "([^"]*)")?$/)
   @petition = FactoryBot.create(:rejected_petition,
     :action => petition_action,
     :rejection_code => "irrelevant",
-    :rejection_details => reason || "It doesn't make any sense")
+    :rejection_details => reason || "It doesn’t make any sense")
 end
 
 Given(/^an archived petition "([^"]*)" has been rejected with the reason "([^"]*)"$/) do |action, rejection_details|

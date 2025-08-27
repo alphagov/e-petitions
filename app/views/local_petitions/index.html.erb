@@ -1,6 +1,6 @@
 <h1 class="page-title">
   <% if @postcode.present? %>
-    We couldn't find that postcode
+    We couldn’t find that postcode
   <% else %>
     Local to you
   <% end %>
@@ -9,7 +9,7 @@
 <% if @postcode.blank? %>
   <p>Find petitions about local issues</p>
 <% else %>
-  <p>We couldn't find the postcode <q><%= params[:postcode] %></q>. Try again?</p>
+  <p>We couldn’t find the postcode <q><%= params[:postcode] %></q>. Try again?</p>
 <% end %>
 
 <%= render 'local_search' %>

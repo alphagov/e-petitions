@@ -12,7 +12,7 @@ module SectionHelpers
       "#{prefix}h1"
 
     else
-      raise "Can't find mapping from \"#{section_name}\" to a section."
+      raise "Can’t find mapping from \"#{section_name}\" to a section."
     end
   end
 

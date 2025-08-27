@@ -1,4 +1,4 @@
-Feature: As Laura, a sponsor of my friend Charlie's petition
+Feature: As Laura, a sponsor of my friend Charlie’s petition
   In order to provide my support to the petition
   I want to be able to sign the petition by providing my details
 
@@ -65,7 +65,7 @@ Feature: As Laura, a sponsor of my friend Charlie's petition
 
   Scenario: Laura makes mistakes signing the petition she is a sponsor of
     When I visit the "sponsor this petition" url I was given
-    And I don't fill in my details correctly as a sponsor
+    And I don’t fill in my details correctly as a sponsor
     And I try to sign
     Then I should see an error
     And I should not have signed the petition as a sponsor

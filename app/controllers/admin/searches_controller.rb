@@ -5,7 +5,7 @@ class Admin::SearchesController < Admin::AdminController
     elsif signature_search?
       redirect_to admin_signatures_url(search_params)
     else
-      redirect_to admin_root_url, notice: "Sorry, we didn't understand your query"
+      redirect_to admin_root_url, notice: "Sorry, we didn’t understand your query"
     end
   end
 

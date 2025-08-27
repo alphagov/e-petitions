@@ -1,6 +1,6 @@
 feedback: !ruby/object:Mocks::Feedback
   id: 1
-  comment: "I haven't received my confirmation email"
+  comment: "I haven’t received my confirmation email"
   petition_link_or_title: "http://petitions.localhost:3000/petitions/1000"
   email: "johndoe@example.com"
   user_agent: "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/133.0.0.0 Safari/537.36"
@@ -326,7 +326,7 @@ hidden_petition: !ruby/object:Mocks::Petition &hidden_petition
     id: 1000
     code: "libellous"
     details: |-
-      We can't publish petitions that include false or unverified information, especially where it makes unproven claims about public health.
+      We can’t publish petitions that include false or unverified information, especially where it makes unproven claims about public health.
     created_at: 2025-02-26T12:25:30Z
     updated_at: 2025-02-26T12:25:30Z
     petition:

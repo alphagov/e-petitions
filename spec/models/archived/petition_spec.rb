@@ -15,7 +15,7 @@ RSpec.describe Archived::Petition, type: :model do
           petition.valid?
         }.to change {
           petition.errors[:parliament]
-        }.from([]).to(["Parliament can't be blank"])
+        }.from([]).to(["Parliament can’t be blank"])
       end
     end
 

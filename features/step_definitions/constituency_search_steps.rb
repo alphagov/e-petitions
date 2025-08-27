@@ -15,7 +15,7 @@ Given(/^a constituency "(.*?)"(?: with MP "(.*?)")? is found by postcode "(.*?)"
   elsif for_postcode == constituency
     # noop
   else
-    raise "Postcode #{postcode} registered for constituency #{for_postcode.name} already, can't reassign to #{constituency.name}"
+    raise "Postcode #{postcode} registered for constituency #{for_postcode.name} already, can’t reassign to #{constituency.name}"
   end
 end
 
@@ -117,9 +117,9 @@ Given(/^the constituency api is down$/) do
   @constituency_api_down = true
 end
 
-Then(/^I should see an explanation that my constituency couldn't be found$/) do
+Then(/^I should see an explanation that my constituency couldn’t be found$/) do
   expect(page).not_to have_selector(:css, '.local-petitions .petition-item')
-  expect(page).to have_content("We couldn't find the postcode")
+  expect(page).to have_content("We couldn’t find the postcode")
 end
 
 Then(/^I should see an explanation that there are no petitions popular in my constituency$/) do

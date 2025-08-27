@@ -100,9 +100,9 @@ en-GB:
     format: "%{message}"
     messages:
       accepted: "%{attribute} must be accepted"
-      blank: "%{attribute} can't be blank"
-      confirmation: "%{attribute} doesn't match %{attribute}"
-      empty: "%{attribute} can't be empty"
+      blank: "%{attribute} can’t be blank"
+      confirmation: "%{attribute} doesn’t match %{attribute}"
+      empty: "%{attribute} can’t be empty"
       equal_to: "%{attribute} must be equal to %{count}"
       even: "%{attribute} must be even"
       exclusion: "%{attribute} is reserved"

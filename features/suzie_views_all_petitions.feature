@@ -34,7 +34,7 @@ Feature: Suzy Signer views all petitions
     And the markup should be valid
 
   Scenario: Suzie browses petitions awaiting a government response
-    Given a petition "Abolish bank holidays" exists and hasn't passed the threshold for a response
+    Given a petition "Abolish bank holidays" exists and hasn’t passed the threshold for a response
     And a petition "Free the wombles" exists and passed the threshold for a response less than a day ago
     And a petition "Force supermarkets to give unsold food to charities" exists and passed the threshold for a response 1 day ago
     And a petition "Make every monday bank holiday" exists and passed the threshold for a response 10 days ago
@@ -74,7 +74,7 @@ Feature: Suzy Signer views all petitions
     And the markup should be valid
 
   Scenario: Suzie browses petitions awaiting a debate in Parliament
-    Given a petition "Save the planet" exists and hasn't passed the threshold for a debate
+    Given a petition "Save the planet" exists and hasn’t passed the threshold for a debate
     And a petition "Conquer the Moon" passed the threshold for a debate less than a day ago and has no debate date set
     And a petition "Free the wombles" passed the threshold for a debate 10 days ago and has no debate date set
     And a petition "Travel to the stars" passed the threshold for a debate 2 days ago and has a debate in 2 days

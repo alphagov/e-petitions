@@ -11,7 +11,7 @@ Feature: Sysadmin invalidates some signatures
     And I follow "New Invalidation"
     Then I should see "Reasons for this invalidation"
     When I press "Save"
-    Then I should see "Summary can't be blank"
+    Then I should see "Summary can’t be blank"
     And I should see "Please select some conditions, otherwise all signatures will be invalidated"
     When I fill in "Summary" with "Bob Jones is a fraud"
     And I fill in "Email address" with "bob.jones@example.com"
