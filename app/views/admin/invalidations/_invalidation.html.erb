@@ -21,9 +21,9 @@
   </td>
   <td>
     <% if invalidation.counted_at? %>
-      <span title="<%= date_time_format(invalidation.counted_at) %>">
+      <%= tag.span(title: date_time_format(invalidation.counted_at)) do %>
         <%= invalidation.matching_count %>
-      </span>
+      <% end %>
     <% else %>
       –
     <% end %>
