@@ -3,5 +3,5 @@
 <%= form_row for: [form.object, :allowed_domains] do %>
   <%= error_messages_for_field @rate_limit, :allowed_domains %>
   <%= form.text_area :allowed_domains, tabindex: increment, rows: 15, class: 'form-control' %>
-  <p><small>use *.example.com to match one subdomain and **.example.com to match nested subdomains</small><p>
+  <p><small>use *.example.com to match one subdomain and **.example.com to match nested subdomains</small></p>
 <% end %>

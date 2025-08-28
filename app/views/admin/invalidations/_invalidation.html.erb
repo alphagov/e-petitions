@@ -6,7 +6,7 @@
       <%= invalidation.summary %>
     <% end %>
   </td>
-  <td nowrap="true">
+  <td nowrap>
     <% if invalidation.completed? %>
       <%= content_tag(:span, "Completed", title: "Completed at #{date_time_format(invalidation.completed_at)}") %>
     <% elsif invalidation.cancelled? %>
@@ -42,7 +42,7 @@
       –
     <% end %>
   </td>
-  <td nowrap="true">
+  <td nowrap>
     &nbsp;
     <% unless invalidation.completed? || invalidation.cancelled? %>
       <%= button_to 'Cancel', cancel_admin_invalidation_path(invalidation, params.permit(:state, :q)), method: :post, class: 'button-secondary' %>

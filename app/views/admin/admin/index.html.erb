@@ -186,7 +186,7 @@
       <dl>
         <% if trending_domains? %>
           <dd>
-            <details open="open">
+            <details open>
               <summary>Trending domains</summary>
               <table class="trending-domains">
                 <% trending_domains.each do |domain, count| %>
@@ -202,7 +202,7 @@
 
         <% if trending_ips? %>
           <dd>
-            <details open="open">
+            <details open>
               <summary>Trending IP addresses</summary>
               <table class="trending-ips">
                 <% trending_ips.each do |ip, count| %>

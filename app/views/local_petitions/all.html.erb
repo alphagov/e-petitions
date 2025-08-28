@@ -19,7 +19,7 @@
         <li class="petition-item petition-<%= petition.state %>">
           <h2><%= link_to petition.action, petition_path(petition) %></h2>
           <p>
-            <%= signature_count(:in_your_constituency, petition.constituency_signature_count, constituency: @constituency.name) %><br/>
+            <%= signature_count(:in_your_constituency, petition.constituency_signature_count, constituency: @constituency.name) %><br>
             <% if petition.closed? %>
               (<%= signature_count(:in_total, petition.signature_count) %>, now closed)
             <% else %>
