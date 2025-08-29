@@ -36,10 +36,10 @@
                 <label><input type="radio" name="dmatch" value="none"> no departments</label>
               </small>
             </p>
-            <% Department.by_name.each do |dept| %>
+            <% Department.by_name.each do |d| %>
               <div class="multiple-choice">
-                <input type="checkbox" name="depts[]" value="<%= dept.id %>" id="depts_<%= dept.id %>">
-                <label for="depts_<%= dept.id %>" title="<%= dept.name %>"><%= dept.label %></label>
+                <%= tag.input type: "checkbox", name: "depts[]", value: d.id, id: "depts_#{d.id}", checked: selected_depts.include?(d.id) %>
+                <%= tag.label d.label, for: "depts_#{d.id}", title: d.name %>
               </div>
             <% end %>
           </div>
@@ -57,10 +57,10 @@
                 <label><input type="radio" name="tmatch" value="none"> no tags</label>
               </small>
             </p>
-            <% Tag.by_name.each do |tag| %>
+            <% Tag.by_name.each do |t| %>
               <div class="multiple-choice">
-                <input type="checkbox" name="tags[]" value="<%= tag.id %>" id="tags_<%= tag.id %>">
-                <label for="tags_<%= tag.id %>" title="<%= tag.description %>"><%= tag.name %></label>
+                <%= tag.input type: "checkbox", name: "tags[]", value: t.id, id: "tags_#{t.id}", checked: selected_tags.include?(t.id) %>
+                <%= tag.label t.name, for: "tags_#{t.id}", title: t.description %>
               </div>
             <% end %>
           </div>
@@ -186,7 +186,7 @@
       <dl>
         <% if trending_domains? %>
           <dd>
-            <details open="open">
+            <details open>
               <summary>Trending domains</summary>
               <table class="trending-domains">
                 <% trending_domains.each do |domain, count| %>
@@ -202,7 +202,7 @@
 
         <% if trending_ips? %>
           <dd>
-            <details open="open">
+            <details open>
               <summary>Trending IP addresses</summary>
               <table class="trending-ips">
                 <% trending_ips.each do |ip, count| %>

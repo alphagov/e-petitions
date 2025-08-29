@@ -3,7 +3,7 @@
 <%= form_row for: [form.object, :countries] do %>
   <%= error_messages_for_field @rate_limit, :countries %>
   <%= form.text_area :countries, tabindex: increment, rows: 8, class: 'form-control' %>
-  <p><small>Add countries that are allowed to sign petitions, e.g. United Kingdom</small><p>
+  <p><small>Add countries that are allowed to sign petitions, e.g. United Kingdom</small></p>
 <% end %>
 
 <%= form_row for: [form.object, :country_rate_limits_enabled], class: 'inline' do %>
