@@ -33,7 +33,7 @@ class ApplicationController < ActionController::Base
   end
 
   def unknown_format?
-    request.format.nil?
+    request.format.nil? && request.path.match(/\.\w+$/)
   end
 
   def url_without_format
