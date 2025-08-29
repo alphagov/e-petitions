@@ -23,13 +23,13 @@ Given(/^there (?:are|is) (\d+) petitions? debated in parliament(.+)?$/) do |deba
   end
 
   debated_count.times do |count|
-    petition = FactoryBot.create(:debated_petition, action: "Petition #{count}", video_url: video_url, transcript_url: transcript_url, debate_pack_url: debate_pack_url, public_engagement_url: public_engagement_url, debate_summary_url: debate_summary_url)
+    FactoryBot.create(:debated_petition, action: "Petition #{count}", video_url: video_url, transcript_url: transcript_url, debate_pack_url: debate_pack_url, public_engagement_url: public_engagement_url, debate_summary_url: debate_summary_url)
   end
 end
 
 Given(/^there are (\d+) petitions with a government response$/) do |response_count|
   response_count.times do |count|
-    petition = FactoryBot.create(:responded_petition, :action => "Petition #{count}")
+    FactoryBot.create(:responded_petition, :action => "Petition #{count}")
   end
 end
 

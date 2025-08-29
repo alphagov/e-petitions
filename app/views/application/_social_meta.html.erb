@@ -1,7 +1,7 @@
 <!-- SEO meta description -->
 <% if archived_petition_page? %>
 <%= tag.meta name: 'description', content: @petition.background? ? @petition.background : @petition.additional_details %>
-<% elsif defined?(@petition) %>
+<% elsif defined?(@petition) && @petition.visible? %>
 <%= tag.meta name: 'description', content: @petition.background %>
 <% else %>
 <%= tag.meta name: 'description', content: 'Official online petitions in response to issues of the day, listing the number that got a Government response, and those that have been debated in the House of Parliament' %>
@@ -17,7 +17,7 @@
 <%= open_graph_tag 'type', 'article' %>
 <%= open_graph_tag 'title', :archived_title, petition: @petition.action %>
 <%= open_graph_tag 'description', @petition.background? ? @petition.background : @petition.additional_details %>
-<% elsif defined?(@petition) %>
+<% elsif defined?(@petition) && @petition.visible? %>
 <%= open_graph_tag 'url', petition_url(@petition) %>
 <%= open_graph_tag 'type', 'article' %>
 <%= open_graph_tag 'title', :title, petition: @petition.action %>
@@ -34,7 +34,7 @@
 <% if archived_petition_page? %>
 <%= x_card_tag 'title', :title, petition: @petition.action %>
 <%= x_card_tag 'description', @petition.background? ? @petition.background : @petition.additional_details %>
-<% elsif defined?(@petition) %>
+<% elsif defined?(@petition) && @petition.visible? %>
 <%= x_card_tag 'title', :title, petition: @petition.action %>
 <%= x_card_tag 'description', @petition.background %>
 <% else %>
