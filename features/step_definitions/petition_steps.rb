@@ -1,4 +1,4 @@
-Given /^a set of petitions$/ do
+Given(/^a set of petitions$/) do
   3.times do |x|
     @petition = FactoryBot.create(:open_petition, :with_additional_details, :action => "Petition #{x}")
   end
@@ -16,6 +16,10 @@ end
 
 Given(/^an? ?(pending|validated|sponsored|flagged|dormant|open|closed|rejected)? petition "([^"]*)"(?: exists)?$/) do |state, action|
   @petition = FactoryBot.create(:"#{state || 'open'}_petition", action: action)
+end
+
+Given('an open petition {string} with background {string}') do |action, background|
+  @petition = FactoryBot.create(:open_petition, action: action, background: background)
 end
 
 Given(/^a (validated|sponsored) petition "(.*?)" with (\d+) supporters?$/) do |state, action, sponsor_count|
@@ -185,7 +189,7 @@ Then(/^I should be redirected to the archived url$/) do
   expect(current_path).to eq(archived_petition_path(@petition))
 end
 
-When /^I view all petitions from the home page$/ do
+When(/^I view all petitions from the home page$/) do
   visit home_url
   click_link "All petitions"
 end
@@ -211,6 +215,18 @@ Then(/^I should see the petition details$/) do
     click_details "More details"
     expect(page).to have_content(@petition.additional_details)
   end
+end
+
+Then('the page should have the opengraph meta tag {string} with {string}') do |property, content|
+  expect(page).to have_opengraph_meta_tag(property, content)
+end
+
+Then('the page should not have the opengraph meta tag {string}') do |string|
+  expect(page).not_to have_xpath("//meta[@property='og:#{string}']", visible: false)
+end
+
+Then('the page should have the twitter meta tag {string} with {string}') do |name, content|
+  expect(page).to have_twitter_meta_tag(name, content)
 end
 
 Then(/^I should see the vote count, closed and open dates$/) do
@@ -358,7 +374,6 @@ end
 
 Given(/^an? (open|closed|rejected) petition "(.*?)" with some (fraudulent)? ?signatures$/) do |state, petition_action, signature_state|
   petition_closed_at = state == 'closed' ? 1.day.ago : nil
-  petition_state = state == 'closed' ? 'open' : state
   petition_args = {
     action: petition_action,
     open_at: 3.months.ago,
@@ -380,7 +395,7 @@ end
 
 Given(/^there are (\d+) petitions awaiting a government response$/) do |response_count|
   response_count.times do |count|
-    petition = FactoryBot.create(:awaiting_petition, :action => "Petition #{count}")
+    FactoryBot.create(:awaiting_petition, :action => "Petition #{count}")
   end
 end
 

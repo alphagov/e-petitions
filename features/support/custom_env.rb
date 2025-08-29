@@ -97,6 +97,18 @@ module CucumberHelpers
       page.find("//summary[contains(., '#{name}')]/..").click
     end
   end
+
+  def have_meta_tag(name, content)
+    have_xpath("//meta[@name='#{name}' and starts-with(@content, '#{content}')]", visible: false)
+  end
+
+  def have_opengraph_meta_tag(property, content)
+    have_xpath("//meta[@property='og:#{property}' and starts-with(@content, '#{content}')]", visible: false)
+  end
+
+  def have_twitter_meta_tag(name, content)
+    have_xpath("//meta[@name='twitter:#{name}' and starts-with(@content, '#{content}')]", visible: false)
+  end
 end
 
 World(CucumberI18n)

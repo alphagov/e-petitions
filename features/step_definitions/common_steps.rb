@@ -106,3 +106,11 @@ end
 When(/^I accept the alert$/) do
   page.driver.browser.switch_to.alert.accept
 end
+
+Then('the page should have the title {string}') do |string|
+  expect(page).to have_title(string)
+end
+
+Then('the page should have the meta description {string}') do |string|
+  expect(page).to have_meta_tag('description', string)
+end

@@ -9,6 +9,12 @@ Feature: Suzie views a petition
     Then I should see "This petition is gathering support"
     And I should see "This petition needs 3 more supporters before we will check that it meets the petition standards"
     And I should see a link called "petition standards" linking to "/help#standards"
+    And the page should have the title "This petition is gathering support - Petitions"
+    And the page should have the meta description "Official online petitions in response to issues of the day"
+    And the page should have the opengraph meta tag "title" with "This petition is gathering support - Petitions"
+    And the page should not have the opengraph meta tag "description"
+    And the page should have the twitter meta tag "title" with "This petition is gathering support - Petitions"
+    And the page should have the twitter meta tag "description" with "Official online petitions in response to issues of the day"
 
   Scenario: Suzie views a petition gathering sponsors with 4 supporters
     Given a validated petition "Spend more money on Defence" with 4 supporters
@@ -16,6 +22,12 @@ Feature: Suzie views a petition
     Then I should see "This petition is gathering support"
     And I should see "This petition needs 1 more supporter before we will check that it meets the petition standards"
     And I should see a link called "petition standards" linking to "/help#standards"
+    And the page should have the title "This petition is gathering support - Petitions"
+    And the page should have the meta description "Official online petitions in response to issues of the day"
+    And the page should have the opengraph meta tag "title" with "This petition is gathering support - Petitions"
+    And the page should not have the opengraph meta tag "description"
+    And the page should have the twitter meta tag "title" with "This petition is gathering support - Petitions"
+    And the page should have the twitter meta tag "description" with "Official online petitions in response to issues of the day"
 
   Scenario: Suzie views a petition waiting to be moderated
     Given a sponsored petition "Spend more money on Defence" with 5 supporters
@@ -24,6 +36,12 @@ Feature: Suzie views a petition
     And I should see "5 people have already supported this petition"
     And I should not see "No more people can sign this petition until it has been approved"
     And I should see a link called "petition standards" linking to "/help#standards"
+    And the page should have the title "This petition has been sent to moderation - Petitions"
+    And the page should have the meta description "Official online petitions in response to issues of the day"
+    And the page should have the opengraph meta tag "title" with "This petition has been sent to moderation - Petitions"
+    And the page should not have the opengraph meta tag "description"
+    And the page should have the twitter meta tag "title" with "This petition has been sent to moderation - Petitions"
+    And the page should have the twitter meta tag "description" with "Official online petitions in response to issues of the day"
 
   Scenario: Suzie views a petition waiting to be moderated with 1 supporter
     Given a sponsored petition "Spend more money on Defence" with 1 supporter
@@ -32,6 +50,12 @@ Feature: Suzie views a petition
     And I should see "1 person has already supported this petition"
     And I should not see "No more people can sign this petition until it has been approved"
     And I should see a link called "petition standards" linking to "/help#standards"
+    And the page should have the title "This petition has been sent to moderation - Petitions"
+    And the page should have the meta description "Official online petitions in response to issues of the day"
+    And the page should have the opengraph meta tag "title" with "This petition has been sent to moderation - Petitions"
+    And the page should not have the opengraph meta tag "description"
+    And the page should have the twitter meta tag "title" with "This petition has been sent to moderation - Petitions"
+    And the page should have the twitter meta tag "description" with "Official online petitions in response to issues of the day"
 
   Scenario: Suzie views a petition with the maximum number of supporters waiting to be moderated
     Given a sponsored petition "Spend more money on Defence" with 20 supporters
@@ -40,6 +64,12 @@ Feature: Suzie views a petition
     And I should see "20 people have already supported this petition"
     And I should see "No more people can sign this petition until it has been approved"
     And I should see a link called "petition standards" linking to "/help#standards"
+    And the page should have the title "This petition has been sent to moderation - Petitions"
+    And the page should have the meta description "Official online petitions in response to issues of the day"
+    And the page should have the opengraph meta tag "title" with "This petition has been sent to moderation - Petitions"
+    And the page should not have the opengraph meta tag "description"
+    And the page should have the twitter meta tag "title" with "This petition has been sent to moderation - Petitions"
+    And the page should have the twitter meta tag "description" with "Official online petitions in response to issues of the day"
 
   @allow-rescue
   Scenario: Suzie views a dormant petition
@@ -48,10 +78,15 @@ Feature: Suzie views a petition
     Then I will see a 404 error page
 
   Scenario: Suzie views an open petition
-    Given an open petition "Spend more money on Defence"
+    Given an open petition "Spend more money on Defence" with background "Because of reasons"
     When I view the petition
-    Then I should see the petition details
-    And I should see "Spend more money on Defence - Petitions" in the browser page title
+    Then the page should have the title "Spend more money on Defence - Petitions"
+    And the page should have the meta description "Because of reasons"
+    And the page should have the opengraph meta tag "title" with "Petition: Spend more money on Defence"
+    And the page should have the opengraph meta tag "description" with "Because of reasons"
+    And the page should have the twitter meta tag "title" with "Petition: Spend more money on Defence"
+    And the page should have the twitter meta tag "description" with "Because of reasons"
+    And I should see the petition details
     And I should see the vote count, closed and open dates
     And I should not see "This petition is closed"
     And I can share it via Email
