@@ -69,6 +69,17 @@ jobs:
           bundler-cache: true
           cache-version: 1
 
+      - name: Setup node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20.x"
+          cache: "npm"
+
+      - name: Install node packages
+        shell: bash
+        run: |
+          npm ci
+
       - name: Setup database
         shell: bash
         env:

@@ -121,7 +121,7 @@ class CookiePreferences {
   }
 }
 
-class CookieManager {
+export default class CookieManager {
   constructor(root) {
     this.cookieName = 'uk-parliament.cookie-policy';
     this.alternateCookieName = 'petition-cookie-policy';
@@ -194,6 +194,3 @@ class CookieManager {
     return this.policyCookie.preferences_set;
   }
 }
-
-window.PETS = window.PETS || {};
-window.PETS.CookieManager = CookieManager;

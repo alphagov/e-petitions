@@ -3,6 +3,7 @@ require 'rspec/core/pending'
 require 'rspec/mocks'
 require 'multi_test'
 require 'faker'
+require 'rake'
 
 # Use webmock to disable net connections except for localhost and exceptions
 WebMock.disable_net_connect!(
@@ -70,6 +71,11 @@ pid = Process.spawn('bin/local_proxy', out: 'log/proxy.log', err: 'log/proxy.log
 Process.detach(pid)
 
 at_exit { Process.kill('INT', pid) rescue nil }
+
+Rails.application.load_tasks
+
+Rake::Task["css:build"].invoke
+Rake::Task["javascript:build"].invoke
 
 module CucumberI18n
   def t(*args)

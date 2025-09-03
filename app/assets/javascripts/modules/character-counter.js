@@ -1,4 +1,4 @@
-class CharacterCounter {
+export default class CharacterCounter {
   constructor(textarea) {
     this.textarea = textarea;
     this.counter = textarea.parentNode.querySelector('.character-count');
@@ -49,6 +49,3 @@ class CharacterCounter {
     this.counter.textContent = `You have ${Math.abs(remaining)} ${characters} ${status}`;
   }
 }
-
-window.PETS = window.PETS || {};
-window.PETS.CharacterCounter = CharacterCounter;

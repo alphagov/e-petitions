@@ -14,9 +14,9 @@
 
 // Mixin to clean up retina bg images
 @mixin background-image($path, $width, $height, $extension: ".png") {
-  background-image: image-url($path + $extension);
+  background-image: url($path + $extension);
   @include device-pixel-ratio() {
-    background-image: image-url($path + "-2x" + $extension);
+    background-image: url($path + "-2x" + $extension);
     background-size: $width $height;
   }
 }
