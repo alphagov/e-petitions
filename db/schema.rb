@@ -353,6 +353,14 @@ ActiveRecord::Schema[7.2].define(version: 2025_04_16_072110) do
     t.index ["name"], name: "index_domains_on_name", unique: true
   end
 
+  create_table "email_partials", force: :cascade do |t|
+    t.string "name", limit: 50, null: false
+    t.text "content", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["name"], name: "index_email_partials_on_name", unique: true
+  end
+
   create_table "email_requested_receipts", force: :cascade do |t|
     t.bigint "petition_id"
     t.datetime "government_response", precision: nil
@@ -363,6 +371,17 @@ ActiveRecord::Schema[7.2].define(version: 2025_04_16_072110) do
     t.datetime "petition_email", precision: nil
     t.datetime "petition_mailshot", precision: nil
     t.index ["petition_id"], name: "index_email_requested_receipts_on_petition_id"
+  end
+
+  create_table "email_templates", force: :cascade do |t|
+    t.string "mailer_name", limit: 50, null: false
+    t.string "action_name", limit: 50, null: false
+    t.string "subject", limit: 200, null: false
+    t.text "content", null: false
+    t.boolean "active", default: false, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["mailer_name", "action_name"], name: "index_email_templates_on_mailer_name_and_action_name", unique: true
   end
 
   create_table "feedback", force: :cascade do |t|

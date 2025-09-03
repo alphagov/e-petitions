@@ -6,10 +6,6 @@ namespace :lighthouse do
       Rake::Task["assets:clobber"].invoke
     }
 
-    Sprockets::Rails::Task.new(Rails.application) do |t|
-      t.log_level = :warn
-    end
-
     Rake::Task["db:migrate"].invoke
     Rake::Task["assets:precompile"].invoke
 
