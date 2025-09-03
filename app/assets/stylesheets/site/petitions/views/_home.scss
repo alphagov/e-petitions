@@ -145,34 +145,34 @@ a.threshold-panel:focus {
 
 a.threshold-panel-response {
   background-position: 15px 16px;
-  background-image: image-url("graphics/graphic_crown-white.png");
+  background-image: url("graphics/graphic_crown-white.png");
 
   @include device-pixel-ratio() {
-    background-image: image-url("graphics/graphic_crown-white-2x.png");
+    background-image: url("graphics/graphic_crown-white-2x.png");
     background-size: 27px;
   }
 
   &:focus {
-    background-image: image-url("graphics/graphic_crown.png");
+    background-image: url("graphics/graphic_crown.png");
     @include device-pixel-ratio() {
-      background-image: image-url("graphics/graphic_crown-2x.png");
+      background-image: url("graphics/graphic_crown-2x.png");
     }
   }
 }
 
 a.threshold-panel-debate {
   background-position: 15px 12px;
-  background-image: image-url("graphics/graphic_portcullis-white.png");
+  background-image: url("graphics/graphic_portcullis-white.png");
 
   @include device-pixel-ratio() {
-    background-image: image-url("graphics/graphic_portcullis-white-2x.png");
+    background-image: url("graphics/graphic_portcullis-white-2x.png");
     background-size: 26px;
   }
 
   &:focus {
-    background-image: image-url("graphics/graphic_portcullis.png");
+    background-image: url("graphics/graphic_portcullis.png");
     @include device-pixel-ratio() {
-      background-image: image-url("graphics/graphic_portcullis-2x.png");
+      background-image: url("graphics/graphic_portcullis-2x.png");
     }
   }
 }

@@ -10,7 +10,7 @@ $path: false !default;
   @if $path {
     $url: url($path+$file);
   } @else {
-    $url: image-url($file);
+    $url: url($file);
   }
   @return $url;
 }

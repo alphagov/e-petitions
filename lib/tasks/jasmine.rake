@@ -5,10 +5,6 @@ namespace :jasmine do
       Rake::Task["assets:clobber"].invoke
     }
 
-    Sprockets::Rails::Task.new(Rails.application) do |t|
-      t.log_level = :warn
-    end
-
     Rake::Task["assets:precompile"].invoke
 
     if !system("npx jasmine-browser-runner runSpecs")

@@ -67,7 +67,4 @@ Rails.application.configure do
 
   # Raise error when a before_action's only/except options reference missing actions
   config.action_controller.raise_on_missing_callback_actions = true
-
-  # Disable asset digests so that test values don't change.
-  config.assets.digest = false
 end

@@ -1,4 +1,4 @@
-(function ($) {
+export default function ($) {
   'use strict';
 
   $.fn.autoLogout = function() {
@@ -41,4 +41,4 @@
 
     window.setInterval(AutoLogout.checkStatus, INTERVAL);
   }
-})(jQuery);
+};

@@ -38,210 +38,210 @@
 .graphic-portcullis {
   width: 26px;
   height: 32px;
-  background-image: image-url("graphics/graphic_portcullis.png");
+  background-image: url("graphics/graphic_portcullis.png");
 
   @include device-pixel-ratio() {
-    background-image: image-url("graphics/graphic_portcullis-2x.png");
+    background-image: url("graphics/graphic_portcullis-2x.png");
     background-size: 100%;
   }
 }
 .graphic-portcullis-white {
   width: 26px;
   height: 32px;
-  background-image: image-url("graphics/graphic_portcullis-white.png");
+  background-image: url("graphics/graphic_portcullis-white.png");
 
   @include device-pixel-ratio() {
-    background-image: image-url("graphics/graphic_portcullis-white-2x.png");
+    background-image: url("graphics/graphic_portcullis-white-2x.png");
     background-size: 100%;
   }
 }
 .graphic-portcullis-large-white {
   width: 52px;
   height: 64px;
-  background-image: image-url("graphics/graphic_portcullis-large-white.png");
+  background-image: url("graphics/graphic_portcullis-large-white.png");
 
   @include device-pixel-ratio() {
-    background-image: image-url("graphics/graphic_portcullis-large-white-2x.png");
+    background-image: url("graphics/graphic_portcullis-large-white-2x.png");
     background-size: 100%;
   }
 }
 .graphic-portcullis-large-grey {
   width: 52px;
   height: 64px;
-  background-image: image-url("graphics/graphic_portcullis-large-grey.png");
+  background-image: url("graphics/graphic_portcullis-large-grey.png");
 
   @include device-pixel-ratio() {
-    background-image: image-url("graphics/graphic_portcullis-large-grey-2x.png");
+    background-image: url("graphics/graphic_portcullis-large-grey-2x.png");
     background-size: 100%;
   }
 }
 .graphic-crown {
   width: 27px;
   height: 25px;
-  background-image: image-url("graphics/graphic_crown.png");
+  background-image: url("graphics/graphic_crown.png");
 
   @include device-pixel-ratio() {
-    background-image: image-url("graphics/graphic_crown-2x.png");
+    background-image: url("graphics/graphic_crown-2x.png");
     background-size: 100%;
   }
 }
 .graphic-crown-white {
   width: 27px;
   height: 25px;
-  background-image: image-url("graphics/graphic_crown-white.png");
+  background-image: url("graphics/graphic_crown-white.png");
 
   @include device-pixel-ratio() {
-    background-image: image-url("graphics/graphic_crown-white-2x.png");
+    background-image: url("graphics/graphic_crown-white-2x.png");
     background-size: 100%;
   }
 }
 .graphic-crest-large-white {
   width: 80px;
   height: 64px;
-  background-image: image-url("graphics/graphic_crest-large-white.png");
+  background-image: url("graphics/graphic_crest-large-white.png");
 
   @include device-pixel-ratio() {
-    background-image: image-url("graphics/graphic_crest-large-white-2x.png");
+    background-image: url("graphics/graphic_crest-large-white-2x.png");
     background-size: 100%;
   }
 }
 .graphic-crest-large-grey {
   width: 80px;
   height: 64px;
-  background-image: image-url("graphics/graphic_crest-large-grey.png");
+  background-image: url("graphics/graphic_crest-large-grey.png");
 
   @include device-pixel-ratio() {
-    background-image: image-url("graphics/graphic_crest-large-grey-2x.png");
+    background-image: url("graphics/graphic_crest-large-grey-2x.png");
     background-size: 100%;
   }
 }
 .graphic-pen {
   width: 25px;
   height: 35px;
-  background-image: image-url("graphics/graphic_pen.png");
+  background-image: url("graphics/graphic_pen.png");
 
   @include device-pixel-ratio() {
-    background-image: image-url("graphics/graphic_pen-2x.png");
+    background-image: url("graphics/graphic_pen-2x.png");
     background-size: 100%;
   }
 }
 .graphic-open-government-licence {
   width: 42px;
   height: 17px;
-  background-image: image-url("graphics/graphic_open-government-licence.png");
+  background-image: url("graphics/graphic_open-government-licence.png");
 
   @include device-pixel-ratio() {
-    background-image: image-url("graphics/graphic_open-government-licence-2x.png");
+    background-image: url("graphics/graphic_open-government-licence-2x.png");
     background-size: 100%;
   }
 }
 .icon-share-facebook {
   width: 7px;
   height: 16px;
-  background-image: image-url("icons/icon_share-facebook.png");
+  background-image: url("icons/icon_share-facebook.png");
 
   @include device-pixel-ratio() {
-    background-image: image-url("icons/icon_share-facebook-2x.png");
+    background-image: url("icons/icon_share-facebook-2x.png");
     background-size: 7px 16px;
   }
 }
 .icon-share-email {
   width: 18px;
   height: 13px;
-  background-image: image-url("icons/icon_share-email.png");
+  background-image: url("icons/icon_share-email.png");
 
   @include device-pixel-ratio() {
-    background-image: image-url("icons/icon_share-email-2x.png");
+    background-image: url("icons/icon_share-email-2x.png");
     background-size: 18px 13px;
   }
 }
 .icon-share-twitter {
   width: 16px;
   height: 13px;
-  background-image: image-url("icons/icon_share-twitter.png");
+  background-image: url("icons/icon_share-twitter.png");
 
   @include device-pixel-ratio() {
-    background-image: image-url("icons/icon_share-twitter-2x.png");
+    background-image: url("icons/icon_share-twitter-2x.png");
     background-size: 16px 13px;
   }
 }
 .icon-share-x {
   width: 16px;
   height: 13px;
-  background-image: image-url("icons/icon_share-x.png");
+  background-image: url("icons/icon_share-x.png");
 
   @include device-pixel-ratio() {
-    background-image: image-url("icons/icon_share-x-2x.png");
+    background-image: url("icons/icon_share-x-2x.png");
     background-size: 16px 13px;
   }
 }
 .icon-share-whatsapp {
   width: 19px;
   height: 19px;
-  background-image: image-url("icons/icon_share-whatsapp.png");
+  background-image: url("icons/icon_share-whatsapp.png");
 
   @include device-pixel-ratio() {
-    background-image: image-url("icons/icon_share-whatsapp-2x.png");
+    background-image: url("icons/icon_share-whatsapp-2x.png");
     background-size: 19px 19px;
   }
 }
 .icon-email {
   width: 25px;
   height: 17px;
-  background-image: image-url("icons/icon_email.png");
+  background-image: url("icons/icon_email.png");
 
   @include device-pixel-ratio() {
-    background-image: image-url("icons/icon_email-2x.png");
+    background-image: url("icons/icon_email-2x.png");
     background-size: 25px 17px;
   }
 }
 .icon-warning-white {
   width: 25px;
   height: 25px;
-  background-image: image-url("icons/icon_warning-white.png");
+  background-image: url("icons/icon_warning-white.png");
 
   @include device-pixel-ratio() {
-    background-image: image-url("icons/icon_warning-white-2x.png");
+    background-image: url("icons/icon_warning-white-2x.png");
     background-size: 25px 25px;
   }
 }
 .icon-confirmation-tick {
   width: 22px;
   height: 17px;
-  background-image: image-url("icons/icon_confirmation-tick.png");
+  background-image: url("icons/icon_confirmation-tick.png");
 
   @include device-pixel-ratio() {
-    background-image: image-url("icons/icon_confirmation-tick-2x.png");
+    background-image: url("icons/icon_confirmation-tick-2x.png");
     background-size: 22px 17px;
   }
 }
 .icon-search-white {
   width: 18px;
   height: 18px;
-  background-image: image-url("icons/icon_search-white.png");
+  background-image: url("icons/icon_search-white.png");
 
   @include device-pixel-ratio() {
-    background-image: image-url("icons/icon_search-white-2x.png");
+    background-image: url("icons/icon_search-white-2x.png");
     background-size: 18px 18px;
   }
 }
 .icon-location-white {
   width: 18px;
   height: 18px;
-  background-image: image-url("icons/icon_location-white.png");
+  background-image: url("icons/icon_location-white.png");
 
   @include device-pixel-ratio() {
-    background-image: image-url("icons/icon_location-white-2x.png");
+    background-image: url("icons/icon_location-white-2x.png");
     background-size: 18px 18px;
   }
 }
 .icon-play-white {
   width: 18px;
   height: 23px;
-  background-image: image-url("icons/icon_play-white.png");
+  background-image: url("icons/icon_play-white.png");
 
   @include device-pixel-ratio() {
-    background-image: image-url("icons/icon_play-white-2x.png");
+    background-image: url("icons/icon_play-white-2x.png");
     background-size: 18px 23px;
   }
 }
@@ -249,20 +249,20 @@
 .icon-paginate-next {
   width: 32px;
   height: 57px;
-  background-image: image-url("icons/icon_paginate-next.png");
+  background-image: url("icons/icon_paginate-next.png");
 
   @include device-pixel-ratio() {
-    background-image: image-url("icons/icon_paginate-next-2x.png");
+    background-image: url("icons/icon_paginate-next-2x.png");
     background-size: 32px 57px;
   }
 }
 .icon-paginate-previous {
   width: 32px;
   height: 57px;
-  background-image: image-url("icons/icon_paginate-previous.png");
+  background-image: url("icons/icon_paginate-previous.png");
 
   @include device-pixel-ratio() {
-    background-image: image-url("icons/icon_paginate-previous-2x.png");
+    background-image: url("icons/icon_paginate-previous-2x.png");
     background-size: 32px 57px;
   }
 }

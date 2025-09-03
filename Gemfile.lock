@@ -236,6 +236,27 @@ GEM
       thor (~> 1.4)
     globalid (1.2.1)
       activesupport (>= 6.1)
+    google-protobuf (4.32.0)
+      bigdecimal
+      rake (>= 13)
+    google-protobuf (4.32.0-aarch64-linux-gnu)
+      bigdecimal
+      rake (>= 13)
+    google-protobuf (4.32.0-aarch64-linux-musl)
+      bigdecimal
+      rake (>= 13)
+    google-protobuf (4.32.0-arm64-darwin)
+      bigdecimal
+      rake (>= 13)
+    google-protobuf (4.32.0-x86_64-darwin)
+      bigdecimal
+      rake (>= 13)
+    google-protobuf (4.32.0-x86_64-linux-gnu)
+      bigdecimal
+      rake (>= 13)
+    google-protobuf (4.32.0-x86_64-linux-musl)
+      bigdecimal
+      rake (>= 13)
     hashdiff (1.1.2)
     hashie (5.0.0)
     htmlentities (4.3.4)
@@ -253,10 +274,6 @@ GEM
       actionview (>= 7.0.0)
       activesupport (>= 7.0.0)
     jmespath (1.6.2)
-    jquery-rails (4.6.0)
-      rails-dom-testing (>= 1, < 3)
-      railties (>= 4.2.0)
-      thor (>= 0.14, < 2.0)
     json (2.15.0)
     launchy (2.5.2)
       addressable (~> 2.8)
@@ -338,6 +355,10 @@ GEM
     pp (0.6.2)
       prettyprint
     prettyprint (0.2.0)
+    propshaft (1.2.1)
+      actionpack (>= 7.0.0)
+      activesupport (>= 7.0.0)
+      rack
     pry (0.15.2)
       coderay (~> 1.1)
       method_source (~> 1.0)
@@ -393,9 +414,6 @@ GEM
       thor (~> 1.0, >= 1.2.2)
       zeitwerk (~> 2.6)
     rake (13.3.0)
-    rb-fsevent (0.11.2)
-    rb-inotify (0.11.1)
-      ffi (~> 1.0)
     rdoc (6.14.2)
       erb
       psych (>= 4.0.0)
@@ -434,17 +452,22 @@ GEM
       logger
     ruby2_keywords (0.0.5)
     rubyzip (3.0.1)
-    sass (3.7.4)
-      sass-listen (~> 4.0.0)
-    sass-listen (4.0.0)
-      rb-fsevent (~> 0.9, >= 0.9.4)
-      rb-inotify (~> 0.9, >= 0.9.7)
-    sass-rails (5.1.0)
-      railties (>= 5.2.0)
-      sass (~> 3.1)
-      sprockets (>= 2.8, < 4.0)
-      sprockets-rails (>= 2.0, < 4.0)
-      tilt (>= 1.1, < 3)
+    sass-embedded (1.91.0-aarch64-linux-gnu)
+      google-protobuf (~> 4.31)
+    sass-embedded (1.91.0-aarch64-linux-musl)
+      google-protobuf (~> 4.31)
+    sass-embedded (1.91.0-arm-linux-gnueabihf)
+      google-protobuf (~> 4.31)
+    sass-embedded (1.91.0-arm-linux-musleabihf)
+      google-protobuf (~> 4.31)
+    sass-embedded (1.91.0-arm64-darwin)
+      google-protobuf (~> 4.31)
+    sass-embedded (1.91.0-x86_64-darwin)
+      google-protobuf (~> 4.31)
+    sass-embedded (1.91.0-x86_64-linux-gnu)
+      google-protobuf (~> 4.31)
+    sass-embedded (1.91.0-x86_64-linux-musl)
+      google-protobuf (~> 4.31)
     scrypt (3.1.0)
       ffi-compiler (>= 1.0, < 2.0)
       rake (~> 13)
@@ -464,14 +487,6 @@ GEM
     simplecov-html (0.12.3)
     simplecov_json_formatter (0.1.4)
     slack-notifier (2.4.0)
-    sprockets (3.7.3)
-      base64
-      concurrent-ruby (~> 1.0)
-      rack (> 1, < 3)
-    sprockets-rails (3.5.2)
-      actionpack (>= 6.1)
-      activesupport (>= 6.1)
-      sprockets (>= 3.0.0)
     stringio (3.1.7)
     sys-uname (1.3.1)
       ffi (~> 1.1)
@@ -480,7 +495,6 @@ GEM
     textacular (5.7.0)
       activerecord (>= 5.0)
     thor (1.4.0)
-    tilt (2.0.10)
     timeout (0.4.3)
     tzinfo (2.0.6)
       concurrent-ruby (~> 1.0)
@@ -540,7 +554,6 @@ DEPENDENCIES
   foreman
   image_processing
   jbuilder
-  jquery-rails
   json
   launchy
   lograge
@@ -552,6 +565,7 @@ DEPENDENCIES
   omniauth-rails_csrf_protection
   omniauth-saml
   pg
+  propshaft
   pry
   puma
   rails (= 7.2.2.2)
@@ -559,7 +573,7 @@ DEPENDENCIES
   rake
   redcarpet
   rspec-rails
-  sass-rails (~> 5.0)
+  sass-embedded
   scrypt
   selenium-webdriver
   shoulda-matchers
@@ -660,6 +674,13 @@ CHECKSUMS
   ffi-compiler (1.3.2) sha256=a94f3d81d12caf5c5d4ecf13980a70d0aeaa72268f3b9cc13358bcc6509184a0
   foreman (0.90.0) sha256=ff675e2d47b607ac58714a6d4ac3e1ee8f06f41d8db084531c31961e2c3f117c
   globalid (1.2.1) sha256=70bf76711871f843dbba72beb8613229a49429d1866828476f9c9d6ccc327ce9
+  google-protobuf (4.32.0) sha256=e64bdc0280e9bb9233fa3f62b72a5c4d1522679c5cb4485b0fec726d0b6b96ab
+  google-protobuf (4.32.0-aarch64-linux-gnu) sha256=764c3e3e4e4952f798746e5933375f50609572aa964b767d7ab0f96a57fca788
+  google-protobuf (4.32.0-aarch64-linux-musl) sha256=17d1442d5e266b96362c35fde23722797344083eddef459fe58731babcc7f52e
+  google-protobuf (4.32.0-arm64-darwin) sha256=c2a3508af783e0b72171a400c54040be7f65523126cb83f1686d521ef20f5b9b
+  google-protobuf (4.32.0-x86_64-darwin) sha256=60098f391bbb47c31df8f8fb7f86f307606bf560877f6253f9f142f024d86895
+  google-protobuf (4.32.0-x86_64-linux-gnu) sha256=0813ffbb2cade07e757be35a32036455d52cb18856e34666b508c492925d747b
+  google-protobuf (4.32.0-x86_64-linux-musl) sha256=d26307111f43a27065f38128d744b6e3fcebfb6c6c1595d3755787cda6eebced
   hashdiff (1.1.2) sha256=2c30eeded6ed3dce8401d2b5b99e6963fe5f14ed85e60dd9e33c545a44b71a77
   hashie (5.0.0) sha256=9d6c4e51f2a36d4616cbc8a322d619a162d8f42815a792596039fc95595603da
   htmlentities (4.3.4) sha256=125a73c6c9f2d1b62100b7c3c401e3624441b663762afa7fe428476435a673da
@@ -669,7 +690,6 @@ CHECKSUMS
   irb (1.15.2) sha256=222f32952e278da34b58ffe45e8634bf4afc2dc7aa9da23fed67e581aa50fdba
   jbuilder (2.14.1) sha256=4eb26376ff60ef100cb4fd6fd7533cd271f9998327e86adf20fd8c0e69fabb42
   jmespath (1.6.2) sha256=238d774a58723d6c090494c8879b5e9918c19485f7e840f2c1c7532cf84ebcb1
-  jquery-rails (4.6.0) sha256=3c4e6bf47274340b44d836b8aa1b5472c6d451e2739af5ec094421f39025a7e2
   json (2.15.0) sha256=bc24d490a1d81bcbf6b45ee5c02695545d4ed37f679cee879b789a2bbb53ad5c
   launchy (2.5.2) sha256=8aa0441655aec5514008e1d04892c2de3ba57bd337afb984568da091121a241b
   logger (1.7.0) sha256=196edec7cc44b66cfb40f9755ce11b392f21f7967696af15d274dde7edff0203
@@ -714,6 +734,7 @@ CHECKSUMS
   pg (1.6.2-x86_64-linux-musl) sha256=e5c8668ffeaf7a9c3458a3dcb002dffa6d8ee1fca9ae534ffef861d2b15644ca
   pp (0.6.2) sha256=947ec3120c6f92195f8ee8aa25a7b2c5297bb106d83b41baa02983686577b6ff
   prettyprint (0.2.0) sha256=2bc9e15581a94742064a3cc8b0fb9d45aae3d03a1baa6ef80922627a0766f193
+  propshaft (1.2.1) sha256=e9b91daf52f21152f851a59f8621af53ffb4dc4401f9b5f8fe16065190b98654
   pry (0.15.2) sha256=12d54b8640d3fa29c9211dd4ffb08f3fd8bf7a4fd9b5a73ce5b59c8709385b6b
   psych (5.2.6) sha256=814328aa5dcb6d604d32126a20bc1cbcf05521a5b49dbb1a8b30a07e580f316e
   public_suffix (6.0.1) sha256=61d44e1cab5cbbbe5b31068481cf16976dd0dc1b6b07bd95617ef8c5e3e00c6f
@@ -730,8 +751,6 @@ CHECKSUMS
   rails-html-sanitizer (1.6.2) sha256=35fce2ca8242da8775c83b6ba9c1bcaad6751d9eb73c1abaa8403475ab89a560
   railties (7.2.2.2) sha256=457506d29b7be2c5644b5bd4740edaf42bcefa52b50f9bed519a9b10ec9069e0
   rake (13.3.0) sha256=96f5092d786ff412c62fde76f793cc0541bd84d2eb579caa529aa8a059934493
-  rb-fsevent (0.11.2) sha256=43900b972e7301d6570f64b850a5aa67833ee7d87b458ee92805d56b7318aefe
-  rb-inotify (0.11.1) sha256=a0a700441239b0ff18eb65e3866236cd78613d6b9f78fea1f9ac47a85e47be6e
   rdoc (6.14.2) sha256=9fdd44df130f856ae70cc9a264dfd659b9b40de369b16581f4ab746e42439226
   redcarpet (3.6.1) sha256=d444910e6aa55480c6bcdc0cdb057626e8a32c054c29e793fa642ba2f155f445
   regexp_parser (2.10.0) sha256=cb6f0ddde88772cd64bff1dbbf68df66d376043fe2e66a9ef77fcb1b0c548c61
@@ -748,9 +767,14 @@ CHECKSUMS
   ruby-vips (2.2.3) sha256=41d12b1a805cd6ead4a7965201a8f7c5fe459bb58d3a7d967c9eb0719a6edc92
   ruby2_keywords (0.0.5) sha256=ffd13740c573b7301cf7a2e61fc857b2a8e3d3aff32545d6f8300d8bae10e3ef
   rubyzip (3.0.1) sha256=8bbbf32ff93db9a156ce2626820e748e2913352e6df80d764d0eea1ed1f5b8a7
-  sass (3.7.4) sha256=808b0d39053aa69068df939e24671fe84fd5a9d3314486e1a1457d0934a4255d
-  sass-listen (4.0.0) sha256=ae9dcb76dd3e234329e5ba6e213f48e532c5a3e7b0b4d8a87f13aaca0cc18377
-  sass-rails (5.1.0) sha256=9728ac86ec91d5d1c2e2b4bbfe06d1f1459f21ac9cc5f7614760d8cf1b777493
+  sass-embedded (1.91.0-aarch64-linux-gnu) sha256=932bf7223ffbbdeefc91cd364de6bf9dbfdc7d80201911eb4dae8d9a7f5bee50
+  sass-embedded (1.91.0-aarch64-linux-musl) sha256=08449fac861094055a1afe7da376f887f8192b3dba6658db1de7be17d32355c4
+  sass-embedded (1.91.0-arm-linux-gnueabihf) sha256=8e971474d34bdf15a31f5d4b0d7fcfb8bee87177d875323d7cc6d24e95602ca6
+  sass-embedded (1.91.0-arm-linux-musleabihf) sha256=6134921019684df17c71f976404a2a23c561d8ced727dcf7ab78ad33c18210b6
+  sass-embedded (1.91.0-arm64-darwin) sha256=04df4cb5661ea0c4bd2f2e819e73f22fee97307e58117ea158ae6c828ece9a77
+  sass-embedded (1.91.0-x86_64-darwin) sha256=8deab415ffc209249f27369a620be2497221ad40fe60fa86b6e961b13622ea76
+  sass-embedded (1.91.0-x86_64-linux-gnu) sha256=f94852f7b5442a2a34994544a578f7157cd64dc1a3b7b922baf059328734e813
+  sass-embedded (1.91.0-x86_64-linux-musl) sha256=d8cd06bc64fea00070fc4c89d306d7def0d7b343510b52ad9c86f9b285853bbf
   scrypt (3.1.0) sha256=67fde35bc7e3b7fe906c5be9c242acf95fe4a886c89572f405f6b11df30aa6af
   securerandom (0.4.1) sha256=cc5193d414a4341b6e225f0cb4446aceca8e50d5e1888743fac16987638ea0b1
   selenium-webdriver (4.35.0) sha256=6fc920cec4b9e6263afeb4941289d8deb0853acbc49e0d6f7de91c86986d359b
@@ -759,14 +783,11 @@ CHECKSUMS
   simplecov-html (0.12.3) sha256=4b1aad33259ffba8b29c6876c12db70e5750cb9df829486e4c6e5da4fa0aa07b
   simplecov_json_formatter (0.1.4) sha256=529418fbe8de1713ac2b2d612aa3daa56d316975d307244399fa4838c601b428
   slack-notifier (2.4.0) sha256=cd9aba3f5f3e6227f73df1f6a33ac6c127c5fac35b513b86b7ba900cd98d2b00
-  sprockets (3.7.3) sha256=dcda152805b432eb2827c394b938b7e15ba2722f8a5c9f58b79a2a4f7a35cc53
-  sprockets-rails (3.5.2) sha256=a9e88e6ce9f8c912d349aa5401509165ec42326baf9e942a85de4b76dbc4119e
   stringio (3.1.7) sha256=5b78b7cb242a315fb4fca61a8255d62ec438f58da2b90be66048546ade4507fa
   sys-uname (1.3.1) sha256=b7b3eb817a9dd4a2f26a8b616a4f150ab1b79f4682d7538ceb992c8b7346f49c
   terser (1.2.6) sha256=6ddf00b93df7015b07e2b9b149e74cd70fa7aa4f0f89a15d9922a6ebd13f37ab
   textacular (5.7.0) sha256=7c25df13c0152cf991cddfeb832c0dc16928bdaccb98f9a88fe29d7b032dd31f
   thor (1.4.0) sha256=8763e822ccb0f1d7bee88cde131b19a65606657b847cc7b7b4b82e772bcd8a3d
-  tilt (2.0.10) sha256=9b664f0e9ae2b500cfa00f9c65c34abc6ff1799cf0034a8c0a0412d520fac866
   timeout (0.4.3) sha256=9509f079b2b55fe4236d79633bd75e34c1c1e7e3fb4b56cb5fda61f80a0fe30e
   tzinfo (2.0.6) sha256=8daf828cc77bcf7d63b0e3bdb6caa47e2272dcfaf4fbfe46f8c3a9df087a829b
   useragent (0.16.11) sha256=700e6413ad4bb954bb63547fa098dddf7b0ebe75b40cc6f93b8d54255b173844

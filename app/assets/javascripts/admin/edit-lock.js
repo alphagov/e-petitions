@@ -1,4 +1,4 @@
-(function ($) {
+export default function ($) {
   'use strict';
 
   $.fn.editLock = function(id, user_id, path, moderated) {
@@ -74,4 +74,4 @@
 
     var timer = window.setInterval(EditLock.checkStatus, INTERVAL);
   }
-})(jQuery);
+};

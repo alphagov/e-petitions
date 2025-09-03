@@ -9,7 +9,7 @@ RSpec.describe "Requests for apple-touch-icon images", type: :request do
       get "/apple-touch-icon.png"
 
       expect(response).to have_http_status(:temporary_redirect)
-      expect(location).to eq "https://petition.parliament.uk/assets/os-social/apple/apple-touch-icon.png"
+      expect(location).to eq "https://petition.parliament.uk/assets/os-social/apple/apple-touch-icon-5820e4ad.png"
       expect(cache_control).to eq "max-age=3600, public"
     end
   end
@@ -19,7 +19,7 @@ RSpec.describe "Requests for apple-touch-icon images", type: :request do
       get "/apple-touch-icon-precomposed.png"
 
       expect(response).to have_http_status(:temporary_redirect)
-      expect(location).to eq "https://petition.parliament.uk/assets/os-social/apple/apple-touch-icon.png"
+      expect(location).to eq "https://petition.parliament.uk/assets/os-social/apple/apple-touch-icon-5820e4ad.png"
       expect(cache_control).to eq "max-age=3600, public"
     end
   end
@@ -30,7 +30,7 @@ RSpec.describe "Requests for apple-touch-icon images", type: :request do
         get "/apple-touch-icon-#{size}.png"
 
         expect(response).to have_http_status(:temporary_redirect)
-        expect(location).to eq "https://petition.parliament.uk/assets/os-social/apple/apple-touch-icon-#{size}.png"
+        expect(location).to match %r(https://petition\.parliament\.uk/assets/os-social/apple/apple-touch-icon-#{size}-[a-z0-9]{8}\.png)
         expect(cache_control).to eq "max-age=3600, public"
       end
     end
@@ -40,7 +40,7 @@ RSpec.describe "Requests for apple-touch-icon images", type: :request do
         get "/apple-touch-icon-#{size}-precomposed.png"
 
         expect(response).to have_http_status(:temporary_redirect)
-        expect(location).to eq "https://petition.parliament.uk/assets/os-social/apple/apple-touch-icon-#{size}.png"
+        expect(location).to match %r(https://petition\.parliament\.uk/assets/os-social/apple/apple-touch-icon-#{size}-[a-z0-9]{8}\.png)
         expect(cache_control).to eq "max-age=3600, public"
       end
     end
@@ -52,7 +52,7 @@ RSpec.describe "Requests for apple-touch-icon images", type: :request do
         get "/apple-touch-icon-#{size}.png"
 
         expect(response).to have_http_status(:temporary_redirect)
-        expect(location).to eq "https://petition.parliament.uk/assets/os-social/apple/apple-touch-icon.png"
+        expect(location).to eq "https://petition.parliament.uk/assets/os-social/apple/apple-touch-icon-5820e4ad.png"
         expect(cache_control).to eq "max-age=3600, public"
       end
     end
@@ -62,7 +62,7 @@ RSpec.describe "Requests for apple-touch-icon images", type: :request do
         get "/apple-touch-icon-#{size}-precomposed.png"
 
         expect(response).to have_http_status(:temporary_redirect)
-        expect(location).to eq "https://petition.parliament.uk/assets/os-social/apple/apple-touch-icon.png"
+        expect(location).to eq "https://petition.parliament.uk/assets/os-social/apple/apple-touch-icon-5820e4ad.png"
         expect(cache_control).to eq "max-age=3600, public"
       end
     end

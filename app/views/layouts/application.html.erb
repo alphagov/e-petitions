@@ -6,14 +6,6 @@
 
     <%= preload_link_tag 'application.css', nopush: true %>
     <%= preload_link_tag 'application.js', nopush: true %>
-
-    <% if open_petition_page? %>
-      <%= preload_link_tag 'auto-updater.js', nopush: true %>
-    <% end %>
-    <% if create_petition_page? %>
-      <%= preload_link_tag 'character-counter.js', nopush: true %>
-    <% end %>
-
     <%= stylesheet_link_tag 'application' %>
 
     <meta name="viewport" content="width = device-width">
@@ -40,11 +32,5 @@
 
     <%= render 'application/footer' %>
     <%= javascript_include_tag 'application' %>
-    <% if open_petition_page? %>
-      <%= javascript_include_tag 'auto-updater' %>
-    <% end %>
-    <% if create_petition_page? %>
-      <%= javascript_include_tag 'character-counter' %>
-    <% end %>
   </body>
 </html>

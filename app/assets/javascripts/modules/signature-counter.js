@@ -1,7 +1,7 @@
-class SignatureCounter {
-  constructor(container, responseThreshold, debateThreshold, interval) {
-    this.responseThreshold = responseThreshold;
-    this.debateThreshold = debateThreshold;
+export default class SignatureCounter {
+  constructor(container, interval) {
+    this.responseThreshold = parseInt(container.dataset.responseThreshold);
+    this.debateThreshold = parseInt(container.dataset.debateThreshold);
     this.baseUrl = window.location.origin + window.location.pathname;
     this.jsonUrl = this.baseUrl + '/count.json';
     this.signatureCount = container.querySelector('.signature-count-number .count');
@@ -119,6 +119,3 @@ class SignatureCounter {
     }
   }
 }
-
-window.PETS = window.PETS || {};
-window.PETS.SignatureCounter = SignatureCounter;
