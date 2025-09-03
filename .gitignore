@@ -7,6 +7,10 @@
 # Ignore bundler config.
 /.bundle
 
+# Ignore asset build artifacts
+/app/assets/builds/*
+!/app/assets/builds/.keep
+
 # Ignore logfiles and tempfiles.
 /log/*
 /tmp/*

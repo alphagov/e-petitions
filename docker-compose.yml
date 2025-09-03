@@ -9,9 +9,6 @@ x-application: &application
       source: bundle
       target: /bundle
     - type: volume
-      source: cache
-      target: /cache
-    - type: volume
       source: node_modules
       target: /app/node_modules
   tmpfs:
@@ -26,7 +23,6 @@ x-application: &application
 x-environment: &environment
   DATABASE_URL: "postgres://postgres:ZW4IvOPrXcbp2hyp@postgres:5432"
   DATABASE_CLEANER_ALLOW_REMOTE_DATABASE_URL: "true"
-  SPROCKETS_CACHE: "/cache"
   PIDFILE: "/tmp/pids/server.pid"
 
 services:
@@ -135,5 +131,4 @@ networks:
 volumes:
   bundle:
   db:
-  cache:
   node_modules:
