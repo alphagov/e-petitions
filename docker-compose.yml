@@ -9,6 +9,9 @@ x-application: &application
       source: bundle
       target: /bundle
     - type: volume
+      source: cache
+      target: /app/tmp/cache
+    - type: volume
       source: node_modules
       target: /app/node_modules
   tmpfs:
@@ -147,6 +150,7 @@ networks:
 
 volumes:
   bundle:
+  cache:
   db:
   node_modules:
   ollama:

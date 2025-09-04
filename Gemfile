@@ -7,6 +7,7 @@ gem 'rails', '8.0.4'
 
 gem 'appsignal'
 gem 'bcrypt'
+gem 'bootsnap', require: false
 gem 'connection_pool'
 gem 'daemons'
 gem 'delayed_job_active_record'
