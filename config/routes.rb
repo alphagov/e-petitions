@@ -155,13 +155,20 @@ Rails.application.routes.draw do
       resources :profile, only: %i[edit update]
 
       resources :invalidations, except: %i[show] do
-        post :cancel, :count, :start, on: :member
+        member do
+          post :cancel
+          post :count
+          post :start
+        end
       end
 
       resource :moderation_delay, only: %i[new create], path: 'moderation-delay'
 
       resources :petitions, only: %i[show index] do
-        post :resend, :remove, on: :member
+        member do
+          post :resend
+          post :remove
+        end
 
         resource  :creator, only: %i[destroy]
         resources :emails, controller: 'petition_emails', except: %i[index show]
@@ -188,8 +195,12 @@ Rails.application.routes.draw do
         end
 
         resources :signatures, only: %i[index destroy] do
-          post :validate, :invalidate, on: :member
-          post :subscribe, :unsubscribe, on: :member
+          member do
+            post :validate
+            post :invalidate
+            post :subscribe
+            post :unsubscribe
+          end
 
           collection do
             delete :destroy, action: :bulk_destroy
@@ -211,8 +222,12 @@ Rails.application.routes.draw do
       resource :tasks, only: %i[create]
 
       resources :signatures, only: %i[index destroy] do
-        post :validate, :invalidate, on: :member
-        post :subscribe, :unsubscribe, on: :member
+        member do
+          post :validate
+          post :invalidate
+          post :subscribe
+          post :unsubscribe
+        end
 
         collection do
           delete :destroy, action: :bulk_destroy
@@ -254,7 +269,10 @@ Rails.application.routes.draw do
         end
 
         resources :signatures, only: %i[index destroy] do
-          post :subscribe, :unsubscribe, on: :member
+          member do
+            post :subscribe
+            post :unsubscribe
+          end
 
           collection do
             delete :destroy, action: :bulk_destroy
