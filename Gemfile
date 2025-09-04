@@ -5,42 +5,43 @@ gem 'dotenv', require: 'dotenv/load'
 
 gem 'rails', '7.2.2.2'
 
-gem 'rake'
-gem 'pg'
-gem 'devise'
-gem 'will_paginate'
-gem 'json'
-gem 'delayed_job_active_record'
-gem 'whenever'
 gem 'appsignal'
-gem 'faraday'
-gem 'faraday_middleware'
-gem 'net-http-persistent'
-gem 'sass-rails', '~> 5.0'
-gem 'textacular'
-gem 'terser'
 gem 'bcrypt'
-gem 'faker', require: false
-gem 'slack-notifier'
-gem 'daemons'
-gem 'jquery-rails'
-gem 'delayed-web'
 gem 'connection_pool'
+gem 'daemons'
+gem 'delayed_job_active_record'
+gem 'delayed-web'
+gem 'devise'
+gem 'faker', require: false
+gem 'faraday_middleware'
+gem 'faraday'
+gem 'image_processing'
+gem 'jbuilder'
+gem 'json'
 gem 'lograge'
 gem 'logstash-logger'
-gem 'jbuilder'
-gem 'image_processing'
 gem 'maxminddb'
-gem 'redcarpet'
-gem 'scrypt'
-gem 'webrick'
+gem 'net-http-persistent'
 gem 'nokogiri'
+gem 'pg'
+gem 'propshaft'
+gem 'rake'
+gem 'redcarpet'
+gem 'sass-embedded'
+gem 'scrypt'
+gem 'slack-notifier'
+gem 'terser'
+gem 'textacular'
+gem 'webrick'
+gem 'whenever'
+gem 'will_paginate'
+
 gem 'omniauth'
 gem 'omniauth-rails_csrf_protection'
 gem 'omniauth-saml'
 
-gem 'aws-sdk-codedeploy'
 gem 'aws-sdk-cloudwatchlogs'
+gem 'aws-sdk-codedeploy'
 gem 'aws-sdk-s3'
 
 group :development do
@@ -48,24 +49,24 @@ group :development do
 end
 
 group :development, :test do
-  gem 'simplecov'
   gem 'brakeman', require: false
   gem 'bundler-audit', require: false
-  gem 'rspec-rails'
   gem 'pry'
+  gem 'rspec-rails'
+  gem 'simplecov'
 end
 
 group :test do
-  gem 'shoulda-matchers'
+  gem 'capybara'
   gem 'cucumber-rails', require: false
   gem 'database_cleaner'
-  gem 'capybara'
-  gem 'factory_bot_rails'
   gem 'email_spec'
+  gem 'factory_bot_rails'
   gem 'launchy'
-  gem 'selenium-webdriver'
-  gem 'webmock'
   gem 'rails-controller-testing'
+  gem 'selenium-webdriver'
+  gem 'shoulda-matchers'
+  gem 'webmock'
 end
 
 group :production do

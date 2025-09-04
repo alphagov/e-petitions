@@ -1,4 +1,4 @@
-<div class="signature-count">
+<%= tag.div(class: "signature-count", data: { response_threshold: petition.threshold_for_response, debate_threshold: petition.threshold_for_debate }) do %>
   <p class="signature-count-number" role="status" aria-atomic="true">
     <%= signature_count(:default, petition.signature_count) %>
   </p>
@@ -50,4 +50,4 @@
       <span class="visuallyhidden"> signatures required to get a government response</span>
     <% end %>
   </p>
-</div>
+<% end %>

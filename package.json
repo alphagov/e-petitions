@@ -13,5 +13,10 @@
     "start-server": "bin/rails server -b 0.0.0.0 -p 3000",
     "test": "mocha --timeout 30000",
     "lighthouse:ci": "start-server-and-test start-server http-get://petitions.localhost:3000 test"
+  },
+  "dependencies": {
+    "esbuild": "^0.25.9",
+    "jquery": "^3.7.1",
+    "jquery-ujs": "^1.2.3"
   }
 }
