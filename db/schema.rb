@@ -14,6 +14,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_04_16_072110) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "intarray"
   enable_extension "plpgsql"
+  enable_extension "vector"
 
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
@@ -170,12 +171,14 @@ ActiveRecord::Schema[7.2].define(version: 2025_04_16_072110) do
     t.text "reason_for_removal"
     t.string "state_at_removal", limit: 10
     t.datetime "removed_at", precision: nil
+    t.halfvec "embedding", limit: 1024
     t.index "to_tsvector('english'::regconfig, (action)::text)", name: "index_archived_petitions_on_action", using: :gin
     t.index "to_tsvector('english'::regconfig, (background)::text)", name: "index_archived_petitions_on_background", using: :gin
     t.index "to_tsvector('english'::regconfig, additional_details)", name: "index_archived_petitions_on_additional_details", using: :gin
     t.index ["anonymized_at"], name: "index_archived_petitions_on_anonymized_at"
     t.index ["debate_state", "parliament_id"], name: "index_archived_petitions_on_debate_state_and_parliament_id"
     t.index ["departments"], name: "index_archived_petitions_on_departments", opclass: :gin__int_ops, using: :gin
+    t.index ["embedding"], name: "index_archived_petitions_on_embedding", opclass: :halfvec_cosine_ops, using: :hnsw
     t.index ["government_response_at", "parliament_id"], name: "index_archived_petitions_on_response_at_and_parliament_id"
     t.index ["locked_by_id"], name: "index_archived_petitions_on_locked_by_id"
     t.index ["moderated_by_id"], name: "index_archived_petitions_on_moderated_by_id"
@@ -574,6 +577,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_04_16_072110) do
     t.text "reason_for_removal"
     t.string "state_at_removal", limit: 10
     t.datetime "removed_at", precision: nil
+    t.halfvec "embedding", limit: 1024
     t.index "((last_signed_at > signature_count_validated_at))", name: "index_petitions_on_validated_at_and_signed_at"
     t.index "to_tsvector('english'::regconfig, (action)::text)", name: "index_petitions_on_action", using: :gin
     t.index "to_tsvector('english'::regconfig, (background)::text)", name: "index_petitions_on_background", using: :gin
@@ -584,6 +588,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_04_16_072110) do
     t.index ["debate_state"], name: "index_petitions_on_debate_state"
     t.index ["debate_threshold_reached_at"], name: "index_petitions_on_debate_threshold_reached_at"
     t.index ["departments"], name: "index_petitions_on_departments", opclass: :gin__int_ops, using: :gin
+    t.index ["embedding"], name: "index_petitions_on_embedding", opclass: :halfvec_cosine_ops, using: :hnsw
     t.index ["government_response_at", "state"], name: "index_petitions_on_government_response_at_and_state"
     t.index ["last_signed_at"], name: "index_petitions_on_last_signed_at"
     t.index ["locked_by_id"], name: "index_petitions_on_locked_by_id"

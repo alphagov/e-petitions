@@ -5,17 +5,12 @@ module Browseable
   VALID_PAGE_SIZE = /\A(?:[1-9]|[1-5][0-9])\z/
 
   included do
-    class_attribute :facet_definitions, instance_writer: false
-    self.facet_definitions = {}
-
-    class_attribute :filter_definitions, instance_writer: false
-    self.filter_definitions = {}
-
-    class_attribute :default_page_size, instance_writer: false
-    self.default_page_size = 50
-
-    class_attribute :max_page_size, instance_writer: false
-    self.max_page_size = 50
+    with_options instance_writer: false do
+      class_attribute :facet_definitions, default: {}
+      class_attribute :filter_definitions, default: {}
+      class_attribute :default_page_size, default: 50
+      class_attribute :max_page_size, default: 50
+    end
   end
 
   class Facets
@@ -160,6 +155,10 @@ module Browseable
       @query ||= params[:q].to_s
     end
 
+    def embedding
+      @embedding ||= generate_embedding
+    end
+
     def url_safe_query
       Rack::Utils.escape(query)
     end
@@ -200,6 +199,10 @@ module Browseable
       query.present?
     end
 
+    def semantic_search?
+      embedding.present?
+    end
+
     def in_batches(&block)
       execute_search.find_each do |obj|
         block.call obj
@@ -223,6 +226,18 @@ module Browseable
 
     private
 
+    def embedding_column?
+      model.column_names.include?("embedding")
+    end
+
+    def generate_embedding
+      return unless Site.semantic_searching?
+      return unless query.present?
+      return unless embedding_column?
+
+      Embedding.generate(query)
+    end
+
     def new_params(page)
       {}.tap do |new_params|
         new_params[:q] = query if query.present?
@@ -242,16 +257,23 @@ module Browseable
     end
 
     def execute_search
-      if search?
-        relation = klass.basic_search(query)
+      relation = klass
+
+      if semantic_search?
+        relation = filters.apply(relation)
+        relation = relation.instance_exec(&klass.facet_definitions[scope])
+        relation = relation.except(:order)
+        relation.nearest_neighbours(embedding)
+      elsif search?
+        relation = relation.basic_search(query)
         relation = relation.except(:select).select(star)
         relation = relation.except(:order)
+        relation = filters.apply(relation)
+        relation.instance_exec(&klass.facet_definitions[scope])
       else
-        relation = klass
+        relation = filters.apply(relation)
+        relation.instance_exec(&klass.facet_definitions[scope])
       end
-
-      relation = filters.apply(relation)
-      relation.instance_exec(&klass.facet_definitions[scope])
     end
 
     def star
