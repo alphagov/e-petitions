@@ -5,15 +5,15 @@ class PetitionsController < PublicController
   before_action :do_not_cache, except: [:index, :show]
   before_action :set_cors_headers, only: [:index, :show, :count], if: :json_request?
 
-  before_action :redirect_to_home_page_if_dissolved, only: [:new, :start, :create]
-  before_action :redirect_to_home_page_unless_opened, only: [:index, :new, :start, :create]
+  before_action :redirect_to_home_page_if_dissolved, only: [:start, :new, :create]
+  before_action :redirect_to_home_page_unless_opened, only: [:index, :start, :new, :create]
   before_action :redirect_to_archived_petition_if_archived, only: [:show]
 
-  before_action :redirect_to_home_page_if_suspended, only: [:new, :start, :create]
+  before_action :redirect_to_home_page_if_suspended, only: [:start, :new, :create]
 
   before_action :retrieve_petitions, only: [:index]
   before_action :retrieve_petition, only: [:show, :count, :gathering_support, :moderation_info]
-  before_action :build_petition_creator, only: [:start, :new, :create]
+  before_action :build_petition_creator, only: [:new, :create]
 
   before_action :redirect_to_stopped_page, if: :stopped?, only: [:moderation_info, :show]
   before_action :redirect_to_gathering_support_url, if: :collecting_sponsors?, only: [:moderation_info, :show]

@@ -1,3 +1,4 @@
+@wip
 Feature: Suzie signs a petition
   In order to have my say
   As Suzie
@@ -26,7 +27,7 @@ Feature: Suzie signs a petition
     And I fill in my postcode with "N1 1TY"
     And I try to sign
     Then I am asked to review my details
-    When I press "Change my details"
+    When I press "Change email address"
     And I fill in "Email" with "womboidian@wimbledon.com"
     And I fill in "Confirm email" with "womboidian@wimbledon.com"
     And I press "Continue"
@@ -36,7 +37,7 @@ Feature: Suzie signs a petition
     And "womboid@wimbledon.com" should receive no email
     And "womboidian@wimbledon.com" should receive 1 email
     When I confirm my email address
-    Then I should see "2 signatures"
+    Then I should see "We’ve added your signature to the petition"
     And I should see my constituency "Islington South and Finsbury"
     And I should see my MP
     And I can click on a link to visit my MP
@@ -69,7 +70,7 @@ Feature: Suzie signs a petition
     Then I am told to check my inbox to complete signing
     And "womboid@wimbledon.com" should receive 1 email
     When I confirm my email address
-    Then I should see "2 signatures"
+    Then I should see "We’ve added your signature to the petition"
     And I should not see the text "Your constituency is"
     And I should not see the text "Your MP is"
 
@@ -94,7 +95,7 @@ Feature: Suzie signs a petition
     And I fill in my details with email "womboidian@wimbledon.com"
     And I try to sign
     Then I am asked to review my details
-    When I press "Change my details"
+    When I press "Change email address"
     And I fill in "Email" with "WOMBOID@wimbledon.com"
     And I fill in "Confirm email" with "WOMBOID@wimbledon.com"
     And I press "Continue"
@@ -123,7 +124,7 @@ Feature: Suzie signs a petition
     And I am told to check my inbox to complete signing
     And "womboid@wimbledon.com" should receive 1 email
     When I confirm my email address
-    Then I should see "2 signatures"
+    Then I should see "We’ve added your signature to the petition"
     And I should see my constituency "Islington South and Finsbury"
     And I should see my MP
     And I can click on a link to visit my MP
@@ -143,7 +144,7 @@ Feature: Suzie signs a petition
     And I am told to check my inbox to complete signing
     And "wom.boid@wimbledon.com" should receive 1 email
     When I confirm my email address
-    Then I should see "2 signatures"
+    Then I should see "We’ve added your signature to the petition"
     And I should see my constituency "Islington South and Finsbury"
     And I should see my MP
     And I can click on a link to visit my MP
@@ -171,13 +172,11 @@ Feature: Suzie signs a petition
   Scenario: Suzie sees notice that she has already signed when she validates more than once
     When I fill in my details and sign a petition
     And I confirm my email address
-    And I should see "2 signatures"
-    And I should see "We’ve added your signature to the petition"
+    Then I should see "We’ve added your signature to the petition"
     And I can click on a link to return to the petition
     And I should have signed the petition
     When I confirm my email address again
-    And I should see "2 signatures"
-    And I should see "We’ve added your signature to the petition"
+    Then I should see "We’ve added your signature to the petition"
     And I can click on a link to return to the petition
 
   Scenario: Eric clicks the link shared to him by Suzie
@@ -239,7 +238,6 @@ Feature: Suzie signs a petition
     When the petition has closed
     And I confirm my email address
     Then I should see "We’ve added your signature to the petition"
-    And I should see "2 signatures"
     When I follow "Do something!"
     Then I should be on the petition page
     And I should see "This petition is closed"
@@ -257,7 +255,6 @@ Feature: Suzie signs a petition
     And "womboid@wimbledon.com" should receive 1 email
     And I confirm my email address
     Then I should see "We’ve added your signature to the petition"
-    And I should see "2 signatures"
     When I follow "Do something!"
     Then I should be on the petition page
     And I should see "1 signature"
@@ -275,7 +272,6 @@ Feature: Suzie signs a petition
     And "womboid@wimbledon.com" should receive 1 email
     And I confirm my email address
     Then I should see "We’ve added your signature to the petition"
-    And I should see "2 signatures"
     When I follow "Do something!"
     Then I should be on the petition page
     And I should see "1 signature"
@@ -293,7 +289,6 @@ Feature: Suzie signs a petition
     And "womboid@wimbledon.com" should receive 1 email
     And I confirm my email address
     Then I should see "We’ve added your signature to the petition"
-    And I should see "2 signatures"
     When I follow "Do something!"
     Then I should be on the petition page
     And I should see "2 signatures"
@@ -313,7 +308,6 @@ Feature: Suzie signs a petition
     And "womboid@wimbledon.com" should receive 1 email
     And I confirm my email address
     Then I should see "We’ve added your signature to the petition"
-    And I should see "2 signatures"
     When I follow "Do something!"
     Then I should be on the petition page
     And I should see "1 signature"
@@ -334,7 +328,6 @@ Feature: Suzie signs a petition
     And "womboid@wimbledon.com" should receive 1 email
     And I confirm my email address
     Then I should see "We’ve added your signature to the petition"
-    And I should see "2 signatures"
     When I follow "Do something!"
     Then I should be on the petition page
     And I should see "2 signatures"

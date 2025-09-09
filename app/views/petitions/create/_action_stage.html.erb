@@ -10,38 +10,35 @@
 <%= form.hidden_field :location_code %>
 <%= form.hidden_field :notify_by_email %>
 
-<h1 class="page-title">
-  <span class="heading-secondary">Start a petition</span>
-  Petition title
-</h1>
+<div class="grid-row margin-top-7">
+  <div class="grid-column-two-thirds-from-laptop">
+    <%= form_row for: [petition, :action] do %>
+      <h1>
+        <span class="heading-secondary">Start a petition</span>
 
-<%= form_row for: [petition, :action] do %>
-  <%= form.label :action, class: "form-label" do %>
-    What do you want us to do?
-    <span class="form-hint">Example: Change the day General Elections are held to Wednesday</span>
-  <% end %>
-  <%= error_messages_for_field petition, :action %>
-  <%= form.text_area :action, rows: 3, data: { max_length: 80 }, class: "form-control" %>
-  <p class="character-count">80 characters max</p>
-  <details class="form-group-help">
-    <summary><span class="summary">Show more examples</span></summary>
-    <div class="panel-indent">
-      <p>Good examples:</p>
-      <ul class="list-bullet">
-        <li>Introduce Black History to the primary curriculum</li>
-        <li>Lower the voting age to 16</li>
-      </ul>
-      <p>Bad examples:</p>
-      <ul class="list-bullet">
-        <li>Russia Problem on US ruling</li>
-        <li>Justice for David Thomas</li>
-      </ul>
-      <p>Good petitions say clearly what they want government or parliament to do.</p>
+        <%= form.label :action do %>
+          Petition title
+        <% end %>
+      </h1>
+
+      <span class="form-hint">
+        Write a short title for your petition that clearly explains
+        what you want the UK Government or Parliament to do
+      </span>
+
+      <%= error_messages_for_field petition, :action %>
+      <%= form.text_area :action, rows: 3, data: { max_length: 80 } %>
+
+      <div class="character-count">80 characters max</div>
+
+      <div class="panel-indent">
+        <p>Your petition must say clearly what you want the UK Government or UK Parliament to do</p>
+      </div>
+    <% end %>
+
+    <div class="button-group">
+      <%= form.button "Continue", name: "move_next", class: "button" %>
+      <%= form.button "Back", name: "move_back", value: "uk_citizenship", class: "button button-secondary" %>
     </div>
-  </details>
-<% end %>
-
-<div class="button-group">
-  <%= form.button "Continue", name: "move_next", class: "button" %>
-  <%= form.button "Back", name: "move_back", value: "uk_citizenship", class: "button button-secondary" %>
+  </div>
 </div>

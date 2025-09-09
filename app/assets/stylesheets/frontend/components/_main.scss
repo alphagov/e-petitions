@@ -1,0 +1,9 @@
+@use "../settings" as *;
+@use "../helpers" as *;
+
+main {
+  background-color: $background-colour;
+  color: $text-colour;
+
+  @include responsive-padding(8, bottom);
+}

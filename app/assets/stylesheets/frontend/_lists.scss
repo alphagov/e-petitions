@@ -1,0 +1,60 @@
+@use "./settings" as *;
+@use "./helpers" as *;
+
+%list {
+  @include font-size(22);
+
+  margin-top: 0;
+  margin-bottom: 18px;
+  padding-left: 0;
+  list-style-type: none;
+
+  %list-common {
+    margin-top: 6px;
+  }
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+%list > li {
+  margin-bottom: 6px;
+}
+
+%bulleted-list {
+  padding-left: spacing(6);
+  list-style-type: disc;
+}
+
+%numbered-list {
+  padding-left: spacing(6);
+  list-style-type: decimal;
+}
+
+%list-bullet > li,
+%list-number > li {
+  margin-bottom: 3px;
+
+  @include media-query($from: tablet) {
+    margin-bottom: 6px;
+  }
+}
+
+ul, ol {
+  @extend %list;
+}
+
+li {
+  overflow-wrap: break-word;
+}
+
+.bulleted-list,
+.markdown ul {
+  @extend %bulleted-list;
+}
+
+.numbered-list,
+.markdown ol {
+  @extend %numbered-list;
+}

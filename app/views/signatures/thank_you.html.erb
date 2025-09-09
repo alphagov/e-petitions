@@ -1,25 +1,26 @@
-<h1 class="page-title page-title-with-icon">
-  <span class="icon icon-email"></span>
-  One more step…
-</h1>
+<div class="grid-row margin-top-7">
+  <div class="grid-column-two-thirds-from-laptop">
+    <h1>
+      One more step…
+    </h1>
 
-<p>
-  We’ve sent you an email. Please click on the link in the email to confirm your address.
-</p>
-
-<%= render "notification", message: "Your signature will not be counted until you click the link in the email" %>
-
-<details>
-  <summary><span class="summary">Not received a confirmation email?</span></summary>
-
-  <div class="panel-indent">
     <p>
-      If you haven’t received a confirmation email:
+      We’ve sent you an email. Please click on the link in the email to confirm your address.
     </p>
 
-    <ul class="list-bullet">
+    <div class="highlight">
+      <p>
+        Your signature will not be counted until you click the link in the email
+      </p>
+    </div>
+
+    <h2 class="heading-4">
+      If you don’t receive a confirmation email:
+    </h2>
+
+    <ul class="bulleted-list">
       <li>check your spam or junk mail folders</li>
       <li>allow up to 24 hours for the email to arrive</li>
     </ul>
   </div>
-</details>
+</div>

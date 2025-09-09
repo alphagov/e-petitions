@@ -1,1 +1,30 @@
+@charset "UTF-8";
 
+@use "pkg:modern-normalize";
+
+@use "frontend/fonts";
+@use "frontend/containers";
+@use "frontend/display";
+@use "frontend/grid";
+@use "frontend/layout";
+@use "frontend/typography";
+
+@use "frontend/buttons";
+@use "frontend/links";
+@use "frontend/lists";
+@use "frontend/forms";
+@use "frontend/media";
+@use "frontend/overrides";
+
+@use "frontend/components/cookies";
+@use "frontend/components/header";
+@use "frontend/components/menu";
+@use "frontend/components/main";
+@use "frontend/components/footer";
+@use "frontend/components/search-petitions";
+@use "frontend/components/trending-petitions";
+@use "frontend/components/responded-petitions";
+@use "frontend/components/debated-petitions";
+@use "frontend/components/side-menu";
+@use "frontend/components/summary-list";
+@use "frontend/components/petitions";

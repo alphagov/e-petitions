@@ -1,20 +1,33 @@
 <% if actioned[:awaiting_response][:count].zero? && actioned[:with_response][:count].zero? %>
   <p>The government hasn’t responded to any petitions yet</p>
 <% else %>
-  <ol class="threshold-petitions">
+  <ul>
     <% actioned[:with_response][:list].each do |petition| %>
       <li class="petition-item">
-        <h3><%= link_to petition.action, petition_path(petition, reveal_response: "yes", anchor: 'response-threshold'), class: "threshold-petition-title" %></h3>
-        <p class="intro">The government responded on <%= short_date_format(petition.government_response_at) %></p>
-        <blockquote class="pull-quote"><%= simple_format(h(petition.government_response.summary)) %></blockquote>
-        <p>
-          <%= link_to petition_path(petition, reveal_response: "yes", anchor: 'response-threshold') do %>
-            Read the response <span class="visuallyhidden">to ‘<%= petition.action %>’</span> in full
-          <% end %>
-        </p>
+        <h3>
+          <%= link_to petition.action, petition_path(petition, reveal_response: "yes", anchor: 'response-threshold') %>
+        </h3>
+
+        <div class="wrapper">
+          <div class="panel-indent">
+            <small>
+              Government responded on <%= date_format(petition.government_response_at) %>
+            </small>
+
+            <%= simple_format(h(petition.government_response.summary)) %>
+
+            <small>
+              <%= link_to petition_path(petition, reveal_response: "yes", anchor: 'response-threshold') do %>
+                Read the response <span class="visually-hidden">to ‘<%= petition.action %>’</span> in full
+              <% end %>
+            </small>
+          </div>
+
+          <p class="signature-count">
+            <%= signature_count(:popular, petition.signature_count) %>
+          </p>
+        </div>
       </li>
     <% end -%>
-  </ol>
-  <p><%= link_to petition_count(:with_response_explanation, actioned[:with_response][:count]), petitions_path(state: :with_response), class: "view-all" %></p>
-  <p><%= link_to petition_count(:awaiting_response_explanation, actioned[:awaiting_response][:count]), petitions_path(state: :awaiting_response), class: "view-all" %></p>
+  </ul>
 <% end %>

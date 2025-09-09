@@ -1,0 +1,17 @@
+@use "sass:map";
+
+$breakpoints: (
+  mobile: 576px,
+  tablet: 768px,
+  laptop: 992px,
+  desktop: 1200px
+);
+
+$breakpoint-max-widths: (
+  mobile: 540px,
+  tablet: 720px,
+  laptop: 960px,
+  desktop: 1140px
+);
+
+$size-breakpoint: map.get($breakpoints, tablet);

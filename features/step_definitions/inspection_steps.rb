@@ -34,16 +34,16 @@ end
 
 Then(/^I should see the following search results:$/) do |values_table|
   values_table.raw.each_with_index do |row, idx|
-    expect(page).to have_selector(:css, ".search-results ol li:nth-child(#{idx+1}) h2", text: row[0]);
+    expect(page).to have_selector(:css, ".petition-item:nth-of-type(#{idx+1}) h2", text: row[0]);
 
     if row[1].present?
-      expect(page).to have_selector(:css, ".search-results ol li:nth-child(#{idx+1}) p", text: row[1]);
+      expect(page).to have_selector(:css, ".petition-item:nth-of-type(#{idx+1}) p", text: row[1]);
     end
   end
 end
 
 Then(/^I should see the following ordered list of petitions:$/) do |table|
-  actual_petitions = page.all(:css, '.search-results ol li a').map(&:text)
+  actual_petitions = page.all(:css, '.petition-item a').map(&:text)
   expected_petitions = table.raw.flatten
   expect(actual_petitions).to eq(expected_petitions)
 end
@@ -66,7 +66,7 @@ Then /^I should see the following list of archived petitions:$/ do |table|
 end
 
 Then /^I should see (\d+) petitions?$/ do |number|
-  expect(page).to have_xpath( "//ol[count(li)=#{number.to_i}]" )
+  expect(page).to have_xpath( "//div[count(div[@class='petition-item'])=#{number.to_i}]" )
 end
 
 ### Links

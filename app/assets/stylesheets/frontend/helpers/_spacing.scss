@@ -1,0 +1,80 @@
+@use "sass:map";
+@use "sass:math";
+@use "sass:meta";
+
+@use "../settings/spacing" as *;
+@use "./media-query" as *;
+
+@function spacing($spacing-unit) {
+  $actual-input-type: meta.type-of($spacing-unit);
+
+  @if $actual-input-type != "number" {
+    @error "Expected a number (integer), but got a #{$actual-input-type}.";
+  }
+
+  $is-negative: false;
+
+  @if $spacing-unit < 0 {
+    $is-negative: true;
+    $spacing-unit: math.abs($spacing-unit);
+  }
+
+  @if not map.has-key($spacing-units, $spacing-unit) {
+    @error "Unknown spacing unit `#{$spacing-unit}`. Make sure you are using a unit from the spacing scale in `_settings/spacing.scss`.";
+  }
+
+  $value: map.get($spacing-units, $spacing-unit);
+  @return if($is-negative, $value * -1, $value);
+}
+
+@mixin _responsive-spacing($responsive-spacing-unit, $property, $direction: "all", $important: false, $adjustment: false) {
+  $actual-input-type: meta.type-of($responsive-spacing-unit);
+
+  @if $actual-input-type != "number" {
+    @error "Expected a number (integer), but got a #{$actual-input-type}.";
+  }
+
+  @if not map.has-key($responsive-spacing-units, $responsive-spacing-unit) {
+    @error "Unknown spacing point `#{$responsive-spacing-unit}`. Make sure you are using a unit from the responsive spacing scale in `_settings/spacing.scss`.";
+  }
+
+  // Make sure that the return value from `_settings/spacing.scss` is a map.
+  $scale-map: map.get($responsive-spacing-units, $responsive-spacing-unit);
+  $actual-map-type: type-of($scale-map);
+
+  @if $actual-map-type != "map" {
+    @error "Expected a number (integer), but got a #{$actual-map-type}. Make sure you are using a map to set the responsive spacing in `_settings/spacing.scss`)";
+  }
+
+  // Loop through each breakpoint in the map
+  @each $breakpoint, $breakpoint-value in $scale-map {
+    @if $adjustment {
+      $breakpoint-value: $breakpoint-value + $adjustment;
+    }
+
+    // The 'null' breakpoint is for mobile.
+    @if not $breakpoint {
+      @if $direction == all {
+        #{$property}: $breakpoint-value if($important, !important, null);
+      } @else {
+        #{$property}-#{$direction}: $breakpoint-value if($important, !important, null);
+      }
+    } @else {
+      @include media-query($from: $breakpoint) {
+        @if $direction == all {
+          #{$property}: $breakpoint-value if($important, !important, null);
+        } @else {
+          #{$property}-#{$direction}: $breakpoint-value if($important, !important, null);
+        }
+      }
+    }
+  }
+}
+
+@mixin responsive-margin($responsive-spacing-point, $direction: "all", $important: false, $adjustment: false) {
+  @include _responsive-spacing($responsive-spacing-point, "margin", $direction, $important, $adjustment);
+}
+
+@mixin responsive-padding($responsive-spacing-point, $direction: "all", $important: false, $adjustment: false) {
+  @include _responsive-spacing($responsive-spacing-point, "padding", $direction, $important, $adjustment);
+}

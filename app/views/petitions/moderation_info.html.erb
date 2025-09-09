@@ -1,13 +1,26 @@
-<h1>We’re checking this petition</h1>
+<div class="grid-row margin-top-7">
+  <div class="grid-column-two-thirds-from-laptop">
+    <h1>
+      We’re checking this petition
+    </h1>
 
-<p>
-  <%= pluralize(@petition.sponsor_count, "person has", plural: "people have", locale: :en) %> already supported this petition.
+    <p>
+      <%= pluralize(@petition.sponsor_count, "person has", plural: "people have", locale: :en) %>
+      already supported this petition.
 
-  <% if @petition.has_maximum_sponsors? %>
-    No more people can sign this petition until it has been approved.
-  <% end %>
-</p>
+      <% if @petition.has_maximum_sponsors? %>
+        No more people can sign this petition until it has been approved.
+      <% end %>
+    </p>
 
-<p>We need to check it meets the <%= link_to "petition standards", help_path(anchor: 'standards') %> before we publish it.</p>
+    <p>
+      We need to check it meets the
+      <%= link_to "petition standards", help_path(anchor: 'standards') %>
+      before we publish it.
+    </p>
 
-<p>Please try again in a few days.</p>
+    <p>
+      Please try again in a few days.
+    </p>
+  </div>
+</div>

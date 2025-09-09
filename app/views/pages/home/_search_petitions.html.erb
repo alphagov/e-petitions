@@ -1,26 +1,41 @@
-<section class="search-petitions" aria-labelledby="search-petitions-heading">
-  <%= form_tag search_path, method: 'get', enforce_utf8: false do %>
-    <% if Parliament.dissolved? %>
-      <input type="hidden" name="state" value="closed">
-    <% elsif Parliament.dissolution_announced? %>
-      <input type="hidden" name="state" value="open">
-    <% elsif Parliament.opened? %>
-      <input type="hidden" name="state" value="open">
-    <% else %>
-      <input type="hidden" name="state" value="published">
-    <% end %>
+<section id="search-petitions" aria-labelledby="search-petitions-heading">
+  <div class="container">
+    <h1 id="search-petitions-heading">
+      Search petitions
+    </h1>
 
-    <h2 id="search-petitions-heading">
+    <%= form_tag search_path, method: 'get', enforce_utf8: false do %>
+      <% if Parliament.dissolved? %>
+        <input type="hidden" name="state" value="closed">
+      <% elsif Parliament.dissolution_announced? %>
+        <input type="hidden" name="state" value="open">
+      <% elsif Parliament.opened? %>
+        <input type="hidden" name="state" value="open">
+      <% else %>
+        <input type="hidden" name="state" value="published">
+      <% end %>
+
       <%= label_tag 'search' do %>
-        Search petitions
+        Search by topic or keyword
       <% end %>
-    </h2>
 
-    <div class="search-inline">
-      <%= search_field_tag 'q', nil, class: 'form-control', id: 'search' %>
-      <%= button_tag name: nil do %>
-        <span class="visuallyhidden">Search</span>
-      <% end %>
-    </div>
-  <% end %>
+      <div class="item-group">
+        <%= text_field_tag 'q', nil, id: 'search' %>
+
+        <%= button_tag name: nil, class: "button" do %>
+          Search petitions
+        <% end %>
+      </div>
+
+      <div class="item-group">
+        or
+      </div>
+
+      <div class="item-group">
+        <%= link_to start_petitions_path, class: "button button-secondary" do %>
+          Start a petition
+        <% end %>
+      </div>
+    <% end %>
+  </div>
 </section>

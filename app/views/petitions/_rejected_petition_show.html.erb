@@ -1,5 +1,8 @@
+<strong class="tag tag-red">
+  Rejected<span class="visually-hidden"> petition</span>
+</strong>
+
 <h1>
-  <span class="heading-secondary">Rejected petition</span>
   <%= petition.action %>
 </h1>
 
@@ -9,29 +12,35 @@
   </div>
 <% end %>
 
-<div><%= auto_link(simple_format(h(petition.background)), html: { rel: 'nofollow' }) %></div>
+<p>
+  Submitted on <strong><%= short_date_format(petition.created_at) %></strong>
+</p>
+
+<%= auto_link(simple_format(h(petition.background)), html: { rel: 'nofollow' }) %>
+
 <% unless petition.additional_details.blank? %>
-  <details>
-    <summary><span class="summary">More details</span></summary>
-    <div><%= auto_link(simple_format(h(petition.additional_details)), html: { rel: 'nofollow' }) %></div>
-  </details>
+  <%= auto_link(simple_format(h(petition.additional_details)), html: { rel: 'nofollow' }) %>
 <% end %>
 
-<p class="flash-notice">This petition was rejected</p>
+<hr>
 
-<h2>Why was this petition rejected?</h2>
+<h2 class="heading-3">
+  Why was this petition rejected?
+</h2>
+
 <%= rejection_description(petition.rejection.code) %>
-<% if petition.rejection.details? %>
-  <p><%= auto_link(simple_format(h(petition.rejection.details))) %></p>
-<% end %>
-<p>We only reject petitions that don’t meet the <%= link_to 'petition standards', help_url(anchor: 'standards') %>.</p>
 
-<ul class="petition-meta">
-  <li>
-    <span class="label">Date submitted</span> <%= short_date_format petition.created_at %>
-  </li>
-  <li class="meta-json">
-    <span class="note"><%= link_to "Get petition data (json format)", petition_path(petition, :json) %></span>
-    <%= render "about_petition_data" %>
-  </li>
-</ul>
+<% if petition.rejection.details? %>
+  <%= auto_link(simple_format(h(petition.rejection.details))) %>
+<% end %>
+
+<p>
+  We only reject petitions that don’t meet the
+  <%= link_to 'petition standards', help_url(anchor: 'standards') %>.
+</p>
+
+<hr>
+
+<p>
+  <%= link_to "Get petition data (json format)", petition_path(petition, :json) %>
+</p>

@@ -1,0 +1,25 @@
+@mixin visually-hidden($important: true) {
+  position: absolute if($important, !important, null);
+
+  width: 1px if($important, !important, null);
+  height: 1px if($important, !important, null);
+  margin: 0 if($important, !important, null);
+  padding: 0 if($important, !important, null);
+
+  overflow: hidden if($important, !important, null);
+
+  clip: rect(0 0 0 0) if($important, !important, null);
+  clip-path: inset(50%) if($important, !important, null);
+
+  border: 0 if($important, !important, null);
+  white-space: nowrap if($important, !important, null);
+  user-select: none;
+
+  &::before {
+    content: "\00a0";
+  }
+
+  &::after {
+    content: "\00a0";
+  }
+}

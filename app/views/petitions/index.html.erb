@@ -1,73 +1,85 @@
 <%= render 'parliament_dissolution_warning' %>
 
-<details class="lists-of-petitions">
-  <summary><span class="summary">Other lists of petitions</span></summary>
-  <div>
-    <ul>
-    <% public_petition_facets_with_counts(@petitions).each do |facet, count| %>
-      <li>
-        <%= link_to petitions_url(@petitions.facet_params(facet)) do %>
-          <%= t(facet, scope: :"petitions.lists", quantity: number_with_delimiter(count)) %>
-        <% end %>
-      </li>
-    <% end %>
-    </ul>
-  </div>
-</details>
+<div class="grid-row margin-top-7">
+  <div class="grid-column-one-third-from-laptop">
+    <div id="search-filter">
+      <%= form_tag petitions_path, method: 'get', enforce_utf8: false do %>
+        <label for="search">
+          Search <span class="visually-hidden">petitions</span>
+        </label>
 
-<h1 class="page-title"><%= t(@petitions.scope, scope: :"petitions.page_titles") %></h1>
+        <div class="search-field">
+          <%= text_field_tag 'q', @petitions.query, id: 'search' %>
+          <%= hidden_field_tag 'state', @petitions.scope %>
+          <%= button_tag name: nil, class: 'button' do %>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" aria-hidden="true">
+              <path fill="currentColor" d="M2.083 2.083a7.112 7.112 0 0 1 10.646 9.391l3.01 3.01a.888.888 0 1 1-1.255 1.256l-3.01-3.01a7.112 7.112 0 0 1-9.39-10.647Zm5.037-.291a5.328 5.328 0 1 0 0 10.656 5.328 5.328 0 0 0 0-10.656Z"/>
+            </svg>
+            <span class="visually-hidden">Search</span>
+          <% end %>
+        </div>
+      <% end %>
 
-<% if petition_list_header? %>
-  <div class="list-header">
-    <%= petition_list_header %>
-  </div>
-<% end %>
+      <nav aria-label="Other lists of petitions" data-module="navigation-menu" data-breakpoint="992px">
+        <button type="button" aria-controls="search-navigation" aria-expanded="false" hidden>
+          <span>Other lists of petitions</span>
+          <svg xmlns="http://www.w3.org/2000/svg" width="12" height="8">
+            <path d="M6.028 6.05 10.986.057 12 .876 6.028 8 0 .876.986 0z"/>
+          </svg>
+        </button>
 
-<%= form_tag petitions_path, method: 'get', enforce_utf8: false do %>
-  <label for="search" class="visuallyhidden">Search petitions</label>
-  <div class="search-inline">
-    <%= search_field_tag 'q', @petitions.query, class: 'form-control', id: 'search' %>
-    <%= hidden_field_tag 'state', @petitions.scope %>
-    <%= button_tag name: nil do %>
-      <span class="visuallyhidden">Search</span>
-    <% end %>
-  </div>
-<% end %>
+        <div id="list-navigation">
+          <ul>
+            <% public_petition_facets_with_counts(@petitions).each do |facet, count| %>
+              <li>
+                <%= link_to petitions_url(@petitions.facet_params(facet)) do %>
+                  <%= t(facet, scope: :"petitions.lists", quantity: number_with_delimiter(count)) %>
+                <% end %>
+              </li>
+            <% end %>
+          </ul>
 
-<p class="filtered-petition-count"><%= filtered_petition_count(@petitions) %></p>
-
-<div class="search-results section-panel">
-  <% if @petitions.empty? %>
-    <p>No petitions could be found matching your search terms.</p>
-  <% else %>
-    <ol>
-      <%= render partial: "petitions/petition", collection: @petitions %>
-    </ol>
-
-    <div class="search-pagination">
-      <%= paginate @petitions %>
+          <%= link_to 'View archived petitions', archived_petitions_path(state: "published") %>
+        </div>
+      </nav>
     </div>
-
-    <p>
-      Get this data in
-      <%= link_to "JSON", petitions_path(:json, @petitions.current_params) %> or
-      <%= link_to 'CSV', petitions_path(:csv, @petitions.current_params.without(:page)) %> format
-    </p>
-  <% end %>
-</div>
-
-<nav id="other-search-lists" aria-labelledby="other-lists-heading">
-  <h2 id="other-lists-heading">Other lists of petitions</h2>
-  <div class="section-panel">
-    <ul>
-    <% public_petition_facets_with_counts(@petitions).each do |facet, count| %>
-      <li>
-        <%= link_to petitions_url(@petitions.facet_params(facet)) do %>
-          <%= t(facet, scope: :"petitions.lists", quantity: number_with_delimiter(count)) %>
-        <% end %>
-      </li>
-    <% end %>
-    </ul>
   </div>
-  <%= link_to 'Archived petitions', archived_petitions_path(state: "published") %>
-</nav>
+
+  <div class="grid-column-two-thirds-from-laptop">
+    <h1 class="margin-bottom-3">
+      <%= t(@petitions.scope, scope: :"petitions.page_titles") %>
+    </h1>
+
+    <% if petition_list_header? %>
+      <%= petition_list_header %>
+    <% end %>
+
+    <p class="margin-bottom-3">
+      <%= filtered_petition_count(@petitions) %>
+    </p>
+
+    <% if @petitions.empty? %>
+      <p>No petitions could be found matching your search terms.</p>
+    <% else %>
+      <%= render partial: "petitions/petition", collection: @petitions %>
+
+      <% if @petitions.total_pages > 1 %>
+        <hr>
+
+        <p>
+          <%= page_entries_info @petitions %>
+        </p>
+
+        <%= will_paginate @petitions, inner_window: 1 %>
+      <% end %>
+
+      <hr>
+
+      <p>
+        Get this data in
+        <%= link_to "JSON", petitions_path(:json, @petitions.current_params) %> or
+        <%= link_to 'CSV', petitions_path(:csv, @petitions.current_params.without(:page)) %> format
+      </p>
+    <% end %>
+  </div>
+</div>

@@ -66,7 +66,7 @@ Feature: As Laura, a sponsor of my friend Charlie’s petition
     And I fill in my details as a sponsor with email "sponsor@example.com"
     And I press "Continue"
     Then I should see "Check and sign this petition"
-    When I press "Change my details"
+    When I press "Change email address"
     And I fill in "Email" with "laura.the.sponsor@example.com"
     And I fill in "Confirm email" with "laura.the.sponsor@example.com"
     And I press "Continue"

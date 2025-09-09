@@ -113,7 +113,7 @@ module Browseable
     delegate :next_page, :previous_page, to: :results
     delegate :total_entries, :total_pages, to: :results
     delegate :to_a, :to_ary, to: :results
-    delegate :each, :map, :size, to: :to_a
+    delegate :each, :map, :size, :length, to: :to_a
 
     def initialize(klass, params = {})
       @klass, @params = klass, params

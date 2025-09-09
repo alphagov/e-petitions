@@ -1,33 +1,59 @@
 <%= render 'parliament_dissolution_warning' %>
 
-<h1 class="page-title">
-  Start your petition
-</h1>
+<div class="grid-row margin-top-7">
+  <div class="grid-column-two-thirds-from-laptop">
+    <h1>
+      <span class="heading-secondary">Start a petition</span>
 
-<p class="lede">
-  Petitions are a way to ask the UK Government or Parliament to take action on
-  an issue that’s important to you. Follow the steps to create your petition.
-</p>
+      Start your petition
+    </h1>
 
-<h2>
-  How it works
-</h2>
+    <p class="lede">
+      Petitions are a way to ask the UK Government or Parliament to take action
+      on an issue that’s important to you. Follow the steps to create your petition.
+    </p>
 
-<ul class="bulleted-list">
-  <li>Write a clear and specific petition action</li>
-  <li>Provide details about what you want to happen and why</li>
-  <li>Share your petition to gather at least five supporters</li>
-</ul>
+    <h2>
+      How it works
+    </h2>
 
-<h2>
-  How it works
-</h2>
+    <ul class="bulleted-list">
+      <li>
+        Write a clear and specific petition action
+      </li>
+      <li>
+        Provide details about what you want to happen and why
+      </li>
+      <li>
+        Share your petition to gather at least five supporters
+      </li>
+    </ul>
 
-<p>
-  After you’ve submitted your petition, you will need to share it with at least
-  five supporters. Your petition must also meet the <a href="/standards">petition standards</a>.
-</p>
+    <p>
+      After you’ve submitted your petition, you will need to share it with at least
+      five supporters. Your petition must also meet the <a href="/help#standards">petition standards</a>.
+    </p>
 
-<p>
-  <%= link_to "Start a petition", new_petition_path, class: "button" %>
-</p>
+    <div class="button-group">
+      <%= link_to "Start a petition", new_petition_path, class: "button" %>
+    </div>
+  </div>
+
+  <div class="grid-column-one-third-from-laptop display-none display-from-laptop">
+    <nav class="side-menu" aria-label="Other information">
+      <h3>Other information</h3>
+
+      <ul>
+        <li>
+          <%= link_to "How petitions work", help_path %>
+        </li>
+        <li>
+          <%= link_to "Petition standards", help_path(anchor: 'standards') %>
+        </li>
+        <li>
+          <%= link_to "Privacy notice", privacy_path %>
+        </li>
+      </ul>
+    </nav>
+  </div>
+</div>

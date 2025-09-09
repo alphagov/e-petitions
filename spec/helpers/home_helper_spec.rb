@@ -110,6 +110,7 @@ RSpec.describe HomeHelper, type: :helper do
   end
 
   describe "#trending_petitions" do
+    let(:popular) { double(Petition) }
     let(:trending) { double(Petition) }
     let(:time) { Time.at(1616240245).in_time_zone }
     let(:quantum) { Time.at((time.to_i / 60) * 60).in_time_zone }
@@ -118,8 +119,11 @@ RSpec.describe HomeHelper, type: :helper do
     let(:limit) { 3 }
 
     before do
+      allow(Petition).to receive(:popular).with(limit).and_return(popular)
+      allow(popular).to receive(:pluck).and_return(popular_petitions)
+
       allow(Petition).to receive(:trending).with(interval, limit).and_return(trending)
-      allow(trending).to receive(:pluck).and_return(petitions)
+      allow(trending).to receive(:pluck).and_return(trending_petitions)
     end
 
     around do |example|
@@ -127,7 +131,8 @@ RSpec.describe HomeHelper, type: :helper do
     end
 
     context "when trending petitions is disabled" do
-      let(:petitions) { [[1, "Petition Action", 1000]] }
+      let(:popular_petitions) { [[2, "Popular Petition", 2000]] }
+      let(:trending_petitions) { [[1, "Petition Action", 1000]] }
 
       before do
         allow(Site).to receive(:disable_trending_petitions?).and_return(true)
@@ -138,8 +143,8 @@ RSpec.describe HomeHelper, type: :helper do
       end
 
       context "and it is called without a block" do
-        it "returns an empty array" do
-          expect(helper.trending_petitions).to eq([])
+        it "returns nil" do
+          expect(helper.trending_petitions).to be_nil
         end
       end
     end
@@ -150,29 +155,50 @@ RSpec.describe HomeHelper, type: :helper do
       end
 
       context "and there are no trending petitions" do
-        let(:petitions) { [] }
+        let(:trending_petitions) { [] }
 
-        it "doesn't yield" do
-          expect { |b| helper.trending_petitions(&b) }.not_to yield_control
+        context "and there are no popular petitions" do
+          let(:popular_petitions) { [] }
+
+          it "doesn't yield" do
+            expect { |b| helper.trending_petitions(&b) }.not_to yield_control
+          end
+
+          context "and it is called without a block" do
+            it "returns nil" do
+              expect(helper.trending_petitions).to be_nil
+            end
+          end
         end
 
-        context "and it is called without a block" do
-          it "returns an empty array" do
-            expect(helper.trending_petitions).to eq([])
+        context "and there are popular petitions" do
+          let(:popular_petitions) { [[2, "Popular Petition", 2000]] }
+
+          it "yields the popular petitions" do
+            expect { |b| helper.trending_petitions(&b) }.to yield_with_args([[2, "Popular Petition", 2000]])
+          end
+
+          context "and it is called without a block" do
+            it "returns the popular petitions" do
+              expect(helper.trending_petitions).to eq([[2, "Popular Petition", 2000]])
+            end
           end
         end
       end
 
       context "and there are trending petitions" do
-        let(:petitions) { [[1, "Petition Action", 1000]] }
+        let(:popular_petitions) { [[2, "Popular Petition", 2000]] }
+        let(:trending_petitions) { [[1, "Petition Action", 1000]] }
 
         it "yields the trending petitions" do
           expect { |b| helper.trending_petitions(&b) }.to yield_with_args([[1, "Petition Action", 1000]])
+          expect(Petition).not_to have_received(:popular)
         end
 
         context "and it is called without a block" do
           it "returns the trending petitions" do
             expect(helper.trending_petitions).to eq([[1, "Petition Action", 1000]])
+            expect(Petition).not_to have_received(:popular)
           end
         end
       end

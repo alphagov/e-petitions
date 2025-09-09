@@ -191,7 +191,7 @@ end
 
 When(/^I view all petitions from the home page$/) do
   visit home_url
-  click_link "All petitions"
+  click_link "Browse all petitions"
 end
 
 When(/^I choose to create a petition anyway$/) do
@@ -199,7 +199,7 @@ When(/^I choose to create a petition anyway$/) do
 end
 
 Then(/^I should see all petitions$/) do
-  expect(page).to have_css("ol li", :count => 3)
+  expect(page).to have_css(".petition-item", :count => 3)
 end
 
 Then(/^I should see the petition details$/) do
@@ -207,7 +207,6 @@ Then(/^I should see the petition details$/) do
   expect(page).to have_content(@petition.background) if @petition.background?
 
   if @petition.additional_details?
-    click_details "More details"
     expect(page).to have_content(@petition.additional_details)
   end
 end
@@ -256,7 +255,7 @@ Then(/^I should see the reason for rejection$/) do
 end
 
 Then(/^I should see my search query already filled in as the action of the petition$/) do
-  expect(page).to have_field("What do you want us to do?", text: "rioters benefits")
+  expect(page).to have_field("Petition title", text: "rioters benefits")
 end
 
 Then(/^I can click on a link to return to the petition$/) do
@@ -280,15 +279,15 @@ end
 
 When(/^I fill in the petition details/) do
   steps %Q(
-    When I fill in "What do you want us to do?" with "The wombats of wimbledon rock."
+    When I fill in "Petition title" with "The wombats of wimbledon rock."
     And I press "Continue"
     Then I should see "We checked for similar petitions"
     And I press "Continue with my petition"
     Then I should see "Say what you want the UK Government or Parliament to do"
-    When I fill in "Tell us more about what you want the Government or Parliament to do" with "Give half of Wimbledon rock to wombats!"
+    When I fill in "Say what you want the UK Government or Parliament to do" with "Give half of Wimbledon rock to wombats!"
     And I press "Continue"
     Then I should see "Add more information to your petition"
-    When I fill in "Tell us more about why you want the Government or Parliament to do it" with "The racial tensions between the wombles and the wombats are heating up. Racial attacks are a regular occurrence and the death count is already in 5 figures. The only resolution to this crisis is to give half of Wimbledon common to the Wombats and to recognise them as their own independent state."
+    When I fill in "Add more information to your petition" with "The racial tensions between the wombles and the wombats are heating up. Racial attacks are a regular occurrence and the death count is already in 5 figures. The only resolution to this crisis is to give half of Wimbledon common to the Wombats and to recognise them as their own independent state."
     And I press "Continue"
     Then I should see "Confirm your details"
   )
@@ -324,19 +323,19 @@ Then(/^I can share it via (.+)$/) do |service|
   case service
   when 'Email'
     within(:css, '.petition-share') do
-      expect(page).to have_link('Email', href: %r[\Amailto:\?body=#{ERB::Util.url_encode(petition_url(@petition))}&subject=Petition%3A%20#{ERB::Util.url_encode(@petition.action)}\z])
+      expect(page).to have_link('Send via email', href: %r[\Amailto:\?body=#{ERB::Util.url_encode(petition_url(@petition))}&subject=Petition%3A%20#{ERB::Util.url_encode(@petition.action)}\z])
     end
   when 'Facebook'
     within(:css, '.petition-share') do
-      expect(page).to have_link('Facebook', href: %r[\Ahttps://www\.facebook\.com/sharer/sharer\.php\?ref=responsive&u=#{ERB::Util.url_encode(petition_url(@petition))}\z])
+      expect(page).to have_link('Share on Facebook', href: %r[\Ahttps://www\.facebook\.com/sharer/sharer\.php\?ref=responsive&u=#{ERB::Util.url_encode(petition_url(@petition))}\z])
     end
   when 'X'
     within(:css, '.petition-share') do
-      expect(page).to have_link('X', href: %r[\Ahttps://x\.com/intent/post\?text=Petition%3A%20#{ERB::Util.url_encode(@petition.action)}&url=#{ERB::Util.url_encode(petition_url(@petition))}\z])
+      expect(page).to have_link('Post on X', href: %r[\Ahttps://x\.com/intent/post\?text=Petition%3A%20#{ERB::Util.url_encode(@petition.action)}&url=#{ERB::Util.url_encode(petition_url(@petition))}\z])
     end
   when 'Whatsapp'
     within(:css, '.petition-share') do
-      expect(page).to have_link('Whatsapp', href: %r[\Awhatsapp://send\?text=Petition%3A%20#{ERB::Util.url_encode(@petition.action + "\n" + petition_url(@petition))}\z])
+      expect(page).to have_link('Share via Whatsapp', href: %r[\Awhatsapp://send\?text=Petition%3A%20#{ERB::Util.url_encode(@petition.action + "\n" + petition_url(@petition))}\z])
     end
   else
     raise ArgumentError, "Unknown sharing service: #{service.inspect}"
@@ -477,10 +476,8 @@ Given(/^these archived petitions? exist?:?$/) do |table|
 end
 
 When (/^I search all petitions for "(.*?)"$/) do |search_term|
-  within :css, '.search-petitions' do
-    fill_in :search, with: search_term
-    step %{I press "Search"}
-  end
+  fill_in "Search by topic or keyword", with: search_term
+  click_button "Search petitions"
 end
 
 Given(/^all the open petitions have been closed$/) do

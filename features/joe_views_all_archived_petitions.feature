@@ -15,22 +15,22 @@ Feature: Joe views all archived petition
       | Bring back the Wombles   | stopped  |                 |  2013-03-01 |
 
   Scenario:
-    When I view all petitions from the home page
-    And I follow "Archived petitions"
-    Then I should see "Published petitions" within ".//h1[@class='page-title']"
+    When I am on the petitions page
+    And I follow "View archived petition"
+    Then I should see "Published petitions" within ".//h1"
     And I should see the following list of archived petitions:
       | Wombles are great         | 835 signatures |
       | Common People             | 639 signatures |
       | Save the planet           | 243 signatures |
       | Wombles to Parliament     | 243 signatures |
     And the markup should be valid
-    When I follow "Rejected petitions" within ".//nav[@id='other-search-lists']"
-    Then I should see "Rejected petitions" within ".//h1[@class='page-title']"
+    When I follow "Rejected petitions" within ".//div[@id='list-navigation']"
+    Then I should see "Rejected petitions" within ".//h1"
     And I should see the following list of archived petitions:
       | Free gig tickets          | Rejected       |
     And the markup should be valid
-    When I follow "All petitions" within ".//nav[@id='other-search-lists']"
-    Then I should see "All petitions" within ".//h1[@class='page-title']"
+    When I follow "All petitions" within ".//div[@id='list-navigation']"
+    Then I should see "All petitions" within ".//h1"
     And I should see the following list of archived petitions:
       | Wombles are great         | 835 signatures |
       | Common People             | 639 signatures |

@@ -28,7 +28,7 @@ class PetitionCreator
   attribute :postcode, :string
   attribute :location_code, :string, default: "GB"
   attribute :uk_citizenship, :string
-  attribute :notify_by_email, :string
+  attribute :notify_by_email, :boolean
 
   strip_attribute :action, :background, :additional_details
   strip_attribute :name, :email, :email_confirmation
@@ -132,6 +132,16 @@ class PetitionCreator
   def united_kingdom?
     location_code == "GB"
   end
+
+  def formatted_postcode
+    postcode.to_s.gsub(/(\w{3,4})(\w{3})/, '\1 \2')
+  end
+
+  def location
+    @location || Location.current.find_by(code: location_code)
+  end
+
+  delegate :name, to: :location, prefix: true, allow_nil: true
 
   private
 

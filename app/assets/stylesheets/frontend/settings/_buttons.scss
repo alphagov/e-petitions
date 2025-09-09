@@ -1,0 +1,17 @@
+@use "./colours" as *;
+
+$button-font-size: 22;
+$button-line-height: 26px;
+$button-colour: $text-colour;
+$button-padding-y: 7px;
+$button-padding-x: 17px;
+$button-border-radius: 4px;
+$button-border-width: 2px;
+
+$primary-button-background-colour: $colour-blue;
+$primary-button-colour: $colour-white;
+$primary-button-hover-colour: $colour-blue-dark;
+
+$secondary-button-background-colour: $colour-white;
+$secondary-button-colour: $colour-blue;
+$secondary-button-hover-colour: $colour-blue-dark;

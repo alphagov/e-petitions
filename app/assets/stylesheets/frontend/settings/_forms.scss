@@ -1,0 +1,10 @@
+@use "./colours" as *;
+
+$input-background-colour: $colour-white;
+$input-border-radius: 0;
+$input-border-width: 2px;
+$input-border-colour: $colour-grey-3;
+$input-colour: $colour-grey-2;
+$input-font-size: 22;
+$input-height: 44px;
+$input-height-small: 40px;

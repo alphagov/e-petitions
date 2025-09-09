@@ -9,7 +9,7 @@ Feature: User views static pages
 
   Scenario: I navigate to Help
     When I go to the home page
-    And I follow "How petitions work"
+    And I follow "How petitions work" within ".//footer"
     Then I should be on the help page
     And I should see "How petitions work" in the browser page title
     And the markup should be valid

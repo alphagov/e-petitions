@@ -89,10 +89,8 @@ When(/^I search for petitions local to me in "(.*?)"$/) do |postcode|
     end
   end
 
-  within :css, '.local-to-you' do
-    fill_in "UK postcode", with: postcode
-    click_on "Search"
-  end
+  fill_in "UK postcode", with: postcode
+  click_on "Search"
 end
 
 Then(/^I should see that my fellow constituents support "(.*?)"$/) do |petition_action|
@@ -130,7 +128,7 @@ Then(/^I should see an explanation that there are no petitions popular in my con
 end
 
 Then(/^the petitions I see should be ordered by my fellow constituents level of support$/) do
-  within :css, '.local-petitions ol' do
+  within :css, '.local-petitions' do
     petitions = page.all(:css, '.petition-item')
     my_constituents_signature_counts = petitions.map { |petition| Integer(petition.text.match(/(\d+) signatures? from/)[1]) }
     expect(my_constituents_signature_counts).to eq my_constituents_signature_counts.sort.reverse

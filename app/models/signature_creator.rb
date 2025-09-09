@@ -112,6 +112,16 @@ class SignatureCreator
     @petition.signatures
   end
 
+  def formatted_postcode
+    postcode.to_s.gsub(/(\w{3,4})(\w{3})/, '\1 \2')
+  end
+
+  def location
+    @location || Location.current.find_by(code: location_code)
+  end
+
+  delegate :name, to: :location, prefix: true, allow_nil: true
+
   private
 
   def citizenship_errors?

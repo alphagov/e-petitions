@@ -32,7 +32,7 @@ class Admin::SitesController < Admin::AdminController
       :threshold_for_response, :threshold_for_debate, :feedback_email,
       :moderate_url, :login_timeout, :disable_constituency_api,
       :signature_count_interval, :update_signature_counts,
-      :disable_trending_petitions, :threshold_for_moderation_delay,
+      :disable_trending_petitions, :disable_popular_petitions, :threshold_for_moderation_delay,
       :disable_invalid_signature_count_check, :disable_daily_update_statistics_job,
       :disable_plus_address_check, :disable_feedback_sending, :semantic_searching,
       :show_feedback_page_message, :feedback_page_message, :feedback_page_message_colour,

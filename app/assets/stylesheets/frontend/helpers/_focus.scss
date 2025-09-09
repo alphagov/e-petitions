@@ -1,0 +1,28 @@
+@use "../settings/buttons" as *;
+@use "../settings/colours" as *;
+@use "../settings/forms" as *;
+
+%focused-text {
+  background-color: $focus-background-colour;
+  box-shadow: 0 0 0 2px $focus-border-colour, 0 0 0 4px $focus-shadow-colour;
+  color: $focus-colour !important;
+  outline: none;
+  text-decoration: none;
+}
+
+%focused-input {
+  background-color: $focus-background-colour;
+  border: $input-border-width solid $focus-border-colour !important;
+  box-shadow: 0 0 0 2px $focus-shadow-colour;
+  color: $focus-colour !important;
+  outline: none;
+}
+
+%focused-button {
+  background-color: $focus-background-colour;
+  border: $button-border-width solid $focus-border-colour;
+  box-shadow: 0 0 0 $button-border-width $focus-shadow-colour;
+  color: $focus-colour !important;
+  outline: none;
+  padding: ($button-padding-y - $button-border-width) ($button-padding-x - $button-border-width)
+}

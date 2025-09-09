@@ -1,4 +1,6 @@
-<%= content_tag :li, class: "petition-item petition-#{petition.state}" do %>
+<hr>
+
+<div class="petition-item">
   <% case @petitions.scope %>
   <% when :awaiting_debate %>
 
@@ -77,4 +79,4 @@
     <% end %>
 
   <% end %>
-<% end %>
+</div>

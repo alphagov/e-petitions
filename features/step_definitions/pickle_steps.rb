@@ -58,6 +58,10 @@ Given('a closed petition exists with action: {string}, closed_at: {timestamp}') 
   @petition = FactoryBot.create(:closed_petition, action: action, closed_at: closed_at)
 end
 
+Given('a closed petition exists with action: {string}, closed_at: {timestamp}, signature_count: {int}') do |action, closed_at, signature_count|
+  @petition = FactoryBot.create(:closed_petition, action: action, closed_at: closed_at, validated_signatures: signature_count)
+end
+
 Given(/^a pending petition exists with action: "([^"]*)"$/) do |action|
   @petition = FactoryBot.create(:pending_petition, action: action)
 end

@@ -7,28 +7,110 @@
 <%= form.hidden_field :location_code %>
 <%= form.hidden_field :notify_by_email %>
 
-<h1 class="page-title">
-  Check and sign this petition
-</h1>
+<div class="grid-row margin-top-7">
+  <div class="grid-column-two-thirds-from-laptop">
+    <h1>
+      Check and sign this petition
+    </h1>
 
-<p>
-  Make sure your details are correct. We’ll use this to send you a confirmation email and updates about this petition.
-</p>
+    <p>
+      Make sure your details are correct. We’ll use this to send you
+      a confirmation email and updates about this petition.
+    </p>
 
-<p>
-  If you wish to proceed, select ‘Sign petition’.  If you want to make changes, select ‘Change’.
-</p>
+    <p>
+      If you wish to proceed, select ‘Sign petition’.
+      If you want to make changes, select ‘Change’.
+    </p>
 
-<p>
-  <%= form.button "Change my details", name: "move_back", value: "signature", class: "button" %>
-</p>
+    <div class="summary-card">
+      <div class="summary-card__title-wrapper">
+        <h2 class="summary-card__title">
+          Your details
+        </h2>
+      </div>
 
-<div class="panel-indent">
-  <p>
-    Review your details before signing this petition.
-  </p>
+      <div class="summary-card__content">
+        <dl class="summary-list">
+          <div class="summary-list__row">
+            <dt class="summary-list__key">
+              Full name
+            </dt>
+            <dd class="summary-list__value">
+              <%= signature.name %>
+            </dd>
+            <dd class="summary-list__actions">
+              <%= form.button name: "move_back", value: "signature", class: "button-link" do %>
+                Change<span class="visually-hidden"> full name</span>
+              <% end %>
+            </dd>
+          </div>
+          <div class="summary-list__row">
+            <dt class="summary-list__key">
+              Email address
+            </dt>
+            <dd class="summary-list__value">
+              <%= signature.email %>
+            </dd>
+            <dd class="summary-list__actions">
+              <%= form.button name: "move_back", value: "signature", class: "button-link" do %>
+                Change<span class="visually-hidden"> email address</span>
+              <% end %>
+            </dd>
+          </div>
+          <div class="summary-list__row">
+            <dt class="summary-list__key">
+              Location
+            </dt>
+            <dd class="summary-list__value">
+              <%= signature.location_name %>
+            </dd>
+            <dd class="summary-list__actions">
+              <%= form.button name: "move_back", value: "signature", class: "button-link" do %>
+                Change<span class="visually-hidden"> location</span>
+              <% end %>
+            </dd>
+          </div>
+          <% if signature.united_kingdom? %>
+            <div class="summary-list__row">
+              <dt class="summary-list__key">
+                Postcode
+              </dt>
+              <dd class="summary-list__value">
+                <%= signature.formatted_postcode %>
+              </dd>
+              <dd class="summary-list__actions">
+                <%= form.button name: "move_back", value: "signature", class: "button-link" do %>
+                  Change<span class="visually-hidden"> Postcode</span>
+                <% end %>
+              </dd>
+            </div>
+          <% end %>
+          <div class="summary-list__row">
+            <dt class="summary-list__key">
+              Email updates
+            </dt>
+            <dd class="summary-list__value">
+              <%= signature.notify_by_email ? "Yes" : "No" %>
+            </dd>
+            <dd class="summary-list__actions">
+              <%= form.button name: "move_back", value: "signature", class: "button-link" do %>
+                Change<span class="visually-hidden"> whether to receive email updates</span>
+              <% end %>
+            </dd>
+          </div>
+        </dl>
+      </div>
+    </div>
+
+    <div class="panel-indent">
+      <p>
+        Review your details before signing this petition.
+      </p>
+    </div>
+
+    <p>
+      <%= form.button "Sign petition", name: "move_next", class: "button" %>
+    </p>
+  </div>
 </div>
-
-<p>
-  <%= form.button "Sign petition", name: "move_next", class: "button" %>
-</p>

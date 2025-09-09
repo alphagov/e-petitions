@@ -1,0 +1,61 @@
+$font-family: National, Arial, Helvetica, sans-serif;
+$root-font-size: 16px;
+
+$typography-scale: (
+  44: (
+    null: (
+      font-size: 36px,
+      line-height: 1.1
+    ),
+    tablet: (
+      font-size: 44px,
+      line-height: 1.1
+    )
+  ),
+  33: (
+    null: (
+      font-size: 28px,
+      line-height: 1.1
+    ),
+    tablet: (
+      font-size: 33px,
+      line-height: 1.1
+    )
+  ),
+  27: (
+    null: (
+      font-size: 24px,
+      line-height: 1.1
+    ),
+    tablet: (
+      font-size: 27px,
+      line-height: 1.1
+    )
+  ),
+  22: (
+    null: (
+      font-size: 20px,
+      line-height: 1.2
+    ),
+    tablet: (
+      font-size: 22px,
+      line-height: 1.2
+    )
+  ),
+  20: (
+    null: (
+      font-size: 18px,
+      line-height: 1.2
+    ),
+    tablet: (
+      font-size: 20px,
+      line-height: 1.2
+    )
+  ),
+  16: (
+    null: (
+      font-size: 16px,
+      line-height: 1.2
+    )
+  )
+);

@@ -1,29 +1,59 @@
-<h1 class="visuallyhidden"><%= number_with_delimiter(@signature.number) %> signatures</h1>
+<div class="grid-row margin-top-7">
+  <div class="grid-column-two-thirds-from-laptop">
+    <h1>
+      We’ve added your signature to the petition:
+    </h1>
 
-<div class="signature-confirmation">
-  <%= render 'signature_confirmation' %>
-  <p>We’ve added your signature to the petition:</p>
-  <p><%= link_to @petition.action, petition_path(@petition) %></p>
-</div>
+    <p>
+      <%= link_to @petition.action, petition_path(@petition) %>
+    </p>
 
-<%= render 'share_petition', petition: @petition %>
+    <%= render 'share_petition', petition: @petition %>
 
-<section class="section-panel">
-  <%= render "petitions/threshold_details", petition: @petition %>
-</section>
+    <hr>
 
-<% if @signature.constituency %>
-  <div class="section-panel" aria-labelledby="contact-your-mp-heading">
-    <h2 id="contact-your-mp-heading">Contact your MP</h2>
-    <p>Your constituency is <%= @signature.constituency.name %></p>
-    <% if @signature.constituency.mp_id? %>
-      <p>Your local MP is <%= @signature.constituency.mp_name %></p>
-      <p><%= link_to "Contact your MP to let them know you have signed this petition", @signature.constituency.mp_url, rel: "external" %></p>
+    <% if @signature.constituency %>
+      <section labelledby="contact-your-mp-heading">
+        <h2 id="contact-your-mp-heading">
+          Contact your MP
+        </h2>
+
+        <p>
+          Your constituency is <%= @signature.constituency.name %>
+        </p>
+
+        <% if @signature.constituency.mp_id? %>
+          <p>
+            Your local MP is <%= @signature.constituency.mp_name %>
+          </p>
+
+          <p>
+            <%= link_to @signature.constituency.mp_url, rel: "external" do %>
+              Let them know you have signed this petition
+            <% end %>
+          </p>
+        <% end %>
+      </section>
+
+      <hr>
     <% end %>
-  </div>
-<% end %>
 
-<h2>Register to vote</h2>
-<p>To vote in local and national elections, you must be registered to vote.</p>
-<p>It takes less than 5 minutes.</p>
-<a href="https://www.gov.uk/register-to-vote" rel="external">Register to vote</a>
+    <section labelledby="register-to-vote-heading">
+      <h2 id="register-to-vote-heading">
+        Register to vote
+      </h2>
+
+      <p>
+        To vote in local and national elections, you must be registered to vote.
+      </p>
+
+      <p>
+        It takes less than 5 minutes.
+      </p>
+
+      <p>
+        <a href="https://www.gov.uk/register-to-vote" rel="external">Register to vote</a>
+      </p>
+    </section>
+  </div>
+</div>

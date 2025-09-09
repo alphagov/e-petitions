@@ -1,15 +1,15 @@
 <h2>Share this petition</h2>
 <ul class="petition-share">
   <li>
-    <%= share_via_facebook(petition, rel: 'external', target: '_blank') %>
+    <%= share_via_facebook(petition, rel: 'external', target: '_blank', class: 'button button-secondary') %>
   </li>
   <li>
-    <%= share_via_email(petition, rel: 'external', target: '_blank') %>
+    <%= share_via_email(petition, rel: 'external', target: '_blank', class: 'button button-secondary') %>
   </li>
   <li>
-    <%= share_via_x(petition, rel: 'external', target: '_blank') %>
+    <%= share_via_x(petition, rel: 'external', target: '_blank', class: 'button button-secondary') %>
   </li>
-  <li class="petition-share-whatsapp">
-    <%= share_via_whatsapp(petition, rel: 'external', target: '_blank') %>
+  <li>
+    <%= share_via_whatsapp(petition, rel: 'external', target: '_blank', class: 'button button-secondary') %>
   </li>
 </ul>

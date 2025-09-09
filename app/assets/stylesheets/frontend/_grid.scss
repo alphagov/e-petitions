@@ -1,0 +1,38 @@
+@use "sass:map";
+
+@use "./settings" as *;
+@use "./helpers" as *;
+
+.grid-row {
+  @include clearfix;
+  margin-right: -($gutter-half);
+  margin-left: -($gutter-half);
+}
+
+.grid-column {
+  @include grid-column();
+}
+
+@each $width in map.keys($grid-widths) {
+  .grid-column-#{$width} {
+    @include grid-column($width);
+  }
+}
+
+@each $width in map.keys($grid-widths) {
+  .grid-column-#{$width}-from-tablet {
+    @include grid-column($width, $at: tablet);
+  }
+}
+
+@each $width in map.keys($grid-widths) {
+  .grid-column-#{$width}-from-laptop {
+    @include grid-column($width, $at: laptop);
+  }
+}
+
+@each $width in map.keys($grid-widths) {
+  .grid-column-#{$width}-from-desktop {
+    @include grid-column($width, $at: desktop);
+  }
+}

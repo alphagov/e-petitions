@@ -17,7 +17,7 @@ Feature: Freya searches petitions by constituency
     And a constituent in "South Dorset" supports "What about other primates?"
 
   Scenario: Searching for local petitions
-    Given I am on the home page
+    Given I am on the local petitions page
     When I search for petitions local to me in "BH20 6HH"
     Then I should be on the local petitions results page
     And the markup should be valid
@@ -40,7 +40,7 @@ Feature: Freya searches petitions by constituency
     And the petitions I see should be ordered by my fellow constituents level of support
 
   Scenario: Downloading the JSON data for open local petitions
-    Given I am on the home page
+    Given I am on the local petitions page
     When I search for petitions local to me in "BH20 6HH"
     Then I should be on the local petitions results page
     And the markup should be valid
@@ -49,7 +49,7 @@ Feature: Freya searches petitions by constituency
     And the JSON should be valid
 
   Scenario: Downloading the JSON data for all local petitions
-    Given I am on the home page
+    Given I am on the local petitions page
     When I search for petitions local to me in "BH20 6HH"
     Then I should be on the local petitions results page
     And the markup should be valid
@@ -61,7 +61,7 @@ Feature: Freya searches petitions by constituency
     And the JSON should be valid
 
   Scenario: Downloading the CSV data for open local petitions
-    Given I am on the home page
+    Given I am on the local petitions page
     When I search for petitions local to me in "BH20 6HH"
     Then I should be on the local petitions results page
     And the markup should be valid
@@ -69,7 +69,7 @@ Feature: Freya searches petitions by constituency
     Then I should get a download with the filename "open-popular-petitions-in-south-dorset.csv"
 
   Scenario: Downloading the CSV data for all local petitions
-    Given I am on the home page
+    Given I am on the local petitions page
     When I search for petitions local to me in "BH20 6HH"
     Then I should be on the local petitions results page
     And the markup should be valid
@@ -81,14 +81,14 @@ Feature: Freya searches petitions by constituency
 
   Scenario: Searching for local petitions when the api is down
     Given the constituency api is down
-    And I am on the home page
+    And I am on the local petitions page
     When I search for petitions local to me in "BH20 6HH"
     Then the markup should be valid
     But I should see an explanation that my constituency couldn’t be found
 
   Scenario: Searching for local petitions when the no-one in my constituency is engaged
     Given a constituency "South Northamptonshire" is found by postcode "NN13 5QD"
-    And I am on the home page
+    And I am on the local petitions page
     When I search for petitions local to me in "NN13 5QD"
     Then the markup should be valid
     But I should see an explanation that there are no petitions popular in my constituency
@@ -96,7 +96,7 @@ Feature: Freya searches petitions by constituency
   Scenario: Searching for local petitions when the mp has passed away
     Given a constituency "Sheffield, Brightside and Hillsborough" with MP "Harry Harpham" is found by postcode "S4 8AA"
     And the MP has passed away
-    When I am on the home page
+    When I am on the local petitions page
     And I search for petitions local to me in "S4 8AA"
     Then the markup should be valid
     And I should not see a link to the MP for my constituency
@@ -104,7 +104,7 @@ Feature: Freya searches petitions by constituency
   Scenario: Downloading the JSON data for open local petitions when the mp has passed away
     Given a constituency "Sheffield, Brightside and Hillsborough" with MP "Harry Harpham" is found by postcode "S4 8AA"
     And the MP has passed away
-    When I am on the home page
+    When I am on the local petitions page
     And I search for petitions local to me in "S4 8AA"
     Then the markup should be valid
     When I click the JSON link
@@ -114,7 +114,7 @@ Feature: Freya searches petitions by constituency
   Scenario: Downloading the JSON data for all local petitions when the mp has passed away
     Given a constituency "Sheffield, Brightside and Hillsborough" with MP "Harry Harpham" is found by postcode "S4 8AA"
     And the MP has passed away
-    When I am on the home page
+    When I am on the local petitions page
     And I search for petitions local to me in "S4 8AA"
     Then the markup should be valid
     When I click the view all local petitions
@@ -127,7 +127,7 @@ Feature: Freya searches petitions by constituency
   Scenario: Downloading the CSV data for local petitions when the mp has passed away
     Given a constituency "Sheffield, Brightside and Hillsborough" with MP "Harry Harpham" is found by postcode "S4 8AA"
     And the MP has passed away
-    When I am on the home page
+    When I am on the local petitions page
     And I search for petitions local to me in "S4 8AA"
     Then the markup should be valid
     When I click the CSV link
@@ -136,7 +136,7 @@ Feature: Freya searches petitions by constituency
   Scenario: Downloading the CSV data for local petitions when the mp has passed away
     Given a constituency "Sheffield, Brightside and Hillsborough" with MP "Harry Harpham" is found by postcode "S4 8AA"
     And the MP has passed away
-    When I am on the home page
+    When I am on the local petitions page
     And I search for petitions local to me in "S4 8AA"
     Then the markup should be valid
     When I click the view all local petitions

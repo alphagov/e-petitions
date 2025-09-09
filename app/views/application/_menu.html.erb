@@ -1,0 +1,19 @@
+<nav class="service-navigation" aria-label="Menu" data-module="navigation-menu" data-breakpoint="768px">
+  <button type="button" aria-controls="navigation" aria-expanded="false" hidden>
+    <div class="container">
+      <span>Menu</span>
+      <svg xmlns="http://www.w3.org/2000/svg" width="12" height="8">
+        <path d="M6.028 6.05 10.986.057 12 .876 6.028 8 0 .876.986 0z"/>
+      </svg>
+    </div>
+  </button>
+
+  <div id="navigation">
+    <ul class="container">
+      <li><%= link_to "Home", home_path %></li>
+      <li><%= link_to "Browse all petitions", petitions_path %></li>
+      <li><%= link_to "How petitions work", help_path %></li>
+      <li><%= link_to "Petition standards", help_path(anchor: 'standards') %></li>
+    </ul>
+  </div>
+</nav>

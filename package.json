@@ -18,6 +18,8 @@
   "dependencies": {
     "esbuild": "^0.25.9",
     "jquery": "^3.7.1",
-    "jquery-ujs": "^1.2.3"
+    "jquery-ujs": "^1.2.3",
+    "modern-normalize": "^3.0.1",
+    "sass-mq": "^7.0.0"
   }
 }

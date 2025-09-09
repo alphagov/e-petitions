@@ -1,0 +1,7 @@
+@use "../settings" as *;
+@use "../helpers" as *;
+
+.side-menu {
+  border-top: 2px solid $theme-colour;
+  @include responsive-padding(4, top);
+}

@@ -1,24 +1,26 @@
 namespace :css do
-  load_path = Rails.root.join("app/assets/stylesheets")
-  build_path = Rails.root.join("app/assets/builds")
+  default_args = lambda do
+    load_path = Rails.root.join("app/assets/stylesheets")
+    build_path = Rails.root.join("app/assets/builds")
 
-  args = %W[
-    #{load_path.join("admin.scss")}:#{build_path.join("admin.css")}
-    #{load_path.join("application.scss")}:#{build_path.join("application.css")}
-    #{load_path.join("delayed/web/application.scss")}:#{build_path.join("delayed/web/application.css")}
-  ]
+    args = %W[
+      #{load_path.join("admin.scss")}:#{build_path.join("admin.css")}
+      #{load_path.join("application.scss")}:#{build_path.join("application.css")}
+      #{load_path.join("delayed/web/application.scss")}:#{build_path.join("delayed/web/application.css")}
+    ]
 
-  Rails.application.config.assets.paths.each do |path|
-    next unless path.include?("stylesheets")
-    args.concat ["--load-path", path.to_s]
+    Rails.application.config.assets.paths.each do |path|
+      args.concat ["--load-path", path.to_s]
+    end
+
+    args.concat %w[--quiet --quiet-deps]
+    args.concat %w[--pkg-importer node]
   end
-
-  args.concat %w[--quiet --quiet-deps]
 
   desc "Build your Sass CSS bundle"
   task build: :environment do
     begin
-      system("bin/sass", *args, exception: true)
+      system("bin/sass", *default_args.call, exception: true)
     rescue Interrupt
       abort("Exiting ...")
     end
@@ -31,7 +33,7 @@ namespace :css do
     ]
 
     begin
-      system("bin/sass", *args, *extra_args, exception: true)
+      system("bin/sass", *default_args.call, *extra_args, exception: true)
     rescue Interrupt
       abort("Exiting ...")
     end
@@ -44,7 +46,7 @@ namespace :css do
     ]
 
     begin
-      system("bin/sass", *args, *extra_args, exception: true)
+      system("bin/sass", *default_args.call, *extra_args, exception: true)
     rescue Interrupt
       abort("Exiting ...")
     end

@@ -1,0 +1,87 @@
+@use "./settings" as *;
+@use "./helpers" as *;
+
+%button {
+  @include font-size($button-font-size);
+
+  line-height: $button-line-height;
+  font-weight: normal;
+  display: inline-block;
+
+  background-color: transparent;
+  color: $button-colour;
+
+  text-align: center;
+  vertical-align: middle;
+  user-select: none;
+  border: 0 solid transparent;
+
+  padding: $button-padding-y $button-padding-x;
+  border-radius: $button-border-radius;
+}
+
+%button-primary {
+  background-color: $primary-button-background-colour;
+  color: $primary-button-colour !important;
+  padding: $button-padding-y $button-padding-x;
+  text-decoration: none;
+
+  &:hover:not(:active):not(:focus) {
+    background-color: $primary-button-hover-colour;
+  }
+}
+
+%button-secondary {
+  background-color: $secondary-button-background-colour;
+  border: $button-border-width solid $secondary-button-colour;
+  color: $secondary-button-colour !important;
+  padding: ($button-padding-y - $button-border-width) ($button-padding-x - $button-border-width);
+
+  &:hover:not(:active):not(:focus) {
+    background-color: $secondary-button-background-colour;
+    border: $button-border-width solid $secondary-button-hover-colour;
+    color: $secondary-button-hover-colour !important;
+  }
+}
+
+button:not(:disabled), .button:not(:disabled) {
+  cursor: pointer;
+}
+
+.button {
+  @extend %button;
+  @extend %button-primary;
+
+  &:active, &:focus {
+    @extend %focused-button;
+  }
+
+  &.button-secondary {
+    @extend %button-secondary;
+
+    &:active, &:focus {
+      @extend %focused-button;
+    }
+  }
+}
+
+.button-link {
+  @extend %button;
+  @extend %link-decoration;
+
+  border-radius: 0;
+  color: $link-colour;
+  padding: 0;
+
+  &:hover:not(:focus) {
+    color: $link-hover-colour;
+  }
+
+  &:active:not(:focus) {
+    color: $link-active-colour;
+  }
+
+  &:focus {
+    @extend %focused-text;
+  }
+}

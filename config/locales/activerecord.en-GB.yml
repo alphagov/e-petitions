@@ -11,6 +11,10 @@ en-GB:
 
         petition_creator:
           attributes:
+            action:
+              invalid: "Petition title can’t start with a '=', '+', '-' or '@'"
+              blank: "Petition title must be completed"
+              too_long: "Petition title is too long"
             uk_citizenship:
               accepted: "You must be a British citizen or normally live in the UK to create petitions"
 

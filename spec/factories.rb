@@ -472,6 +472,23 @@ FactoryBot.define do
     state { Petition::CLOSED_STATE }
     open_at { 10.days.ago }
     closed_at { 1.day.ago }
+
+    transient do
+      validated_signatures { nil }
+    end
+
+    after(:create) do |petition, evaluator|
+      unless evaluator.validated_signatures.nil?
+        existing_signatures = petition.signatures.validated.count
+        signatures_to_add = (evaluator.validated_signatures - existing_signatures).clamp(0, 100)
+
+        signatures_to_add.times do
+          FactoryBot.create(:validated_signature, petition: petition, validated_at: 10.seconds.ago)
+        end
+
+        petition.update_signature_count!
+      end
+    end
   end
 
   factory :stopped_petition, :parent => :petition do

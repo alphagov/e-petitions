@@ -1,5 +1,19 @@
-<h1>This petition is gathering support</h1>
+<div class="grid-row margin-top-7">
+  <div class="grid-column-two-thirds-from-laptop">
+    <h1>
+      This petition is gathering support
+    </h1>
 
-<p>This petition needs <%= pluralize(@petition.sponsors_required, "more supporter", locale: :en) %> before we will check that it meets the <%= link_to "petition standards", help_path(anchor: 'standards') %> and publish it.</p>
+    <p>
+      This petition needs
+      <%= pluralize(@petition.sponsors_required, "more supporter", locale: :en) %>
+      before we will check that it meets the
+      <%= link_to "petition standards", help_path(anchor: 'standards') %>
+      and publish it.
+    </p>
 
-<p>Please try again in a few days.</p>
+    <p>
+      Please try again in a few days.
+    </p>
+  </div>
+</div>

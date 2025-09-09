@@ -142,6 +142,10 @@ Rails.application.routes.draw do
     route_for(:image_proxy, signed_blob_id, variation_key, filename, options)
   end
 
+  direct :parliament do
+    "https://www.parliament.uk/"
+  end
+
   constraints Site.constraints_for_moderation do
     get '/', to: redirect('/admin')
 

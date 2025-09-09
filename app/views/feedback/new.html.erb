@@ -1,48 +1,51 @@
 <%= render 'parliament_dissolution_warning' %>
 
-<% if Site.show_feedback_page_message? %>
-  <div class="notification notification-<%= Site.feedback_page_message_colour %>">
-    <span class="icon icon-warning-white">
-      <span class="visuallyhidden">Important:</span>
-    </span>
-    <%= markdown_to_html(Site.feedback_page_message) %>
-  </div>
-<% end %>
+<div class="grid-row margin-top-7">
+  <div class="grid-column-two-thirds-from-laptop">
+    <h1>
+      Feedback and contact
+    </h1>
 
-<div class="text-page">
-  <h1 class="page-title">Feedback and contact</h1>
-  <h2>Feedback</h2>
+    <h2>Feedback</h2>
 
-  <%= form_for @feedback, url: feedback_path, html: {class: "wizard_form new_petition_form"} do |f| %>
-    <%= form_row for: [@feedback, :comment] do %>
-      <%= f.label :comment, "Comments", class: "form-label" %>
-      <%= error_messages_for_field @feedback, :comment %>
-      <%= f.text_area :comment, class: "form-control" %>
-    <% end %>
-
-    <%= form_row for: [@feedback, :petition_link_or_title] do %>
-      <%= f.label :petition_link_or_title, class: "form-label" do %>
-        Petition title/link <span class="optional">optional</span>
+    <%= form_for @feedback, url: feedback_path, html: {class: "wizard_form new_petition_form"} do |f| %>
+      <%= form_row for: [@feedback, :comment] do %>
+        <%= f.label :comment, "Comments" %>
+        <%= error_messages_for_field @feedback, :comment %>
+        <%= f.text_area :comment %>
       <% end %>
-      <%= error_messages_for_field @feedback, :petition_link_or_title %>
-      <%= f.text_field :petition_link_or_title, class: "form-control" %>
-    <% end %>
 
-    <h3>Do you want a reply?</h3>
+      <%= form_row for: [@feedback, :petition_link_or_title] do %>
+        <%= f.label :petition_link_or_title, class: "form-label" do %>
+          Petition title/link <span class="optional">optional</span>
+        <% end %>
+        <%= error_messages_for_field @feedback, :petition_link_or_title %>
+        <%= f.text_field :petition_link_or_title %>
+      <% end %>
 
-    <%= form_row for: [@feedback, :email] do %>
-      <%= f.label :email, "Email address", class: "form-label" %>
-      <%= error_messages_for_field @feedback, :email %>
-      <%= f.text_field :email, inputmode: "email", class: "form-control", autocomplete: "email" %>
-    <% end %>
+      <h3>Do you want a reply?</h3>
 
-    <%= button_tag "Send feedback", class: "button" %>
-  <% end -%>
+      <%= form_row for: [@feedback, :email] do %>
+        <%= f.label :email, "Email address", class: "form-label" %>
+        <%= error_messages_for_field @feedback, :email %>
+        <%= f.text_field :email, inputmode: "email", autocomplete: "email" %>
+      <% end %>
 
-  <div class="inline-terms">
-    <p>We’ll only use your email to reply to your message</p>
-    <p>We can’t forward your feedback to the people who started a petition or comment on the ideas raised in a specific petition</p>
+      <%= button_tag "Send feedback", class: "button" %>
+    <% end -%>
+
+  <div class="panel-indent">
+    <p>
+      We’ll only use your email to reply to your message
+    </p>
+
+    <p>
+      We can’t forward your feedback to the people who started a petition
+      or comment on the ideas raised in a specific petition
+    </p>
   </div>
+
+  <hr>
 
   <h2>Contact</h2>
 
@@ -55,9 +58,10 @@
   <p>Phone calls are handled by the House of Commons Enquiry Service.</p>
   <p>They can help you to understand how Parliament handles petitions. They can’t help with any technical problems with this service, forward your feedback to the people who started a petition or comment on the ideas raised in a specific petition.</p>
 
-  <ul>
-    <li>Telephone: <a href="tel:+448001124272">0800 112 4272</a> (Freephone) or <a href="tel:+442072194272">020 7219 4272</a></li>
-    <li>Textphone via Text Relay: <a href="tel:+4418001">18001</a> followed by <a href="tel:+442072194272">020 7219 4272</a></li>
-    <li>Monday to Friday, 10am&ndash;12pm and 2pm&ndash;4pm</li>
-  </ul>
+    <ul>
+      <li>Telephone: <a href="tel:+448001124272">0800 112 4272</a> (Freephone) or <a href="tel:+442072194272">020 7219 4272</a></li>
+      <li>Textphone via Text Relay: <a href="tel:+4418001">18001</a> followed by <a href="tel:+442072194272">020 7219 4272</a></li>
+      <li>Monday to Friday, 10am&ndash;12pm and 2pm&ndash;4pm</li>
+    </ul>
+  </div>
 </div>

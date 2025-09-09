@@ -14,6 +14,7 @@ class Site < ActiveRecord::Base
 
   FEATURE_FLAGS = %w[
     disable_constituency_api
+    disable_popular_petitions
     disable_trending_petitions
     disable_invalid_signature_count_check
     disable_daily_update_statistics_job

@@ -56,6 +56,9 @@ module NavigationHelpers
     when /^the Admin (.*)$/i
       admin_url($1)
 
+    when /^the local petitions page$/
+      local_petitions_url
+
     when /^the local petitions results page$/
       local_petition_url(@my_constituency.slug)
 

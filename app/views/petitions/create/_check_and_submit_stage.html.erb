@@ -11,49 +11,170 @@
 <%= form.hidden_field :location_code %>
 <%= form.hidden_field :notify_by_email %>
 
-<h1 class="page-title">
-  <span class="heading-secondary">Start a petition</span>
-  Check and submit your petition
-</h1>
+<div class="grid-row margin-top-7">
+  <div class="grid-column-two-thirds-from-laptop">
+    <h1>
+      <span class="heading-secondary">Start a petition</span>
 
-<p>
-  If you’ve included personal information, such as details about health, family,
-  or your job, think carefully about whether you’re happy for this to be published
-  with your full name. Once published, petitions will only be removed by the
-  Petitions Committee in exceptional circumstances.
-</p>
+      Check and submit your petition
+    </h1>
 
-<p>
-  If you wish to proceed, select ‘Submit your petition’.
-</p>
+    <p>
+      If you’ve included personal information, such as details about health, family,
+      or your job, think carefully about whether you’re happy for this to be published
+      with your full name. Once published, petitions will only be removed by the
+      Petitions Committee in exceptional circumstances.
+    </p>
 
-<p>
-  If you want to make changes, select ‘Change’.
-</p>
+    <p>
+      If you wish to proceed, select ‘Submit your petition’.
+    </p>
 
-<p>
-  <%= form.button "Change action", name: "move_back", value: "action", class: "button" %>
-</p>
+    <p>
+      If you want to make changes, select ‘Change’.
+    </p>
 
-<p>
-  <%= form.button "Change background", name: "move_back", value: "background", class: "button" %>
-</p>
+    <div class="summary-card">
+      <div class="summary-card__title-wrapper">
+        <h2 class="summary-card__title">
+          Your petition
+        </h2>
+      </div>
 
-<p>
-  <%= form.button "Change additional details", name: "move_back", value: "additional_details", class: "button" %>
-</p>
+      <div class="summary-card__content">
+        <dl class="summary-list">
+          <div class="summary-list__row">
+            <dt class="summary-list__key">
+              Petition title
+            </dt>
+            <dd class="summary-list__value">
+              <%= petition.action %>
+            </dd>
+            <dd class="summary-list__actions">
+              <%= form.button name: "move_back", value: "action", class: "button-link" do %>
+                Change<span class="visually-hidden"> petition title</span>
+              <% end %>
+            </dd>
+          </div>
+          <div class="summary-list__row">
+            <dt class="summary-list__key">
+              What you want the UK Government or Parliament to do
+            </dt>
+            <dd class="summary-list__value">
+              <%= petition.background %>
+            </dd>
+            <dd class="summary-list__actions">
+              <%= form.button name: "move_back", value: "background", class: "button-link" do %>
+                Change<span class="visually-hidden"> what you want the UK Government or Parliament to do</span>
+              <% end %>
+            </dd>
+          </div>
+          <div class="summary-list__row">
+            <dt class="summary-list__key">
+              More information about your petition
+            </dt>
+            <dd class="summary-list__value">
+              <%= petition.additional_details.presence || "–" %>
+            </dd>
+            <dd class="summary-list__actions">
+              <%= form.button name: "move_back", value: "creator", class: "button-link" do %>
+                Change<span class="visually-hidden"> more information about your petition</span>
+              <% end %>
+            </dd>
+          </div>
+        </dl>
+      </div>
+    </div>
 
-<p>
-  <%= form.button "Change my details", name: "move_back", value: "creator", class: "button" %>
-</p>
+    <div class="summary-card">
+      <div class="summary-card__title-wrapper">
+        <h2 class="summary-card__title">
+          Your details
+        </h2>
+      </div>
 
-<div class="panel-indent">
-  <p>
-    You can't change your petition after this point. Review and make
-    sure you are happy with everything before submitting your petition.
-  </p>
+      <div class="summary-card__content">
+        <dl class="summary-list">
+          <div class="summary-list__row">
+            <dt class="summary-list__key">
+              Full name
+            </dt>
+            <dd class="summary-list__value">
+              <%= petition.name %>
+            </dd>
+            <dd class="summary-list__actions">
+              <%= form.button name: "move_back", value: "creator", class: "button-link" do %>
+                Change<span class="visually-hidden"> full name</span>
+              <% end %>
+            </dd>
+          </div>
+          <div class="summary-list__row">
+            <dt class="summary-list__key">
+              Email address
+            </dt>
+            <dd class="summary-list__value">
+              <%= petition.email %>
+            </dd>
+            <dd class="summary-list__actions">
+              <%= form.button name: "move_back", value: "creator", class: "button-link" do %>
+                Change<span class="visually-hidden"> email address</span>
+              <% end %>
+            </dd>
+          </div>
+          <div class="summary-list__row">
+            <dt class="summary-list__key">
+              Location
+            </dt>
+            <dd class="summary-list__value">
+              <%= petition.location_name %>
+            </dd>
+            <dd class="summary-list__actions">
+              <%= form.button name: "move_back", value: "creator", class: "button-link" do %>
+                Change<span class="visually-hidden"> location</span>
+              <% end %>
+            </dd>
+          </div>
+          <% if petition.united_kingdom? %>
+            <div class="summary-list__row">
+              <dt class="summary-list__key">
+                Postcode
+              </dt>
+              <dd class="summary-list__value">
+                <%= petition.formatted_postcode %>
+              </dd>
+              <dd class="summary-list__actions">
+                <%= form.button name: "move_back", value: "creator", class: "button-link" do %>
+                  Change<span class="visually-hidden"> Postcode</span>
+                <% end %>
+              </dd>
+            </div>
+          <% end %>
+          <div class="summary-list__row">
+            <dt class="summary-list__key">
+              Email updates
+            </dt>
+            <dd class="summary-list__value">
+              <%= petition.notify_by_email ? "Yes" : "No" %>
+            </dd>
+            <dd class="summary-list__actions">
+              <%= form.button name: "move_back", value: "creator", class: "button-link" do %>
+                Change<span class="visually-hidden"> whether to receive email updates</span>
+              <% end %>
+            </dd>
+          </div>
+        </dl>
+      </div>
+    </div>
+
+    <div class="panel-indent">
+      <p>
+        You can't change your petition after this point. Review and make
+        sure you are happy with everything before submitting your petition.
+      </p>
+    </div>
+
+    <p>
+      <%= form.button "Submit your petition", name: "move_next", class: "button" %>
+    </p>
+  </div>
 </div>
-
-<p>
-  <%= form.button "Submit your petition", name: "move_next", class: "button" %>
-</p>

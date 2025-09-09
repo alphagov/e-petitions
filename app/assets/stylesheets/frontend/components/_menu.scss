@@ -1,0 +1,140 @@
+@use "../settings" as *;
+@use "../helpers" as *;
+
+.service-navigation {
+  border-bottom: 1px solid $border-colour;
+  font-weight: bold;
+
+  @include font-size(20);
+
+  button {
+    background-color: transparent;
+    border: none;
+    color: $text-colour;
+    cursor: pointer;
+    padding: spacing(2) 0;
+    margin: spacing(2) 0;
+    font-weight: bold;
+    text-align: left;
+    width: 100%;
+
+    .container {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    @include media-query($from: tablet) {
+      display: none;
+    }
+
+    &:focus {
+      @extend %focused-text;
+    }
+
+    &[aria-expanded=true] {
+      svg {
+        transform: rotate(180deg);
+      }
+
+      & + div {
+        display: block;
+      }
+    }
+
+    &[aria-expanded=false]:not([hidden]) {
+      svg {
+        transform: rotate(0deg);
+      }
+
+      & + div {
+        display: none;
+      }
+    }
+
+    @include media-query($from: tablet) {
+      &[hidden] + div {
+        display: block;
+      }
+    }
+  }
+
+  button + div {
+    border-top: 1px solid $border-colour;
+    padding: spacing(3) 0;
+
+    ul {
+      margin: 0 auto;
+    }
+
+    @include media-query($from: tablet) {
+      padding: 0;
+
+      ul {
+        display: flex ;
+      }
+    }
+  }
+
+  li {
+    @include font-size(20);
+
+    border-left: 3px solid transparent;
+    margin: 0;
+    margin-left: spacing(-4);
+    padding: 0 0 0 spacing(4) - 3px;
+    width: 100%;
+
+    @include media-query($from: tablet) {
+      border-left: none;
+      border-bottom: 3px solid transparent;
+      margin: 0;
+      margin-right: spacing(7);
+      padding: spacing(2) 0 spacing(1) 0;
+      width: auto;
+    }
+
+    &.current {
+      border-left: 3px solid $link-colour;
+
+      @include media-query($from: tablet) {
+        border-left: none;
+        border-bottom: 3px solid $link-colour;
+      }
+
+      a:not(:focus) {
+        color: $link-colour;
+
+        &:hover {
+          color: $link-hover-colour;
+        }
+
+        &:active {
+          color: $link-active-colour;
+        }
+      }
+    }
+  }
+
+  a {
+    display: block;
+    padding: spacing(2) 0;
+    text-decoration: none;
+
+    &:not(:focus) {
+      color: $text-colour;
+    }
+
+    &:hover:not(:focus) {
+      @extend %link-decoration;
+
+      color: $text-hover-colour;
+    }
+
+    &:active:not(:focus) {
+      @extend %link-decoration;
+
+      color: $text-active-colour;
+    }
+  }
+}

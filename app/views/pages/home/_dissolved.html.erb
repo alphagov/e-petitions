@@ -10,13 +10,5 @@
   </a>
 <% end %>
 
-<% if any_actioned_petitions? %>
-  <div class="section-panel-borderless">
-    <p>During the last parliament</p>
-  </div>
-<% end %>
-
-<%= render "pages/home/actioned_petitions" %>
 <%= render "pages/home/search_petitions", search_path: petitions_path %>
 <%= render "pages/home/explanation_petitions" %>
-<%= render "pages/home/local_petitions" %>

@@ -353,6 +353,10 @@ class Petition < ActiveRecord::Base
       limit(limit)
     end
 
+    def popular(limit = 3)
+      open_state.by_most_popular.limit(limit)
+    end
+
     def close_petitions!(time = Time.current)
       in_need_of_closing(time).find_each do |petition|
         petition.close!(time)

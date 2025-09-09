@@ -1,0 +1,27 @@
+@use "sass:map";
+@use "./settings" as *;
+@use "./helpers/media-query" as *;
+
+.display-none {
+  display: none !important;
+}
+
+@each $breakpoint, $width in $breakpoints {
+  .hide-from-#{$breakpoint} {
+    @include media-query($from: $width) {
+      display: none !important;
+    }
+  }
+}
+
+.display-block {
+  display: block !important;
+}
+
+@each $breakpoint, $width in $breakpoints {
+  .display-from-#{$breakpoint} {
+    @include media-query($from: $width) {
+      display: block !important;
+    }
+  }
+}

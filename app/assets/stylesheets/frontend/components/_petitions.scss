@@ -1,0 +1,331 @@
+@use "../settings" as *;
+@use "../helpers" as *;
+
+.petition-item {
+  h2 {
+    @include font-size(27);
+    @include responsive-margin(3, bottom);
+
+    a {
+      display: block;
+    }
+  }
+
+  p {
+    @include font-size(20);
+    @include responsive-margin(2, top);
+    @include responsive-margin(2, bottom);
+  }
+}
+
+.petition-share {
+  display: flex;
+  gap: spacing(2);
+  flex-wrap: wrap;
+
+  li {
+    display: block;
+    min-width: fit-content;
+  }
+
+  a.button {
+    @include font-size(20);
+
+    display: flex;
+    align-items: center;
+    padding: spacing(3);
+  }
+
+  svg {
+    width: 24px;
+    height: 24px;
+    margin-right: spacing(2);
+  }
+
+}
+
+.pagination {
+  @include font-size(22);
+  @include responsive-margin(8, bottom);
+}
+
+.tag {
+  @include font-size(22);
+
+  border-radius: $button-border-radius;
+  display: inline-block;
+  font-weight: normal !important;
+  margin: 0 0 spacing(3) 0;
+  padding: spacing(2) spacing(3);
+}
+
+.tag-grey {
+  background-color: $colour-grey-5;
+  color: $colour-grey-2;
+}
+
+.tag-red {
+  background-color: $colour-error-light;
+  color: $colour-error-dark;
+}
+
+.tag-green {
+  background-color: #CCE2D8;
+  color: #005A30;
+}
+
+.petition-timeline {
+  h2 {
+    @include font-size(27);
+  }
+
+  ul {
+    @include responsive-margin(7, bottom);
+  }
+
+  li {
+    @include responsive-margin(4, bottom);
+    @include responsive-padding(4, all);
+
+    margin-left: 45px;
+    position: relative;
+    border: 1px solid $border-colour;
+    border-radius: $button-border-radius;
+
+    &:before {
+      content: "";
+      position: absolute;
+      left: -29px;
+      top: 0;
+      width: 0;
+      height: 100%;
+      border-left: 2px solid $border-colour;
+    }
+
+    &:after {
+      background-color: $border-colour;
+      content: "";
+      position: absolute;
+      left: -34px;
+      top: 0;
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      box-shadow: 0 0 0 10px $colour-white;
+    }
+
+    &.completed {
+      &:after {
+        background-image: url("data:image/svg+xml,%3C%3Fxml%20version%3D%221.0%22%20encoding%3D%22utf-8%22%3F%3E%3Csvg%20width%3D%2216px%22%20height%3D%2216px%22%20viewBox%3D%220%200%2016%2016%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Crect%20width%3D%2216%22%20height%3D%2216%22%20id%3D%22icon-bound%22%20fill%3D%22none%22%20%2F%3E%3Cpath%20fill%3D%22%23fff%22%20d%3D%22M0%2C9.014L1.414%2C7.6L5.004%2C11.189L14.593%2C1.6L16.007%2C3.014L5.003%2C14.017L0%2C9.014Z%22%20%2F%3E%3C%2Fsvg%3E");
+        background-color: $colour-blue;
+        background-repeat: no-repeat;
+        background-position: 5px 5px;
+        background-size: 14px 14px;
+        left: -39px;
+        top: 0;
+        width: 24px;
+        height: 24px;
+      }
+    }
+
+    h3 {
+      @include font-size(22);
+      @include responsive-margin(2, bottom);
+    }
+
+    p {
+      @include font-size(20);
+    }
+  }
+}
+
+#signature-count {
+  @include responsive-margin(6, top);
+
+  .signature-count-number {
+    @include font-size(33);
+
+    color: $theme-colour;
+    font-weight: bold;
+  }
+
+  .signature-count-progress {
+    display: block;
+    margin: 0;
+    padding: 0;
+
+    progress[value] {
+      -moz-appearance: none;
+      -webkit-appearance: none;
+      appearance: none;
+      display: block;
+
+      height: 25px;
+      width: 100%;
+
+      border: none;
+
+      &::-moz-progress-bar {
+        background-color: $colour-blue;
+      }
+
+      &::-webkit-progress-bar {
+        background-color: $colour-grey-4;
+      }
+
+      &::-webkit-progress-value {
+        background-color: $colour-blue;
+      }
+
+      &::-webkit-progress-inner-element {
+        background-color: $colour-grey-4;
+        border: none;
+      }
+    }
+  }
+
+  .signature-count-progress-footer {
+    @include responsive-margin(3, top);
+
+    display: flex;
+    justify-content: space-between;
+  }
+}
+
+#search-filter {
+  margin-bottom: spacing(7);
+
+  @include media-query($from: laptop) {
+    border: 1px solid $border-colour;
+    border-radius: $button-border-radius;
+  }
+
+  form {
+    @include responsive-margin(6, bottom);
+
+    @include media-query($from: laptop) {
+      @include responsive-margin(4, all);
+      @include responsive-margin(3, top);
+    }
+
+    .search-field {
+      display: flex;
+    }
+
+    input[type=text] {
+      border-radius: $button-border-radius 0 0 $button-border-radius;
+    }
+
+    button {
+      flex: 0 0 $input-height-small;
+      width: $input-height-small;
+      height: $input-height-small;
+      padding: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 0 $button-border-radius $button-border-radius 0;
+
+      @include media-query($from: tablet) {
+        flex: 0 0 $input-height;
+        width: $input-height;
+        height: $input-height;
+      }
+
+      svg {
+        display: inline-block;
+        width: 20px;
+        height: 20px;
+
+        @include media-query($from: tablet) {
+          width: 24px;
+          height: 24px;
+        }
+      }
+    }
+  }
+
+  nav {
+    border-bottom: 1px solid $border-colour;
+    @include responsive-margin(5, top);
+
+    @include media-query($from: laptop) {
+      @include responsive-padding(4, all);
+      border-bottom: none;
+    }
+
+    padding-top: 0 !important;
+
+    & > div {
+      @include media-query($until: laptop) {
+        @include responsive-margin(5, bottom);
+      }
+    }
+
+    & > button {
+      background-color: transparent;
+      border: none;
+      color: $text-colour;
+      cursor: pointer;
+      padding: spacing(2) 0;
+      margin: spacing(2) 0;
+      font-weight: bold;
+      text-align: left;
+      width: 100%;
+
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+
+      @include media-query($from: laptop) {
+        display: none;
+      }
+
+      &:focus {
+        @extend %focused-text;
+      }
+
+      &[aria-expanded=true] {
+        svg {
+          transform: rotate(180deg);
+        }
+
+        & + div {
+          display: block;
+        }
+      }
+
+      &[aria-expanded=false]:not([hidden]) {
+        svg {
+          transform: rotate(0deg);
+        }
+
+        & + div {
+          display: none;
+        }
+      }
+
+      @include media-query($from: laptop) {
+        &[hidden] + div {
+          display: block;
+        }
+      }
+    }
+  }
+
+  ul {
+    @include responsive-padding(4, top);
+    @include responsive-margin(5, bottom);
+
+    border-top: 1px solid $border-colour;
+  }
+
+  li {
+    @include font-size(20);
+    @include responsive-margin(3, top);
+
+    &:first-child {
+      margin-top: 0;
+    }
+  }
+}

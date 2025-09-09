@@ -14,14 +14,14 @@ Scenario: Charlie has to search for a petition before creating one
   When I follow "Start a petition" within ".//main"
   Then I should be asked to confirm my eligibility
   When I confirm that I am UK citizen or resident
-  Then I should see "What do you want us to do?"
-  When I fill in "What do you want us to do?" with "Rioters benefits"
+  Then I should see "Petition title"
+  When I fill in "Petition title" with "Rioters benefits"
   And I press "Continue"
   Then I should see the following similar petitions:
-    | Do not remove rioters benefits | 1,023 signatures |
-    | Rioters should loose benefits  | 835 signatures   |
+    | Do not remove rioters benefits | Total signatures 1,023 |
+    | Rioters should loose benefits  | Total signatures 835   |
   When I press "Continue with my petition"
-  Then I should see "Tell us more about what you want the Government or Parliament to do"
+  Then I should see "Say what you want the UK Government or Parliament to do"
 
 Scenario: Charlie cannot create a petition if he is not a UK citizen
   Given I am on the start a new petition page
@@ -57,8 +57,8 @@ Scenario: Charlie cannot craft an xss attack when searching for petitions
   When I follow "Start a petition" within ".//main"
   Then I should be asked to confirm my eligibility
   When I confirm that I am UK citizen or resident
-  Then I should see "What do you want us to do?"
-  When I fill in "What do you want us to do?" with "'onmouseover='alert(1)'"
+  Then I should see "Petition title"
+  When I fill in "Petition title" with "'onmouseover='alert(1)'"
   When I press "Continue"
   Then the markup should be valid
 
@@ -89,17 +89,17 @@ Scenario: Charlie tries to submit an invalid petition
   And I confirm that I am UK citizen or resident
 
   When I press "Continue"
-  Then I should see "Action must be completed"
+  Then I should see "Petition title must be completed"
 
-  When I fill in "What do you want us to do?" with text longer than 80 characters
+  When I fill in "Petition title" with text longer than 80 characters
   And I press "Continue"
-  Then I should see "Action is too long"
+  Then I should see "Petition title is too long"
 
-  When I fill in "What do you want us to do?" with "=cmd"
+  When I fill in "Petition title" with "=cmd"
   And I press "Continue"
-  Then I should see "Action can’t start with a '=', '+', '-' or '@'"
+  Then I should see "Petition title can’t start with a '=', '+', '-' or '@'"
 
-  When I fill in "What do you want us to do?" with "The wombats of wimbledon rock."
+  When I fill in "Petition title" with "The wombats of wimbledon rock."
   And I press "Continue"
   Then I should see "We checked for similar petitions"
 
@@ -109,27 +109,27 @@ Scenario: Charlie tries to submit an invalid petition
   When I press "Continue"
   Then I should see "Background must be completed"
 
-  When I fill in "Tell us more about what you want the Government or Parliament to do" with text longer than 300 characters
+  When I fill in "Say what you want the UK Government or Parliament to do" with text longer than 300 characters
   And I press "Continue"
   Then I should see "Background is too long"
 
-  When I fill in "Tell us more about what you want the Government or Parliament to do" with "@cmd"
+  When I fill in "Say what you want the UK Government or Parliament to do" with "@cmd"
   And I press "Continue"
   Then I should see "Background can’t start with a '=', '+', '-' or '@'"
 
-  When I fill in "Tell us more about what you want the Government or Parliament to do" with "Give half of Wimbledon rock to wombats!"
+  When I fill in "Say what you want the UK Government or Parliament to do" with "Give half of Wimbledon rock to wombats!"
   And I press "Continue"
   Then I should see "Add more information to your petition"
 
-  When I fill in "Tell us more about why you want the Government or Parliament to do it" with text longer than 800 characters
+  When I fill in "Add more information to your petition" with text longer than 800 characters
   And I press "Continue"
   Then I should see "Additional details is too long"
 
-  When I fill in "Tell us more about why you want the Government or Parliament to do it" with "+cmd"
+  When I fill in "Add more information to your petition" with "+cmd"
   And I press "Continue"
   Then I should see "Additional details can’t start with a '=', '+', '-' or '@'"
 
-  When I fill in "Tell us more about why you want the Government or Parliament to do it" with "The racial tensions between the wombles and the wombats are heating up. Racial attacks are a regular occurrence and the death count is already in 5 figures. The only resolution to this crisis is to give half of Wimbledon common to the Wombats and to recognise them as their own independent state."
+  When I fill in "Add more information to your petition" with "The racial tensions between the wombles and the wombats are heating up. Racial attacks are a regular occurrence and the death count is already in 5 figures. The only resolution to this crisis is to give half of Wimbledon common to the Wombats and to recognise them as their own independent state."
   And I press "Continue"
   Then I should see "Confirm your details"
 
@@ -153,7 +153,7 @@ Scenario: Charlie tries to submit an invalid petition
   And I press "Continue"
   Then I should see a heading called "Check and submit your petition"
 
-  When I press "Change my details"
+  When I press "Change full name"
   And I fill in "Full name" with "Mr. Wibbledon"
   And I press "Continue"
   Then I should see a heading called "Check and submit your petition"

@@ -9,28 +9,40 @@
 <%= form.hidden_field :location_code %>
 <%= form.hidden_field :notify_by_email %>
 
-<fieldset>
-  <legend>
-    <h1 class="page-title">
-      <span class="heading-secondary">Start a petition</span>
-      Are you a British citizen or UK resident?
-    </h1>
-  </legend>
+<div class="grid-row margin-top-7">
+  <div class="grid-column-two-thirds-from-laptop">
+    <fieldset>
+      <legend>
+        <h1>
+          <span class="heading-secondary">
+            Start a petition
+          </span>
 
-  <%= form_row for: [petition, :uk_citizenship] do %>
-    <%= form.label :uk_citizenship, "Only British citizens or UK residents have the right to create petitions", class: "form-label" %>
-    <%= error_messages_for_field form.object, :uk_citizenship %>
-    <div class="multiple-choice">
-      <%= form.radio_button :uk_citizenship, "1" %>
-      <%= form.label :uk_citizenship, "Yes", for: "petition_creator_uk_citizenship_1" %>
-    </div>
-    <div class="multiple-choice">
-      <%= form.radio_button :uk_citizenship, "0" %>
-      <%= form.label :uk_citizenship, "No", for: "petition_creator_uk_citizenship_0" %>
-    </div>
-  <% end %>
-</fieldset>
+          Are you a British citizen or UK resident?
+        </h1>
+      </legend>
 
-<div class="button-group">
-  <%= form.button "Continue", class: "button" %>
+      <%= form_row for: [petition, :uk_citizenship] do %>
+        <span class="form-hint">
+          Only British citizens or UK residents have the right to create petitions
+        </span>
+
+        <%= error_messages_for_field form.object, :uk_citizenship %>
+
+        <div class="multiple-choice">
+          <%= form.radio_button :uk_citizenship, "1" %>
+          <%= form.label :uk_citizenship, "Yes", for: "petition_creator_uk_citizenship_1" %>
+        </div>
+
+        <div class="multiple-choice">
+          <%= form.radio_button :uk_citizenship, "0" %>
+          <%= form.label :uk_citizenship, "No", for: "petition_creator_uk_citizenship_0" %>
+        </div>
+      <% end %>
+    </fieldset>
+
+    <div class="button-group">
+      <%= form.button "Continue", class: "button" %>
+    </div>
+  </div>
 </div>

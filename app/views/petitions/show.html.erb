@@ -1,9 +1,13 @@
 <%= render 'parliament_dissolution_warning' %>
 
-<% if @petition.rejected? %>
-  <%= render 'rejected_petition_show', petition: @petition %>
-<% elsif @petition.closed? %>
-  <%= render 'closed_petition_show', petition: @petition %>
-<% else %>
-  <%= render 'open_petition_show', petition: @petition %>
-<% end %>
+<div class="grid-row margin-top-7">
+  <div class="grid-column-two-thirds-from-laptop">
+    <% if @petition.rejected? %>
+      <%= render 'rejected_petition_show', petition: @petition %>
+    <% elsif @petition.closed? %>
+      <%= render 'closed_petition_show', petition: @petition %>
+    <% else %>
+      <%= render 'open_petition_show', petition: @petition %>
+    <% end %>
+  </div>
+</div>

@@ -43,8 +43,8 @@ RSpec.describe "Content Security Policy header", type: :request do
         expect(subject).to match(/connect-src 'self';/)
       end
 
-      it "sets img-src to 'self'" do
-        expect(subject).to match(/img-src 'self';/)
+      it "sets img-src to 'self' and data:" do
+        expect(subject).to match(/img-src 'self' data:;/)
       end
 
       it "sets script-src to 'self'" do
@@ -76,8 +76,8 @@ RSpec.describe "Content Security Policy header", type: :request do
         expect(subject).to match(/connect-src 'self' https:\/\/\*\.google-analytics\.com https:\/\/\*\.analytics\.google\.com https:\/\/\*\.googletagmanager\.com;/)
       end
 
-      it "sets img-src to 'self', https://*.google-analytics.com and https://*.googletagmanager.com" do
-        expect(subject).to match(/img-src 'self' https:\/\/\*\.google-analytics\.com https:\/\/\*\.googletagmanager\.com;/)
+      it "sets img-src to 'self', data:, https://*.google-analytics.com and https://*.googletagmanager.com" do
+        expect(subject).to match(/img-src 'self' data: https:\/\/\*\.google-analytics\.com https:\/\/\*\.googletagmanager\.com;/)
       end
 
       it "sets script-src to 'self', https://*.googletagmanager.com and the GTM hash" do

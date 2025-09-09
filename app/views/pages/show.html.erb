@@ -1,5 +1,33 @@
 <%= render 'parliament_dissolution_warning' if @page.show_dissolution_warning? %>
 
-<div class="text-page">
-  <%= markdown_to_html(@page.content, tables: true) %>
+<div class="grid-row margin-top-7">
+  <div class="grid-column-two-thirds-from-laptop">
+    <div class="markdown">
+      <%= markdown_to_html(@page.content, tables: true) %>
+    </div>
+  </div>
+
+  <div class="grid-column-one-third-from-laptop display-none display-from-laptop">
+    <nav class="side-menu" aria-label="Other information">
+      <h3>Other information</h3>
+
+      <ul>
+        <li>
+          <%= link_to "How petitions work", help_path %>
+        </li>
+        <li>
+          <%= link_to "Petition standards", help_path(anchor: 'standards') %>
+        </li>
+        <li>
+          <%= link_to "Cookies", cookies_path %>
+        </li>
+        <li>
+          <%= link_to "Privacy notice", privacy_path %>
+        </li>
+        <li>
+          <%= link_to "Accessibility statement", accessibility_path %>
+        </li>
+      </ul>
+    </nav>
+  </div>
 </div>

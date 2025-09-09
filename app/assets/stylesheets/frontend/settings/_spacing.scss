@@ -1,0 +1,62 @@
+$spacing-units: (
+  0: 0px,
+  1: 2px,
+  2: 5px,
+  3: 10px,
+  4: 15px,
+  5: 20px,
+  6: 25px,
+  7: 30px,
+  8: 50px,
+  9: 65px,
+  10: 90px,
+  11: 120px
+);
+
+$responsive-spacing-units: (
+  0: (
+    null: 0
+  ),
+  1: (
+    null: 2px
+  ),
+  2: (
+    null: 5px
+  ),
+  3: (
+    null: 7px,
+    tablet: 10px
+  ),
+  4: (
+    null: 10px,
+    tablet: 15px
+  ),
+  5: (
+    null: 15px,
+    tablet: 20px
+  ),
+  6: (
+    null: 20px,
+    tablet: 25px
+  ),
+  7: (
+    null: 20px,
+    tablet: 30px
+  ),
+  8: (
+    null: 30px,
+    tablet: 50px
+  ),
+  9: (
+    null: 40px,
+    tablet: 65px
+  ),
+  10: (
+    null: 60px,
+    tablet: 90px
+  ),
+  11: (
+    null: 80px,
+    tablet: 120px
+  )
+);

@@ -1,0 +1,27 @@
+@use "sass:map";
+
+@use "../settings/grid" as *;
+@use "./media-query" as *;
+
+@function grid-width($key) {
+  @if map.has-key($grid-widths, $key) {
+    @return map.get($grid-widths, $key);
+  }
+
+  @error "Unknown grid width `#{$key}`";
+}
+
+@mixin grid-column($width: full, $float: left, $at: tablet) {
+  box-sizing: border-box;
+
+  @if $at != desktop {
+    width: 100%;
+  }
+
+  padding: 0 $gutter-half;
+
+  @include media-query($from: $at) {
+    width: grid-width($width);
+    float: $float;
+  }
+}

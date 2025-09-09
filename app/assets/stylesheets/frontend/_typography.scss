@@ -1,0 +1,123 @@
+@use "./settings" as *;
+@use "./helpers" as *;
+
+html {
+  background-color: $theme-colour;
+  color: $inverse-text-colour;
+}
+
+body {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+  @include font-size(20);
+
+  background-color: $background-colour;
+  color: $text-colour;
+
+  font-family: $font-family;
+}
+
+h1, .heading-1 {
+  @extend %h1;
+}
+
+h2, .heading-2 {
+  @extend %h2;
+}
+
+h3, .heading-3 {
+  @extend %h3;
+}
+
+h4, .heading-4 {
+  @extend %h4;
+}
+
+h5, .heading-5 {
+  @extend %h5;
+}
+
+h6, .heading-6 {
+  @extend %h6;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  color: $heading-colour;
+  text-wrap: balance;
+
+  &:first-child {
+    margin-top: 0;
+  }
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+h1 > .heading-secondary {
+  @include font-size(22);
+
+  color: $supplementary-text-colour;
+  display: block;
+  font-weight: normal;
+}
+
+p {
+  @include font-size(22);
+  margin-top: 0;
+  margin-bottom: 18px;
+  overflow-wrap: break-word;
+  text-wrap: pretty;
+
+  &:first-child {
+    margin-top: 0;
+  }
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+hr {
+  border: none;
+  border-bottom: 1px solid $border-colour;
+  height: 0;
+  margin-top: 18px;
+  margin-bottom: 18px;
+}
+
+section {
+  margin-top: 30px;
+}
+
+.panel-indent {
+  border-left: 5px solid $border-colour;
+  color: $supplementary-text-colour;
+  margin: spacing(5) 0 spacing(6) 0;
+  padding: spacing(3) spacing(4);
+}
+
+.highlight {
+  background-color: $highlight-background-colour;
+  border-left: 5px solid $highlight-colour;
+  color: $text-colour;
+  margin: spacing(5) 0 spacing(6) 0;
+  padding: spacing(3) spacing(4);
+
+  &:first-child {
+    margin-top: 0;
+  }
+
+  p {
+    margin: spacing(3) 0;
+
+    &:first-child {
+      margin-top: 0;
+    }
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+}

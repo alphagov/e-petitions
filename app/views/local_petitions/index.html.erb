@@ -1,15 +1,26 @@
-<h1 class="page-title">
-  <% if @postcode.present? %>
-    We couldn’t find that postcode
-  <% else %>
-    Local to you
-  <% end %>
-</h1>
+<div class="grid-row margin-top-7">
+  <div class="grid-column-two-thirds-from-laptop">
+    <h1>
+      <% if @postcode.present? %>
+        We couldn’t find that postcode
+      <% else %>
+        Local to you
+      <% end %>
+    </h1>
 
-<% if @postcode.blank? %>
-  <p>Find petitions about local issues</p>
-<% else %>
-  <p>We couldn’t find the postcode <q><%= params[:postcode] %></q>. Try again?</p>
-<% end %>
+    <% if @postcode.blank? %>
+      <p>Find petitions about local issues</p>
+    <% else %>
+      <p>We couldn’t find the postcode <q><%= params[:postcode] %></q>. Try again?</p>
+    <% end %>
 
-<%= render 'local_search' %>
+    <%= form_tag local_petitions_path, method: 'get', enforce_utf8: false do %>
+      <%= label_tag 'postcode', 'UK postcode' %>
+
+      <div class="input-group">
+        <%= text_field_tag 'postcode', @postcode, size: 30, maxlength: 30 %>
+        <%= button_tag 'Search', name: nil, class: 'button' %>
+      </div>
+    <% end %>
+  </div>
+</div>
