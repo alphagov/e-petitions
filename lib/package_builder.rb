@@ -53,14 +53,12 @@ class PackageBuilder
   end
 
   def upload!
-    s3 = Aws::S3::Resource.new(region: region, profile: profile)
-    bucket = s3.bucket(release_bucket)
-    release_obj = bucket.object(release_key)
+    tm = Aws::S3::TransferManager.new(region: region, profile: profile)
 
     info "Uploading package #{package_name} to S3 ..."
     start_time = Time.current
 
-    release_obj.upload_file(package_path)
+    tm.upload_file(package_path, bucket: release_bucket, key: release_key)
 
     duration = Time.current - start_time
     info "Upload completed in #{duration} seconds."
