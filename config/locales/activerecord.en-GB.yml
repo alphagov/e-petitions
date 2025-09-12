@@ -14,6 +14,16 @@ en-GB:
             uk_citizenship:
               accepted: "You must be a British citizen or normally live in the UK to create petitions"
 
+        signature_creator:
+          attributes:
+            uk_citizenship:
+              accepted: "You must be a British citizen or normally live in the UK to sign petitions"
+
+        sponsor_creator:
+          attributes:
+            uk_citizenship:
+              accepted: "You must be a British citizen or normally live in the UK to sign petitions"
+
         statistics/moderation_performance/form:
           attributes:
             parliament_id:

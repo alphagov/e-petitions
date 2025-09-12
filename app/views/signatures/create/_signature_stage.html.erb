@@ -1,0 +1,69 @@
+<h1 class="page-title">Sign petition</h1>
+<h2 class="page-subtitle"><%= @petition.action %></h2>
+
+<%= form_row for: [signature, :uk_citizenship], class: "uk-citizen" do %>
+  <span class="form-label">
+    Only British citizens or UK residents have the right to sign
+  </span>
+  <%= error_messages_for_field signature, :uk_citizenship %>
+  <div class="multiple-choice">
+    <%= form.check_box :uk_citizenship %>
+    <%= form.label :uk_citizenship, "I am a British citizen or UK resident" %>
+  </div>
+<% end %>
+
+<%= form_row for: [signature, :name] do %>
+  <%= form.label :name, class: "form-label" %>
+  <%= error_messages_for_field signature, :name %>
+  <%= form.text_field :name, maxlength: 255, size: nil, class: "form-control", autocomplete: "name"  %>
+<% end %>
+
+<%= form_row for: [signature, :email] do %>
+  <%= form.label :email, "Email address", class: "form-label" %>
+  <%= error_messages_for_field signature, :email %>
+  <%= form.text_field :email, inputmode: "email", class: "form-control", autocomplete: "email" %>
+<% end %>
+
+<%= form_row for: [signature, :location_code] do %>
+  <%= form.label :location_code, "Location", class: "form-label" %>
+  <%= error_messages_for_field signature, :location_code %>
+  <%= form.select :location_code, countries_for_select, {}, class: "form-control", autocomplete: "country" %>
+<% end %>
+
+<%= form_row for: [signature, :postcode], id: "postcode-row" do %>
+  <%= form.label :postcode, class: "form-label" %>
+  <%= error_messages_for_field signature, :postcode %>
+  <%= form.text_field :postcode, class: "form-control small", autocomplete: "postal-code" %>
+<% end %>
+
+<%= form_row for: [signature, :notify_by_email], class: "notify-by-email" do %>
+  <div class="multiple-choice">
+    <%= form.check_box :notify_by_email %>
+    <%= form.label :notify_by_email, "Email me whenever there’s an update about this petition" %>
+  </div>
+<% end %>
+
+<%= form.button "Continue", name: "move_next", class: "button" %>
+
+<div class="secondary">
+  <p>We won’t publish your personal details anywhere or use them for anything other than this petition.</p>
+  <p>The personal data you provide is necessary for the operation of the e-petitions website and the work of the House of Commons Petitions Committee.</p>
+  <p>We will manage your personal data as set out in our <%= link_to "privacy notice", privacy_path, target: "_blank" %>, which includes details of your rights under data protection legislation.</p>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    var location = document.getElementById('signature_location_code');
+    var postcodeInput = document.getElementById('signature_postcode');
+    var postcodeRow = document.getElementById('postcode-row');
+
+    location.addEventListener('change', function(e) {
+      if (e.target.value === 'GB') {
+        postcodeRow.style.display = '';
+      } else {
+        postcodeRow.style.display = 'none';
+        postcodeInput.value = '';
+      }
+    });
+  });
+</script>

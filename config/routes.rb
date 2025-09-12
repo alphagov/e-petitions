@@ -81,9 +81,9 @@ Rails.application.routes.draw do
         get 'moderation-info'
       end
 
-      resources :sponsors, only: %i[new create], shallow: true do
+      resources :sponsors, only: %i[new], shallow: true do
         collection do
-          post 'new', action: 'confirm', as: :confirm
+          post 'new', action: 'create', as: nil
           get  'thank-you'
         end
 
@@ -93,9 +93,9 @@ Rails.application.routes.draw do
         end
       end
 
-      resources :signatures, only: %i[new create], shallow: true do
+      resources :signatures, only: %i[new], shallow: true do
         collection do
-          post 'new', action: 'confirm', as: :confirm
+          post 'new', action: 'create', as: nil
           get  'thank-you'
         end
 

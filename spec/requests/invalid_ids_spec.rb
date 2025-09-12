@@ -57,13 +57,6 @@ RSpec.describe "invalid ids", type: :request, show_exceptions: true, csrf: false
     end
   end
 
-  describe "POST /petitions/:petition_id/sponsors" do
-    it "returns a 400 Bad Request" do
-      post "/petitions/not-a-number/sponsors"
-      expect(response).to have_http_status(:bad_request)
-    end
-  end
-
   describe "GET /petitions/:petition_id/sponsors/thank-you" do
     it "returns a 400 Bad Request" do
       get "/petitions/not-a-number/sponsors/thank-you"
@@ -95,13 +88,6 @@ RSpec.describe "invalid ids", type: :request, show_exceptions: true, csrf: false
   describe "POST /petitions/:petition_id/signatures/new" do
     it "returns a 400 Bad Request" do
       post "/petitions/not-a-number/signatures/new"
-      expect(response).to have_http_status(:bad_request)
-    end
-  end
-
-  describe "POST /petitions/:petition_id/signatures" do
-    it "returns a 400 Bad Request" do
-      post "/petitions/not-a-number/signatures"
       expect(response).to have_http_status(:bad_request)
     end
   end
