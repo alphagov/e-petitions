@@ -82,6 +82,10 @@ RSpec.describe SignaturesController, type: :controller do
         expect(assigns[:signature]).not_to be_persisted
       end
 
+      it "is on stage 'uk_citizenship'" do
+        expect(assigns[:signature].stage).to eq "uk_citizenship";
+      end
+
       it "sets the signature's location_code to 'GB'" do
         expect(assigns[:signature].location_code).to eq("GB")
       end

@@ -1,11 +1,12 @@
 <%= form.button "Back", name: "move_back", class: "back-page" %>
 
+<%= form.hidden_field :uk_citizenship %>
+
 <%= form.hidden_field :action %>
 <%= form.hidden_field :background %>
 <%= form.hidden_field :additional_details %>
 
 <%= form.hidden_field :name %>
-<%= form.hidden_field :uk_citizenship %>
 <%= form.hidden_field :postcode %>
 <%= form.hidden_field :location_code %>
 <%= form.hidden_field :notify_by_email %>
@@ -22,4 +23,3 @@
 <% end %>
 
 <%= form.button "Yes – this is my email address", name: "move_next", class: "button" %>
-

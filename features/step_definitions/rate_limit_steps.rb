@@ -45,9 +45,9 @@ end
 Given(/^there is a signature already from this IP address$/) do
   steps %Q(
     When I go to the new signature page for "Do something!"
+    And I confirm that I am UK citizen or resident
     And I fill in "Name" with "Existing Signer"
     And I fill in "Email" with "existing@example.com"
-    And I check "I am a British citizen or UK resident"
     And I fill in my postcode with "SW14 9RQ"
     And I select "United Kingdom" from "Location"
     And I try to sign

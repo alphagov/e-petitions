@@ -52,7 +52,6 @@ When(/^I fill in my details(?: with email "([^"]+)")?$/) do |email_address|
   steps %Q(
     When I fill in "Name" with "Womboid Wibbledon"
     And I fill in "Email" with "#{email_address}"
-    And I check "I am a British citizen or UK resident"
     And I fill in my postcode with "SW14 9RQ"
     And I select "United Kingdom" from "Location"
     And I check "Email me whenever there’s an update about this petition"
@@ -63,7 +62,6 @@ When(/^I fill in my details with postcode "(.*?)"?$/) do |postcode|
   steps %Q(
     When I fill in "Name" with "Womboid Wibbledon"
     And I fill in "Email" with "womboid@wimbledon.com"
-    And I check "I am a British citizen or UK resident"
     And I fill in my postcode with "#{postcode}"
     And I select "United Kingdom" from "Location"
     And I check "Email me whenever there’s an update about this petition"
@@ -82,6 +80,7 @@ When /^I fill in my details and sign a petition$/ do
     When I go to the new signature page for "Do something!"
     And I should see "Do something! - Sign this petition - Petitions" in the browser page title
     And I should be connected to the server via an ssl connection
+    When I confirm that I am UK citizen or resident
     And I fill in my details
     And I try to sign
     And I say I am happy with my email address
@@ -160,6 +159,7 @@ end
 When /^I try to sign the petition with the same email address and a different name$/ do
   steps %Q{
     When I decide to sign the petition
+    And I confirm that I am UK citizen or resident
     And I fill in my details
     And I fill in "Name" with "Sam Wibbledon"
     And I try to sign
@@ -169,6 +169,7 @@ end
 
 When /^I try to sign the petition with the same email address and the same name$/ do
   step "I decide to sign the petition"
+  step "I confirm that I am UK citizen or resident"
   step "I fill in my details"
   step "I try to sign"
   step "I say I am happy with my email address"
@@ -176,6 +177,7 @@ end
 
 When /^I try to sign the petition with the same email address, a different name, and a different postcode$/ do
   step "I decide to sign the petition"
+  step "I confirm that I am UK citizen or resident"
   step "I fill in my details"
   step %{I fill in "Name" with "Sam Wibbledon"}
   step %{I fill in my postcode with "W1A 1AA"}
@@ -185,6 +187,7 @@ end
 
 When /^I try to sign the petition with the same email address and a third name$/ do
   step "I decide to sign the petition"
+  step "I confirm that I am UK citizen or resident"
   step "I fill in my details"
   step %{I fill in "Name" with "Sarah Wibbledon"}
   step "I try to sign"
