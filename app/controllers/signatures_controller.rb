@@ -1,14 +1,14 @@
 class SignaturesController < ApplicationController
-  before_action :retrieve_petition, only: [:new, :confirm, :create, :thank_you]
+  before_action :retrieve_petition, only: [:new, :create, :thank_you]
   before_action :retrieve_signature, only: [:verify, :unsubscribe, :signed]
 
   # Verify petition is in a valid state before processing signature
-  before_action :redirect_to_petition_page_if_rejected, only: [:new, :confirm, :create, :thank_you, :verify, :signed]
-  before_action :redirect_to_petition_page_if_closed, only: [:new, :confirm, :create, :thank_you]
+  before_action :redirect_to_petition_page_if_rejected, only: [:new, :create, :thank_you, :verify, :signed]
+  before_action :redirect_to_petition_page_if_closed, only: [:new, :create, :thank_you]
   before_action :redirect_to_petition_page_if_closed_for_signing, only: [:verify, :signed]
-  before_action :redirect_to_petition_page_if_paused, only: [:new, :confirm, :create, :thank_you, :verify, :signed]
+  before_action :redirect_to_petition_page_if_paused, only: [:new, :create, :thank_you, :verify, :signed]
 
-  before_action :build_signature, only: [:new, :confirm, :create]
+  before_action :build_signature, only: [:new, :create]
   before_action :expire_signed_tokens, only: [:verify]
   before_action :verify_token, only: [:verify]
   before_action :verify_signed_token, only: [:signed]
@@ -16,35 +16,19 @@ class SignaturesController < ApplicationController
 
   before_action :do_not_cache
 
-  rescue_from ActiveRecord::RecordNotUnique do |exception|
-    @signature = @signature.find_duplicate!
-    send_email_to_petition_signer
-
-    redirect_to thank_you_url
-  end
-
-  rescue_from ActiveRecord::RecordInvalid do |exception|
-    respond_to do |format|
-      format.html { render :new }
-    end
-  end
-
   def new
     respond_to do |format|
       format.html
     end
   end
 
-  def confirm
-    respond_to do |format|
-      format.html { render(@signature.valid? ? :confirm : :new) }
-    end
-  end
-
   def create
-    if @signature.save!
-      send_email_to_petition_signer
+    if @signature.save
       redirect_to thank_you_url
+    else
+      respond_to do |format|
+        format.html { render :new }
+      end
     end
   end
 
@@ -163,11 +147,7 @@ class SignaturesController < ApplicationController
   end
 
   def build_signature
-    if action_name == "new"
-      @signature = @petition.signatures.build(signature_params_for_new)
-    else
-      @signature = @petition.signatures.build(signature_params_for_create)
-    end
+    @signature = SignatureCreator.new(@petition, params, request)
   end
 
   def thank_you_url
@@ -206,31 +186,5 @@ class SignaturesController < ApplicationController
     if Site.signature_collection_disabled?
       redirect_to petition_url(@petition), notice: :cant_sign_paused
     end
-  end
-
-  def send_email_to_petition_signer
-    unless @signature.email_threshold_reached?
-      if @signature.pending?
-        EmailConfirmationForSignerEmailJob.perform_later(@signature)
-      else
-        EmailDuplicateSignaturesEmailJob.perform_later(@signature)
-      end
-    end
-  end
-
-  def signature_params_for_new
-    { location_code: "GB" }
-  end
-
-  def signature_params
-    params.require(:signature).permit(*signature_attributes)
-  end
-
-  def signature_params_for_create
-    signature_params.merge(ip_address: request.remote_ip)
-  end
-
-  def signature_attributes
-    %i[name email email_confirmation postcode location_code uk_citizenship notify_by_email autocorrect_domain]
   end
 end

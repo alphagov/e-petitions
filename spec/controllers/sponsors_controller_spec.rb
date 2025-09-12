@@ -140,7 +140,7 @@ RSpec.describe SponsorsController, type: :controller do
     context "when the petition doesn't exist" do
       it "raises an ActiveRecord::RecordNotFound exception" do
         expect {
-          post :confirm, params: { petition_id: 1, token: 'token', signature: params }
+          post :create, params: { petition_id: 1, token: 'token', stage: 'replay_email', signature: params }
         }.to raise_exception(ActiveRecord::RecordNotFound)
       end
     end
@@ -149,7 +149,7 @@ RSpec.describe SponsorsController, type: :controller do
       let(:petition) { FactoryBot.create(:pending_petition) }
 
       it "redirects to the petition gathering support page" do
-        post :confirm, params: { petition_id: petition.id, token: 'token', signature: params }
+        post :create, params: { petition_id: petition.id, token: 'token', stage: 'replay_email', signature: params }
         expect(response).to redirect_to("/petitions/#{petition.id}/gathering-support")
       end
     end
@@ -160,7 +160,7 @@ RSpec.describe SponsorsController, type: :controller do
 
         it "raises an ActiveRecord::RecordNotFound exception" do
           expect {
-            post :confirm, params: { petition_id: petition.id, token: petition.sponsor_token, signature: params }
+            post :create, params: { petition_id: petition.id, token: petition.sponsor_token, stage: 'replay_email', signature: params }
           }.to raise_exception(ActiveRecord::RecordNotFound)
         end
       end
@@ -171,144 +171,7 @@ RSpec.describe SponsorsController, type: :controller do
         let(:petition) { FactoryBot.create(:"#{state}_petition") }
 
         before do
-          post :confirm, params: { petition_id: petition.id, token: petition.sponsor_token, signature: params }
-        end
-
-        it "assigns the @petition instance variable" do
-          expect(assigns[:petition]).to eq(petition)
-        end
-
-        it "redirects to the petition page" do
-          expect(response).to redirect_to("/petitions/#{petition.id}")
-        end
-      end
-    end
-
-    %w[pending validated sponsored flagged].each do |state|
-      context "when the petition is #{state}" do
-        let(:petition) { FactoryBot.create(:"#{state}_petition") }
-
-        before do
-          post :confirm, params: { petition_id: petition.id, token: petition.sponsor_token, signature: params }
-        end
-
-        it "assigns the @petition instance variable" do
-          expect(assigns[:petition]).to eq(petition)
-        end
-
-        it "assigns the @signature instance variable with a new signature" do
-          expect(assigns[:signature]).not_to be_persisted
-        end
-
-        it "sets the signature's params" do
-          expect(assigns[:signature].name).to eq("Ted Berry")
-          expect(assigns[:signature].email).to eq("ted@example.com")
-          expect(assigns[:signature].uk_citizenship).to eq("1")
-          expect(assigns[:signature].postcode).to eq("SW1A1AA")
-          expect(assigns[:signature].location_code).to eq("GB")
-        end
-
-        it "records the IP address on the signature" do
-          expect(assigns[:signature].ip_address).to eq("0.0.0.0")
-        end
-
-        it "renders the sponsors/confirm template" do
-          expect(response).to render_template("sponsors/confirm")
-        end
-
-        context "and the params are invalid" do
-          let(:params) do
-            {
-              name: "Ted Berry",
-              email: "",
-              uk_citizenship: "1",
-              postcode: "12345",
-              location_code: "GB"
-            }
-          end
-
-          it "renders the sponsors/new template" do
-            expect(response).to render_template("sponsors/new")
-          end
-        end
-
-        context "and has one remaining sponsor slot" do
-          let(:petition) { FactoryBot.create(:"#{state}_petition", sponsor_count: Site.maximum_number_of_sponsors - 1, sponsors_signed: true) }
-
-          it "doesn't redirect to the petition moderation info page" do
-            expect(response).not_to redirect_to("/petitions/#{petition.id}/moderation-info")
-          end
-        end
-
-        context "and has reached the maximum number of sponsors" do
-          let(:petition) { FactoryBot.create(:"#{state}_petition", sponsor_count: Site.maximum_number_of_sponsors, sponsors_signed: true) }
-
-          it "redirects to the petition moderation info page" do
-            expect(response).to redirect_to("/petitions/#{petition.id}/moderation-info")
-          end
-        end
-
-        context "and signature collection is paused" do
-          let(:signature_collection_disabled?) { true }
-
-          it "sets the flash :notice message" do
-            expect(flash[:notice]).to eq("Sorry, you can’t sign petitions at the moment")
-          end
-
-          it "redirects to the petition page" do
-            expect(response).to redirect_to("/petitions/#{petition.to_param}")
-          end
-        end
-      end
-    end
-  end
-
-  describe "POST /petitions/:petition_id/sponsors" do
-    let(:params) do
-      {
-        name: "Ted Berry",
-        email: "ted@example.com",
-        uk_citizenship: "1",
-        postcode: "SW1A 1AA",
-        location_code: "GB"
-      }
-    end
-
-    context "when the petition doesn't exist" do
-      it "raises an ActiveRecord::RecordNotFound exception" do
-        expect {
-          post :create, params: { petition_id: 1, token: 'token', signature: params }
-        }.to raise_exception(ActiveRecord::RecordNotFound)
-      end
-    end
-
-    context "when the token is invalid" do
-      let(:petition) { FactoryBot.create(:pending_petition) }
-
-      it "redirects to the petition gathering support page" do
-        post :create, params: { petition_id: petition.id, token: 'token', signature: params }
-        expect(response).to redirect_to("/petitions/#{petition.id}/gathering-support")
-      end
-    end
-
-    %w[dormant hidden stopped].each do |state|
-      context "when the petition is #{state}" do
-        let(:petition) { FactoryBot.create(:"#{state}_petition") }
-
-        it "raises an ActiveRecord::RecordNotFound exception" do
-          expect {
-            post :create, params: { petition_id: petition.id, token: petition.sponsor_token, signature: params }
-          }.to raise_exception(ActiveRecord::RecordNotFound)
-        end
-      end
-    end
-
-    %w[open closed rejected].each do |state|
-      context "when the petition is #{state}" do
-        let(:petition) { FactoryBot.create(:"#{state}_petition") }
-
-        before do
-          post :create, params: { petition_id: petition.id, token: petition.sponsor_token, signature: params }
+          post :create, params: { petition_id: petition.id, token: petition.sponsor_token, stage: 'replay_email', signature: params }
         end
 
         it "assigns the @petition instance variable" do
@@ -328,16 +191,12 @@ RSpec.describe SponsorsController, type: :controller do
         context "and the signature is not a duplicate" do
           before do
             perform_enqueued_jobs {
-              post :create, params: { petition_id: petition.id, token: petition.sponsor_token, signature: params }
+              post :create, params: { petition_id: petition.id, token: petition.sponsor_token, stage: 'replay_email', signature: params }
             }
           end
 
           it "assigns the @petition instance variable" do
             expect(assigns[:petition]).to eq(petition)
-          end
-
-          it "assigns the @signature instance variable with a saved signature" do
-            expect(assigns[:signature]).to be_persisted
           end
 
           it "sets the signature's params" do
@@ -383,16 +242,12 @@ RSpec.describe SponsorsController, type: :controller do
 
           before do
             perform_enqueued_jobs {
-              post :create, params: { petition_id: petition.id, token: petition.sponsor_token, signature: params }
+              post :create, params: { petition_id: petition.id, token: petition.sponsor_token, stage: 'replay_email', signature: params }
             }
           end
 
           it "assigns the @petition instance variable" do
             expect(assigns[:petition]).to eq(petition)
-          end
-
-          it "assigns the @signature instance variable to the original signature" do
-            expect(assigns[:signature]).to eq(signature)
           end
 
           it "re-sends the confirmation email" do
@@ -412,16 +267,12 @@ RSpec.describe SponsorsController, type: :controller do
             allow(Site).to receive(:disable_plus_address_check?).and_return(true)
 
             perform_enqueued_jobs {
-              post :create, params: { petition_id: petition.id, token: petition.sponsor_token, signature: params.merge(email: "ted+petitions@example.com") }
+              post :create, params: { petition_id: petition.id, token: petition.sponsor_token, stage: 'replay_email', signature: params.merge(email: "ted+petitions@example.com") }
             }
           end
 
           it "assigns the @petition instance variable" do
             expect(assigns[:petition]).to eq(petition)
-          end
-
-          it "assigns the @signature instance variable to the original signature" do
-            expect(assigns[:signature]).to eq(signature)
           end
 
           it "re-sends the confirmation email" do
@@ -439,16 +290,12 @@ RSpec.describe SponsorsController, type: :controller do
 
           before do
             perform_enqueued_jobs {
-              post :create, params: { petition_id: petition.id, token: petition.sponsor_token, signature: params }
+              post :create, params: { petition_id: petition.id, token: petition.sponsor_token, stage: "replay_email", signature: params }
             }
           end
 
           it "assigns the @petition instance variable" do
             expect(assigns[:petition]).to eq(petition)
-          end
-
-          it "assigns the @signature instance variable to the original signature" do
-            expect(assigns[:signature]).to eq(signature)
           end
 
           it "sends a duplicate signature email" do
@@ -468,16 +315,12 @@ RSpec.describe SponsorsController, type: :controller do
             allow(Site).to receive(:disable_plus_address_check?).and_return(true)
 
             perform_enqueued_jobs {
-              post :create, params: { petition_id: petition.id, token: petition.sponsor_token, signature: params.merge(email: "ted+petitions@example.com") }
+              post :create, params: { petition_id: petition.id, token: petition.sponsor_token, stage: "replay_email", signature: params.merge(email: "ted+petitions@example.com") }
             }
           end
 
           it "assigns the @petition instance variable" do
             expect(assigns[:petition]).to eq(petition)
-          end
-
-          it "assigns the @signature instance variable to the original signature" do
-            expect(assigns[:signature]).to eq(signature)
           end
 
           it "sends a duplicate signature email" do
@@ -495,7 +338,7 @@ RSpec.describe SponsorsController, type: :controller do
 
           before do
             perform_enqueued_jobs {
-              post :create, params: { petition_id: petition.id, token: petition.sponsor_token, signature: params }
+              post :create, params: { petition_id: petition.id, token: petition.sponsor_token, stage: "replay_email", signature: params }
             }
           end
 
@@ -523,7 +366,7 @@ RSpec.describe SponsorsController, type: :controller do
 
           before do
             perform_enqueued_jobs {
-              post :create, params: { petition_id: petition.id, token: petition.sponsor_token, signature: params }
+              post :create, params: { petition_id: petition.id, token: petition.sponsor_token, stage: 'replay_email', signature: params }
             }
           end
 

@@ -52,10 +52,6 @@ class Signature < ActiveRecord::Base
 
   attr_readonly :sponsor, :creator
 
-  before_validation if: :autocorrect_domain do
-    self.email = DomainAutocorrect.call(email)
-  end
-
   before_create if: :email? do
     self.uuid = generate_uuid
     self.canonical_email = Domain.normalize(email)
@@ -493,11 +489,6 @@ class Signature < ActiveRecord::Base
   end
 
   attr_accessor :uk_citizenship
-  attr_reader :autocorrect_domain
-
-  def autocorrect_domain=(value)
-    @autocorrect_domain = value.present?
-  end
 
   def find_duplicate
     begin

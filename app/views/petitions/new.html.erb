@@ -1,4 +1,4 @@
 <%= form_for @new_petition, url: new_petition_path do |form| %>
-<%= hidden_field_tag :stage, @new_petition.stage %>
-<%= render @new_petition, form: form, petition: form.object %>
+  <%= hidden_field_tag :stage, @new_petition.stage %>
+  <%= render @new_petition, form: form, petition: form.object %>
 <% end %>

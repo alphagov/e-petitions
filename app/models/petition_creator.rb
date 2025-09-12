@@ -95,6 +95,8 @@ class PetitionCreator
         @petition.save!
         send_email_to_gather_sponsors(@petition)
       end
+
+      true
     end
   end
 
