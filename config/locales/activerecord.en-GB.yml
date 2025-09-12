@@ -9,6 +9,11 @@ en-GB:
             email:
               invalid: "Email not recognised."
 
+        petition_creator:
+          attributes:
+            uk_citizenship:
+              accepted: "You must be a British citizen or normally live in the UK to create petitions"
+
         statistics/moderation_performance/form:
           attributes:
             parliament_id:
@@ -256,5 +261,6 @@ en-GB:
       postcode:
         blank: "Postcode must be completed"
         invalid: "Postcode not recognised"
+        too_long: "Postcode is too long"
       uk_citizenship:
         accepted: "You must be a British citizen or normally live in the UK to create or sign petitions"
