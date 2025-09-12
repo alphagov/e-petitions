@@ -20,9 +20,9 @@ When(/^(Laura|a sponsor) supports my petition$/) do |who|
 
   steps %{
     When I visit the "sponsor this petition" url I was given
+    And I confirm that I am UK citizen or resident
     And I fill in "Name" with "Anonymous Sponsor"
     And I fill in "Email" with "#{sponsor_email}"
-    And I check "I am a British citizen or UK resident"
     And I fill in my postcode with "SW1A 1AA"
     And I select "United Kingdom" from "Location"
     And I try to sign
@@ -62,9 +62,9 @@ end
 Given(/^there is a sponsor already from this IP address$/) do
   steps %{
     When I visit the "sponsor this petition" url I was given
+    And I confirm that I am UK citizen or resident
     And I fill in "Name" with "Existing Sponsor"
     And I fill in "Email" with "existing@example.com"
-    And I check "I am a British citizen or UK resident"
     And I fill in my postcode with "SW14 9RQ"
     And I select "United Kingdom" from "Location"
     And I try to sign
@@ -111,7 +111,6 @@ When(/^I fill in my details as a sponsor(?: with email "(.*?)")?$/) do |email_ad
   steps %{
     When I fill in "Name" with "Laura The Sponsor"
     And I fill in "Email" with "#{email_address}"
-    And I check "I am a British citizen or UK resident"
     And I fill in my postcode with "AB10 1AA"
     And I select "United Kingdom" from "Location"
     And I check "Email me whenever there’s an update about this petition"
@@ -170,7 +169,8 @@ When(/^I have sponsored a petition$/) do
   steps %{
     When I visit the "sponsor this petition" url I was given
     And I should be connected to the server via an ssl connection
-    When I fill in my details as a sponsor
+    When I confirm that I am UK citizen or resident
+    And I fill in my details as a sponsor
     And I try to sign
     Then I should not have signed the petition as a sponsor
     And I am asked to review my email address

@@ -1,0 +1,22 @@
+<fieldset>
+  <legend>
+    <h1 class="page-title">
+      Are you a British citizen or UK resident?
+    </h1>
+  </legend>
+
+  <%= form_row for: [signature, :uk_citizenship] do %>
+    <%= form.label :uk_citizenship, "Only British citizens or UK residents have the right to sign petition", class: "form-label" %>
+    <%= error_messages_for_field form.object, :uk_citizenship %>
+    <div class="multiple-choice">
+      <%= form.radio_button :uk_citizenship, "1" %>
+      <%= form.label :uk_citizenship, "Yes", for: "signature_uk_citizenship_1" %>
+    </div>
+    <div class="multiple-choice">
+      <%= form.radio_button :uk_citizenship, "0" %>
+      <%= form.label :uk_citizenship, "No", for: "signature_uk_citizenship_0" %>
+    </div>
+  <% end %>
+</fieldset>
+
+<%= form.button "Continue", class: "button" %>

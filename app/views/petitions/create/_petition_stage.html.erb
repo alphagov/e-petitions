@@ -1,5 +1,7 @@
 <%= link_to "Back", check_results_petitions_path(q: petition.action), class: "back-page" %>
 
+<%= form.hidden_field :uk_citizenship %>
+
 <h1 class="page-title">Start a petition</h1>
 
 <p class="petition-standards">We only publish petitions that meet the <%= link_to "petition standards", help_url(anchor: "standards") %>.</p>

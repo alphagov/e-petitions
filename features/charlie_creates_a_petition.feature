@@ -17,7 +17,9 @@ Scenario: Charlie has to search for a petition before creating one
     | Rioters should loose benefits  | 835 signatures   |
   When I choose to create a petition anyway
   Then I should be on the new petition page
-  And I should see my search query already filled in as the action of the petition
+  And I should be asked to confirm my eligibility
+  When I confirm that I am UK citizen or resident
+  Then I should see my search query already filled in as the action of the petition
 
 Scenario: Charlie starts to create a petition when parliament is not dissolving
   Given I am on the check for existing petitions page
@@ -49,6 +51,7 @@ Scenario: Charlie cannot craft an xss attack when searching for petitions
 
 Scenario: Charlie creates a petition
   Given I start a new petition
+  And I confirm that I am UK citizen or resident
   And I fill in the petition details
   And I press "Preview petition"
   And I press "This looks good"
@@ -71,6 +74,7 @@ Scenario: First person sponsors a petition
 
 Scenario: Charlie creates a petition with invalid postcode SW14 9RQ
   Given I start a new petition
+  And I confirm that I am UK citizen or resident
   And I fill in the petition details
   And I press "Preview petition"
   And I press "This looks good"
@@ -81,6 +85,7 @@ Scenario: Charlie creates a petition with invalid postcode SW14 9RQ
 @javascript
 Scenario: Charlie tries to submit an invalid petition
   Given I am on the new petition page
+  And I confirm that I am UK citizen or resident
 
   When I press "Preview petition"
   Then I should see "Action must be completed"
@@ -129,7 +134,6 @@ Scenario: Charlie tries to submit an invalid petition
   When I press "Continue"
   Then I should see "Name must be completed"
   And I should see "Email must be completed"
-  And I should see "You must be a British citizen"
   And I should see "Postcode must be completed"
 
   When I fill in "Name" with "=cmd"
@@ -167,6 +171,7 @@ Scenario: Charlie tries to submit an invalid petition
 
 Scenario: Charlie creates a petition with a typo in his email
   Given I start a new petition
+  And I confirm that I am UK citizen or resident
   And I fill in the petition details
   And I press "Preview petition"
   And I press "This looks good"
@@ -180,6 +185,7 @@ Scenario: Charlie creates a petition with a typo in his email
 
 Scenario: Charlie creates a petition when his email is autocorrected wrongly
   Given I start a new petition
+  And I confirm that I am UK citizen or resident
   And I fill in the petition details
   And I press "Preview petition"
   And I press "This looks good"
@@ -195,6 +201,7 @@ Scenario: Charlie creates a petition when his email is autocorrected wrongly
 Scenario: Charlie creates a petition when his IP address is blocked
   Given the IP address 127.0.0.1 is blocked
   And I start a new petition
+  And I confirm that I am UK citizen or resident
   And I fill in the petition details
   And I press "Preview petition"
   And I press "This looks good"
@@ -210,6 +217,7 @@ Scenario: Charlie creates a petition when his IP address is blocked
 Scenario: Charlie creates a petition when his email address is blocked
   Given the email address "womboid@wimbledon.com" is blocked
   And I start a new petition
+  And I confirm that I am UK citizen or resident
   And I fill in the petition details
   And I press "Preview petition"
   And I press "This looks good"
@@ -228,6 +236,7 @@ Scenario: Charlie creates a petition when his IP address is rate limited
   And there are no blocked IPs
   And there are 2 petitions created from this IP address
   And I start a new petition
+  And I confirm that I am UK citizen or resident
   And I fill in the petition details
   And I press "Preview petition"
   And I press "This looks good"
@@ -243,13 +252,13 @@ Scenario: Charlie creates a petition when his IP address is rate limited
 @javascript
 Scenario: Charlie creates a petition from overseas
   When I start a new petition
+  And I confirm that I am UK citizen or resident
   And I fill in the petition details
   And I press "Preview petition"
   And I press "This looks good"
   Then I should see a "Postcode" text field
   When I select "United States" from "Location"
   Then I should not see a "Postcode" text field
-  When I check "I am a British citizen or UK resident"
   And I fill in "Name" with "Womboid Wibbledon"
   And I fill in "Email" with "womboid@wimbledon.com"
   And I press "Continue"

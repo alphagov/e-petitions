@@ -4,6 +4,10 @@ require 'postcode_sanitizer'
 class PetitionCreator
   include StagedForm
 
+  CITIZENSHIP_ATTRIBUTES = %i[
+    uk_citizenship
+  ]
+
   PETITION_ATTRIBUTES = %i[
     action
     background
@@ -14,9 +18,9 @@ class PetitionCreator
     name
     location_code
     postcode
-    uk_citizenship
   ]
 
+  stage :uk_citizenship
   stage :petition
   stage :replay_petition
   stage :creator
@@ -29,13 +33,17 @@ class PetitionCreator
   attribute :email, :string
   attribute :postcode, :string
   attribute :location_code, :string, default: "GB"
-  attribute :uk_citizenship, :boolean, default: false
+  attribute :uk_citizenship, :string
   attribute :notify_by_email, :string
 
   strip_attribute :action, :background, :additional_details
   strip_attribute :name, :email
 
   normalizes :postcode, with: PostcodeSanitizer
+
+  with_options on: [:uk_citizenship, :replay_email] do
+    validates :uk_citizenship, presence: true, acceptance: true
+  end
 
   with_options on: [:petition, :replay_email] do
     validates :action, :background, presence: true
@@ -56,16 +64,22 @@ class PetitionCreator
     validates :postcode, presence: true, postcode: true, if: :united_kingdom?
     validates :postcode, length: { maximum: 255 }, unless: :united_kingdom?
     validates :postcode, length: { maximum: 10 }, if: :united_kingdom?
-
-    validates :uk_citizenship, acceptance: true
   end
 
   before_validation on: :creator do
     self.email = DomainAutocorrect.call(email)
   end
 
+  after_validation on: :uk_citizenship do
+    if citzenship_errors? && uk_citizenship.present?
+      @stage = "non_citizen"
+    end
+  end
+
   after_validation on: :replay_email do
-    if petition_errors?
+    if citzenship_errors?
+      @stage = "uk_citizenship"
+    elsif petition_errors?
       @stage = "petition"
     elsif creator_errors?
       @stage = "creator"
@@ -124,6 +138,10 @@ class PetitionCreator
 
   def constituency_id
     constituency.try(:external_id)
+  end
+
+  def citzenship_errors?
+    errors.any? { |e| CITIZENSHIP_ATTRIBUTES.include?(e.attribute) }
   end
 
   def creator_errors?

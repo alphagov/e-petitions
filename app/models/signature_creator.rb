@@ -4,13 +4,17 @@ require 'postcode_sanitizer'
 class SignatureCreator
   include StagedForm
 
+  CITIZENSHIP_ATTRIBUTES = %i[
+    uk_citizenship
+  ]
+
   SIGNATURE_ATTRIBUTES = %i[
     name
     location_code
     postcode
-    uk_citizenship
   ]
 
+  stage :uk_citizenship
   stage :signature
   stage :replay_email
 
@@ -25,6 +29,10 @@ class SignatureCreator
 
   normalizes :postcode, with: PostcodeSanitizer
 
+  with_options on: [:uk_citizenship, :replay_email] do
+    validates :uk_citizenship, presence: true, acceptance: true
+  end
+
   with_options on: [:signature, :replay_email] do
     validates :name, presence: true, length: { maximum: 255 }
     validates :name, format: { without: /\A[-=+@]/ }
@@ -36,12 +44,16 @@ class SignatureCreator
     validates :postcode, presence: true, postcode: true, if: :united_kingdom?
     validates :postcode, length: { maximum: 255 }, unless: :united_kingdom?
     validates :postcode, length: { maximum: 10 }, if: :united_kingdom?
-
-    validates :uk_citizenship, acceptance: true
   end
 
   before_validation on: :signature do
     self.email = DomainAutocorrect.call(email)
+  end
+
+  after_validation on: :uk_citizenship do
+    if citzenship_errors? && uk_citizenship.present?
+      @stage = "non_citizen"
+    end
   end
 
   after_validation on: :replay_email do
@@ -103,6 +115,10 @@ class SignatureCreator
   end
 
   private
+
+  def citzenship_errors?
+    errors.any? { |e| CITIZENSHIP_ATTRIBUTES.include?(e.attribute) }
+  end
 
   def signature_errors?
     errors.any? { |e| SIGNATURE_ATTRIBUTES.include?(e.attribute) }
