@@ -1,16 +1,7 @@
+<%= form.hidden_field :uk_citizenship %>
+
 <h1 class="page-title">Sign petition</h1>
 <h2 class="page-subtitle"><%= @petition.action %></h2>
-
-<%= form_row for: [signature, :uk_citizenship], class: "uk-citizen" do %>
-  <span class="form-label">
-    Only British citizens or UK residents have the right to sign
-  </span>
-  <%= error_messages_for_field signature, :uk_citizenship %>
-  <div class="multiple-choice">
-    <%= form.check_box :uk_citizenship %>
-    <%= form.label :uk_citizenship, "I am a British citizen or UK resident" %>
-  </div>
-<% end %>
 
 <%= form_row for: [signature, :name] do %>
   <%= form.label :name, class: "form-label" %>

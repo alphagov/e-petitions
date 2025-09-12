@@ -274,3 +274,4 @@ en-GB:
         too_long: "Postcode is too long"
       uk_citizenship:
         accepted: "You must be a British citizen or normally live in the UK to create or sign petitions"
+        blank: "You must choose whether you are a British citizen/UK resident or not"

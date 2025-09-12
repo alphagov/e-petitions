@@ -7,9 +7,9 @@ RSpec.describe PetitionsController, type: :controller do
       expect(assigns[:new_petition]).not_to be_nil
     end
 
-    it "is on stage 'petition'" do
+    it "is on stage 'uk_citizenship'" do
       get :new
-      expect(assigns[:new_petition].stage).to eq "petition";
+      expect(assigns[:new_petition].stage).to eq "uk_citizenship";
     end
 
     it "fills in the action if given as query parameter 'q'" do
@@ -220,12 +220,12 @@ RSpec.describe PetitionsController, type: :controller do
           expect(assigns[:new_petition].stage).to eq "creator"
         end
 
-        it "has stage of 'creator' if there is an error on uk_citizenship" do
+        it "has stage of 'uk_citizenship' if there is an error on uk_citizenship" do
           perform_enqueued_jobs do
             post :create, params: { stage: "replay_email", petition_creator: params.merge(uk_citizenship: "0") }
           end
 
-          expect(assigns[:new_petition].stage).to eq "creator"
+          expect(assigns[:new_petition].stage).to eq "uk_citizenship"
         end
 
         it "has stage of 'creator' if there is an error on postcode" do

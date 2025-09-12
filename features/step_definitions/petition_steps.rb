@@ -503,3 +503,23 @@ Given(/^(\d+) archived petitions exist$/) do |number|
     FactoryBot.create(:archived_petition)
   end
 end
+
+Then('I should be asked to confirm my eligibility') do
+  expect(page).to have_css("h1", text: "Are you a British citizen or UK resident?")
+end
+
+When("I confirm that I am UK citizen or resident") do
+  within_fieldset "Are you a British citizen or UK resident?" do
+    choose "Yes"
+  end
+
+  click_button "Continue"
+end
+
+When("I say that I am not UK citizen or resident") do
+  within_fieldset "Are you a British citizen or UK resident?" do
+    choose "No"
+  end
+
+  click_button "Continue"
+end
