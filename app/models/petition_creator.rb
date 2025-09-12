@@ -97,6 +97,8 @@ class PetitionCreator
         send_email_to_gather_sponsors(@petition)
         enqueue_job_to_update_embedding(@petition)
       end
+
+      true
     end
   end
 

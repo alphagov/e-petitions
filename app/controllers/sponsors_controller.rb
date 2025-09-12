@@ -42,21 +42,7 @@ class SponsorsController < SignaturesController
   end
 
   def build_signature
-    if action_name == "new"
-      @signature = @petition.sponsors.build(signature_params_for_new)
-    else
-      @signature = @petition.sponsors.build(signature_params_for_create)
-    end
-  end
-
-  def send_email_to_petition_signer
-    unless @signature.email_threshold_reached?
-      if @signature.pending?
-        PetitionAndEmailConfirmationForSponsorEmailJob.perform_later(@signature)
-      else
-        EmailDuplicateSignaturesEmailJob.perform_later(@signature)
-      end
-    end
+    @signature = SponsorCreator.new(@petition, params, request)
   end
 
   def send_sponsor_support_notification_email_to_petition_owner

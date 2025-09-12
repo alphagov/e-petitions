@@ -47,9 +47,7 @@ module StagedForm
     end
 
     if last_stage?
-      yield if block_given?
-
-      return true
+      block_given? ? yield : true
     else
       @stage = next_stage and return false
     end
