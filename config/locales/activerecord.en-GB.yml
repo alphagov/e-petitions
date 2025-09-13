@@ -246,6 +246,11 @@ en-GB:
         blank: "Email must be completed"
         invalid: "Email not recognised"
         plus_address: "You can’t use ‘plus addressing’ in your email address"
+      email_confirmation:
+        blank: "Email confirmation must be completed"
+        confirmation: "Email confirmation does not match"
+        invalid: "Email confirmation not recognised"
+        plus_address: "You can’t use ‘plus addressing’ in the confirmation of your email address"
       creator:
         blank: "Creator must be completed"
       action:
@@ -262,9 +267,10 @@ en-GB:
       comment:
         blank: "Comments must be completed"
       name:
-        invalid: "Name can’t start with a '=', '+', '-' or '@'"
-        blank: "Name must be completed"
-        has_uri: "Name can’t contain links"
+        invalid: "Full name can’t start with a '=', '+', '-' or '@'"
+        blank: "Full name must be completed"
+        has_uri: "Full name can’t contain links"
+        too_long: "Full name is too long"
       location_code:
         blank: "Location must be completed"
         invalid: "Location must be one of those listed below"

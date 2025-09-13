@@ -194,11 +194,6 @@ When(/^I view all petitions from the home page$/) do
   click_link "All petitions"
 end
 
-When(/^I check for similar petitions$/) do
-  fill_in "q", :with => "rioters benefits"
-  click_button("Continue")
-end
-
 When(/^I choose to create a petition anyway$/) do
   click_link_or_button "My petition is different"
 end
@@ -260,24 +255,12 @@ Then(/^I should see the reason for rejection$/) do
   expect(page).to have_content(@petition.rejection.details)
 end
 
-Then(/^I should be asked to search for a new petition$/) do
-  expect(page).to have_content("What do you want us to do?")
-  expect(page).to have_css("form textarea[name=q]")
-end
-
 Then(/^I should see my search query already filled in as the action of the petition$/) do
   expect(page).to have_field("What do you want us to do?", text: "rioters benefits")
 end
 
 Then(/^I can click on a link to return to the petition$/) do
   expect(page).to have_css("a[href*='/petitions/#{@petition.id}']")
-end
-
-When(/^I am allowed to make the petition action too long$/) do
-  # NOTE: we do this to remove the maxlength attribtue on the petition
-  # action input because any modern browser/driver will not let us enter
-  # values longer than maxlength and so we can't test our JS validation
-  page.execute_script "document.getElementById('petition_creator_action').removeAttribute('maxlength');"
 end
 
 When(/^I am allowed to make the creator name too long$/) do
@@ -298,8 +281,16 @@ end
 When(/^I fill in the petition details/) do
   steps %Q(
     When I fill in "What do you want us to do?" with "The wombats of wimbledon rock."
-    And I fill in "Tell us more about what you want the Government or Parliament to do" with "Give half of Wimbledon rock to wombats!"
-    And I fill in "Tell us more about why you want the Government or Parliament to do it" with "The racial tensions between the wombles and the wombats are heating up. Racial attacks are a regular occurrence and the death count is already in 5 figures. The only resolution to this crisis is to give half of Wimbledon common to the Wombats and to recognise them as their own independent state."
+    And I press "Continue"
+    Then I should see "We checked for similar petitions"
+    And I press "Continue with my petition"
+    Then I should see "Say what you want the UK Government or Parliament to do"
+    When I fill in "Tell us more about what you want the Government or Parliament to do" with "Give half of Wimbledon rock to wombats!"
+    And I press "Continue"
+    Then I should see "Add more information to your petition"
+    When I fill in "Tell us more about why you want the Government or Parliament to do it" with "The racial tensions between the wombles and the wombats are heating up. Racial attacks are a regular occurrence and the death count is already in 5 figures. The only resolution to this crisis is to give half of Wimbledon common to the Wombats and to recognise them as their own independent state."
+    And I press "Continue"
+    Then I should see "Confirm your details"
   )
 end
 

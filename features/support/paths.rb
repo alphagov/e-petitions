@@ -26,8 +26,8 @@ module NavigationHelpers
     when /^the all petitions JSON page$/
       petitions_url(:json)
 
-    when /^the check for existing petitions page$/
-      check_petitions_url
+    when /^the start a new petition page$/
+      start_petitions_url
 
     when /^the new petition page$/
       new_petition_url

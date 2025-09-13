@@ -1,0 +1,35 @@
+<%= form.hidden_field :uk_citizenship %>
+
+<%= form.hidden_field :action %>
+<%= form.hidden_field :additional_details %>
+
+<%= form.hidden_field :name %>
+<%= form.hidden_field :email %>
+<%= form.hidden_field :email_confirmation %>
+<%= form.hidden_field :postcode %>
+<%= form.hidden_field :location_code %>
+<%= form.hidden_field :notify_by_email %>
+
+<h1 class="page-title">
+  <span class="heading-secondary">Start a petition</span>
+  Say what you want the UK Government or Parliament to do
+</h1>
+
+<%= form_row for: [petition, :background] do %>
+  <%= form.label :background, "Tell us more about what you want the Government or Parliament to do", class: "form-label" %>
+  <%= error_messages_for_field petition, :background %>
+  <%= form.text_area :background, rows: 5, data: { max_length: 300 }, class: "form-control" %>
+  <p class="character-count">300 characters max</p>
+  <details class="form-group-help">
+    <summary><span class="summary">Help writing background</span></summary>
+    <div class="panel-indent">
+      <p>Use this section to back up why you want action. Some people include a personal story here.</p>
+      <p>Remember that people won’t always know that much about the issue you’re petitioning about - explain it.</p>
+    </div>
+  </details>
+<% end %>
+
+<div class="button-group">
+  <%= form.button "Continue", name: "move_next", class: "button" %>
+  <%= form.button "Back", name: "move_back", value: "action", class: "button button-secondary" %>
+</div>

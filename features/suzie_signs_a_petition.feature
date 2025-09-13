@@ -11,7 +11,7 @@ Feature: Suzie signs a petition
     And I confirm that I am UK citizen or resident
     And I fill in my details
     And I try to sign
-    And I say I am happy with my email address
+    And I say I am happy with my details
     Then I am told to check my inbox to complete signing
     And "womboid@wimbledon.com" should receive 1 email
     When I confirm my email address
@@ -25,9 +25,13 @@ Feature: Suzie signs a petition
     And I fill in my details with email "womboid@wimbledon.com"
     And I fill in my postcode with "N1 1TY"
     And I try to sign
-    Then I am asked to review my email address
-    When I change my email address to "womboidian@wimbledon.com"
-    And I say I am happy with my email address
+    Then I am asked to review my details
+    When I press "Change my details"
+    And I fill in "Email" with "womboidian@wimbledon.com"
+    And I fill in "Confirm email" with "womboidian@wimbledon.com"
+    And I press "Continue"
+    Then I am asked to review my details
+    When I say I am happy with my details
     Then I am told to check my inbox to complete signing
     And "womboid@wimbledon.com" should receive no email
     And "womboidian@wimbledon.com" should receive 1 email
@@ -43,16 +47,16 @@ Feature: Suzie signs a petition
   Scenario: Suzie signs a petition with an invalid name
     When I go to the new signature page for "Do something!"
     And I confirm that I am UK citizen or resident
-    And I fill in "Name" with "=cmd"
+    And I fill in "Full name" with "=cmd"
     And I press "Continue"
-    Then I should see "Name can’t start with a '=', '+', '-' or '@'"
+    Then I should see "Full name can’t start with a '=', '+', '-' or '@'"
 
   Scenario: Suzie signs a petition with a link in their name
     When I go to the new signature page for "Do something!"
     And I confirm that I am UK citizen or resident
-    And I fill in "Name" with "http://petition.parliament.uk"
+    And I fill in "Full name" with "http://petition.parliament.uk"
     And I press "Continue"
-    Then I should see "Name can’t contain links"
+    Then I should see "Full name can’t contain links"
 
   Scenario: Suzie signs a petition with invalid postcode SW14 9RQ
     When I go to the new signature page for "Do something!"
@@ -60,8 +64,8 @@ Feature: Suzie signs a petition
     And I fill in my details with email "womboid@wimbledon.com"
     And I fill in my postcode with "SW14 9RQ"
     And I try to sign
-    Then I am asked to review my email address
-    And I say I am happy with my email address
+    Then I am asked to review my details
+    And I say I am happy with my details
     Then I am told to check my inbox to complete signing
     And "womboid@wimbledon.com" should receive 1 email
     When I confirm my email address
@@ -80,7 +84,7 @@ Feature: Suzie signs a petition
     And I confirm that I am UK citizen or resident
     And I fill in my details
     And I try to sign
-    And I say I am happy with my email address
+    And I say I am happy with my details
     Then "WOMBOID@wimbledon.com" should receive 1 email with subject "Duplicate signature of petition"
 
   Scenario: Suzie receives a duplicate signature email if she changes to her original email but she has already signed and validated
@@ -89,8 +93,13 @@ Feature: Suzie signs a petition
     And I confirm that I am UK citizen or resident
     And I fill in my details with email "womboidian@wimbledon.com"
     And I try to sign
-    When I change my email address to "womboid@wimbledon.com"
-    And I say I am happy with my email address
+    Then I am asked to review my details
+    When I press "Change my details"
+    And I fill in "Email" with "WOMBOID@wimbledon.com"
+    And I fill in "Confirm email" with "WOMBOID@wimbledon.com"
+    And I press "Continue"
+    Then I am asked to review my details
+    When I say I am happy with my details
     Then "WOMBOID@wimbledon.com" should receive 1 email with subject "Duplicate signature of petition"
 
   Scenario: Suzie receives a duplicate signature email if an alias has been used to sign the petition already
@@ -100,7 +109,7 @@ Feature: Suzie signs a petition
     And I confirm that I am UK citizen or resident
     And I fill in my details with postcode "N1 1TY"
     And I try to sign
-    And I say I am happy with my email address
+    And I say I am happy with my details
     Then "wom.boid@wimbledon.com" should receive 1 email with subject "Duplicate signature of petition"
 
   Scenario: Suzie receives another email if she has already signed but not validated
@@ -109,7 +118,7 @@ Feature: Suzie signs a petition
     And I confirm that I am UK citizen or resident
     And I fill in my details with postcode "N1 1TY"
     And I try to sign
-    And I say I am happy with my email address
+    And I say I am happy with my details
     Then the signature count stays at 2
     And I am told to check my inbox to complete signing
     And "womboid@wimbledon.com" should receive 1 email
@@ -129,7 +138,7 @@ Feature: Suzie signs a petition
     And I confirm that I am UK citizen or resident
     And I fill in my details with postcode "N1 1TY"
     And I try to sign
-    And I say I am happy with my email address
+    And I say I am happy with my details
     Then the signature count stays at 2
     And I am told to check my inbox to complete signing
     And "wom.boid@wimbledon.com" should receive 1 email
@@ -148,7 +157,7 @@ Feature: Suzie signs a petition
     And I confirm that I am UK citizen or resident
     And I fill in my details
     And I try to sign
-    And I say I am happy with my email address
+    And I say I am happy with my details
     Then the signature count goes up to 3
     And I am told to check my inbox to complete signing
     And "womboid@wimbledon.com" should receive 1 email
@@ -199,7 +208,7 @@ Feature: Suzie signs a petition
     And I try to sign
     Then I should be on the new signature page
     When the petition has closed
-    And I say I am happy with my email address
+    And I say I am happy with my details
     Then I should be on the petition page
     And I should see "This petition is closed"
 
@@ -209,7 +218,7 @@ Feature: Suzie signs a petition
     And I fill in my details
     And I try to sign
     Then I should be on the new signature page
-    When I say I am happy with my email address
+    When I say I am happy with my details
     Then I am told to check my inbox to complete signing
     And "womboid@wimbledon.com" should receive 1 email
     When the petition has closed some time ago
@@ -224,7 +233,7 @@ Feature: Suzie signs a petition
     When I fill in my details
     And I try to sign
     Then I should be on the new signature page
-    When I say I am happy with my email address
+    When I say I am happy with my details
     Then I am told to check my inbox to complete signing
     And "womboid@wimbledon.com" should receive 1 email
     When the petition has closed
@@ -243,7 +252,7 @@ Feature: Suzie signs a petition
     And I fill in my details
     And I try to sign
     Then I should be on the new signature page
-    When I say I am happy with my email address
+    When I say I am happy with my details
     Then I am told to check my inbox to complete signing
     And "womboid@wimbledon.com" should receive 1 email
     And I confirm my email address
@@ -261,7 +270,7 @@ Feature: Suzie signs a petition
     And I fill in my details
     And I try to sign
     Then I should be on the new signature page
-    When I say I am happy with my email address
+    When I say I am happy with my details
     Then I am told to check my inbox to complete signing
     And "womboid@wimbledon.com" should receive 1 email
     And I confirm my email address
@@ -279,7 +288,7 @@ Feature: Suzie signs a petition
     And I fill in my details
     And I try to sign
     Then I should be on the new signature page
-    When I say I am happy with my email address
+    When I say I am happy with my details
     Then I am told to check my inbox to complete signing
     And "womboid@wimbledon.com" should receive 1 email
     And I confirm my email address
@@ -299,7 +308,7 @@ Feature: Suzie signs a petition
     And I fill in my details
     And I try to sign
     Then I should be on the new signature page
-    When I say I am happy with my email address
+    When I say I am happy with my details
     Then I am told to check my inbox to complete signing
     And "womboid@wimbledon.com" should receive 1 email
     And I confirm my email address
@@ -320,7 +329,7 @@ Feature: Suzie signs a petition
     And I fill in my details
     And I try to sign
     Then I should be on the new signature page
-    When I say I am happy with my email address
+    When I say I am happy with my details
     Then I am told to check my inbox to complete signing
     And "womboid@wimbledon.com" should receive 1 email
     And I confirm my email address
@@ -331,33 +340,6 @@ Feature: Suzie signs a petition
     And I should see "2 signatures"
     And the signature "womboid@wimbledon.com" is marked as validated
 
-  Scenario: Suzie signs a petition with a typo in her email
-    Given I am on the new signature page
-    When I confirm that I am UK citizen or resident
-    And I fill in my details with email "suzie@gmial.com"
-    And I try to sign
-    Then my email is autocorrected to "suzie@gmail.com"
-    When I say I am happy with my email address
-    Then a signature should exist with email: "suzie@gmail.com", state: "pending"
-    And "suzie@gmail.com" should receive 1 email
-    When I confirm my email address
-    Then I should see "We’ve added your signature to the petition"
-    And a signature should exist with email: "suzie@gmail.com", state: "validated"
-
-  Scenario: Suzie signs a petition when her email is autocorrected wrongly
-    Given I am on the new signature page
-    When I confirm that I am UK citizen or resident
-    And I fill in my details with email "suzie@gmial.com"
-    And I try to sign
-    Then my email is autocorrected to "suzie@gmail.com"
-    When I fill in "Email" with "suzie@gmial.com"
-    And I say I am happy with my email address
-    Then a signature should exist with email: "suzie@gmial.com", state: "pending"
-    And "suzie@gmial.com" should receive 1 email
-    When I confirm my email address
-    Then I should see "We’ve added your signature to the petition"
-    And a signature should exist with email: "suzie@gmial.com", state: "validated"
-
   @javascript
   Scenario: Suzie signs a petition from overseas
     Given I am on the new signature page
@@ -365,10 +347,11 @@ Feature: Suzie signs a petition
     Then I should see a "Postcode" text field
     When I select "United States" from "Location"
     Then I should not see a "Postcode" text field
-    And I fill in "Name" with "Womboid Wibbledon"
+    And I fill in "Full name" with "Womboid Wibbledon"
     And I fill in "Email" with "womboid@wimbledon.com"
+    And I fill in "Confirm email" with "womboid@wimbledon.com"
     And I press "Continue"
-    Then I should see "Make sure this is right"
-    When I press "Yes – this is my email address"
+    Then I should see "Check and sign this petition"
+    When I press "Sign petition"
     Then I should see "We’ve sent you an email"
     And a signature should exist with email: "womboid@wimbledon.com", state: "pending", location_code: "US", postcode: ""

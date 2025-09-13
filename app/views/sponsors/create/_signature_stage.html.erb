@@ -3,15 +3,30 @@
 <h1 class="page-title">Sign <%= @petition.creator.name %>’s petition</h1>
 
 <%= form_row for: [signature, :name] do %>
-  <%= form.label :name, class: "form-label" %>
+  <%= form.label :name, class: "form-label" do %>
+    Full name
+    <span class="form-hint">Give your full name including your surname or last name</span>
+  <% end %>
   <%= error_messages_for_field signature, :name %>
   <%= form.text_field :name, maxlength: 255, size: nil, class: "form-control", autocomplete: "name"  %>
 <% end %>
 
 <%= form_row for: [signature, :email] do %>
-  <%= form.label :email, "Email address", class: "form-label" %>
+  <%= form.label :email, class: "form-label" do %>
+    Email address
+    <span class="form-hint">Provide the email address you want us to use to contact you about this petition</span>
+  <% end %>
   <%= error_messages_for_field signature, :email %>
   <%= form.text_field :email, inputmode: "email", class: "form-control", autocomplete: "email" %>
+<% end %>
+
+<%= form_row for: [signature, :email_confirmation] do %>
+  <%= form.label :email_confirmation, class: "form-label" do %>
+    Confirm email address
+    <span class="form-hint">Make sure your email address is correct</span>
+  <% end %>
+  <%= error_messages_for_field signature, :email_confirmation %>
+  <%= form.text_field :email_confirmation, inputmode: "email", class: "form-control", autocomplete: "email" %>
 <% end %>
 
 <%= form_row for: [signature, :location_code] do %>
@@ -21,7 +36,10 @@
 <% end %>
 
 <%= form_row for: [signature, :postcode], id: "postcode-row" do %>
-  <%= form.label :postcode, class: "form-label" %>
+  <%= form.label :postcode, class: "form-label" do %>
+    Postcode
+    <span class="form-hint">Your postcode helps us identify your constituency</span>
+  <% end %>
   <%= error_messages_for_field signature, :postcode %>
   <%= form.text_field :postcode, class: "form-control small", autocomplete: "postal-code" %>
 <% end %>
@@ -29,7 +47,7 @@
 <%= form_row for: [signature, :notify_by_email], class: "notify-by-email" do %>
   <div class="multiple-choice">
     <%= form.check_box :notify_by_email %>
-    <%= form.label :notify_by_email, "Email me whenever there’s an update about this petition" %>
+    <%= form.label :notify_by_email, "I want to receive email updates about this petition" %>
   </div>
 <% end %>
 

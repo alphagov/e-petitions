@@ -1,0 +1,34 @@
+<%= form.hidden_field :uk_citizenship %>
+
+<%= form.hidden_field :name %>
+<%= form.hidden_field :email %>
+<%= form.hidden_field :email_confirmation %>
+<%= form.hidden_field :postcode %>
+<%= form.hidden_field :location_code %>
+<%= form.hidden_field :notify_by_email %>
+
+<h1 class="page-title">
+  Check and sign this petition
+</h1>
+
+<p>
+  Make sure your details are correct. We’ll use this to send you a confirmation email and updates about this petition.
+</p>
+
+<p>
+  If you wish to proceed, select ‘Sign petition’.  If you want to make changes, select ‘Change’.
+</p>
+
+<p>
+  <%= form.button "Change my details", name: "move_back", value: "signature", class: "button" %>
+</p>
+
+<div class="panel-indent">
+  <p>
+    Review your details before signing this petition.
+  </p>
+</div>
+
+<p>
+  <%= form.button "Sign petition", name: "move_next", class: "button" %>
+</p>

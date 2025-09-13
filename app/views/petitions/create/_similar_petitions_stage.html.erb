@@ -1,0 +1,68 @@
+<%= form.hidden_field :uk_citizenship %>
+
+<%= form.hidden_field :action %>
+<%= form.hidden_field :background %>
+<%= form.hidden_field :additional_details %>
+
+<%= form.hidden_field :name %>
+<%= form.hidden_field :email %>
+<%= form.hidden_field :email_confirmation %>
+<%= form.hidden_field :postcode %>
+<%= form.hidden_field :location_code %>
+<%= form.hidden_field :notify_by_email %>
+
+<% if petitions = @new_petition.duplicates %>
+
+  <h1 class="page-title">
+    <span class="heading-secondary">Start a petition</span>
+    We found similar petitions to yours
+  </h1>
+
+  <p>
+    Sign and share one of the petitions below instead of creating a new one.
+  </p>
+
+  <p>
+    If there is already another petition on the same topic, your petition is likely to be rejected.
+  </p>
+
+  <div class="panel-indent">
+    <p>
+      If you think your petition is different, continue creating your petition
+    </p>
+  </div>
+
+  <% petitions.each do |petition| %>
+    <ul>
+      <li class="petition-item petition-item-existing panel-indent">
+        <h2><%= link_to petition.action, petition_path(petition) %></h2>
+        <% unless petition.rejected? -%>
+          <p><%= signature_count(:default, petition.signature_count) %></p>
+        <% end %>
+        <p><%= petition.background %></p>
+      </li>
+    </ul>
+  <% end %>
+
+<% else %>
+
+  <h1 class="page-title">
+    <span class="heading-secondary">Start a petition</span>
+    We checked for similar petitions
+  </h1>
+
+  <p>
+    We checked for similar petitions and it doesn’t look like there are any.
+  </p>
+
+  <p>
+    But there might be a similar petition that has used different words. If there
+    is already a petition on the same topic, your petition might not be published.
+  </p>
+
+<% end %>
+
+<div class="button-group">
+  <%= form.button "Continue with my petition", name: "move_next", class: "button" %>
+  <%= form.button "Back", name: "move_back", value: "action", class: "button button-secondary" %>
+</div>

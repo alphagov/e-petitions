@@ -1,44 +1,44 @@
-require 'domain_autocorrect'
 require 'postcode_sanitizer'
 
 class SignatureCreator
   include StagedForm
 
-  CITIZENSHIP_ATTRIBUTES = %i[
-    uk_citizenship
-  ]
-
   SIGNATURE_ATTRIBUTES = %i[
     name
+    email
+    email_confirmation
     location_code
     postcode
   ]
 
   stage :uk_citizenship
   stage :signature
-  stage :replay_email
+  stage :check_and_submit
 
   attribute :name, :string
   attribute :email, :string
+  attribute :email_confirmation, :string
   attribute :postcode, :string
   attribute :location_code, :string, default: "GB"
   attribute :uk_citizenship, :string
   attribute :notify_by_email, :boolean
 
-  strip_attribute :name, :email
+  strip_attribute :name, :email, :email_confirmation
 
   normalizes :postcode, with: PostcodeSanitizer
 
-  with_options on: [:uk_citizenship, :replay_email] do
+  with_options on: [:uk_citizenship, :check_and_submit] do
     validates :uk_citizenship, presence: true, acceptance: true
   end
 
-  with_options on: [:signature, :replay_email] do
+  with_options on: [:signature, :check_and_submit] do
     validates :name, presence: true, length: { maximum: 255 }
     validates :name, format: { without: /\A[-=+@]/ }
     validates :name, format: { without: URI.regexp, message: :has_uri }
 
-    validates :email, presence: true, email: true
+    validates :email, presence: true, email: true, confirmation: true
+    validates :email_confirmation, presence: true, email: true
+
     validates :location_code, presence: true, format: { with: /\A[A-Z]{2,3}\z/ }
 
     validates :postcode, presence: true, postcode: true, if: :united_kingdom?
@@ -46,18 +46,16 @@ class SignatureCreator
     validates :postcode, length: { maximum: 10 }, if: :united_kingdom?
   end
 
-  before_validation on: :signature do
-    self.email = DomainAutocorrect.call(email)
-  end
-
   after_validation on: :uk_citizenship do
-    if citzenship_errors? && uk_citizenship.present?
+    if citizenship_errors? && uk_citizenship.present?
       @stage = "non_citizen"
     end
   end
 
-  after_validation on: :replay_email do
-    if signature_errors?
+  after_validation on: :check_and_submit do
+    if citizenship_errors?
+      @stage = "uk_citizenship"
+    elsif signature_errors?
       @stage = "signature"
     end
   end
@@ -116,12 +114,12 @@ class SignatureCreator
 
   private
 
-  def citzenship_errors?
-    errors.any? { |e| CITIZENSHIP_ATTRIBUTES.include?(e.attribute) }
+  def citizenship_errors?
+    errors.include?(:uk_citizenship)
   end
 
   def signature_errors?
-    errors.any? { |e| SIGNATURE_ATTRIBUTES.include?(e.attribute) }
+    (SIGNATURE_ATTRIBUTES & errors.attribute_names).present?
   end
 
   def send_email_to_petition_signer
