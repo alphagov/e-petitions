@@ -21,12 +21,13 @@ When(/^(Laura|a sponsor) supports my petition$/) do |who|
   steps %{
     When I visit the "sponsor this petition" url I was given
     And I confirm that I am UK citizen or resident
-    And I fill in "Name" with "Anonymous Sponsor"
+    And I fill in "Full name" with "Anonymous Sponsor"
     And I fill in "Email" with "#{sponsor_email}"
+    And I fill in "Confirm email" with "#{sponsor_email}"
     And I fill in my postcode with "SW1A 1AA"
     And I select "United Kingdom" from "Location"
     And I try to sign
-    And I say I am happy with my email address
+    And I say I am happy with my details
     And "#{sponsor_email}" opens the email with subject "Sign to support: “#{@sponsor_petition.action}”"
     And they click the first link in the email
   }
@@ -63,12 +64,13 @@ Given(/^there is a sponsor already from this IP address$/) do
   steps %{
     When I visit the "sponsor this petition" url I was given
     And I confirm that I am UK citizen or resident
-    And I fill in "Name" with "Existing Sponsor"
+    And I fill in "Full name" with "Existing Sponsor"
     And I fill in "Email" with "existing@example.com"
+    And I fill in "Confirm email" with "existing@example.com"
     And I fill in my postcode with "SW14 9RQ"
     And I select "United Kingdom" from "Location"
     And I try to sign
-    And I say I am happy with my email address
+    And I say I am happy with my details
     Then I am told to check my inbox to complete signing
     And "existing@example.com" should receive 1 email
   }
@@ -109,16 +111,17 @@ end
 When(/^I fill in my details as a sponsor(?: with email "(.*?)")?$/) do |email_address|
   email_address ||= 'laura.the.sponsor@example.com'
   steps %{
-    When I fill in "Name" with "Laura The Sponsor"
+    When I fill in "Full name" with "Laura The Sponsor"
     And I fill in "Email" with "#{email_address}"
+    And I fill in "Confirm email" with "#{email_address}"
     And I fill in my postcode with "AB10 1AA"
     And I select "United Kingdom" from "Location"
-    And I check "Email me whenever there’s an update about this petition"
+    And I check "I want to receive email updates about this petition"
   }
 end
 
 When(/^I don’t fill in my details correctly as a sponsor$/) do
-  step %{I fill in "Name" with ""}
+  step %{I fill in "Full name" with ""}
 end
 
 Then(/^I should have fully signed the petition as a sponsor$/) do
@@ -173,8 +176,8 @@ When(/^I have sponsored a petition$/) do
     And I fill in my details as a sponsor
     And I try to sign
     Then I should not have signed the petition as a sponsor
-    And I am asked to review my email address
-    When I say I am happy with my email address
+    And I am asked to review my details
+    When I say I am happy with my details
     Then I should have a pending signature on the petition as a sponsor
     And I should receive an email explaining the petition I am sponsoring
   }

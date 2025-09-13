@@ -67,10 +67,12 @@ Rails.application.routes.draw do
       end
     end
 
+    get '/petitions/check',         to: redirect('/petitions/start')
+    get '/petitions/check_results', to: redirect('/petitions/start')
+
     resources :petitions, only: %i[new show index] do
       collection do
-        get  'check'
-        get  'check_results'
+        get  'start'
         post 'new', action: 'create', as: nil
         get  'thank-you'
       end
@@ -116,16 +118,16 @@ Rails.application.routes.draw do
       end
     end
 
-    # REDIRECTS OLD PAGES
-    get '/api/petitions',         to: redirect('/')
-    get '/api/petitions/:id',     to: redirect('/')
-    get '/crown-copyright',       to: redirect('https://www.nationalarchives.gov.uk/information-management/our-services/crown-copyright.htm')
-    get '/departments',           to: redirect('/')
-    get '/departments/:id',       to: redirect('/')
-    get '/how-it-works',          to: redirect('/help')
-    get '/privacy-policy',        to: redirect('/privacy')
-    get '/faq',                   to: redirect('/help')
-    get '/terms-and-conditions',  to: redirect('/help')
+    # REDIRECT OLD PAGES
+    get '/api/petitions',        to: redirect('/')
+    get '/api/petitions/:id',    to: redirect('/')
+    get '/crown-copyright',      to: redirect('https://www.nationalarchives.gov.uk/information-management/our-services/crown-copyright.htm')
+    get '/departments',          to: redirect('/')
+    get '/departments/:id',      to: redirect('/')
+    get '/how-it-works',         to: redirect('/help')
+    get '/privacy-policy',       to: redirect('/privacy')
+    get '/faq',                  to: redirect('/help')
+    get '/terms-and-conditions', to: redirect('/help')
 
     scope '/images', controller: 'images' do
       get '/:signed_blob_id/:variation_key/*filename', action: 'show', as: :image_proxy

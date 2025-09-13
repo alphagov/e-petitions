@@ -1,0 +1,34 @@
+<%= form.hidden_field :uk_citizenship %>
+
+<%= form.hidden_field :action %>
+<%= form.hidden_field :background %>
+
+<%= form.hidden_field :name %>
+<%= form.hidden_field :email %>
+<%= form.hidden_field :email_confirmation %>
+<%= form.hidden_field :postcode %>
+<%= form.hidden_field :location_code %>
+<%= form.hidden_field :notify_by_email %>
+
+<h1 class="page-title">
+  <span class="heading-secondary">Start a petition</span>
+  Add more information to your petition
+</h1>
+
+<%= form_row for: [petition, :additional_details] do %>
+  <%= form.label :additional_details, "Tell us more about why you want the Government or Parliament to do it", class: "form-label" %>
+  <%= error_messages_for_field petition, :additional_details %>
+  <%= form.text_area :additional_details, rows: 7, data: { max_length: 500 }, class: "form-control" %>
+  <p class="character-count">500 characters max</p>
+  <details class="form-group-help">
+    <summary><span class="summary">Help writing additional info</span></summary>
+    <div class="panel-indent">
+      <p>Optional - background information, evidence and references.</p>
+    </div>
+  </details>
+<% end %>
+
+<div class="button-group">
+  <%= form.button "Continue", name: "move_next", class: "button" %>
+  <%= form.button "Back", name: "move_back", value: "background", class: "button button-secondary" %>
+</div>

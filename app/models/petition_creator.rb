@@ -1,64 +1,69 @@
-require 'domain_autocorrect'
 require 'postcode_sanitizer'
 
 class PetitionCreator
   include StagedForm
 
-  CITIZENSHIP_ATTRIBUTES = %i[
-    uk_citizenship
-  ]
-
-  PETITION_ATTRIBUTES = %i[
-    action
-    background
-    additional_details
-  ]
-
   CREATOR_ATTRIBUTES = %i[
     name
+    email
+    email_confirmation
     location_code
     postcode
   ]
 
   stage :uk_citizenship
-  stage :petition
-  stage :replay_petition
+  stage :action
+  stage :similar_petitions
+  stage :background
+  stage :additional_details
   stage :creator
-  stage :replay_email
+  stage :check_and_submit
 
   attribute :action, :string
   attribute :background, :string
   attribute :additional_details, :string
   attribute :name, :string
   attribute :email, :string
+  attribute :email_confirmation, :string
   attribute :postcode, :string
   attribute :location_code, :string, default: "GB"
   attribute :uk_citizenship, :string
   attribute :notify_by_email, :string
 
   strip_attribute :action, :background, :additional_details
-  strip_attribute :name, :email
+  strip_attribute :name, :email, :email_confirmation
 
   normalizes :postcode, with: PostcodeSanitizer
 
-  with_options on: [:uk_citizenship, :replay_email] do
+  with_options on: [:uk_citizenship, :check_and_submit] do
     validates :uk_citizenship, presence: true, acceptance: true
   end
 
-  with_options on: [:petition, :replay_email] do
-    validates :action, :background, presence: true
-    validates :action, :background, :additional_details, format: { without: /\A[-=+@]/ }
+  with_options on: [:action, :check_and_submit] do
+    validates :action, presence: true
+    validates :action, format: { without: /\A[-=+@]/ }
     validates :action, length: { maximum: 80 }
+  end
+
+  with_options on: [:background, :check_and_submit] do
+    validates :background, presence: true
+    validates :background, format: { without: /\A[-=+@]/ }
     validates :background, length: { maximum: 300 }
+  end
+
+  with_options on: [:additional_details, :check_and_submit] do
+    validates :additional_details, format: { without: /\A[-=+@]/ }
     validates :additional_details, length: { maximum: 800 }
   end
 
-  with_options on: [:creator, :replay_email] do
+  with_options on: [:creator, :check_and_submit] do
     validates :name, presence: true, length: { maximum: 255 }
     validates :name, format: { without: /\A[-=+@]/ }
     validates :name, format: { without: URI.regexp, message: :has_uri }
 
-    validates :email, presence: true, email: true
+    validates :email, presence: true, email: true, confirmation: true
+    validates :email_confirmation, presence: true, email: true
+
     validates :location_code, presence: true, format: { with: /\A[A-Z]{2,3}\z/ }
 
     validates :postcode, presence: true, postcode: true, if: :united_kingdom?
@@ -66,21 +71,21 @@ class PetitionCreator
     validates :postcode, length: { maximum: 10 }, if: :united_kingdom?
   end
 
-  before_validation on: :creator do
-    self.email = DomainAutocorrect.call(email)
-  end
-
   after_validation on: :uk_citizenship do
-    if citzenship_errors? && uk_citizenship.present?
+    if citizenship_errors? && uk_citizenship.present?
       @stage = "non_citizen"
     end
   end
 
-  after_validation on: :replay_email do
-    if citzenship_errors?
+  after_validation on: :check_and_submit do
+    if citizenship_errors?
       @stage = "uk_citizenship"
-    elsif petition_errors?
-      @stage = "petition"
+    elsif action_errors?
+      @stage = "action"
+    elsif background_errors?
+      @stage = "background"
+    elsif additional_details_errors?
+      @stage = "additional_details"
     elsif creator_errors?
       @stage = "creator"
     end
@@ -114,10 +119,6 @@ class PetitionCreator
     end
   end
 
-  def action
-    super || query_param
-  end
-
   def to_partial_path
     "petitions/create/#{stage}_stage"
   end
@@ -140,20 +141,24 @@ class PetitionCreator
     constituency.try(:external_id)
   end
 
-  def citzenship_errors?
-    errors.any? { |e| CITIZENSHIP_ATTRIBUTES.include?(e.attribute) }
+  def citizenship_errors?
+    errors.include?(:uk_citizenship)
+  end
+
+  def action_errors?
+    errors.include?(:action)
+  end
+
+  def background_errors?
+    errors.include?(:background)
+  end
+
+  def additional_details_errors?
+    errors.include?(:additional_details)
   end
 
   def creator_errors?
-    errors.any? { |e| CREATOR_ATTRIBUTES.include?(e.attribute) }
-  end
-
-  def petition_errors?
-    errors.any? { |e| PETITION_ATTRIBUTES.include?(e.attribute) }
-  end
-
-  def query_param
-    @query_param ||= params[:q].to_s.first(255)
+    (CREATOR_ATTRIBUTES & errors.attribute_names).present?
   end
 
   def rate_limit

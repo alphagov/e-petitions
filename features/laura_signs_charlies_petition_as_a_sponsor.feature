@@ -12,8 +12,8 @@ Feature: As Laura, a sponsor of my friend Charlie’s petition
     And I fill in my details as a sponsor
     And I try to sign
     Then I should not have signed the petition as a sponsor
-    And I am asked to review my email address
-    When I say I am happy with my email address
+    And I am asked to review my details
+    When I say I am happy with my details
     Then I should have a pending signature on the petition as a sponsor
     And I should receive an email explaining the petition I am sponsoring
     When I confirm my email address as a sponsor
@@ -64,25 +64,16 @@ Feature: As Laura, a sponsor of my friend Charlie’s petition
     When I visit the "sponsor this petition" url I was given
     And I confirm that I am UK citizen or resident
     And I fill in my details as a sponsor with email "sponsor@example.com"
-    And I try to sign
-    And I change my email address to "laura.the.sponsor@example.com"
-    And I say I am happy with my email address
+    And I press "Continue"
+    Then I should see "Check and sign this petition"
+    When I press "Change my details"
+    And I fill in "Email" with "laura.the.sponsor@example.com"
+    And I fill in "Confirm email" with "laura.the.sponsor@example.com"
+    And I press "Continue"
+    Then I should see "Check and sign this petition"
+    And I say I am happy with my details
     Then "laura.the.sponsor@example.com" should receive an email explaining the petition I am sponsoring
     But "sponsor@example.com" should not have received an email explaining the petition I am sponsoring
-
-  Scenario: Laura makes mistakes signing the petition she is a sponsor of
-    When I visit the "sponsor this petition" url I was given
-    And I confirm that I am UK citizen or resident
-    And I don’t fill in my details correctly as a sponsor
-    And I try to sign
-    Then I should see an error
-    And I should not have signed the petition as a sponsor
-    When I fill in my details as a sponsor with email "sponsor@example.com"
-    And I try to sign
-    And I change my email address to ""
-    And I say I am happy with my email address
-    Then I should see an error
-    And I should not have signed the petition as a sponsor
 
   Scenario: Laura sees notice that she has already signed when she validates more than once
     When I have sponsored a petition
@@ -104,7 +95,7 @@ Feature: As Laura, a sponsor of my friend Charlie’s petition
     And I confirm that I am UK citizen or resident
     And I fill in my details as a sponsor
     And I try to sign
-    Then I am asked to review my email address
-    When I say I am happy with my email address
+    Then I am asked to review my details
+    When I say I am happy with my details
     Then I should have a fraudulent signature on the petition as a sponsor
     And "laura.the.sponsor@example.com" should not have received an email explaining the petition I am sponsoring

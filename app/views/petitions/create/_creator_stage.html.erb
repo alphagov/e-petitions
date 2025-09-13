@@ -1,29 +1,43 @@
-<%= form.button "Back", name: "move_back", class: "back-page" %>
-
 <%= form.hidden_field :uk_citizenship %>
 
 <%= form.hidden_field :action %>
 <%= form.hidden_field :background %>
 <%= form.hidden_field :additional_details %>
 
-<h1 class="page-title">Sign your petition</h1>
-<h2 class="page-subtitle"><%= petition.action %></h2>
+<h1 class="page-title">
+  <span class="heading-secondary">Start a petition</span>
+  Confirm your details
+</h1>
 
-<%= render "petitions/create/error_summary", form: form %>
+<p>
+  We need your details to validate your petition and keep you informed.
+</p>
 
 <%= form_row for: [petition, :name] do %>
   <%= form.label :name, class: "form-label" do %>
-    Name
-    <span class="form-hint">You must use your full name</span>
+    Full name
+    <span class="form-hint">Give your full name including your surname or last name</span>
   <% end %>
   <%= error_messages_for_field petition, :name %>
   <%= form.text_field :name, maxlength: 255, size: nil, class: "form-control", autocomplete: "name" %>
 <% end %>
 
 <%= form_row for: [petition, :email] do %>
-  <%= form.label :email, "Email address", class: "form-label" %>
+  <%= form.label :email, class: "form-label" do %>
+    Email address
+    <span class="form-hint">Provide the email address you want us to use to send you a confirmation email and updates about your petition</span>
+  <% end %>
   <%= error_messages_for_field petition, :email %>
   <%= form.text_field :email, inputmode: "email", class: "form-control", autocomplete: "email" %>
+<% end %>
+
+<%= form_row for: [petition, :email_confirmation] do %>
+  <%= form.label :email_confirmation, class: "form-label" do %>
+    Confirm email address
+    <span class="form-hint">Make sure your email address is correct</span>
+  <% end %>
+  <%= error_messages_for_field petition, :email_confirmation %>
+  <%= form.text_field :email_confirmation, inputmode: "email", class: "form-control", autocomplete: "email" %>
 <% end %>
 
 <%= form_row for: [petition, :location_code] do %>
@@ -33,7 +47,10 @@
 <% end %>
 
 <%= form_row for: [petition, :postcode], id: "postcode-row" do %>
-  <%= form.label :postcode, class: "form-label" %>
+  <%= form.label :postcode, class: "form-label" do %>
+    Postcode
+    <span class="form-hint">Your postcode helps us identify your constituency</span>
+  <% end %>
   <%= error_messages_for_field petition, :postcode %>
   <%= form.text_field :postcode, class: "form-control small", autocomplete: "postal-code" %>
 <% end %>
@@ -41,17 +58,31 @@
 <%= form_row for: [petition, :notify_by_email], class: "notify-by-email" do %>
   <div class="multiple-choice">
     <%= form.check_box :notify_by_email %>
-    <%= form.label :notify_by_email, "Email me whenever there’s an update about this petition" %>
+    <%= form.label :notify_by_email, "I want to receive email updates about this petition" %>
   </div>
 <% end %>
 
-<%= form.button "Continue", name: "move_next", class: "button" %>
+<div class="panel-indent">
+  <p>
+    Your name will be published on the petitions website as the creator of
+    this petition. We won’t publish any of your personal details anywhere
+    else or use them for anything other than this petition.
+  </p>
 
-<div>
-  <p>Your name will be published on this petition as the petition creator.</p>
-  <p>Other than that, we won’t publish your personal details anywhere or use them for anything other than this petition.</p>
-  <p>The personal data you provide is necessary for the operation of the e-petitions website and the work of the House of Commons Petitions Committee.</p>
-  <p>We will manage your personal data as set out in our <%= link_to "privacy notice", privacy_path, target: "_blank" %>, which includes details of your rights under data protection legislation.</p>
+  <p>
+    The personal data you provide is necessary for the operation of the petitions
+    website and the work of the House of Commons Petitions Committee.
+  </p>
+
+  <p>
+    We’ll manage your personal data as set out in our privacy notice, which
+    includes details of your rights under data protection legislation.
+  </p>
+</div>
+
+<div class="button-group">
+  <%= form.button "Continue", name: "move_next", class: "button" %>
+  <%= form.button "Back", name: "move_back", value: "additional_details", class: "button button-secondary" %>
 </div>
 
 <script>

@@ -585,6 +585,10 @@ FactoryBot.define do
   end
 
   factory :signature do
+    transient {
+      email_confirmation { nil }
+    }
+
     sequence(:name) { |n| "Jo Public #{n}" }
     sequence(:email) { |n| "jo#{n}@public.com" }
     postcode { "SW1A 1AA" }
