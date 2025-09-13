@@ -135,6 +135,7 @@ RSpec.describe SponsorsController, type: :controller do
       {
         name: "Ted Berry",
         email: "ted@example.com",
+        email_confirmation: "ted@example.com",
         uk_citizenship: "1",
         postcode: "SW1A 1AA",
         location_code: "GB"
@@ -144,7 +145,7 @@ RSpec.describe SponsorsController, type: :controller do
     context "when the petition doesn't exist" do
       it "raises an ActiveRecord::RecordNotFound exception" do
         expect {
-          post :create, params: { petition_id: 1, token: 'token', stage: 'replay_email', signature: params }
+          post :create, params: { petition_id: 1, token: 'token', stage: 'check_and_submit', signature: params }
         }.to raise_exception(ActiveRecord::RecordNotFound)
       end
     end
@@ -153,7 +154,7 @@ RSpec.describe SponsorsController, type: :controller do
       let(:petition) { FactoryBot.create(:pending_petition) }
 
       it "redirects to the petition gathering support page" do
-        post :create, params: { petition_id: petition.id, token: 'token', stage: 'replay_email', signature: params }
+        post :create, params: { petition_id: petition.id, token: 'token', stage: 'check_and_submit', signature: params }
         expect(response).to redirect_to("/petitions/#{petition.id}/gathering-support")
       end
     end
@@ -164,7 +165,7 @@ RSpec.describe SponsorsController, type: :controller do
 
         it "raises an ActiveRecord::RecordNotFound exception" do
           expect {
-            post :create, params: { petition_id: petition.id, token: petition.sponsor_token, stage: 'replay_email', signature: params }
+            post :create, params: { petition_id: petition.id, token: petition.sponsor_token, stage: 'check_and_submit', signature: params }
           }.to raise_exception(ActiveRecord::RecordNotFound)
         end
       end
@@ -175,7 +176,7 @@ RSpec.describe SponsorsController, type: :controller do
         let(:petition) { FactoryBot.create(:"#{state}_petition") }
 
         before do
-          post :create, params: { petition_id: petition.id, token: petition.sponsor_token, stage: 'replay_email', signature: params }
+          post :create, params: { petition_id: petition.id, token: petition.sponsor_token, stage: 'check_and_submit', signature: params }
         end
 
         it "assigns the @petition instance variable" do
@@ -195,7 +196,7 @@ RSpec.describe SponsorsController, type: :controller do
         context "and the signature is not a duplicate" do
           before do
             perform_enqueued_jobs {
-              post :create, params: { petition_id: petition.id, token: petition.sponsor_token, stage: 'replay_email', signature: params }
+              post :create, params: { petition_id: petition.id, token: petition.sponsor_token, stage: 'check_and_submit', signature: params }
             }
           end
 
@@ -229,6 +230,7 @@ RSpec.describe SponsorsController, type: :controller do
               {
                 name: "Ted Berry",
                 email: "",
+                email_confirmation: "",
                 uk_citizenship: "1",
                 postcode: "SW1A 1AA",
                 location_code: "GB"
@@ -246,7 +248,7 @@ RSpec.describe SponsorsController, type: :controller do
 
           before do
             perform_enqueued_jobs {
-              post :create, params: { petition_id: petition.id, token: petition.sponsor_token, stage: 'replay_email', signature: params }
+              post :create, params: { petition_id: petition.id, token: petition.sponsor_token, stage: 'check_and_submit', signature: params }
             }
           end
 
@@ -271,7 +273,7 @@ RSpec.describe SponsorsController, type: :controller do
             allow(Site).to receive(:disable_plus_address_check?).and_return(true)
 
             perform_enqueued_jobs {
-              post :create, params: { petition_id: petition.id, token: petition.sponsor_token, stage: 'replay_email', signature: params.merge(email: "ted+petitions@example.com") }
+              post :create, params: { petition_id: petition.id, token: petition.sponsor_token, stage: 'check_and_submit', signature: params.merge(email: "ted+petitions@example.com", email_confirmation: "ted+petitions@example.com") }
             }
           end
 
@@ -294,7 +296,7 @@ RSpec.describe SponsorsController, type: :controller do
 
           before do
             perform_enqueued_jobs {
-              post :create, params: { petition_id: petition.id, token: petition.sponsor_token, stage: "replay_email", signature: params }
+              post :create, params: { petition_id: petition.id, token: petition.sponsor_token, stage: "check_and_submit", signature: params }
             }
           end
 
@@ -319,7 +321,7 @@ RSpec.describe SponsorsController, type: :controller do
             allow(Site).to receive(:disable_plus_address_check?).and_return(true)
 
             perform_enqueued_jobs {
-              post :create, params: { petition_id: petition.id, token: petition.sponsor_token, stage: "replay_email", signature: params.merge(email: "ted+petitions@example.com") }
+              post :create, params: { petition_id: petition.id, token: petition.sponsor_token, stage: "check_and_submit", signature: params.merge(email: "ted+petitions@example.com", email_confirmation: "ted+petitions@example.com") }
             }
           end
 
@@ -342,7 +344,7 @@ RSpec.describe SponsorsController, type: :controller do
 
           before do
             perform_enqueued_jobs {
-              post :create, params: { petition_id: petition.id, token: petition.sponsor_token, stage: "replay_email", signature: params }
+              post :create, params: { petition_id: petition.id, token: petition.sponsor_token, stage: "check_and_submit", signature: params }
             }
           end
 
@@ -370,7 +372,7 @@ RSpec.describe SponsorsController, type: :controller do
 
           before do
             perform_enqueued_jobs {
-              post :create, params: { petition_id: petition.id, token: petition.sponsor_token, stage: 'replay_email', signature: params }
+              post :create, params: { petition_id: petition.id, token: petition.sponsor_token, stage: 'check_and_submit', signature: params }
             }
           end
 

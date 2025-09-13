@@ -9,6 +9,14 @@ RSpec.describe "trying to access", type: :routes do
     expect(get "/api/petitions").to permanently_redirect_to("https://petition.parliament.uk/")
   end
 
+  it "the old /petitions/check page redirects to the new start a petition page" do
+    expect(get "/petitions/check").to permanently_redirect_to("https://petition.parliament.uk/petitions/start")
+  end
+
+  it "the old /petitions/check_results page redirects to the new start a petition page" do
+    expect(get "/petitions/check_results").to permanently_redirect_to("https://petition.parliament.uk/petitions/start")
+  end
+
   it "the old /privacy-policy page redirects to the new privacy page" do
     expect(get "/privacy-policy").to permanently_redirect_to("https://petition.parliament.uk/privacy")
   end

@@ -47,6 +47,12 @@ When /^I fill in "([^"]+)" with text longer than (\d+) characters$/ do |field, c
   fill_in field, with: ?a * (count + 1)
 end
 
+When /^(?:|I )choose "([^"]*)"(?: within "([^"]*)")?$/ do |field, selector|
+  with_scope(selector) do
+    choose(field)
+  end
+end
+
 When /^(?:|I )select "([^"]*)" from "([^"]*)"(?: within "([^"]*)")?$/ do |value, field, selector|
   with_scope(selector) do
     select(value, :from => field)

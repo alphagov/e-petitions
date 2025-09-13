@@ -4,7 +4,7 @@
       <li><%= link_to 'Home', home_path %></li>
       <li><%= link_to 'All petitions', petitions_path %></li>
       <% unless Site.disable_petition_creation? || Parliament.closed? %>
-        <li><%= link_to 'Start a petition', check_petitions_path %></li>
+        <li><%= link_to 'Start a petition', start_petitions_path %></li>
       <% end %>
       <li><%= link_to 'How petitions work', help_path %></li>
       <li><%= link_to 'Privacy', privacy_path %></li>

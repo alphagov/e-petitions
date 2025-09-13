@@ -46,12 +46,13 @@ Given(/^there is a signature already from this IP address$/) do
   steps %Q(
     When I go to the new signature page for "Do something!"
     And I confirm that I am UK citizen or resident
-    And I fill in "Name" with "Existing Signer"
+    And I fill in "Full name" with "Existing Signer"
     And I fill in "Email" with "existing@example.com"
+    And I fill in "Confirm email" with "existing@example.com"
     And I fill in my postcode with "SW14 9RQ"
     And I select "United Kingdom" from "Location"
     And I try to sign
-    And I say I am happy with my email address
+    And I say I am happy with my details
     Then I am told to check my inbox to complete signing
     And "existing@example.com" should receive 1 email
   )

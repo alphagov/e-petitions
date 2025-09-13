@@ -46,14 +46,9 @@ RSpec.describe "routes for petitions", type: :routes do
     expect(delete("/petitions/1")).not_to be_routable
   end
 
-  it "routes GET /petitions/check to petitions#check" do
-    expect(get("/petitions/check")).to route_to(controller: "petitions", action: "check")
-    expect(check_petitions_path).to eq("/petitions/check")
-  end
-
-  it "routes GET /petitions/check_results to petitions#check_results" do
-    expect(get("/petitions/check_results")).to route_to(controller: "petitions", action: "check_results")
-    expect(check_results_petitions_path).to eq("/petitions/check_results")
+  it "routes GET /petitions/start to petitions#start" do
+    expect(get("/petitions/start")).to route_to(controller: "petitions", action: "start")
+    expect(start_petitions_path).to eq("/petitions/start")
   end
 
   it "routes GET /petitions/:id/count to petitions#count" do

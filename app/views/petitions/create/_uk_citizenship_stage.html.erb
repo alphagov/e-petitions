@@ -1,8 +1,18 @@
 <%= form.hidden_field :action %>
+<%= form.hidden_field :background %>
+<%= form.hidden_field :additional_details %>
+
+<%= form.hidden_field :name %>
+<%= form.hidden_field :email %>
+<%= form.hidden_field :email_confirmation %>
+<%= form.hidden_field :postcode %>
+<%= form.hidden_field :location_code %>
+<%= form.hidden_field :notify_by_email %>
 
 <fieldset>
   <legend>
     <h1 class="page-title">
+      <span class="heading-secondary">Start a petition</span>
       Are you a British citizen or UK resident?
     </h1>
   </legend>
@@ -21,4 +31,6 @@
   <% end %>
 </fieldset>
 
-<%= form.button "Continue", class: "button" %>
+<div class="button-group">
+  <%= form.button "Continue", class: "button" %>
+</div>

@@ -1,0 +1,59 @@
+<%= form.hidden_field :uk_citizenship %>
+
+<%= form.hidden_field :action %>
+<%= form.hidden_field :background %>
+<%= form.hidden_field :additional_details %>
+
+<%= form.hidden_field :name %>
+<%= form.hidden_field :email %>
+<%= form.hidden_field :email_confirmation %>
+<%= form.hidden_field :postcode %>
+<%= form.hidden_field :location_code %>
+<%= form.hidden_field :notify_by_email %>
+
+<h1 class="page-title">
+  <span class="heading-secondary">Start a petition</span>
+  Check and submit your petition
+</h1>
+
+<p>
+  If you’ve included personal information, such as details about health, family,
+  or your job, think carefully about whether you’re happy for this to be published
+  with your full name. Once published, petitions will only be removed by the
+  Petitions Committee in exceptional circumstances.
+</p>
+
+<p>
+  If you wish to proceed, select ‘Submit your petition’.
+</p>
+
+<p>
+  If you want to make changes, select ‘Change’.
+</p>
+
+<p>
+  <%= form.button "Change action", name: "move_back", value: "action", class: "button" %>
+</p>
+
+<p>
+  <%= form.button "Change background", name: "move_back", value: "background", class: "button" %>
+</p>
+
+<p>
+  <%= form.button "Change additional details", name: "move_back", value: "additional_details", class: "button" %>
+</p>
+
+<p>
+  <%= form.button "Change my details", name: "move_back", value: "creator", class: "button" %>
+</p>
+
+<div class="panel-indent">
+  <p>
+    You can't change your petition after this point. Review and make
+    sure you are happy with everything before submitting your petition.
+  </p>
+</div>
+
+<p>
+  <%= form.button "Submit your petition", name: "move_next", class: "button" %>
+</p>

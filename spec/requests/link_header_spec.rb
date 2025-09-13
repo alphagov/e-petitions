@@ -32,9 +32,9 @@ RSpec.describe 'Link header', type: :request do
     end
   end
 
-  context "when visiting the check petition page" do
+  context "when visiting the start petition page" do
     before do
-      get "/petitions/check"
+      get "/petitions/start"
     end
 
     it "sets the correct Link header" do

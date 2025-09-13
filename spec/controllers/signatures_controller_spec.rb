@@ -119,6 +119,7 @@ RSpec.describe SignaturesController, type: :controller do
       {
         name: "Ted Berry",
         email: "ted@example.com",
+        email_confirmation: "ted@example.com",
         uk_citizenship: "1",
         postcode: "SW1A 1AA",
         location_code: "GB"
@@ -128,7 +129,7 @@ RSpec.describe SignaturesController, type: :controller do
     context "when the petition doesn't exist" do
       it "raises an ActiveRecord::RecordNotFound exception" do
         expect {
-          post :create, params: { petition_id: 1, stage: 'replay_email', signature: params }
+          post :create, params: { petition_id: 1, stage: 'check_and_submit', signature: params }
         }.to raise_exception(ActiveRecord::RecordNotFound)
       end
     end
@@ -139,7 +140,7 @@ RSpec.describe SignaturesController, type: :controller do
 
         it "raises an ActiveRecord::RecordNotFound exception" do
           expect {
-            post :create, params: { petition_id: petition.id, stage: 'replay_email', signature: params }
+            post :create, params: { petition_id: petition.id, stage: 'check_and_submit', signature: params }
           }.to raise_exception(ActiveRecord::RecordNotFound)
         end
       end
@@ -149,7 +150,7 @@ RSpec.describe SignaturesController, type: :controller do
       let(:petition) { FactoryBot.create(:closed_petition) }
 
       before do
-        post :create, params: { petition_id: petition.id, stage: 'replay_email', signature: params }
+        post :create, params: { petition_id: petition.id, stage: 'check_and_submit', signature: params }
       end
 
       it "assigns the @petition instance variable" do
@@ -169,7 +170,7 @@ RSpec.describe SignaturesController, type: :controller do
       let(:petition) { FactoryBot.create(:rejected_petition) }
 
       before do
-        post :create, params: { petition_id: petition.id, stage: 'replay_email', signature: params }
+        post :create, params: { petition_id: petition.id, stage: 'check_and_submit', signature: params }
       end
 
       it "assigns the @petition instance variable" do
@@ -191,7 +192,7 @@ RSpec.describe SignaturesController, type: :controller do
       context "and the signature is not a duplicate" do
         before do
           perform_enqueued_jobs {
-            post :create, params: { petition_id: petition.id, stage: 'replay_email', signature: params }
+            post :create, params: { petition_id: petition.id, stage: 'check_and_submit', signature: params }
           }
         end
 
@@ -242,7 +243,7 @@ RSpec.describe SignaturesController, type: :controller do
 
         before do
           perform_enqueued_jobs {
-            post :create, params: { petition_id: petition.id, stage: 'replay_email', signature: params }
+            post :create, params: { petition_id: petition.id, stage: 'check_and_submit', signature: params }
           }
         end
 
@@ -267,7 +268,7 @@ RSpec.describe SignaturesController, type: :controller do
           allow(Site).to receive(:disable_plus_address_check?).and_return(true)
 
           perform_enqueued_jobs {
-            post :create, params: { petition_id: petition.id, stage: 'replay_email', signature: params.merge(email: "ted+petitions@example.com") }
+            post :create, params: { petition_id: petition.id, stage: 'check_and_submit', signature: params.merge(email: "ted+petitions@example.com", email_confirmation: "ted+petitions@example.com") }
           }
         end
 
@@ -290,7 +291,7 @@ RSpec.describe SignaturesController, type: :controller do
 
         before do
           perform_enqueued_jobs {
-            post :create, params: { petition_id: petition.id, stage: 'replay_email', signature: params }
+            post :create, params: { petition_id: petition.id, stage: 'check_and_submit', signature: params }
           }
         end
 
@@ -315,7 +316,7 @@ RSpec.describe SignaturesController, type: :controller do
           allow(Site).to receive(:disable_plus_address_check?).and_return(true)
 
           perform_enqueued_jobs {
-            post :create, params: { petition_id: petition.id, stage: 'replay_email', signature: params.merge(email: "ted+petitions@example.com") }
+            post :create, params: { petition_id: petition.id, stage: 'check_and_submit', signature: params.merge(email: "ted+petitions@example.com", email_confirmation: "ted+petitions@example.com") }
           }
         end
 
@@ -341,7 +342,7 @@ RSpec.describe SignaturesController, type: :controller do
         expect(Site).to receive(:signature_collection_disabled?).and_return(true)
 
         perform_enqueued_jobs {
-          post :create, params: { petition_id: petition.id, stage: 'replay_email', signature: params }
+          post :create, params: { petition_id: petition.id, stage: 'check_and_submit', signature: params }
         }
       end
 

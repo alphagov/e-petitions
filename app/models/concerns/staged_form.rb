@@ -76,7 +76,11 @@ module StagedForm
   end
 
   def previous_stage
-    stages[clamp_stage(stage_index - 1)]
+    if stages.include?(params[:move_back])
+      params[:move_back]
+    else
+      stages[clamp_stage(stage_index - 1)]
+    end
   end
 
   def next_stage

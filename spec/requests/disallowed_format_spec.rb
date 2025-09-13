@@ -169,8 +169,7 @@ RSpec.describe 'Requests for pages when we do not support the format on that pag
     feedback
     feedback/thanks
     petitions/local
-    petitions/check
-    petitions/check_results
+    petitions/start
     petitions/new
     cookies
   ]
@@ -385,7 +384,7 @@ RSpec.describe 'Requests for pages when we do not support the format on that pag
     let(:url) { '/petitions/new' }
     let(:params) {
       {
-        'stage' => 'replay-email',
+        'stage' => 'check_and_submit',
         'move' => 'next',
         'petition' => {
           'background' => 'Limit temperature rise at two degrees',
@@ -407,7 +406,7 @@ RSpec.describe 'Requests for pages when we do not support the format on that pag
     let(:petition) { FactoryBot.create(:open_petition) }
     let(:params) {
       {
-        'stage' => 'replay-email',
+        'stage' => 'check_and_submit',
         'move' => 'next',
         'petition_id' => "#{petition.id}",
         'signature' => {
