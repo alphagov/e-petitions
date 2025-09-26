@@ -111,6 +111,28 @@ module CucumberHelpers
   end
 end
 
+module CookieHelpers
+  def cookie_preferences
+    unless Capybara.current_driver == Capybara.javascript_driver
+      return {}
+    end
+
+    cookie = page.driver.evaluate_script("document.cookie")
+
+    unless cookie.present?
+      return {}
+    end
+
+    encoded_json = cookie.split(';').first.split("=").last
+    json = Base64.decode64(URI.decode_uri_component(encoded_json))
+
+    JSON.parse(json)
+  rescue
+    return {}
+  end
+end
+
+World(CookieHelpers)
 World(CucumberI18n)
 World(CucumberHelpers)
 World(CucumberSanitizer)

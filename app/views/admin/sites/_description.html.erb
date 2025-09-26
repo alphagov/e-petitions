@@ -71,7 +71,7 @@
   </div>
 </div>
 
-<%= javascript_tag do %>
+<%= javascript_tag(nonce: true) do %>
   $().ready(function() {
     var $show_feedback_page_true = $('input[name="site[show_feedback_page_message]"][value=true]');
     var $show_feedback_page = $('input[name="site[show_feedback_page_message]"]');

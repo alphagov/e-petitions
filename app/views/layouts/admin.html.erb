@@ -5,6 +5,7 @@
   <%= stylesheet_link_tag 'admin' %>
   <%= javascript_include_tag "admin" %>
   <%= yield :admin_scripts %>
+  <%= csp_meta_tag %>
   <%= csrf_meta_tag %>
   <link rel="shortcut icon" type="image/x-icon" href="/favicon-admin.ico">
   <%= yield :js %>

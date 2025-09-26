@@ -50,6 +50,6 @@ class PagesController < ApplicationController
   end
 
   def respond_if_fresh
-    request.local? || fresh_when(@page, public: true)
+    local_request? || fresh_when(@page, public: true)
   end
 end

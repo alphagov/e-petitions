@@ -45,7 +45,7 @@
   <%= f.submit 'Save', name: 'save', class: 'button-secondary', tabindex: increment %>
 
   <% unless f.object.rejection? %>
-    <%= javascript_tag do %>
+    <%= javascript_tag(nonce: true) do %>
       $().ready(function() {
         var $rejection_controls = $('.petition-rejection-controls'),
             $reject_control = $('#petition_moderation_reject'),

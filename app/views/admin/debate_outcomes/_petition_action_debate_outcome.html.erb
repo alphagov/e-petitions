@@ -70,7 +70,7 @@
   <%= link_to 'Cancel', admin_petition_path(@petition), class: 'button-secondary' %>
 <% end -%>
 
-<%= javascript_tag do %>
+<%= javascript_tag(nonce: true) do %>
   $().ready(function() {
     var $debate_outcome_controls = $('.debate-outcome-controls'),
         $debated_true_control = $('#debate_outcome_debated_true'),

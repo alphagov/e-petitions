@@ -74,7 +74,7 @@
     <% end %>
   </div>
 
-  <script>
+  <%= javascript_tag(nonce: true) do %>
     $(document).ready(function() {
       var $list = $('.signature-list');
       var $checkboxes = $list.find('input[name="id"]');
@@ -142,8 +142,7 @@
         $(this).find('input[name="selected_ids"]').val(selectedIds());
       });
     });
-  </script>
-
+  <% end %>
 <% else %>
   <p>
     No signatures found
