@@ -53,11 +53,11 @@
       <%= error_messages_for_field @site, :disable_trending_petitions %>
       <div class="multiple-choice">
         <%= form.radio_button :disable_trending_petitions, true %>
-        <%= form.label :disable_trending_petitions, "Yes", for: "site_disable_constituency_api_true" %>
+        <%= form.label :disable_trending_petitions, "Yes", for: "site_disable_trending_petitions_true" %>
       </div>
       <div class="multiple-choice">
         <%= form.radio_button :disable_trending_petitions, false %>
-        <%= form.label :disable_trending_petitions, "No", for: "site_disable_constituency_api_false" %>
+        <%= form.label :disable_trending_petitions, "No", for: "site_disable_trending_petitions_false" %>
       </div>
     <% end %>
 
@@ -86,5 +86,58 @@
         <%= form.label :disable_constituency_api, "No", for: "site_disable_constituency_api_false" %>
       </div>
     <% end %>
+
+    <%= form_row for: [form.object, :enable_analytics], class: "inline" do %>
+      <%= form.label :enable_analytics, "Enable Google Analytics?", class: "form-label" %>
+      <%= error_messages_for_field @site, :enable_analytics %>
+      <div class="multiple-choice">
+        <%= form.radio_button :enable_analytics, true %>
+        <%= form.label :enable_analytics, "Yes", for: "site_enable_analytics_true" %>
+      </div>
+      <div class="multiple-choice">
+        <%= form.radio_button :enable_analytics, false %>
+        <%= form.label :enable_analytics, "No", for: "site_enable_analytics_false" %>
+      </div>
+    <% end %>
+
+    <div id="analytics-fields">
+      <%= form_row for: [form.object, :google_tag_manager_id] do %>
+        <%= form.label :google_tag_manager_id, class: "form-label" %>
+        <%= error_messages_for_field @site, :google_tag_manager_id %>
+        <%= form.text_field :google_tag_manager_id, tabindex: increment, maxlength: 20, class: "form-control form-control-1-2" %>
+      <% end %>
+
+      <%= form_row for: [form.object, :google_tag_manager_hash] do %>
+        <%= form.label :google_tag_manager_hash, class: "form-label" %>
+        <%= error_messages_for_field @site, :google_tag_manager_hash %>
+        <%= form.text_field :google_tag_manager_hash, tabindex: increment, maxlength: 100, class: "form-control" %>
+      <% end %>
+    </div>
   </div>
 </div>
+
+<%= javascript_tag(nonce: true) do %>
+  $().ready(function() {
+    var $analytics_fields = $('#analytics-fields'),
+        $true_control = $('input[name="site[enable_analytics]"][value=true]'),
+        $false_control = $('input[name="site[enable_analytics]"][value=false]'),
+        $all_controls = $('input[name="site[enable_analytics]"][type=radio]');
+
+    if ($true_control.is(':checked')) {
+      $analytics_fields.show();
+    } else {
+      $analytics_fields.hide();
+    }
+
+    $all_controls.keyup(function() {
+      this.blur();
+      this.focus();
+    }).change(function() {
+      if ($true_control.is(':checked')) {
+        $analytics_fields.show();
+      } else {
+        $analytics_fields.hide();
+      }
+    });
+  });
+<% end -%>

@@ -1,4 +1,4 @@
-class ConstituenciesController < ApplicationController
+class ConstituenciesController < PublicController
   before_action :set_cors_headers, only: [:index], if: :json_request?
   before_action :fetch_parliament, only: [:index]
   before_action :fetch_constituencies, only: [:index]

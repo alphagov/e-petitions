@@ -1,4 +1,4 @@
-class ParliamentsController < ApplicationController
+class ParliamentsController < PublicController
   before_action :set_cors_headers, if: :json_request?
   before_action :fetch_parliaments, only: [:index]
   before_action :fetch_parliament, only: [:show]

@@ -7,8 +7,15 @@ class Admin::AdminController < ApplicationController
   before_action :set_appsignal_namespace
   before_action :do_not_cache
   before_action :set_current_user
+  before_action :set_nonce_generator
 
   layout 'admin'
+
+  NONCE_GENERATOR = -> (request) { SecureRandom.base64(15) }
+
+  content_security_policy do |policy|
+    policy.script_src :self
+  end
 
   def index
   end
@@ -25,6 +32,11 @@ class Admin::AdminController < ApplicationController
 
   def set_current_user
     Admin::Current.user = current_user
+  end
+
+  def set_nonce_generator
+    request.content_security_policy_nonce_generator = NONCE_GENERATOR
+    request.content_security_policy_nonce_directives = %[script-src]
   end
 
   def after_sign_in_path_for(resource)

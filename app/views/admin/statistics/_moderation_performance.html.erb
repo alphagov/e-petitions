@@ -33,7 +33,7 @@
   </div>
 </div>
 
-<%= javascript_tag do %>
+<%= javascript_tag(nonce: true) do %>
   $().ready(function() {
     var $scope = $('input[name="report[scope]"]');
     var $archivedScope = $('input[name="report[scope]"][value="archived"]');

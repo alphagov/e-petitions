@@ -142,6 +142,8 @@ en-GB:
       tag:
         name: "Tag"
       site:
+        google_tag_manager_id: "Google Tag Manager ID"
+        google_tag_manager_hash: "Google Tag Manager Hash"
         url: "URL"
       parliament:
         dissolution_heading: "Heading"

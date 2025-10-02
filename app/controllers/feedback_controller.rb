@@ -1,4 +1,4 @@
-class FeedbackController < ApplicationController
+class FeedbackController < PublicController
   before_action :build_feedback, only: [:new, :create]
 
   rescue_from Feedback::RateLimitExceededError do

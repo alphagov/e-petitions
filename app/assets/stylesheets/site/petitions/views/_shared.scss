@@ -1,6 +1,13 @@
 @import "shared/share-petition";
 @import "shared/petition-item";
 
+// Hide GTM iframe
+// ===============
+.gtm-no-script {
+  display: none;
+  visibility: hidden;
+}
+
 // Common page title
 // =================
 .page-title {
