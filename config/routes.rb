@@ -163,6 +163,7 @@ Rails.application.routes.draw do
       resources :petitions, only: %i[show index] do
         post :resend, :remove, on: :member
 
+        resource  :creator, only: %i[destroy]
         resources :emails, controller: 'petition_emails', except: %i[index show]
         resource  :lock, only: %i[show create update destroy]
         resource  :moderation, controller: 'moderation', only: %i[update]
@@ -232,6 +233,7 @@ Rails.application.routes.draw do
         root to: redirect('/admin/archived/petitions')
 
         resources :petitions, only: %i[show index] do
+          resource  :creator, only: %i[destroy]
           resources :emails, controller: 'petition_emails', except: %i[index show]
           resource  :lock, only: %i[show create update destroy]
 

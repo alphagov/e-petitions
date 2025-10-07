@@ -1,6 +1,6 @@
 <nav class="petition-actions" aria-label="Petition actions">
   <ul>
-    <% if @petition.rejection? %>
+    <% if @petition.rejection? && !@petition.creator.anonymized? %>
       <% if current_user.is_a_sysadmin? %>
         <li class="petition-action">
           <%= render 'petition_action_moderation', petition: @petition %>
@@ -39,7 +39,7 @@
       </li>
 
       <% unless current_user.is_a_reviewer? %>
-        <% if @petition.moderated? %>
+        <% if @petition.moderated? && @petition.published? %>
           <li class="petition-action">
             <%= render 'petition_action_government_response', petition: @petition %>
           </li>
@@ -55,7 +55,7 @@
           </li>
         <% end %>
 
-        <% if @petition.moderated? %>
+        <% if @petition.moderated? && @petition.published? %>
           <li class="petition-action">
             <%= render 'petition_action_email_petitioners', petition: @petition %>
           </li>
@@ -66,7 +66,7 @@
             <%= render 'petition_action_take_down', petition: @petition %>
           </li>
 
-        <% elsif @petition.rejection? %>
+        <% elsif @petition.rejection? && !@petition.creator.anonymized? %>
           <li class="petition-action">
             <%= render 'petition_action_change_rejection_status', petition: @petition %>
           </li>

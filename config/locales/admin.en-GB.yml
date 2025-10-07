@@ -38,6 +38,9 @@ en-GB:
 
     flash:
       admin_required: "You must be logged in as an administrator to view this page"
+      creator_already_anonymized: "Petition creator has already been anonymized"
+      creator_anonymized: "Petition creator has been anonymized"
+      creator_not_anonymized: "Could not anonymize the petition creator - please contact support"
       change_password: "Please change your password before continuing"
       closure_scheduled: "Petitions have been scheduled to close early"
       closure_not_scheduled: "Petitions could not be scheduled to close early - please contact support"
@@ -84,6 +87,7 @@ en-GB:
       missing_tasks: "Please select one or more tasks to execute"
       password_updated: "Password was successfully updated"
       page_updated: "Page updated successfully"
+      petition_not_hidden_or_removed: "The creator can only be anonymized if the petition is hidden or removed"
       petitions_archiving: "Archiving of petitions was successfully started"
       petitions_not_archiving: "Archiving of petitions could not be started - please contact support"
       petitions_anonymizing: "Anonymizing of petitions was successfully started"

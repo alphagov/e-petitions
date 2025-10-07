@@ -17,7 +17,7 @@
     </li>
 
     <% unless current_user.is_a_reviewer? %>
-      <% if @petition.moderated? %>
+      <% if @petition.moderated? && @petition.published? %>
         <li class="petition-action">
           <%= render 'petition_action_government_response', petition: @petition %>
         </li>
@@ -33,7 +33,7 @@
         </li>
       <% end %>
 
-      <% if @petition.moderated? %>
+      <% if @petition.moderated? && @petition.published? %>
         <li class="petition-action">
           <%= render 'petition_action_email_petitioners', petition: @petition %>
         </li>
