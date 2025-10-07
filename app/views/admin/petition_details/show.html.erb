@@ -31,17 +31,19 @@
         <%= f.text_area :additional_details, tabindex: increment, rows: 7, class: 'form-control', disabled: @petition.editing_disabled? %>
       <% end %>
 
-      <%= f.fields_for :creator do |c| %>
-        <%= form_row for: [@petition.creator, :name] do %>
-          <%= c.label :name, "Creator", class: 'form-label' %>
-          <%= error_messages_for_field @petition.creator, :name %>
-          <%= c.text_field :name, tabindex: increment, class: 'form-control', disabled: @petition.editing_disabled? %>
-        <% end %>
+      <% unless @petition.creator.anonymized? %>
+        <%= f.fields_for :creator do |c| %>
+          <%= form_row for: [@petition.creator, :name] do %>
+            <%= c.label :name, "Creator", class: 'form-label' %>
+            <%= error_messages_for_field @petition.creator, :name %>
+            <%= c.text_field :name, tabindex: increment, class: 'form-control', disabled: @petition.editing_disabled? %>
+          <% end %>
 
-        <%= form_row for: [@petition.creator, :email] do %>
-          <%= c.label :email, "Email", class: 'form-label' %>
-          <%= error_messages_for_field @petition.creator, :email %>
-          <%= c.text_field :email, tabindex: increment, class: 'form-control', disabled: @petition.editing_disabled? %>
+          <%= form_row for: [@petition.creator, :email] do %>
+            <%= c.label :email, "Email", class: 'form-label' %>
+            <%= error_messages_for_field @petition.creator, :email %>
+            <%= c.text_field :email, tabindex: increment, class: 'form-control', disabled: @petition.editing_disabled? %>
+          <% end %>
         <% end %>
       <% end %>
 

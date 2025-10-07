@@ -13,28 +13,39 @@
   <dt>Anonymized</dt>
   <dd><%= date_time_format(@petition.anonymized_at) %></dd>
 <% elsif creator = @petition.creator %>
-  <dt>Creator</dt>
-  <dd>
-    <span class="creator-name"><%= creator.name %></span><br>
-    <%= link_to(creator.email, admin_signatures_path(q: creator.email), class: "creator-email") %>
-  </dd>
-  <% if creator.united_kingdom? %>
-    <dt>Postcode</dt>
+  <% if creator.anonymized? %>
+    <dt>Creator</dt>
+    <dd>Anonymized on <%= date_format(creator.anonymized_at) %></dd>
+  <% else %>
+    <dt>Creator</dt>
     <dd>
-      <%= link_to(creator.formatted_postcode, admin_signatures_path(q: creator.formatted_postcode), class: "creator-postcode") %>
-    </dd>
-  <% end %>
-  <dt>IP address</dt>
-  <dd>
-    <%= link_to(creator.ip_address, admin_signatures_path(q: creator.ip_address), class: "creator-ip-address") %>
-  </dd>
+      <span class="creator-name"><%= creator.name %></span><br>
+      <%= link_to(creator.email, admin_signatures_path(q: creator.email), class: "creator-email") %>
 
-  <% if constituency = creator.constituency %>
-    <dt>Constituency</dt>
-    <dd>
-      <span class="creator-constituency"><%= constituency.name %></span><br>
-      <small class="creator-constituency-region"><%= constituency.region.name %></small>
+      <% if current_user.can_remove_petitions? && (@petition.hidden? || @petition.removed?) %>
+        <p>
+          <%= button_to "Anonymize", admin_petition_creator_url(@petition), method: :delete, class: "button", data: { confirm: "Anonymize petition creator?" } %>
+        </p>
+      <% end %>
     </dd>
+    <% if creator.united_kingdom? %>
+      <dt>Postcode</dt>
+      <dd>
+        <%= link_to(creator.formatted_postcode, admin_signatures_path(q: creator.formatted_postcode), class: "creator-postcode") %>
+      </dd>
+    <% end %>
+    <dt>IP address</dt>
+    <dd>
+      <%= link_to(creator.ip_address, admin_signatures_path(q: creator.ip_address), class: "creator-ip-address") %>
+    </dd>
+
+    <% if constituency = creator.constituency %>
+      <dt>Constituency</dt>
+      <dd>
+        <span class="creator-constituency"><%= constituency.name %></span><br>
+        <small class="creator-constituency-region"><%= constituency.region.name %></small>
+      </dd>
+    <% end %>
   <% end %>
 <% end %>
 

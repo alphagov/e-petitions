@@ -9,18 +9,29 @@
     <dt>Anonymized</dt>
     <dd><%= date_time_format(@petition.anonymized_at) %></dd>
   <% elsif creator = @petition.creator %>
-    <dt>Creator</dt>
-    <dd>
-      <%= creator.name %><br>
-      <%= auto_link(creator.email) %>
-    </dd>
-
-    <% if constituency = creator.constituency %>
-      <dt>Constituency</dt>
+    <% if creator.anonymized? %>
+      <dt>Creator</dt>
+      <dd>Anonymized on <%= date_format(creator.anonymized_at) %></dd>
+    <% else %>
+      <dt>Creator</dt>
       <dd>
-        <span class="creator-constituency"><%= constituency.name %></span><br>
-        <small class="creator-constituency-region"><%= constituency.region.name %></small>
+        <%= creator.name %><br>
+        <%= link_to(creator.email, admin_archived_signatures_path(q: creator.email), class: "creator-email") %>
+
+        <% if current_user.can_remove_petitions? && (@petition.hidden? || @petition.removed?) %>
+          <p>
+            <%= button_to "Anonymize", admin_archived_petition_creator_url(@petition), method: :delete, class: "button", data: { confirm: "Anonymize petition creator?" } %>
+          </p>
+        <% end %>
       </dd>
+
+      <% if constituency = creator.constituency %>
+        <dt>Constituency</dt>
+        <dd>
+          <span class="creator-constituency"><%= constituency.name %></span><br>
+          <small class="creator-constituency-region"><%= constituency.region.name %></small>
+        </dd>
+      <% end %>
     <% end %>
   <% end %>
 
