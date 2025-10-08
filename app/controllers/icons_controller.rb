@@ -1,4 +1,4 @@
-class IconsController < ApplicationController
+class IconsController < PublicController
   VALID_SIZES = %w[120x120 152x152 167x167 180x180]
 
   def show

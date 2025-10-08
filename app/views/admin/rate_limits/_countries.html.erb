@@ -46,7 +46,7 @@
   </div>
 <% end %>
 
-<%= javascript_tag do %>
+<%= javascript_tag(nonce: true) do %>
   $().ready(function() {
     var $rate_limit_fields = $('#rate-limit-fields'),
         $true_control = $('input[name="rate_limit[country_rate_limits_enabled]"][value=true]'),

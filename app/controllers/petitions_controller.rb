@@ -1,6 +1,6 @@
 require 'csv'
 
-class PetitionsController < ApplicationController
+class PetitionsController < PublicController
   before_action :redirect_to_valid_state, only: [:index]
   before_action :do_not_cache, except: [:index, :show]
   before_action :set_cors_headers, only: [:index, :show, :count], if: :json_request?

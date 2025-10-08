@@ -20,6 +20,7 @@ Rails.application.config.assets.precompile += %w[
   character-counter.js
   auto-updater.js
   details.js
+  signature-form.js
 ]
 
 # Compress JavaScript assets.

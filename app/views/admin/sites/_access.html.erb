@@ -51,7 +51,7 @@
   </div>
 </div>
 
-<%= javascript_tag do %>
+<%= javascript_tag(nonce: true) do %>
   $().ready(function() {
     var $protected_fields = $('#protected-fields'),
         $true_control = $('input[name="site[protected]"][value=true]'),

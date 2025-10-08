@@ -1,4 +1,4 @@
-class TopicsController < ApplicationController
+class TopicsController < PublicController
   before_action :set_cors_headers, only: [:index], if: :json_request?
 
   def index

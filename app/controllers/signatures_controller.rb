@@ -1,4 +1,4 @@
-class SignaturesController < ApplicationController
+class SignaturesController < PublicController
   before_action :retrieve_petition, only: [:new, :confirm, :create, :thank_you]
   before_action :retrieve_signature, only: [:verify, :unsubscribe, :signed]
 

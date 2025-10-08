@@ -1,0 +1,80 @@
+<template id="cookiepreferencesTemplate">
+  <div class="cookie-manager">
+    <div class="cookie-manager-overlay"></div>
+    <div class="cookie-preferences" id="cookiepreferences" role="region" tabindex="-1">
+      <div class="cookie-preferences__header">
+        <h2>Cookie settings</h2>
+
+        <p>
+          Cookies are small files saved on your phone, tablet or computer when
+          you visit a website. They store information about how you use the website,
+          such as the pages you visit. They are used to make websites work and
+          improve your experience.
+        </p>
+
+        <p>
+          We use two types of cookies. You can choose which cookies you are
+          happy for us to use.
+        </p>
+        <p>
+          Read our <a href="/cookies">cookie policy</a> for more information.
+        </p>
+      </div>
+
+      <div class="cookie-preferences__settings">
+        <form id="preferencesForm">
+          <div>
+            <h3>Essential cookies</h3>
+
+            <p>
+              These cookies always need to be on as they help to make our website work.
+              Essential cookies are a site’s basic form of memory, so they do things
+              like remember if you are logged in to a part of the website.
+            </p>
+
+            <p>
+              You may be able to block these cookies by changing the preferences on
+              your browser, but this can limit you from accessing our online services.
+            </p>
+          </div>
+
+          <div>
+            <h3>Analytics cookies</h3>
+
+            <p>
+              We use analytics tools to collect data on how people use our website
+              to help make improvements.
+            </p>
+
+            <p>
+              These cookies let us understand how people access our site, where
+              they are accessing from, what pages they visit and what technology
+              they are using.
+            </p>
+
+            <div class="cookie-toggle">
+              <div class="multiple-choice">
+                <input name="analyticsCookies" type="radio" value="true" id="analyticsCookiesTrue">
+                <label for="analyticsCookiesTrue">Use cookies that measure my website use</label>
+              </div>
+
+              <div class="multiple-choice">
+                <input name="analyticsCookies" type="radio" value="false" checked="checked" id="analyticsCookiesFalse">
+                <label for="analyticsCookiesFalse">Do not use cookies that measure my website use</label>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+
+      <div class="cookie-preferences__footer">
+        <button id="savePreferences" class="button">
+          Save cookie settings
+        </button>
+        <button id="closePreferences" class="button button-secondary">
+          Close cookie settings
+        </button>
+      </div>
+    </div>
+  </div>
+</template>
