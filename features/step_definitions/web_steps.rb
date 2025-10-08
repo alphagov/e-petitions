@@ -98,16 +98,31 @@ Then /^the "([^"]*)" field(?: within "([^"]*)")? should contain "([^"]*)"$/ do |
   end
 end
 
+Then /^the "([^"]*)" radio button(?: within "([^"]*)")? should be chosen$/ do |label, selector|
+  with_scope(selector) do
+    binding
+    field_checked = find_field(label, visible: false)['checked']
+    expect(field_checked).to be_truthy
+  end
+end
+
+Then /^the "([^"]*)" radio button(?: within "([^"]*)")? should not be chosen$/ do |label, selector|
+  with_scope(selector) do
+    field_checked = find_field(label, visible: false)['checked']
+    expect(field_checked).to be_falsey
+  end
+end
+
 Then /^the "([^"]*)" checkbox(?: within "([^"]*)")? should be checked$/ do |label, selector|
   with_scope(selector) do
-    field_checked = find_field(label)['checked']
+    field_checked = find_field(label, visible: false)['checked']
     expect(field_checked).to be_truthy
   end
 end
 
 Then /^the "([^"]*)" checkbox(?: within "([^"]*)")? should not be checked$/ do |label, selector|
   with_scope(selector) do
-    field_checked = find_field(label)['checked']
+    field_checked = find_field(label, visible: false)['checked']
     expect(field_checked).to be_falsey
   end
 end

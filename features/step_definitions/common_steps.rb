@@ -30,15 +30,6 @@ Then('I should not see the cookie settings') do
   expect(page).not_to have_selector(".//div[@id='cookiepreferences']", visible: true)
 end
 
-When('I choose {string}') do |field|
-  choose field
-  expect(page).to have_checked_field(field, visible: false)
-end
-
-Then('{string} is chosen') do |field|
-  expect(page).to have_checked_field(field, visible: false)
-end
-
 Given(/^the site is disabled$/) do
   Site.update! enabled: false
 end
