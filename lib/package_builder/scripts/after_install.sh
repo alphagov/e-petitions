@@ -9,15 +9,12 @@ ln -nfs /home/deploy/epetitions/shared/config/sso.yml /home/deploy/epetitions/re
 ln -nfs /home/deploy/epetitions/shared/tmp /home/deploy/epetitions/releases/<%= release %>/tmp
 ln -nfs /home/deploy/epetitions/shared/log /home/deploy/epetitions/releases/<%= release %>/log
 ln -nfs /home/deploy/epetitions/shared/bundle /home/deploy/epetitions/releases/<%= release %>/vendor/bundle
-ln -nfs /home/deploy/epetitions/shared/assets /home/deploy/epetitions/releases/<%= release %>/public/assets
 ln -s /home/deploy/epetitions/releases/<%= release %> /home/deploy/epetitions/current_<%= release %>
 mv -Tf /home/deploy/epetitions/current_<%= release %> /home/deploy/epetitions/current
 cd /home/deploy/epetitions/current && bundle config set --local deployment 'true'
 cd /home/deploy/epetitions/current && bundle config set --local without 'development test'
 cd /home/deploy/epetitions/current && bundle install --quiet
 cd /home/deploy/epetitions/current && bundle exec rake db:migrate
-cd /home/deploy/epetitions/current && bundle exec npm install
-cd /home/deploy/epetitions/current && bundle exec rake assets:precompile
 cd /home/deploy/epetitions/current && aws s3 sync public/assets s3://${ASSETS_S3_BUCKET}/assets --size-only
 if [ ${SERVER_TYPE} = "worker" ] ; then cd /home/deploy/epetitions/current && bundle exec whenever -w ; else echo not running whenever ; fi
 EOF
