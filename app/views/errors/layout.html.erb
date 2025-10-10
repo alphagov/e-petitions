@@ -5,20 +5,28 @@
 
 <head>
   <%= yield :title -%>
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <link rel="stylesheet" media="screen" href="/error.css">
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <%= preload_link_tag 'error.css', nopush: true %>
+  <%= preload_link_tag 'error.js', nopush: true %>
+
+  <%= stylesheet_link_tag "error.css", media: "screen" %>
 </head>
 
-<body>
+<body class="error-page">
 <%= render 'application/header' -%>
+<%= render 'application/menu' -%>
 
-  <main id="content">
+  <main id="main-content">
+    <div class="container margin-top-6">
 <%= yield -%>
+    </div>
   </main>
 
 <%= render 'application/footer' -%>
+<%= javascript_include_tag 'error' %>
 </body>
 
 </html>

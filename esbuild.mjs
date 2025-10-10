@@ -2,9 +2,18 @@ import * as esbuild from 'esbuild'
 
 const watch = process.argv.includes('--watch')
 const minify = process.argv.includes('--minify')
+const error = process.argv.includes('--error')
+
+const entryPoints = error
+  ? ['app/assets/javascripts/error.js']
+  : [
+      'app/assets/javascripts/admin.js',
+      'app/assets/javascripts/application.js',
+      'app/assets/javascripts/signature-form.js'
+    ]
 
 const context = await esbuild.context({
-  entryPoints: ['app/assets/javascripts/*.js'],
+  entryPoints: entryPoints,
   bundle: true,
   sourcemap: !minify,
   minify: minify,

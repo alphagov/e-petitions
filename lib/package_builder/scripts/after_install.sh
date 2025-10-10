@@ -16,6 +16,7 @@ cd /home/deploy/epetitions/current && bundle config set --local without 'develop
 cd /home/deploy/epetitions/current && bundle install --quiet
 cd /home/deploy/epetitions/current && bundle exec rake db:migrate
 cd /home/deploy/epetitions/current && aws s3 sync public/assets s3://${ASSETS_S3_BUCKET}/assets --size-only
+cd /home/deploy/epetitions/current && aws s3 sync public/errors s3://${ERRORS_S3_BUCKET}/errors
 if [ ${SERVER_TYPE} = "worker" ] ; then cd /home/deploy/epetitions/current && bundle exec whenever -w ; else echo not running whenever ; fi
 EOF
 
