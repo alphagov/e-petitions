@@ -38,6 +38,12 @@ Given(/^the site is protected$/) do
   Site.update! protected: true, username: "username", password: "password"
 end
 
+Given('Google Analytics is enabled') do
+  allow(Site).to receive(:enable_analytics?).and_return(true)
+  allow(Site).to receive(:google_tag_manager_id).and_return("GTM-5DJ37LLQ")
+  allow(Site).to receive(:google_tag_manager_hash).and_return("sha256-UasoYLRu6TD/yvu3mtLDODDoeB35UDi67gFsONsNX54=")
+end
+
 Given(/^signature counting is handled by an external process$/) do
   ENV["INLINE_UPDATES"] = "false"
 end

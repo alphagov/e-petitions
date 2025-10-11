@@ -44,7 +44,8 @@ Feature: User views static pages
 
   @javascript
   Scenario: I navigate to a redirected page
-    Given the "cookies" page is redirected to "https://www.parliament.uk/site-information/privacy/"
+    Given Google Analytics is enabled
+    And the "cookies" page is redirected to "https://www.parliament.uk/site-information/privacy/"
     When I go to the home page
     And I press "Accept additional cookies"
     And I follow "Cookie policy"

@@ -1,19 +1,13 @@
-import CookieManager from './modules/cookie-manager'
 import CharacterCounter from './modules/character-counter'
 import NavigationMenu from './modules/navigation-menu'
 import SignatureCounter from './modules/signature-counter'
 
 window.PETS = window.PETS || {};
-window.PETS.CookieManager = CookieManager;
 window.PETS.CharacterCounter = CharacterCounter;
 window.PETS.NavigationMenu = NavigationMenu;
 window.PETS.SignatureCounter = SignatureCounter;
 
 window.addEventListener('DOMContentLoaded', (event) => {
-  if (document.getElementById('cookiebannerTemplate')) {
-    new CookieManager(document.body);
-  }
-
   const counters = document.querySelectorAll('[data-module=signature-counter]');
   const textareas = document.querySelectorAll('textarea[data-max-length]');
 

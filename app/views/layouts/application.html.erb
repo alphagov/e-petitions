@@ -6,6 +6,11 @@
 
     <%= preload_link_tag 'application.css', nopush: true %>
     <%= preload_link_tag 'application.js', nopush: true %>
+
+    <% if Site.enable_analytics? %>
+      <%= preload_link_tag 'cookie-manager.js', nopush: true %>
+    <% end %>
+
     <%= stylesheet_link_tag 'application' %>
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -39,8 +44,13 @@
     </main>
 
     <%= render 'application/footer' %>
-    <%= render 'application/cookie_banner' %>
-    <%= render 'application/cookie_preferences' %>
+
+    <% if Site.enable_analytics? %>
+      <%= render 'application/cookie_banner' %>
+      <%= render 'application/cookie_preferences' %>
+
+      <%= javascript_include_tag 'cookie-manager' %>
+    <% end %>
 
     <%= javascript_include_tag 'application' %>
   </body>

@@ -4,6 +4,9 @@ Feature: Joe manages cookies
   As Joe, a member of the general public
   I want to manage my cookie preferences
 
+  Background:
+    Given Google Analytics is enabled
+
   Scenario: On the first visit
     Given I am on the home page
     Then I should see the cookie banner
