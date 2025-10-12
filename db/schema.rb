@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_10_12_120639) do
+ActiveRecord::Schema[7.2].define(version: 2025_10_12_120752) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "intarray"
   enable_extension "plpgsql"
@@ -173,6 +173,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_10_12_120639) do
     t.datetime "removed_at", precision: nil
     t.halfvec "embedding", limit: 1024
     t.datetime "published_at", precision: nil
+    t.string "response_state", limit: 30, default: "pending", null: false
     t.index "to_tsvector('english'::regconfig, (action)::text)", name: "index_archived_petitions_on_action", using: :gin
     t.index "to_tsvector('english'::regconfig, (background)::text)", name: "index_archived_petitions_on_background", using: :gin
     t.index "to_tsvector('english'::regconfig, additional_details)", name: "index_archived_petitions_on_additional_details", using: :gin
@@ -185,6 +186,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_10_12_120639) do
     t.index ["moderated_by_id"], name: "index_archived_petitions_on_moderated_by_id"
     t.index ["moderation_threshold_reached_at", "moderation_lag"], name: "index_archived_petitions_on_mt_reached_at_and_moderation_lag"
     t.index ["parliament_id"], name: "index_archived_petitions_on_parliament_id"
+    t.index ["response_state"], name: "index_archived_petitions_on_response_state"
     t.index ["signature_count", "created_at"], name: "index_archived_petitions_on_signature_count_and_created_at", order: :desc
     t.index ["signature_count"], name: "index_archived_petitions_on_signature_count"
     t.index ["state", "closed_at"], name: "index_archived_petitions_on_state_and_closed_at"
@@ -580,6 +582,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_10_12_120639) do
     t.datetime "removed_at", precision: nil
     t.halfvec "embedding", limit: 1024
     t.datetime "published_at", precision: nil
+    t.string "response_state", limit: 30, default: "pending", null: false
     t.index "((last_signed_at > signature_count_validated_at))", name: "index_petitions_on_validated_at_and_signed_at"
     t.index "to_tsvector('english'::regconfig, (action)::text)", name: "index_petitions_on_action", using: :gin
     t.index "to_tsvector('english'::regconfig, (background)::text)", name: "index_petitions_on_background", using: :gin
@@ -596,6 +599,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_10_12_120639) do
     t.index ["locked_by_id"], name: "index_petitions_on_locked_by_id"
     t.index ["moderated_by_id"], name: "index_petitions_on_moderated_by_id"
     t.index ["moderation_threshold_reached_at", "moderation_lag"], name: "index_petitions_on_mt_reached_at_and_moderation_lag"
+    t.index ["response_state"], name: "index_petitions_on_response_state"
     t.index ["response_threshold_reached_at"], name: "index_petitions_on_response_threshold_reached_at"
     t.index ["signature_count", "created_at"], name: "index_petitions_on_signature_count_and_created_at", order: :desc
     t.index ["signature_count", "state"], name: "index_petitions_on_signature_count_and_state"

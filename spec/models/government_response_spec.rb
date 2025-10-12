@@ -33,7 +33,7 @@ RSpec.describe GovernmentResponse, type: :model do
 
   describe "callbacks" do
     context "when the government response is created" do
-      let(:petition) { FactoryBot.create(:open_petition) }
+      let(:petition) { FactoryBot.create(:awaiting_response_petition) }
       let(:government_response) { FactoryBot.build(:government_response, petition: petition) }
       let(:now) { Time.current }
 
@@ -43,6 +43,58 @@ RSpec.describe GovernmentResponse, type: :model do
         }.to change {
           petition.reload.government_response_at
         }.from(nil).to(be_within(1.second).of(now))
+      end
+
+      it "updates the response state" do
+        expect {
+          government_response.save!
+        }.to change {
+          petition.reload.response_state
+        }.from("awaiting").to("responded")
+      end
+    end
+
+    context "when the government response is deleted" do
+      let(:government_response) { petition.government_response }
+
+      context "and the petition has more than 10,000 signatures" do
+        let(:petition) { FactoryBot.create(:responded_petition, government_response_at: 1.hour.ago, response_threshold_reached_at: 2.weeks.ago) }
+
+        it "updates the government_response_at timestamp" do
+          expect {
+            government_response.destroy!
+          }.to change {
+            petition.reload.government_response_at
+          }.from(be_within(1.second).of(1.hour.ago)).to(nil)
+        end
+
+        it "updates the response state" do
+          expect {
+            government_response.destroy!
+          }.to change {
+            petition.reload.response_state
+          }.from("responded").to("awaiting")
+        end
+      end
+
+      context "and the petition has less than 10,000 signatures" do
+        let(:petition) { FactoryBot.create(:archived_petition, :response, government_response_at: 1.hour.ago, response_threshold_reached_at: nil) }
+
+        it "updates the government_response_at timestamp" do
+          expect {
+            government_response.destroy!
+          }.to change {
+            petition.reload.government_response_at
+          }.from(be_within(1.second).of(1.hour.ago)).to(nil)
+        end
+
+        it "updates the response state" do
+          expect {
+            government_response.destroy!
+          }.to change {
+            petition.reload.response_state
+          }.from("responded").to("pending")
+        end
       end
     end
   end

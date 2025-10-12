@@ -128,11 +128,15 @@ RSpec.describe ArchivePetitionJob, type: :job do
 
   context "with a petition that reached the response threshold" do
     let(:petition) do
-      FactoryBot.create(:closed_petition, response_threshold_reached_at: 2.months.ago)
+      FactoryBot.create(:closed_petition,
+        response_threshold_reached_at: 2.months.ago,
+        response_state: "awaiting"
+      )
     end
 
     it "copies the attributes" do
       expect(archived_petition.response_threshold_reached_at).to be_usec_precise_with(petition.response_threshold_reached_at)
+      expect(archived_petition.response_state).to eq(petition.response_state)
     end
   end
 

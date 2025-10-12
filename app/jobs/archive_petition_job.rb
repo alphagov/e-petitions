@@ -22,6 +22,7 @@ class ArchivePetitionJob < ApplicationJob
         p.tags = petition.tags
         p.topics = petition.topics
         p.state = petition.state
+        p.response_state = petition.response_state
         p.debate_state = petition.debate_state
         p.special_consideration = petition.special_consideration
         p.anonymized_at = petition.anonymized_at

@@ -11,6 +11,10 @@ class GovernmentResponse < ActiveRecord::Base
     petition.touch(:government_response_at) unless petition.government_response_at?
   end
 
+  after_save do
+    petition.update_columns(response_state: "responded")
+  end
+
   after_destroy do
     unless petition.archived?
       Appsignal.increment_counter("petition.responded", -1)
@@ -19,7 +23,10 @@ class GovernmentResponse < ActiveRecord::Base
       petition.set_email_requested_at_for("government_response")
 
       # This removes the petition from the 'Government response' list
-      petition.update_columns(government_response_at: nil)
+      petition.update_columns(
+        government_response_at: nil,
+        response_state: response_state_after_destruction
+      )
     end
   end
 
@@ -38,4 +45,9 @@ class GovernmentResponse < ActiveRecord::Base
       Date.current
     end
   end
+
+  def response_state_after_destruction
+    petition.response_threshold_reached_at? ? "awaiting" : "pending"
+  end
 end
+

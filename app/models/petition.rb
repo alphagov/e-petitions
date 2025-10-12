@@ -37,6 +37,7 @@ class Petition < ActiveRecord::Base
   REJECTABLE_STATES = %w[pending validated sponsored flagged dormant]
   FLAGGABLE_STATES  = %w[pending validated sponsored]
 
+  RESPONSE_STATES = %w[pending awaiting responded]
   DEBATE_STATES = %w[pending awaiting scheduled debated not_debated]
 
   has_perishable_token called: 'sponsor_token'
@@ -230,7 +231,7 @@ class Petition < ActiveRecord::Base
     end
 
     def awaiting_response
-      response_threshold_reached.not_responded
+      where(response_state: %w[awaiting])
     end
 
     def collecting_sponsors
@@ -289,6 +290,10 @@ class Petition < ActiveRecord::Base
       where(state: RESPONDABLE_STATES)
     end
 
+    def responded
+      where(response_state: 'responded').preload(:government_response)
+    end
+
     def response_threshold_reached
       where.not(response_threshold_reached_at: nil)
     end
@@ -330,7 +335,7 @@ class Petition < ActiveRecord::Base
     end
 
     def with_response
-      where.not(government_response_at: nil).preload(:government_response)
+      responded
     end
 
     def trending(interval, limit = 3)
@@ -563,6 +568,10 @@ class Petition < ActiveRecord::Base
 
       if at_threshold_for_response?
         updates << "response_threshold_reached_at = :now"
+
+        if response_state == 'pending'
+          updates << "response_state = 'awaiting'"
+        end
       end
 
       if at_threshold_for_debate?
@@ -598,6 +607,10 @@ class Petition < ActiveRecord::Base
 
     if below_threshold_for_response?
       updates << "response_threshold_reached_at = NULL"
+
+      if response_state == 'awaiting'
+        updates << "response_state = 'pending'"
+      end
     end
 
     if below_threshold_for_moderation?
@@ -1040,6 +1053,14 @@ class Petition < ActiveRecord::Base
     else
       raise ArgumentError, "The #{name} email has not been requested for petition #{id}"
     end
+  end
+
+  def awaiting_response?
+    response_state == 'awaiting'
+  end
+
+  def responded?
+    response_state == 'responded'
   end
 
   def awaiting_debate?
