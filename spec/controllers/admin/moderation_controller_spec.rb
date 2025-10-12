@@ -108,6 +108,10 @@ RSpec.describe Admin::ModerationController, type: :controller, admin: true do
           expect(petition.open_at).to be_within(1.second).of(now)
         end
 
+        it "sets the published date to now" do
+          expect(petition.published_at).to be_within(1.second).of(now)
+        end
+
         it "sets the moderation lag" do
           expect(petition.moderation_lag).to eq(4)
         end
@@ -168,6 +172,10 @@ RSpec.describe Admin::ModerationController, type: :controller, admin: true do
             expect(petition.rejected_at).to be_within(1.second).of(now)
           end
 
+          it "sets the petition published date to now" do
+            expect(petition.published_at).to be_within(1.second).of(now)
+          end
+
           it "sets the moderation lag" do
             expect(petition.moderation_lag).to eq(4)
           end
@@ -214,6 +222,10 @@ RSpec.describe Admin::ModerationController, type: :controller, admin: true do
 
           it "sets the petition rejected date to now" do
             expect(petition.rejected_at).to be_within(1.second).of(now)
+          end
+
+          it "sets the petition published date to now" do
+            expect(petition.published_at).to be_within(1.second).of(now)
           end
 
           it "sets the moderation lag" do
@@ -290,6 +302,10 @@ RSpec.describe Admin::ModerationController, type: :controller, admin: true do
           expect(petition.rejected_at).to be_nil
         end
 
+        it "does not set the published date" do
+          expect(petition.published_at).to be_nil
+        end
+
         it "does not set the moderation lag" do
           expect(petition.moderation_lag).to be_nil
         end
@@ -325,6 +341,10 @@ RSpec.describe Admin::ModerationController, type: :controller, admin: true do
 
         it "does not set the rejected date" do
           expect(petition.rejected_at).to be_nil
+        end
+
+        it "does not set the published date" do
+          expect(petition.published_at).to be_nil
         end
 
         it "does not set the moderation lag" do

@@ -42,6 +42,7 @@ class ArchivePetitionJob < ApplicationJob
         p.debate_outcome_at = petition.debate_outcome_at
         p.created_at = petition.created_at
         p.updated_at = petition.updated_at
+        p.published_at = petition.published_at
 
         p.state_at_removal = petition.state_at_removal
         p.removed_at = petition.removed_at

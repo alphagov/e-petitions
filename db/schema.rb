@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_04_16_072110) do
+ActiveRecord::Schema[7.2].define(version: 2025_10_12_120639) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "intarray"
   enable_extension "plpgsql"
@@ -172,6 +172,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_04_16_072110) do
     t.string "state_at_removal", limit: 10
     t.datetime "removed_at", precision: nil
     t.halfvec "embedding", limit: 1024
+    t.datetime "published_at", precision: nil
     t.index "to_tsvector('english'::regconfig, (action)::text)", name: "index_archived_petitions_on_action", using: :gin
     t.index "to_tsvector('english'::regconfig, (background)::text)", name: "index_archived_petitions_on_background", using: :gin
     t.index "to_tsvector('english'::regconfig, additional_details)", name: "index_archived_petitions_on_additional_details", using: :gin
@@ -578,6 +579,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_04_16_072110) do
     t.string "state_at_removal", limit: 10
     t.datetime "removed_at", precision: nil
     t.halfvec "embedding", limit: 1024
+    t.datetime "published_at", precision: nil
     t.index "((last_signed_at > signature_count_validated_at))", name: "index_petitions_on_validated_at_and_signed_at"
     t.index "to_tsvector('english'::regconfig, (action)::text)", name: "index_petitions_on_action", using: :gin
     t.index "to_tsvector('english'::regconfig, (background)::text)", name: "index_petitions_on_background", using: :gin

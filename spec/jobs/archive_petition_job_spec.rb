@@ -44,7 +44,8 @@ RSpec.describe ArchivePetitionJob, type: :job do
         moderation_lag: 30,
         last_signed_at: 3.months.ago,
         created_at: 8.months.ago,
-        updated_at: 1.month.ago
+        updated_at: 1.month.ago,
+        published_at: 6.months.ago
       )
     end
 
@@ -83,6 +84,7 @@ RSpec.describe ArchivePetitionJob, type: :job do
       expect(archived_petition.last_signed_at).to be_usec_precise_with(petition.last_signed_at)
       expect(archived_petition.created_at).to be_usec_precise_with(petition.created_at)
       expect(archived_petition.updated_at).to be_usec_precise_with(petition.updated_at)
+      expect(archived_petition.published_at).to be_usec_precise_with(petition.published_at)
     end
 
     it "copies the constituency_petition_journal data" do

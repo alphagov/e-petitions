@@ -762,7 +762,8 @@ class Petition < ActiveRecord::Base
 
     update!(
       state: state_for_publishing(time),
-      open_at: time_for_publishing(time)
+      open_at: time_for_publishing(time),
+      published_at: time_for_publishing(time)
     )
   end
 
