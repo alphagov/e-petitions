@@ -98,7 +98,7 @@ select {
   color: $input-colour;
   font-weight: normal;
   height: $input-height-small;
-  padding: spacing(2) spacing(3);
+  padding: spacing(2) spacing(3) + 20px spacing(2) spacing(3);
   width: 100%;
 
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='none' viewBox='0 0 12 12'%3E%3Cpath fill='%234d4d4d' d='m6.028 8.05 4.958-5.993 1.014.82L6.028 10 0 2.876.986 2l5.042 6.05Z'/%3E%3C/svg%3E");
@@ -235,6 +235,54 @@ select {
   & > input[type=checkbox]:focus + label::after {
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath fill='%23212121' fill-rule='evenodd' d='M16 2.12 6.983 15 0 9.856l1.258-1.59 5.237 3.858L14.282 1 16 2.12Z' clip-rule='evenodd'/%3E%3C/svg%3E");
   }
+
+  &.small {
+    @include font-size(20);
+
+    &:first-child {
+      margin-top: 0;
+    }
+
+    @include media-query($from: tablet) {
+      gap: spacing(3);
+      margin: spacing(3) 0;
+    }
+
+    & > input[type=checkbox],
+    & > input[type=radio] {
+      @include media-query($from: tablet) {
+        flex: 0 0 30px;
+        height: 30px;
+        width: 30px;
+      }
+    }
+
+    & > label {
+      &::before {
+        @include media-query($from: tablet) {
+          height: 30px;
+          width: 30px;
+        }
+      }
+    }
+
+    & > input[type=radio] + label::after {
+      @include media-query($from: tablet) {
+        border: 7px solid $multiple-choice-colour;
+        left: 8px;
+        top: 8px;
+      }
+    }
+
+    & > input[type=checkbox] + label::after {
+      @include media-query($from: tablet) {
+        left: 7px;
+        top: 7px;
+        height: 16px;
+        width: 16px;
+      }
+    }
+  }
 }
 
 .form-hint, .error-message {
@@ -282,13 +330,28 @@ select {
   }
 }
 
-.input-group {
+.inline-group {
+  @include responsive-margin(4, bottom);
+
   display: flex;
-  flex-direction: column;
   gap: spacing(3);
+  flex-direction: column;
 
   @include media-query($from: tablet) {
     flex-direction: row;
+  }
+
+  & > *:first-child {
+    width: auto;
+  }
+}
+
+.input-group {
+  display: flex;
+  flex-direction: row;
+  gap: 0;
+
+  @include media-query($from: tablet) {
     justify-content: flex-start;
   }
 
@@ -312,11 +375,49 @@ select {
   }
 
   button {
+    flex-basis: 0;
     flex-grow: 0;
 
     @include media-query($from: tablet) {
       width: auto;
     }
+
+    &.icon-button {
+      flex: 0 0 $input-height-small;
+      width: $input-height-small;
+      height: $input-height-small;
+      padding: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      @include media-query($from: tablet) {
+        flex: 0 0 $input-height;
+        width: $input-height;
+        height: $input-height;
+      }
+
+      svg {
+        display: inline-block;
+        width: 20px;
+        height: 20px;
+
+        @include media-query($from: tablet) {
+          width: 22px;
+          height: 22px;
+        }
+      }
+    }
+  }
+
+  *:first-child:not(:last-child) {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+  }
+
+  *:last-child:not(:first-child) {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
   }
 }
 
@@ -328,6 +429,10 @@ select {
   & > * {
     margin-top: spacing(4);
     width: 100%;
+
+    &:first-child {
+      margin-top: 0;
+    }
   }
 
   @include media-query($from: tablet) {

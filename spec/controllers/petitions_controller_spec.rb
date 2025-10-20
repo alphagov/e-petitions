@@ -501,19 +501,19 @@ RSpec.describe PetitionsController, type: :controller do
       context "and it is an array" do
         it "uses the default count" do
           get :index, params: { count: [ "l337haxxor" ] }
-          expect(assigns(:petitions).page_size).to eq 50
+          expect(assigns(:petitions).page_size).to eq 25
         end
       end
 
       context "and it is a hash" do
         it "uses the default count" do
           get :index, params: { count: { l337: "haxxor" } }
-          expect(assigns(:petitions).page_size).to eq 50
+          expect(assigns(:petitions).page_size).to eq 25
         end
       end
 
       context "and it is out of range" do
-        it "uses the default count" do
+        it "uses the maximum count" do
           get :index, params: { count: "414141414141414141" }
           expect(assigns(:petitions).page_size).to eq 50
         end

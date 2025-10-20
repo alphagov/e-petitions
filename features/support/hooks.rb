@@ -85,7 +85,10 @@ end
 
 After do |scenario|
   if scenario.failed? && page.respond_to?(:save_screenshot)
-    page.save_screenshot("#{scenario.name.gsub(' ', '_').gsub(/[^0-9A-Za-z_]/, '')}.png")
+    begin
+      page.save_screenshot("#{scenario.name.gsub(' ', '_').gsub(/[^0-9A-Za-z_]/, '')}.png")
+    rescue Capybara::NotSupportedByDriverError
+    end
   end
 end
 

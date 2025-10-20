@@ -1,4 +1,43 @@
 en-GB:
+  archived_petitions:
+    search:
+      filters:
+        status:
+          closed: "Closed petitions"
+          rejected: "Rejected petitions"
+        response:
+          awaiting: "Awaiting government response"
+          responded: "With government response"
+        debate:
+          debated: "Debated in Parliament"
+          not_debated: "Not debated in Parliament"
+          awaiting: "Awaiting debate decision"
+          scheduled: "Scheduled for debate"
+
+      status_html:
+        zero: "We’ve found <strong>%{formatted_count}</strong> petitions"
+        one: "We’ve found <strong>%{formatted_count}</strong> petition"
+        other: "We’ve found <strong>%{formatted_count}</strong> petitions"
+
+      sorting:
+        descriptions:
+          popular: "These petitions gained the most signatures since they were published."
+          recent: "These petitions have been recently published."
+          relevant: "These petitions most closely match your search terms."
+          waiting_longest: "These petitions have been waiting the longest for a Government response."
+          latest_response: "These petitions have been recently responded to by Government."
+          upcoming_debates: "These petitions have upcoming debates in Parliament."
+          latest_debate: "These petitions have been recently debated in Parliament."
+
+        menu:
+          - ["Most signatures", "popular"]
+          - ["Recently published", "recent"]
+          - ["Most relevant", "relevant"]
+          - ["Waiting longest for a response", "waiting_longest"]
+          - ["Latest government responses", "latest_response"]
+          - ["Upcoming debates", "upcoming_debates"]
+          - ["Latest debates", "latest_debate"]
+
   petitions:
     errors:
       prompt:
@@ -346,3 +385,59 @@ en-GB:
           <span class="paginate-label">Next</span>
           <span class="paginate page-count">%{next_page} of %{total_pages}</span>
         </a>
+
+
+    search:
+      filters:
+        status:
+          open: "Open petitions"
+          closed: "Closed petitions"
+          rejected: "Rejected petitions"
+        response:
+          awaiting: "Awaiting government response"
+          responded: "With government response"
+        debate:
+          debated: "Debated in Parliament"
+          not_debated: "Not debated in Parliament"
+          awaiting: "Awaiting debate decision"
+          scheduled: "Scheduled for debate"
+
+      status_html:
+        zero: "We’ve found <strong>%{formatted_count}</strong> petitions"
+        one: "We’ve found <strong>%{formatted_count}</strong> petition"
+        other: "We’ve found <strong>%{formatted_count}</strong> petitions"
+
+      sorting:
+        descriptions:
+          popular: "These petitions gained the most signatures since they were published."
+          recent: "These petitions have been recently published."
+          relevant: "These petitions most closely match your search terms."
+          waiting_longest: "These petitions have been waiting the longest for a Government response."
+          latest_response: "These petitions have been recently responded to by Government."
+          upcoming_debates: "These petitions have upcoming debates in Parliament."
+          latest_debate: "These petitions have been recently debated in Parliament."
+
+        menu:
+          - ["Most signatures", "popular"]
+          - ["Recently published", "recent"]
+          - ["Most relevant", "relevant"]
+          - ["Waiting longest for a response", "waiting_longest"]
+          - ["Latest government responses", "latest_response"]
+          - ["Upcoming debates", "upcoming_debates"]
+          - ["Latest debates", "latest_debate"]
+
+  pagination:
+    previous_label: |
+      <svg xmlns="http://www.w3.org/2000/svg" height="13" width="15" aria-hidden="true" focusable="false" viewBox="0 0 15 13">
+        <path d="m6.5938-0.0078125-6.7266 6.7266 6.7441 6.4062 1.377-1.449-4.1856-3.9768h12.896v-2h-12.984l4.2931-4.293-1.414-1.414z"></path>
+      </svg>
+      <span>
+        Previous<span class="visually-hidden"> page</span>
+      </span>
+    next_label: |
+      <span>
+        Next<span class="visually-hidden"> page</span>
+      </span>
+      <svg xmlns="http://www.w3.org/2000/svg" height="13" width="15" aria-hidden="true" focusable="false" viewBox="0 0 15 13">
+        <path d="m8.107-0.0078125-1.4136 1.414 4.2926 4.293h-12.986v2h12.896l-4.1855 3.9766 1.377 1.4492 6.7441-6.4062-6.7246-6.7266z"></path>
+      </svg>

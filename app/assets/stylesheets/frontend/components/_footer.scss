@@ -1,7 +1,7 @@
 @use "../settings" as *;
 @use "../helpers" as *;
 
-footer {
+body > footer {
   background-color: $footer-background-colour;
   color: $inverse-text-colour;
 

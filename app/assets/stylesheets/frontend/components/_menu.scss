@@ -1,7 +1,7 @@
 @use "../settings" as *;
 @use "../helpers" as *;
 
-.service-navigation {
+body > nav {
   border-bottom: 1px solid $border-colour;
   font-weight: bold;
 

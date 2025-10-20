@@ -89,6 +89,7 @@ FactoryBot.define do
 
     after(:build) do |petition, evaluator|
       petition.parliament ||= Parliament.archived.first || FactoryBot.create(:parliament, :archived)
+      petition.published_at = [petition.open_at, petition.rejected_at].compact_blank.first
 
       if evaluator.sponsors_signed
         petition.creator ||= FactoryBot.build(:archived_signature, :validated, :creator, petition: petition)
@@ -297,6 +298,7 @@ FactoryBot.define do
       end
 
       petition.creator.assign_attributes(evaluator.creator_attributes)
+      petition.published_at = [petition.open_at, petition.rejected_at].compact_blank.first
 
       if evaluator.creator_name
         petition.creator.name = evaluator.creator_name
@@ -449,6 +451,11 @@ FactoryBot.define do
     after(:build) do |petition, evaluator|
       if petition.closed_at?
         petition.open_at ||= Site.opened_at_for_closing(petition.closed_at)
+        petition.published_at = petition.open_at
+
+        if petition.open?
+          petition.closed_at = nil
+        end
       else
         petition.open_at ||= Time.current
       end

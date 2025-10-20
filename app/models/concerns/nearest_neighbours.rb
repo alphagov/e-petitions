@@ -2,9 +2,16 @@ module NearestNeighbours
   extend ActiveSupport::Concern
 
   module ClassMethods
+    def relevance(embedding, column)
+      arel_table[column].nearest(embedding)
+    end
+
     def nearest_neighbours(embedding, column: :embedding, distance: 0.75)
-      relevance = arel_table[column].nearest(embedding)
-      where(relevance.lt(distance)).reorder(relevance)
+      where(relevance(embedding, column).lt(distance))
+    end
+
+    def by_relevance(embedding, column: :embedding)
+      reorder(relevance(embedding, column))
     end
   end
 

@@ -27,14 +27,14 @@ Scenario: Arnold searches for petitions when parliament is opened
   Then I should be on the all petitions page
   And I should have the following query string:
     | state | open    |
-    | q     | Wombles |
+    | query | Wombles |
   And I should see my search term "Wombles" filled in the search field
-  And I should see "4 results"
+  And I should see "We’ve found 4 petitions"
   And I should see the following search results:
-    | Uncle Bulgaria               | 23 signatures |
-    | Common People                | 19 signatures |
-    | Overthrow the Wombles        | 17 signatures |
-    | Wombles                      | 13 signatures |
+    | Uncle Bulgaria               | Total signatures 23 |
+    | Common People                | Total signatures 19 |
+    | Overthrow the Wombles        | Total signatures 17 |
+    | Wombles                      | Total signatures 13 |
 
 Scenario: Arnold searches for petitions when parliament is dissolving
   Given Parliament is dissolving
@@ -43,14 +43,14 @@ Scenario: Arnold searches for petitions when parliament is dissolving
   Then I should be on the all petitions page
   And I should have the following query string:
     | state | open    |
-    | q     | Wombles |
+    | query | Wombles |
   And I should see my search term "Wombles" filled in the search field
-  And I should see "4 results"
+  And I should see "We’ve found 4 petitions"
   And I should see the following search results:
-    | Uncle Bulgaria               | 23 signatures |
-    | Common People                | 19 signatures |
-    | Overthrow the Wombles        | 17 signatures |
-    | Wombles                      | 13 signatures |
+    | Uncle Bulgaria               | Total signatures 23 |
+    | Common People                | Total signatures 19 |
+    | Overthrow the Wombles        | Total signatures 17 |
+    | Wombles                      | Total signatures 13 |
 
 Scenario: Arnold searches for petitions when parliament is dissolved
   Given Parliament is dissolved
@@ -60,15 +60,15 @@ Scenario: Arnold searches for petitions when parliament is dissolved
   Then I should be on the all petitions page
   And I should have the following query string:
     | state | closed  |
-    | q     | Wombles |
+    | query | Wombles |
   And I should see my search term "Wombles" filled in the search field
-  And I should see "5 results"
+  And I should see "We’ve found 5 petitions"
   And I should see the following search results:
-    | Uncle Bulgaria               | 23 signatures |
-    | Common People                | 19 signatures |
-    | Overthrow the Wombles        | 17 signatures |
-    | Wombles                      | 13 signatures |
-    | The Wombles will rock Glasto | 9 signatures  |
+    | Uncle Bulgaria               | Total signatures 23 |
+    | Common People                | Total signatures 19 |
+    | Overthrow the Wombles        | Total signatures 17 |
+    | Wombles                      | Total signatures 13 |
+    | The Wombles will rock Glasto | Total signatures 9  |
 
 Scenario: Arnold searches for petitions when parliament is pending
   Given Parliament is pending
@@ -77,10 +77,10 @@ Scenario: Arnold searches for petitions when parliament is pending
   Then I should be on the archived petitions page
   And I should have the following query string:
     | state | published |
-    | q     | Rivers    |
+    | query | Rivers    |
   And I should see my search term "Rivers" filled in the search field
-  And I should see "3 results"
+  And I should see "We’ve found 3 petitions"
   And I should see the following search results:
-    | Rivers are great         | 835 signatures |
-    | Cry me a river           | 639 signatures |
-    | More rivers please       | 243 signatures |
+    | Rivers are great         | Total signatures 835 |
+    | Cry me a river           | Total signatures 639 |
+    | More rivers please       | Total signatures 243 |

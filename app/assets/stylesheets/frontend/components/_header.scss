@@ -1,7 +1,7 @@
 @use "../settings" as *;
 @use "../helpers" as *;
 
-header {
+body > header {
   background-color: $header-background-colour;
   color: $inverse-text-colour;
 

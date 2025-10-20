@@ -116,13 +116,7 @@ class PetitionsController < PublicController
   end
 
   def retrieve_petitions
-    scope = Petition.visible
-
-    if json_request?
-      scope = scope.preload(:creator, :rejection, :government_response, :debate_outcome)
-    end
-
-    @petitions = scope.search(params)
+    @petitions = PetitionSearch.new(params)
   end
 
   def retrieve_petition
@@ -192,7 +186,7 @@ class PetitionsController < PublicController
   end
 
   def csv_filename
-    "#{@petitions.scope}-petitions.csv"
+    "filtered-petitions.csv"
   end
 
   def set_content_disposition

@@ -1,8 +1,7 @@
 require 'csv'
 
-class Archived::PetitionsController < ApplicationController
+class Archived::PetitionsController < PublicController
   before_action :redirect_to_valid_state, only: [:index]
-  before_action :fetch_parliament, only: [:index]
   before_action :fetch_petitions, only: [:index]
   before_action :fetch_petition, only: [:show]
 
@@ -28,12 +27,6 @@ class Archived::PetitionsController < ApplicationController
 
   private
 
-  def parliament_id
-    Integer(params[:parliament])
-  rescue ArgumentError, TypeError => e
-    raise ActionController::BadRequest, "Invalid petition id: #{params[:parliament]}"
-  end
-
   def petition_id
     Integer(params[:id])
   rescue ArgumentError => e
@@ -49,17 +42,7 @@ class Archived::PetitionsController < ApplicationController
   end
 
   def fetch_petitions
-    if params.key?(:parliament)
-      scope = Archived::Petition.visible
-    else
-      scope = @parliament.petitions.visible
-    end
-
-    if json_request?
-      scope = scope.preload(:creator, :rejection, :government_response, :debate_outcome)
-    end
-
-    @petitions = scope.search(params)
+    @petitions = Archived::PetitionSearch.new(params)
   end
 
   def fetch_petition
@@ -76,7 +59,7 @@ class Archived::PetitionsController < ApplicationController
   end
 
   def csv_filename
-    "#{@petitions.scope}-petitions-#{@parliament.period}.csv"
+    "filtered-archived-petitions.csv"
   end
 
   def redirect_to_valid_state

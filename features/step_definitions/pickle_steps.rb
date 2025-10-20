@@ -26,8 +26,16 @@ Given(/^a rejected petition exists with action: "([^"]*)"$/) do |action|
   @petition = FactoryBot.create(:rejected_petition, action: action)
 end
 
+Given('a rejected petition exists with action: {string}, rejected_at: {timestamp}') do |action, rejected_at|
+  @petition = FactoryBot.create(:rejected_petition, action: action, rejected_at: rejected_at)
+end
+
 Given(/^a hidden petition exists with action: "([^"]*)"$/) do |action|
   @petition = FactoryBot.create(:hidden_petition, action: action)
+end
+
+Given('a hidden petition exists with action: {string}, rejected_at: {timestamp}') do |action, rejected_at|
+  @petition = FactoryBot.create(:hidden_petition, action: action, rejected_at: rejected_at)
 end
 
 Given(/^a sponsored petition exists with action: "([^"]*)"$/) do |action|
@@ -123,7 +131,8 @@ Given(/^the following archived petitions exist:$/) do |table|
       signature_count: petition[2],
       opened_at:       petition[3],
       closed_at:       petition[4],
-      created_at:      petition[5]
+      created_at:      petition[5],
+      rejected_at:     petition[6]
     }
 
     FactoryBot.create(:archived_petition, attributes)

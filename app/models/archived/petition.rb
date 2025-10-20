@@ -98,6 +98,14 @@ module Archived
         reorder(created_at: :asc)
       end
 
+      def by_most_recent
+        reorder(created_at: :desc)
+      end
+
+      def by_most_recently_published
+        reorder('published_at DESC NULLS LAST')
+      end
+
       def by_most_recent_debate_outcome
         reorder(debate_outcome_at: :desc, created_at: :desc)
       end
@@ -107,7 +115,7 @@ module Archived
       end
 
       def by_waiting_for_debate_longest
-        reorder(debate_threshold_reached_at: :asc, created_at: :desc)
+        reorder('debate_threshold_reached_at ASC NULLS LAST, created_at ASC')
       end
 
       def by_most_recent
@@ -115,11 +123,15 @@ module Archived
       end
 
       def by_most_signatures
-        reorder(signature_count: :desc)
+        reorder('signature_count DESC NULLS LAST')
+      end
+
+      def by_most_recent_response
+        reorder('government_response_at DESC NULLS LAST, created_at DESC')
       end
 
       def by_waiting_for_response_longest
-        reorder(response_threshold_reached_at: :asc, created_at: :desc)
+        reorder('government_response_at ASC NULLS LAST, created_at ASC')
       end
 
       def awaiting_response
@@ -263,6 +275,10 @@ module Archived
 
     def stopped?
       state == STOPPED_STATE
+    end
+
+    def open?
+      false
     end
 
     def closed?
@@ -423,6 +439,18 @@ module Archived
       end
     rescue ActiveRecord::RecordNotFound
       false
+    end
+
+    def awaiting_response?
+      response_state == 'awaiting'
+    end
+
+    def responded?
+      response_state == 'responded'
+    end
+
+    def awaiting_debate?
+      debate_state.in?(%w[awaiting scheduled])
     end
 
     def debate_outcome?

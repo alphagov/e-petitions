@@ -24,4 +24,15 @@ window.addEventListener('DOMContentLoaded', (event) => {
   for (const navigationMenu of navigationMenus) {
     new NavigationMenu(navigationMenu);
   }
+
+  const applySortButtons = document.querySelectorAll('#sort + button');
+
+  for (const button of applySortButtons) {
+    const select = button.previousElementSibling;
+    button.classList.add('visually-hidden');
+
+    select.addEventListener('change', (event) => {
+      event.target.form.submit();
+    })
+  }
 });

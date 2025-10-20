@@ -1,5 +1,5 @@
 module Archived
-  class SignaturesController < ApplicationController
+  class SignaturesController < PublicController
     before_action :retrieve_signature
     before_action :verify_unsubscribe_token
     before_action :do_not_cache

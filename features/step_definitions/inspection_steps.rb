@@ -37,7 +37,7 @@ Then(/^I should see the following search results:$/) do |values_table|
     expect(page).to have_selector(:css, ".petition-item:nth-of-type(#{idx+1}) h2", text: row[0]);
 
     if row[1].present?
-      expect(page).to have_selector(:css, ".petition-item:nth-of-type(#{idx+1}) p", text: row[1]);
+      expect(page).to have_selector(:css, ".petition-item:nth-of-type(#{idx+1}) dl div:nth-of-type(2)", text: row[1]);
     end
   end
 end
@@ -58,9 +58,11 @@ Then(/^I should see the following list of petitions:$/) do |table|
 end
 
 Then /^I should see the following list of archived petitions:$/ do |table|
-  table.raw.each do |row|
-    row.each do |column|
-      expect(page).to have_content(column)
+  table.raw.each_with_index do |row, idx|
+    expect(page).to have_selector(:css, ".petition-item:nth-of-type(#{idx+1}) h2", text: row[0]);
+
+    if row[1].present?
+      expect(page).to have_selector(:css, ".petition-item:nth-of-type(#{idx+1}) dl div:nth-of-type(2)", text: row[1]);
     end
   end
 end

@@ -17,7 +17,7 @@
     <%= form_tag local_petitions_path, method: 'get', enforce_utf8: false do %>
       <%= label_tag 'postcode', 'UK postcode' %>
 
-      <div class="input-group">
+      <div class="inline-group">
         <%= text_field_tag 'postcode', @postcode, size: 30, maxlength: 30 %>
         <%= button_tag 'Search', name: nil, class: 'button' %>
       </div>

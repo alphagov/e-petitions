@@ -1,15 +1,84 @@
-When(/^I browse to see only "([^"]*)" petitions$/) do |facet|
-  step "I go to the petitions page"
-  within :css, '#list-navigation' do
-    click_on facet
+When('I search for {string}') do |facet|
+  if page.has_field?("Open petitions")
+    uncheck "Open petitions"
   end
+
+  uncheck "Closed petitions"
+  uncheck "Rejected petitions"
+
+  within_fieldset "Government response" do
+    uncheck "Yes"
+    uncheck "Awaiting"
+  end
+
+  within_fieldset "Debated in Parliament" do
+    uncheck "Yes"
+    uncheck "No"
+    uncheck "Awaiting"
+    uncheck "Scheduled"
+  end
+
+  case facet
+  when "All petitions"
+  when "Open petitions"
+    check "Open petitions"
+  when "Closed petitions"
+    check "Closed petitions"
+  when "Rejected petitions"
+    check "Rejected petitions"
+  when "Recent petitions"
+    check "Open petitions"
+    select "Recently published", from: "Sort results"
+  when "Awaiting government response"
+    check "Open petitions"
+    check "Closed petitions"
+    within_fieldset "Government response" do
+      check "Awaiting"
+    end
+  when "Government responses"
+    check "Open petitions"
+    check "Closed petitions"
+    within_fieldset "Government response" do
+      check "Yes"
+    end
+  when "Awaiting a debate in Parliament"
+    check "Open petitions"
+    check "Closed petitions"
+    within_fieldset "Debated in Parliament" do
+      check "Awaiting"
+      check "Scheduled"
+    end
+    select "Upcoming debates", from: "Sort results"
+  when "Debated in Parliament"
+    check "Open petitions"
+    check "Closed petitions"
+    within_fieldset "Debated in Parliament" do
+      check "Yes"
+    end
+    select "Latest debates", from: "Sort results"
+  else
+    raise ArgumentError, "Unexpected facet: #{facet.inspect}"
+  end
+
+  click_on "Apply filters"
+end
+
+When(/^I browse to see only "([^"]*)" petitions$/) do |facet|
+  if facet.in?(%w[Open Closed Rejected])
+    facet += " petitions"
+  end
+
+  step "I go to the petitions page"
+  step "I search for #{facet.inspect}"
 end
 
 When(/^I browse to see only "([^"]*)" archived petitions$/) do |facet|
-  step "I go to the archived petitions page"
-  within :css, '#list-navigation' do
-    click_on facet
+  if facet.in?(%w[Closed Rejected])
+    facet += " petitions"
   end
+
+  step "I go to the archived petitions page"
+  step "I search for #{facet.inspect}"
 end
 
 When(/^I search for "([^"]*)" with "([^"]*)"$/) do |facet, term|
@@ -34,7 +103,7 @@ When(/^I fill in "(.*?)" as my search term$/) do |search_term|
 end
 
 Then(/^I should see my search term "(.*?)" filled in the search field$/) do |search_term|
-  expect(page).to have_field('q', with: search_term)
+  expect(page).to have_field('query', with: search_term)
 end
 
 Then(/^I should see the following similar petitions:$/) do |table|

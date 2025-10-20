@@ -150,12 +150,16 @@ class Petition < ActiveRecord::Base
       reorder(signature_count: :desc, created_at: :desc)
     end
 
+    def by_most_signatures
+      reorder('signature_count DESC NULLS LAST, created_at DESC')
+    end
+
     def by_most_recent
       reorder(created_at: :desc)
     end
 
     def by_most_recently_published
-      reorder(open_at: :desc)
+      reorder('published_at DESC NULLS LAST')
     end
 
     def by_most_recent_debate_outcome
@@ -167,7 +171,7 @@ class Petition < ActiveRecord::Base
     end
 
     def by_most_recent_response
-      reorder(government_response_at: :desc, created_at: :desc)
+      reorder('government_response_at DESC NULLS LAST, created_at DESC')
     end
 
     def by_most_relevant_debate_date
@@ -179,11 +183,11 @@ class Petition < ActiveRecord::Base
     end
 
     def by_waiting_for_debate_longest
-      reorder(debate_threshold_reached_at: :asc, created_at: :desc)
+      reorder('debate_threshold_reached_at ASC NULLS LAST, created_at ASC')
     end
 
     def by_waiting_for_response_longest
-      reorder(response_threshold_reached_at: :asc, created_at: :desc)
+      reorder('government_response_at ASC NULLS LAST, created_at ASC')
     end
 
     def current
