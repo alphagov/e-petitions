@@ -2,13 +2,12 @@
 @use "../helpers" as *;
 
 #search-petitions {
-  background-color: $hero-background-colour;
   margin: 0;
 
-  @include responsive-padding(8, "top");
-  @include responsive-padding(8, "bottom");
+  @include responsive-margin(6, "top");
+  @include responsive-margin(7, "bottom");
 
-  h1 {
+  h2 {
     @include responsive-margin(3, "bottom");
   }
 

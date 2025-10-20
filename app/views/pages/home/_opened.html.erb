@@ -1,19 +1,20 @@
 <% content_for :hero_banner do %>
+  <% if Site.show_home_page_message? %>
+    <div class="highlight">
+      <%= markdown_to_html(Site.home_page_message) %>
+    </div>
+  <% end %>
+
+  <h1>
+    Find, sign and create petitions that call for action from the UK Government or UK Parliament
+  </h1>
+
   <%= render "pages/home/search_petitions", search_path: petitions_path %>
 <% end %>
 
 <% if no_petitions_yet? %>
   <div class="section-panel-borderless no-petitions-yet">
     <p class="lede">The Petitions service is open</p>
-  </div>
-<% end %>
-
-<% if Site.show_home_page_message? %>
-  <div class="notification notification-<%= Site.home_page_message_colour %>">
-    <span class="icon icon-warning-white">
-      <span class="visuallyhidden">Important:</span>
-    </span>
-    <%= markdown_to_html(Site.home_page_message) %>
   </div>
 <% end %>
 

@@ -40,7 +40,13 @@
     <%= render 'application/menu' %>
 
     <main id="main-content">
-      <%= yield :hero_banner %>
+      <% if content_for?(:hero_banner) %>
+        <header id="hero-banner">
+          <div class="container">
+            <%= yield :hero_banner %>
+          </div>
+        </header>
+      <% end %>
 
       <div class="container">
         <%= render 'application/messages' %>
