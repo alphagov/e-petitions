@@ -120,4 +120,12 @@ section {
       margin-bottom: 0;
     }
   }
+
+  a {
+    color: $highlight-colour;
+
+    &:hover {
+      color: $highlight-hover-colour !important;
+    }
+  }
 }
