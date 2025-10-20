@@ -103,12 +103,9 @@ body > footer {
 
     &.uk-government-logo {
       @include media-query($from: tablet) {
-        margin-left: spacing(7);
-        padding-bottom: spacing(2);
-      }
-
-      @include media-query($from: tablet) {
+        margin-left: spacing(9);
         margin-top: 0;
+        padding-bottom: spacing(2);
       }
     }
 
