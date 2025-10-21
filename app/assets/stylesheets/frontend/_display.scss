@@ -12,6 +12,12 @@
       display: none !important;
     }
   }
+
+  .hide-until-#{$breakpoint} {
+    @include media-query($until: $width) {
+      display: none !important;
+    }
+  }
 }
 
 .display-block {
