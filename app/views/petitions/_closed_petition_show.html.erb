@@ -1,57 +1,65 @@
-<strong class="tag tag-grey">
-  Closed<span class="visually-hidden"> petition</span>
-</strong>
+<article class="petition-detail">
+  <header>
+    <strong class="tag tag-grey">
+      Closed<span class="visually-hidden"> petition</span>
+    </strong>
 
-<h1>
-  <%= petition.action %>
-</h1>
+    <h1 id="action">
+      <%= petition.action %>
+    </h1>
 
-<% if @petition.committee_note? %>
-  <div class="highlight">
-    <%= markdown_to_html(@petition.committee_note) %>
-  </div>
-<% end %>
+    <p>
+      Closed on
+      <%= time_tag(petition.closed_at) do %>
+        <strong><%= short_date_format(petition.closed_at) %></strong>
+      <% end %>
+    </p>
+  </header>
 
-<p>
-  Closed on <strong><%= short_date_format(petition.closed_at) %></strong>
-</p>
+  <% if @petition.committee_note? %>
+    <div class="highlight">
+      <%= markdown_to_html(@petition.committee_note) %>
+    </div>
+  <% end %>
 
-<%= auto_link(simple_format(h(petition.background)), html: { rel: 'nofollow' }) %>
+  <%= auto_link(simple_format(h(petition.background)), html: { rel: 'nofollow' }) %>
 
-<% unless petition.additional_details.blank? %>
-  <%= auto_link(simple_format(h(petition.additional_details)), html: { rel: 'nofollow' }) %>
-<% end %>
+  <% unless petition.additional_details.blank? %>
+    <%= auto_link(simple_format(h(petition.additional_details)), html: { rel: 'nofollow' }) %>
+  <% end %>
 
-<%= render "signature_count", petition: petition %>
-<%# render 'threshold_details', petition: petition %>
-<%# render 'related_activity_details', petition: petition %>
+  <%= render "signature_count", petition: petition %>
+  <%# render 'threshold_details', petition: petition %>
+  <%# render 'related_activity_details', petition: petition %>
 
-<hr>
+  <% petition_timeline(petition) do |items| %>
+    <hr>
 
-<div class="petition-timeline">
-  <h2>
-    Petition progress
-  </h2>
+    <div class="petition-timeline">
+      <h2 id="progress">
+        Petition progress
+      </h2>
 
-  <ul>
-    <li class="completed">
-      <h3>Petition published</h3
-      <p>
-        People were able to sign this petition
-      </p>
-    </li>
+      <ul>
+        <% items.each do |item| %>
+          <%= tag.li(class: class_names(completed: item.completed)) do %>
+            <h3><%= item.title %></h3>
+            <p><%= item.description %></p>
+          <% end %>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
 
-    <li class="completed">
-      <h3>Petition closed</h3
-      <p>
-        This petition closed on <%= short_date_format(petition.closed_at) %>
-      </p>
-    </li>
-  </ul>
-</div>
+  <hr>
 
-<hr>
+  <footer>
+    <h2 id="data">
+      Petition data
+    </h2>
 
-<p>
-  <%= link_to "Get petition data (json format)", petition_path(petition, :json) %>
-</p>
+    <p>
+      <%= link_to "Get petition data in JSON format", petition_path(petition, :json) %>
+    </p>
+  </footer>
+</article>

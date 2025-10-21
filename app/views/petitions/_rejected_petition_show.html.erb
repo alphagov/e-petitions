@@ -1,46 +1,61 @@
-<strong class="tag tag-red">
-  Rejected<span class="visually-hidden"> petition</span>
-</strong>
+<article class="petition-detail">
+  <header>
+    <strong class="tag tag-red">
+      Rejected<span class="visually-hidden"> petition</span>
+    </strong>
 
-<h1>
-  <%= petition.action %>
-</h1>
+    <h1 id="action">
+      <%= petition.action %>
+    </h1>
 
-<% if @petition.committee_note? %>
-  <div class="committee-note">
-    <%= markdown_to_html(@petition.committee_note) %>
-  </div>
-<% end %>
+    <p>
+      Rejected on
+      <%= time_tag(petition.rejected_at) do %>
+        <strong><%= short_date_format(petition.rejected_at) %></strong>
+      <% end %>
+    </p>
+  </header>
 
-<p>
-  Submitted on <strong><%= short_date_format(petition.created_at) %></strong>
-</p>
+  <% if @petition.committee_note? %>
+    <div class="highlight">
+      <%= markdown_to_html(@petition.committee_note) %>
+    </div>
+  <% end %>
 
-<%= auto_link(simple_format(h(petition.background)), html: { rel: 'nofollow' }) %>
+  <%= auto_link(simple_format(h(petition.background)), html: { rel: 'nofollow' }) %>
 
-<% unless petition.additional_details.blank? %>
-  <%= auto_link(simple_format(h(petition.additional_details)), html: { rel: 'nofollow' }) %>
-<% end %>
+  <% unless petition.additional_details.blank? %>
+    <%= auto_link(simple_format(h(petition.additional_details)), html: { rel: 'nofollow' }) %>
+  <% end %>
 
-<hr>
+  <hr>
 
-<h2 class="heading-3">
-  Why was this petition rejected?
-</h2>
+  <blockquote id="rejection">
+    <h2>
+      Why was this petition rejected?
+    </h2>
 
-<%= rejection_description(petition.rejection.code) %>
+    <%= rejection_description(petition.rejection.code) %>
 
-<% if petition.rejection.details? %>
-  <%= auto_link(simple_format(h(petition.rejection.details))) %>
-<% end %>
+    <% if petition.rejection.details? %>
+      <%= auto_link(simple_format(h(petition.rejection.details))) %>
+    <% end %>
 
-<p>
-  We only reject petitions that don’t meet the
-  <%= link_to 'petition standards', help_url(anchor: 'standards') %>.
-</p>
+    <p>
+      We only reject petitions that don’t meet the
+      <%= link_to 'petition standards', help_url(anchor: 'standards') %>.
+    </p>
+  </blockquote>
 
-<hr>
+  <hr>
 
-<p>
-  <%= link_to "Get petition data (json format)", petition_path(petition, :json) %>
-</p>
+  <footer>
+    <h2 id="data">
+      Petition data
+    </h2>
+
+    <p>
+      <%= link_to "Get petition data in JSON format", petition_path(petition, :json) %>
+    </p>
+  </footer>
+</article>

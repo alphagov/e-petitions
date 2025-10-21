@@ -1075,6 +1075,14 @@ class Petition < ActiveRecord::Base
     debate_state.in?(%w[awaiting scheduled])
   end
 
+  def awaiting_debate_decision?
+    debate_state == 'awaiting'
+  end
+
+  def debate_scheduled?
+    debate_state == 'scheduled'
+  end
+
   def debated?
     debate_state == 'debated'
   end

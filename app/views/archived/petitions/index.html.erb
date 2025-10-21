@@ -1,19 +1,17 @@
+<%= content_for :notifications do %>
+  <div class="highlight margin-top-7">
+    <p>Archived petitions are closed and cannot be signed</p>
+    <p><%= link_to "Back to current petitions", petitions_path(state: "open") %></p>
+  </div>
+<% end %>
+
 <%= form_tag archived_petitions_path, method: 'get', enforce_utf8: false do %>
-  <div class="grid-row margin-top-7">
+  <div class="grid-row">
     <div class="grid-column">
       <h1 class="margin-bottom-3">Search archived petitions</h1>
       <p>
         <%= t(:"archived_petitions.search.status_html", count: @petitions.total_entries, formatted_count: @petitions.formatted_total_entries) %>
       </p>
-
-      <div class="highlight">
-        <p>
-          Archived petitions are closed and cannot be signed
-        </p>
-        <p>
-          <%= link_to "Back to current petitions", petitions_path(state: "open") %>
-        </p>
-      </div>
     </div>
   </div>
 

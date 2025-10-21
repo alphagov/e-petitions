@@ -8,7 +8,10 @@ end
 
 When /^I decide to sign the petition$/ do
   visit petition_url(@petition)
-  click_link "Sign this petition"
+
+  within ".//p[@id='sign']" do
+    click_link "Sign this petition"
+  end
 end
 
 When /^I try to sign$/ do

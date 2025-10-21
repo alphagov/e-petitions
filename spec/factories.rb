@@ -458,6 +458,7 @@ FactoryBot.define do
         end
       else
         petition.open_at ||= Time.current
+        petition.published_at = petition.open_at
       end
     end
 

@@ -43,6 +43,39 @@
   }
 }
 
+.petition-detail {
+  header {
+    @include responsive-margin(6, bottom);
+  }
+
+  hr {
+    @include responsive-margin(6, top);
+    @include responsive-margin(6, bottom);
+  }
+
+  blockquote {
+    h2 {
+      @extend %h3;
+
+      &:first-child {
+        margin-top: 0;
+      }
+    }
+  }
+
+  footer {
+    @include responsive-margin(8, top);
+
+    h2 {
+      @extend %h3;
+
+      &:first-child {
+        margin-top: 0;
+      }
+    }
+  }
+}
+
 .petition-share {
   display: flex;
   gap: spacing(2);

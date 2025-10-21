@@ -441,3 +441,53 @@ en-GB:
       <svg xmlns="http://www.w3.org/2000/svg" height="13" width="15" aria-hidden="true" focusable="false" viewBox="0 0 15 13">
         <path d="m8.107-0.0078125-1.4136 1.414 4.2926 4.293h-12.986v2h12.896l-4.1855 3.9766 1.377 1.4492 6.7441-6.4062-6.7246-6.7266z"></path>
       </svg>
+
+
+  timeline:
+    published:
+      title: Petition published
+      description_html: |
+        People can now sign this petition.
+    closes:
+      title: Petition closes
+      description_html: |
+        This petition will stay open until
+        <time datetime="%{iso_closing_date}">%{closing_date}</time>.
+    closed:
+      title: Petition closed
+      description_html: |
+        This petition collected signatures until
+        <time datetime="%{iso_closing_date}">%{closing_date}</time>.
+    response_target:
+      title: At %{response_threshold} signatures
+      description_html: |
+        At %{response_threshold} signatures, government will respond to this petition.
+    awaiting_response:
+      title: Waiting for a government response
+      description_html: |
+        Government will respond to this petition.
+    responded:
+      title: Government responded to this petition
+      description_html: |
+        <a href="#response">View response</a>
+    debate_target:
+      title: At %{debate_threshold} signatures
+      description_html: |
+        At %{debate_threshold} signatures, this petition will be considered for debate in Parliament.
+    awaiting_debate:
+      title: Waiting for a decision about a debate in Parliament
+      description_html: |
+        The petitions committee wil consider this petition for a debate in Parliament.
+    debate_scheduled:
+      title: Debate in Parliament scheduled
+      description_html: |
+        A debate about this petition will take place on
+        <time datetime="%{iso_debate_date}">%{debate_date}</time>.
+    debated:
+      title: Parliament debated this petition
+      description_html: |
+        <a href="#debate">View debate</a>
+    not_debated:
+      title: Parliament did not debate this petition
+      description_html: |
+        The petitions committee considered this petition and decided not to debate it.

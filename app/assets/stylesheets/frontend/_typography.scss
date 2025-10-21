@@ -91,6 +91,16 @@ section {
   margin-top: 30px;
 }
 
+blockquote {
+  border-left: 5px solid $border-colour;
+  margin: 0;
+  padding: 0;
+
+  @include responsive-padding(5, all);
+  @include responsive-margin(6, top);
+  @include responsive-margin(6, bottom);
+}
+
 .panel-indent {
   border-left: 5px solid $border-colour;
   color: $supplementary-text-colour;

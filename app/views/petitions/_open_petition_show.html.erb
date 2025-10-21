@@ -6,96 +6,89 @@
   <% end %>
 <% end %>
 
-<strong class="tag tag-green">
-  Open<span class="visually-hidden"> petition</span>
-</strong>
+<article class="petition-detail">
+  <header>
+    <strong class="tag tag-green">
+      Open<span class="visually-hidden"> petition</span>
+    </strong>
 
-<h1>
-  <%= petition.action %>
-</h1>
+    <h1 id="action">
+      <%= petition.action %>
+    </h1>
 
-<% if @petition.committee_note? %>
-  <div class="highlight">
-    <%= markdown_to_html(@petition.committee_note) %>
-  </div>
-<% end %>
-
-<p>
-  <% if creator = petition.creator %>
-    <% unless creator.anonymized? %>
-      Created by <strong><%= petition.creator.name %></strong><br>
-    <% end %>
-  <% end %>
-
-  <% if petition.closing_early_for_dissolution? %>
-    Closes on <strong><%= short_date_format(Parliament.dissolution_at) %></strong>
-  <% else %>
-    Closes on <strong><%= short_date_format(petition.deadline) %></strong>
-  <% end %>
-</p>
-
-<%= auto_link(simple_format(h(petition.background)), html: { rel: 'nofollow' }) %>
-
-<% unless petition.additional_details.blank? %>
-  <%= auto_link(simple_format(h(petition.additional_details)), html: { rel: 'nofollow' }) %>
-<% end %>
-
-<% unless Site.signature_collection_disabled? %>
-  <p>
-    <%= link_to "Sign this petition", new_petition_signature_path(petition), class: 'button' %>
-  </p>
-<% end %>
-
-<%= render "signature_count", petition: petition %>
-<%# render 'threshold_details', petition: petition %>
-<%# render 'related_activity_details', petition: petition %>
-
-<hr>
-
-<div class="petition-timeline">
-  <h2>
-    Petition progress
-  </h2>
-
-  <ul>
-    <li class="completed">
-      <h3>Petition published</h3
-      <p>People can now sign this petition</p>
-    </li>
-
-    <li>
-      <h3>At 10,000 signatures</h3
-      <p>
-        At 10,000 signatures, government will respond to this petition
-      </p>
-    </li>
-
-    <li>
-      <h3>At 100,000 signatures</h3
-      <p>
-        At 100,000 signatures, this petition will be considered for debate in Parliament
-      </p>
-    </li>
-
-    <li>
-      <h3>Petition closes</h3
-      <p>
-        <% if petition.closing_early_for_dissolution? %>
-          This petition will stay open until <%= short_date_format(Parliament.dissolution_at) %>
-        <% else %>
-          This petition will stay open until <%= short_date_format(petition.deadline) %>
+    <p>
+      <% if creator = petition.creator %>
+        <% unless creator.anonymized? %>
+          Created by <strong><%= petition.creator.name %></strong><br>
         <% end %>
-      </p>
-    </li>
-  </ul>
-</div>
+      <% end %>
 
-<hr>
+      <% if petition.closing_early_for_dissolution? %>
+        Closes on
+        <%= time_tag(Parliament.dissolution_at) do %>
+          <strong><%= short_date_format(Parliament.dissolution_at) %></strong>
+        <% end %>
+      <% else %>
+        Closes on
+        <%= time_tag(petition.deadline) do %>
+          <strong><%= short_date_format(petition.deadline) %></strong>
+        <% end %>
+      <% end %>
+    </p>
+  </header>
 
-<%= render 'share_petition', petition: petition %>
+  <% if @petition.committee_note? %>
+    <div class="highlight">
+      <%= markdown_to_html(@petition.committee_note) %>
+    </div>
+  <% end %>
 
-<hr>
+  <%= auto_link(simple_format(h(petition.background)), html: { rel: 'nofollow' }) %>
 
-<p>
-  <%= link_to "Get petition data (json format)", petition_path(petition, :json) %>
-</p>
+  <% unless petition.additional_details.blank? %>
+    <%= auto_link(simple_format(h(petition.additional_details)), html: { rel: 'nofollow' }) %>
+  <% end %>
+
+  <% unless Site.signature_collection_disabled? %>
+    <p id="sign">
+      <%= link_to "Sign this petition", new_petition_signature_path(petition), class: 'button' %>
+    </p>
+  <% end %>
+
+  <%= render "signature_count", petition: petition %>
+  <%# render 'threshold_details', petition: petition %>
+  <%# render 'related_activity_details', petition: petition %>
+
+  <% petition_timeline(petition) do |items| %>
+    <hr>
+
+    <div class="petition-timeline">
+      <h2 id="progress">
+        Petition progress
+      </h2>
+
+      <ul>
+        <% items.each do |item| %>
+          <%= tag.li(class: class_names(completed: item.completed)) do %>
+            <h3><%= item.title %></h3>
+            <p><%= item.description %></p>
+          <% end %>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <%= render 'share_petition', petition: petition %>
+
+  <hr>
+
+  <footer>
+    <h2 id="data">
+      Petition data
+    </h2>
+
+    <p>
+      <%= link_to "Get petition data in JSON format", petition_path(petition, :json) %>
+    </p>
+  </footer>
+</article>

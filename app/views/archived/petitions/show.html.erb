@@ -1,83 +1,151 @@
-<div class="grid-row margin-top-7">
+<%= content_for :notifications do %>
+  <div class="highlight margin-top-7">
+    <p>This petition was submitted during the <%= @parliament.period %> parliament</p>
+    <p><%= link_to "View other petitions from this parliament", archived_petitions_path(parliament: @parliament) %></p>
+  </div>
+<% end %>
+
+<div class="grid-row">
   <div class="grid-column-two-thirds-from-laptop">
-    <div class="highlight">
-      <p>
-        This petition was submitted during the <%= @parliament.period %> parliament
-      </p>
+    <article class="petition-detail">
+      <header>
+        <% if @petition.rejected? %>
+          <strong class="tag tag-red">
+            Rejected<span class="visually-hidden"> petition</span>
+          </strong>
+        <% else %>
+          <strong class="tag tag-grey">
+            Closed<span class="visually-hidden"> petition</span>
+          </strong>
+        <% end %>
 
-      <p>
-        <%= link_to "View other petitions from this parliament", archived_petitions_path(parliament: @parliament) %>
-      </p>
-    </div>
+        <h1 id="action">
+          <%= @petition.action %>
+        </h1>
 
-    <% if @petition.rejected? %>
-      <strong class="tag tag-red">
-        Rejected<span class="visually-hidden"> petition</span>
-      </strong>
-    <% else %>
-      <strong class="tag tag-grey">
-        Closed<span class="visually-hidden"> petition</span>
-      </strong>
-    <% end %>
+        <% if @petition.rejected? %>
+          <p>
+            Rejected on
+            <%= time_tag(@petition.rejected_at) do %>
+              <strong><%= short_date_format(@petition.rejected_at) %></strong>
+            <% end %>
+          </p>
+        <% else %>
+          <p>
+            Closed on
+            <%= time_tag(@petition.closed_at) do %>
+              <strong><%= short_date_format(@petition.closed_at) %></strong>
+            <% end %>
+          </p>
+        <% end %>
+      </header>
 
-    <h1>
-      <%= @petition.action %>
-    </h1>
-
-    <% if @petition.committee_note? %>
-      <div class="highlight">
-        <%= markdown_to_html(@petition.committee_note) %>
-      </div>
-    <% end %>
-
-    <% if @petition.rejected? %>
-      <p>
-        Submitted on <strong><%= short_date_format(@petition.created_at) %></strong>
-      </p>
-    <% else %>
-      <p>
-        Closed on <strong><%= short_date_format(@petition.closed_at) %></strong>
-      </p>
-    <% end %>
-
-
-    <% if @petition.background? %>
-      <%= auto_link(simple_format(h(@petition.background)), html: { rel: 'nofollow' }) %>
-
-      <% if @petition.additional_details? %>
-        <%= auto_link(simple_format(h(@petition.additional_details)), html: { rel: 'nofollow' }) %>
+      <% if @petition.committee_note? %>
+        <div class="highlight">
+          <%= markdown_to_html(@petition.committee_note) %>
+        </div>
       <% end %>
-    <% else %>
-      <% if @petition.additional_details? %>
-        <%= auto_link(simple_format(h(@petition.additional_details)), html: { rel: 'nofollow' }) %>
-      <% end %>
-    <% end %>
 
-    <% if @petition.rejected? %>
+      <% if @petition.background? %>
+        <%= auto_link(simple_format(h(@petition.background)), html: { rel: 'nofollow' }) %>
+
+        <% if @petition.additional_details? %>
+          <%= auto_link(simple_format(h(@petition.additional_details)), html: { rel: 'nofollow' }) %>
+        <% end %>
+      <% else %>
+        <% if @petition.additional_details? %>
+          <%= auto_link(simple_format(h(@petition.additional_details)), html: { rel: 'nofollow' }) %>
+        <% end %>
+      <% end %>
+
+      <% if @petition.rejected? %>
+        <hr>
+
+        <blockquote id="rejection">
+          <h2>
+            Why was this petition rejected?
+          </h2>
+
+          <%= rejection_description(@petition.rejection.code) %>
+
+          <% if @petition.rejection.details? %>
+            <%= auto_link(simple_format(h(@petition.rejection.details))) %>
+          <% end %>
+
+          <p>
+            We only reject petitions that don’t meet the
+            <%= link_to 'petition standards', help_url(anchor: 'standards') %>.
+          </p>
+        </blockquote>
+      <% else %>
+        <%= render "signature_count", petition: @petition %>
+      <% end %>
+
+      <% petition_timeline(@petition) do |items| %>
+        <hr>
+
+        <div class="petition-timeline">
+          <h2 id="progress">
+            Petition progress
+          </h2>
+
+          <ul>
+            <% items.each do |item| %>
+              <%= tag.li(class: class_names(completed: item.completed)) do %>
+                <h3><%= item.title %></h3>
+                <p><%= item.description %></p>
+              <% end %>
+            <% end %>
+          </ul>
+        </div>
+      <% end %>
+
       <hr>
 
-      <h2 class="heading-3">
-        Why was this petition rejected?
-      </h2>
+      <footer>
+        <h2 id="data">
+          Petition data
+        </h2>
 
-      <%= rejection_description(@petition.rejection.code) %>
+        <p>
+          <%= link_to "Get petition data in JSON format", archived_petition_path(@petition, :json) %>
+        </p>
+      </footer>
+    </article>
+  </div>
 
-      <% if @petition.rejection.details? %>
-        <%= auto_link(simple_format(h(@petition.rejection.details))) %>
-      <% end %>
+  <div class="grid-column-one-third hide-until-laptop">
+    <nav class="sticky-menu">
+      <h3>On this page</h3>
 
-      <p>
-        We only reject petitions that don’t meet the
-        <%= link_to 'petition standards', help_url(anchor: 'standards') %>.
-      </p>
-    <% else %>
-      <%= render "signature_count", petition: @petition %>
-    <% end %>
-
-    <hr>
-
-    <p>
-      <%= link_to "Get petition data (json format)", archived_petition_path(@petition, :json) %>
-    </p>
+      <ul>
+        <li>
+          <%= link_to "About this petition", "#action" %>
+        </li>
+        <% if @petition.published? %>
+          <li>
+            <%= link_to "Petition progress", "#progress" %>
+          </li>
+        <% end %>
+        <% if @petition.government_response? %>
+          <li>
+            <%= link_to "Government response", "#response" %>
+          </li>
+        <% end %>
+        <% if @petition.debate_outcome? %>
+          <li>
+            <%= link_to "Parliament debate", "#debate" %>
+          </li>
+        <% end %>
+        <% if @petition.rejected? %>
+          <li>
+            <%= link_to "Why was this petition rejected?", "#rejection" %>
+          </li>
+        <% end %>
+        <li>
+          <%= link_to "Petition data", "#data" %>
+        </li>
+      </ul>
+    </nav>
   </div>
 </div>

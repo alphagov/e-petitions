@@ -1,0 +1,22 @@
+@use "../settings" as *;
+@use "../helpers" as *;
+
+.sticky-menu {
+  padding-left: spacing(5);
+  position: sticky;
+  top: spacing(6);
+  z-index: 100;
+
+  h3 {
+    font-weight: normal;
+  }
+
+  ul {
+    border-left: 1px solid $border-colour;
+    padding-left: spacing(4);
+
+    li {
+      margin: spacing(3) 0;
+    }
+  }
+}

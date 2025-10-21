@@ -10,4 +10,47 @@
       <%= render 'open_petition_show', petition: @petition %>
     <% end %>
   </div>
+
+  <div class="grid-column-one-third hide-until-laptop">
+    <nav class="sticky-menu">
+      <h3>On this page</h3>
+
+      <ul>
+        <li>
+          <%= link_to "About this petition", "#action" %>
+        </li>
+        <% if @petition.published? %>
+          <li>
+            <%= link_to "Petition progress", "#progress" %>
+          </li>
+        <% end %>
+        <% if @petition.open? %>
+          <li>
+            <%= link_to "Sign this petition", "#sign" %>
+          </li>
+          <li>
+            <%= link_to "Share this petition", "#share" %>
+          </li>
+        <% end %>
+        <% if @petition.government_response? %>
+          <li>
+            <%= link_to "Government response", "#response" %>
+          </li>
+        <% end %>
+        <% if @petition.debate_outcome? %>
+          <li>
+            <%= link_to "Parliament debate", "#debate" %>
+          </li>
+        <% end %>
+        <% if @petition.rejected? %>
+          <li>
+            <%= link_to "Why was this petition rejected?", "#rejection" %>
+          </li>
+        <% end %>
+        <li>
+          <%= link_to "Petition data", "#data" %>
+        </li>
+      </ul>
+    </nav>
+  </div>
 </div>
