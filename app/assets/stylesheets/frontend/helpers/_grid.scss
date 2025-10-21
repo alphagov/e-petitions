@@ -11,17 +11,12 @@
   @error "Unknown grid width `#{$key}`";
 }
 
-@mixin grid-column($width: full, $float: left, $at: tablet) {
-  box-sizing: border-box;
-
+@mixin grid-column($width: full, $at: tablet) {
   @if $at != desktop {
     width: 100%;
   }
 
-  padding: 0 $gutter-half;
-
   @include media-query($from: $at) {
     width: grid-width($width);
-    float: $float;
   }
 }

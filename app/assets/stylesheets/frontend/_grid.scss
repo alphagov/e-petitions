@@ -4,13 +4,23 @@
 @use "./helpers" as *;
 
 .grid-row {
-  @include clearfix;
-  margin-right: -($gutter-half);
-  margin-left: -($gutter-half);
+  display: flex;
+  flex-wrap: wrap;
+  margin-left: -$gutter-half;
+  margin-right: -$gutter-half;
+
+  & > * {
+    flex-shrink: 0;
+    width: 100%;
+    max-width: 100%;
+    padding-left: $gutter-half;
+    padding-right: $gutter-half;
+  }
 }
 
 .grid-column {
-  @include grid-column();
+  flex: 1 1 0;
+  max-width: 100%;
 }
 
 @each $width in map.keys($grid-widths) {
