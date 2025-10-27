@@ -1,6 +1,105 @@
 @use "../settings" as *;
 @use "../helpers" as *;
 
+.petition-items {
+  @include responsive-margin(7, top);
+  @include responsive-padding(7, bottom);
+
+  border-bottom: 1px solid $border-colour;
+
+  &:last-child {
+    border-bottom: none;
+  }
+
+  ul {
+    display: flex;
+    flex-direction: column;
+    gap: spacing(3);
+
+    @include media-query($from: tablet) {
+      flex-direction: row;
+      gap: spacing(4);
+    }
+
+    li {
+      @include responsive-padding(4, all);
+
+      border: 1px solid $border-colour;
+      border-radius: $button-border-radius;
+
+      flex-grow: 1;
+      flex-basis: 0;
+
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+
+      @include media-query($from: tablet) {
+        max-width: 50%;
+      }
+
+      h3 {
+        @include font-size(22);
+
+        margin-top: 0;
+        text-wrap: balance;
+
+        a {
+          display: block;
+        }
+      }
+
+      blockquote {
+        flex: 2;
+        display: flex;
+        flex-direction: column;
+
+        margin-top: 0;
+        margin-bottom: 0;
+        padding: spacing(3) spacing(4);
+
+        & > small {
+          @include font-size(18);
+          display: block;
+        }
+
+        & > p {
+          @include font-size(20);
+          @include responsive-margin(3, top);
+          @include responsive-margin(3, bottom);
+
+          color: $text-colour;
+
+          &:before {
+            content: open-quote;
+            display: inline;
+          }
+
+          &:after {
+            content: close-quote;
+            display: inline;
+          }
+        }
+      }
+
+      p.signature-count {
+        @include font-size(22);
+
+        border-top: 1px solid $border-colour;
+        margin-top: spacing(4);
+        padding-top: spacing(3);
+
+        span {
+          @include font-size(33);
+
+          font-weight: bold;
+          display: block;
+        }
+      }
+    }
+  }
+}
+
 .petition-item {
   h2 {
     @include font-size(27);

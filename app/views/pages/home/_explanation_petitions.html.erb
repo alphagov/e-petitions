@@ -1,6 +1,6 @@
 <% explanation_petitions do |actioned| %>
   <% unless actioned[:with_response][:count].zero? %>
-    <section id="responded-petitions">
+    <section id="responded-petitions" class="petition-items">
       <h2>
         Government responses to petitions
       </h2>
@@ -20,7 +20,7 @@
   <% end %>
 
   <% unless actioned[:with_debated_outcome][:count].zero? %>
-    <section id="debated-petitions">
+    <section id="debated-petitions" class="petition-items">
       <h2>
         Petitions debated in Parliament
       </h2>
