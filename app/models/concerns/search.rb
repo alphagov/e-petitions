@@ -7,34 +7,28 @@ module Search
   include ActiveModel::Dirty
   include ActiveSupport::NumberHelper
 
-  class EnumType < ActiveModel::Type::Value
-    attr_reader :values
-
+  class DynamicType < ActiveModel::Type::Value
     def initialize(values:)
-      @values = resolve(values).map(&:to_s)
+      @values = values
     end
 
+    private
+
+    def values
+      @values.respond_to?(:call) ? @values.call : @values
+    end
+  end
+
+  class EnumType < DynamicType
     def cast(value)
       return nil unless value.is_a?(String)
       return nil unless values.include?(value)
 
       value
     end
-
-    private
-
-    def resolve(values)
-      values.respond_to?(:call) ? values.call : values
-    end
   end
 
-  class ListType < ActiveModel::Type::Value
-    attr_reader :values
-
-    def initialize(values:)
-      @values = resolve(values).map(&:to_s)
-    end
-
+  class ListType < DynamicType
     def cast(value)
       Array(value).reject do |item|
         next true unless item.is_a?(String)
@@ -43,12 +37,6 @@ module Search
 
         false
       end
-    end
-
-    private
-
-    def resolve(values)
-      values.respond_to?(:call) ? values.call : values
     end
   end
 
@@ -201,10 +189,17 @@ module Search
 
   def transform(params)
     if state = params[:state]
-      params.merge(mappings.fetch(state.to_sym, {}))
+      params.merge(resolve(mappings.fetch(state.to_sym, {})))
     else
       params
     end
+
+  end
+
+  def resolve(mapping)
+    mapping.map do |key, value|
+      [key, value.respond_to?(:call) ? value.call : value]
+    end.to_h
   end
 
   def permit(params)

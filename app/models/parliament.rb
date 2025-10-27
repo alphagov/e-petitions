@@ -6,6 +6,8 @@ class Parliament < ActiveRecord::Base
   CUTOFF_DATE = Date.civil(2015, 5, 7)
   PERIOD_FORMAT = /\A\d{4}-\d{4}\z/
 
+  PARLIAMENT_CACHE = ActiveSupport::Cache::MemoryStore.new
+
   has_many :petitions, inverse_of: :parliament, class_name: "Archived::Petition"
   has_many :parliament_constituencies
   has_many :constituencies, through: :parliament_constituencies
@@ -151,6 +153,24 @@ class Parliament < ActiveRecord::Base
     def defaults
       I18n.t(:defaults, scope: :parliament).transform_values do |value|
         value.respond_to?(:call) ? value.call : value
+      end
+    end
+
+    def last_archived_id
+      PARLIAMENT_CACHE.fetch(:last_archived_id, expires_in: 1.hour) do
+        archived.ids.first.to_s
+      end
+    end
+
+    def archived_ids
+      PARLIAMENT_CACHE.fetch(:archived_ids, expires_in: 1.hour) do
+        archived.ids.map(&:to_s)
+      end
+    end
+
+    def archive_menu
+      PARLIAMENT_CACHE.fetch(:archive_menu, expires_in: 1.hour) do
+        archived.pluck(:period, :id)
       end
     end
   end

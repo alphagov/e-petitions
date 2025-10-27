@@ -11,7 +11,7 @@ module Archived
     ]
 
     mapping :all, sort: "popular"
-    mapping :published, status: %w[closed], sort: "popular"
+    mapping :published, status: %w[closed], sort: "popular", parliament: -> { Parliament.last_archived_id }
     mapping :rejected, status: %w[rejected], sort: "recent"
     mapping :with_response, status: %w[closed], response: %w[responded], sort: "popular"
     mapping :debated, status: %w[closed], debate: %w[debated], sort: "latest_debate"
@@ -20,7 +20,7 @@ module Archived
     parameter :query, default: ""
     alias_attribute :q, :query
 
-    filter :parliament, default: [], values: -> { Parliament.archived.ids }
+    filter :parliament, default: [], values: -> { Parliament.archived_ids }
     filter :status, default: [], values: %w[closed rejected]
     filter :response, default: [], values: %w[responded awaiting]
     filter :debate, default: [], values: %w[debated not_debated awaiting scheduled]
@@ -56,7 +56,7 @@ module Archived
     end
 
     def parliaments
-      @parliaments ||= Parliament.archived.pluck(:period, :id)
+      @parliaments ||= Parliament.archive_menu
     end
 
     def parliament_map
