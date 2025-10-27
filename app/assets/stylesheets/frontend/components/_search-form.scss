@@ -2,28 +2,14 @@
 @use "../helpers" as *;
 
 .search-form {
-  @include media-query($from: laptop) {
-    border: 1px solid $border-colour;
-    border-radius: $button-border-radius;
-  }
+  margin-bottom: spacing(4);
 
-  @include responsive-margin(5, bottom);
-
-  h2 {
-    @extend %h3;
-  }
-
-  h3 {
-    @extend %h4;
-  }
-
-  h2, h3 {
-    margin-top: 0;
-    @include responsive-margin(2, bottom);
-  }
+  position: sticky;
+  top: spacing(6);
+  z-index: 100;
 
   section {
-    margin: 0;
+    margin-top: 0;
 
     header {
       display: flex;
@@ -40,6 +26,19 @@
       }
     }
 
+    h2 {
+      @extend %h3;
+    }
+
+    h3 {
+      @extend %h4;
+    }
+
+    h2, h3 {
+      margin-top: 0;
+      @include responsive-margin(2, bottom);
+    }
+
     fieldset, legend {
       margin: 0;
       padding: 0;
@@ -54,12 +53,14 @@
 
   &__query {
     @include media-query($from: laptop) {
-      border-bottom: 1px solid $border-colour;
+      border: 1px solid $border-colour;
+      border-radius: $button-border-radius $button-border-radius 0 0;
     }
   }
 
   &__selected-filters {
-    border-bottom: 1px solid $border-colour;
+    border: 1px solid $border-colour;
+    border-top: none;
     display: none;
 
     @include media-query($from: laptop) {
@@ -118,6 +119,10 @@
 
     @include media-query($from: laptop) {
       display: block;
+
+      border: 1px solid $border-colour;
+      border-top: none;
+      border-radius: 0 0 $button-border-radius $button-border-radius;
     }
 
     .form-group {
@@ -127,13 +132,15 @@
     .button-group {
       @include responsive-margin(3, top);
     }
+
   }
 
-  & + p {
+  & > p:last-child {
     display: none;
 
     @include media-query($from: laptop) {
       display: block;
+      margin-top: spacing(5);
     }
   }
 }

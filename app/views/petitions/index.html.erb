@@ -12,7 +12,7 @@
 
   <div class="grid-row margin-top-5">
     <div class="grid-column-one-third-from-laptop">
-      <aside class="search-form">
+      <div class="search-form">
         <section class="search-form__query">
           <h2>
             <label for="search">Search</label>
@@ -120,11 +120,11 @@
             </button>
           </div>
         </section>
-      </aside>
 
-      <p>
-        <%= link_to "View archived petitions", archived_petitions_path(status: %w[closed], sort: "recent") %>
-      </p>
+        <p>
+          <%= link_to "View archived petitions", archived_petitions_path(status: %w[closed], sort: "recent") %>
+        </p>
+      </div>
     </div>
 
     <div class="grid-column-two-thirds-from-laptop">

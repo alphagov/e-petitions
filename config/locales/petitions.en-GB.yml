@@ -15,9 +15,9 @@ en-GB:
           scheduled: "Scheduled for debate"
 
       status_html:
-        zero: "We’ve found <strong>%{formatted_count}</strong> petitions"
-        one: "We’ve found <strong>%{formatted_count}</strong> petition"
-        other: "We’ve found <strong>%{formatted_count}</strong> petitions"
+        zero: "We’ve found <strong>%{formatted_count}</strong> petitions that match your search"
+        one: "We’ve found <strong>%{formatted_count}</strong> petition that matches your search"
+        other: "We’ve found <strong>%{formatted_count}</strong> petitions that match your search"
 
       sorting:
         descriptions:
@@ -403,9 +403,9 @@ en-GB:
           scheduled: "Scheduled for debate"
 
       status_html:
-        zero: "We’ve found <strong>%{formatted_count}</strong> petitions"
-        one: "We’ve found <strong>%{formatted_count}</strong> petition"
-        other: "We’ve found <strong>%{formatted_count}</strong> petitions"
+        zero: "We’ve found <strong>%{formatted_count}</strong> petitions that match your search"
+        one: "We’ve found <strong>%{formatted_count}</strong> petition that matches your search"
+        other: "We’ve found <strong>%{formatted_count}</strong> petitions that match your search"
 
       sorting:
         descriptions:
