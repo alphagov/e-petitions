@@ -92,6 +92,10 @@
     display: flex;
     align-items: center;
     padding: spacing(3);
+
+    &:focus {
+      padding: spacing(3);
+    }
   }
 
   svg {
