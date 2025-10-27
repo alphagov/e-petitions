@@ -1,20 +1,17 @@
-<article class="petition-detail">
-  <header>
-    <strong class="tag tag-grey">
-      Closed<span class="visually-hidden"> petition</span>
-    </strong>
+<section class="petition-detail">
+  <h1 id="action">
+    <span class="tag tag-grey">
+      Closed<span class="visually-hidden"> petition: </span>
+    </span>
+    <%= petition.action %>
+  </h1>
 
-    <h1 id="action">
-      <%= petition.action %>
-    </h1>
-
-    <p>
-      Closed on
-      <%= time_tag(petition.closed_at) do %>
-        <strong><%= short_date_format(petition.closed_at) %></strong>
-      <% end %>
-    </p>
-  </header>
+  <p>
+    Closed on
+    <%= time_tag(petition.closed_at) do %>
+      <strong><%= short_date_format(petition.closed_at) %></strong>
+    <% end %>
+  </p>
 
   <% if @petition.committee_note? %>
     <div class="highlight">
@@ -62,4 +59,4 @@
       <%= link_to "Get petition data in JSON format", petition_path(petition, :json) %>
     </p>
   </footer>
-</article>
+</section>

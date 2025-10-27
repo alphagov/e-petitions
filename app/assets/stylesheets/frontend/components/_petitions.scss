@@ -44,8 +44,12 @@
 }
 
 .petition-detail {
-  header {
-    @include responsive-margin(6, bottom);
+  margin-top: 0;
+
+  h1 {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
   }
 
   hr {
@@ -115,7 +119,6 @@
   @include font-size(22);
 
   border-radius: $button-border-radius;
-  display: inline-block;
   font-weight: normal !important;
   margin: 0 0 spacing(3) 0;
   padding: spacing(2) spacing(3);

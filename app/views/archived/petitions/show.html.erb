@@ -7,38 +7,35 @@
 
 <div class="grid-row">
   <div class="grid-column-two-thirds-from-laptop">
-    <article class="petition-detail">
-      <header>
+    <section class="petition-detail">
+      <h1 id="action">
         <% if @petition.rejected? %>
-          <strong class="tag tag-red">
+          <span class="tag tag-red">
             Rejected<span class="visually-hidden"> petition</span>
-          </strong>
+          </span>
         <% else %>
-          <strong class="tag tag-grey">
+          <span class="tag tag-grey">
             Closed<span class="visually-hidden"> petition</span>
-          </strong>
+          </span>
         <% end %>
+        <%= @petition.action %>
+      </h1>
 
-        <h1 id="action">
-          <%= @petition.action %>
-        </h1>
-
-        <% if @petition.rejected? %>
-          <p>
-            Rejected on
-            <%= time_tag(@petition.rejected_at) do %>
-              <strong><%= short_date_format(@petition.rejected_at) %></strong>
-            <% end %>
-          </p>
-        <% else %>
-          <p>
-            Closed on
-            <%= time_tag(@petition.closed_at) do %>
-              <strong><%= short_date_format(@petition.closed_at) %></strong>
-            <% end %>
-          </p>
-        <% end %>
-      </header>
+      <% if @petition.rejected? %>
+        <p>
+          Rejected on
+          <%= time_tag(@petition.rejected_at) do %>
+            <strong><%= short_date_format(@petition.rejected_at) %></strong>
+          <% end %>
+        </p>
+      <% else %>
+        <p>
+          Closed on
+          <%= time_tag(@petition.closed_at) do %>
+            <strong><%= short_date_format(@petition.closed_at) %></strong>
+          <% end %>
+        </p>
+      <% end %>
 
       <% if @petition.committee_note? %>
         <div class="highlight">
@@ -111,7 +108,7 @@
           <%= link_to "Get petition data in JSON format", archived_petition_path(@petition, :json) %>
         </p>
       </footer>
-    </article>
+    </section>
   </div>
 
   <div class="grid-column-one-third hide-until-laptop">
