@@ -3,7 +3,7 @@
 
 html {
   background-color: $theme-colour;
-  color: $inverse-text-colour;
+  color: $text-inverse-colour;
 }
 
 body {
@@ -43,7 +43,7 @@ h6, .heading-6 {
 }
 
 h1, h2, h3, h4, h5, h6 {
-  color: $heading-colour;
+  color: $text-heading-colour;
   text-wrap: balance;
 
   &:first-child {
@@ -58,7 +58,7 @@ h1, h2, h3, h4, h5, h6 {
 h1 > .heading-secondary {
   @include font-size(22);
 
-  color: $supplementary-text-colour;
+  color: $text-supplementary-colour;
   display: block;
   font-weight: normal;
 }
@@ -103,7 +103,7 @@ blockquote {
 
 .panel-indent {
   border-left: 5px solid $border-colour;
-  color: $supplementary-text-colour;
+  color: $text-supplementary-colour;
   margin: spacing(5) 0 spacing(6) 0;
   padding: spacing(3) spacing(4);
 }

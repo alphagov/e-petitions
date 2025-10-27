@@ -9,7 +9,7 @@
   display: inline-block;
 
   background-color: transparent;
-  color: $button-colour;
+  color: $text-colour;
 
   text-align: center;
   vertical-align: middle;
@@ -20,27 +20,27 @@
   border-radius: $button-border-radius;
 }
 
-%button-primary {
-  background-color: $primary-button-background-colour;
-  color: $primary-button-colour !important;
+%button-standard {
+  background-color: $button-colour;
+  color: $button-inverse-colour !important;
   padding: $button-padding-y $button-padding-x;
   text-decoration: none;
 
   &:hover:not(:active):not(:focus) {
-    background-color: $primary-button-hover-colour;
+    background-color: $button-hover-colour;
   }
 }
 
-%button-secondary {
-  background-color: $secondary-button-background-colour;
-  border: $button-border-width solid $secondary-button-colour;
-  color: $secondary-button-colour !important;
+%button-inverse {
+  background-color: $button-inverse-colour;
+  border: $button-border-width solid $button-colour;
+  color: $button-colour !important;
   padding: ($button-padding-y - $button-border-width) ($button-padding-x - $button-border-width);
 
   &:hover:not(:active):not(:focus) {
-    background-color: $secondary-button-background-colour;
-    border: $button-border-width solid $secondary-button-hover-colour;
-    color: $secondary-button-hover-colour !important;
+    background-color: $button-inverse-hover-colour;
+    border: $button-border-width solid $button-hover-colour;
+    color: $button-hover-colour !important;
   }
 }
 
@@ -50,14 +50,14 @@ button:not(:disabled), .button:not(:disabled) {
 
 .button {
   @extend %button;
-  @extend %button-primary;
+  @extend %button-standard;
 
   &:active, &:focus {
     @extend %focused-button;
   }
 
-  &.button-secondary {
-    @extend %button-secondary;
+  &.button-inverse {
+    @extend %button-inverse;
 
     &:active, &:focus {
       @extend %focused-button;

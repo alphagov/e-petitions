@@ -33,7 +33,7 @@ legend {
 }
 
 label {
-  color: $label-colour;
+  color: $text-label-colour;
   display: block;
   font-weight: bold;
   margin: 0;
@@ -50,7 +50,7 @@ input[type=password] {
   background-color: $input-background-colour;
   border-radius: $input-border-radius;
   border: $input-border-width solid $input-border-colour;
-  color: $input-colour;
+  color: $text-input-colour;
   display: block;
   font-weight: normal;
   height: $input-height-small;
@@ -72,7 +72,7 @@ textarea {
   background-color: $input-background-colour;
   border-radius: $input-border-radius;
   border: $input-border-width solid $input-border-colour;
-  color: $input-colour;
+  color: $text-input-colour;
   display: block;
   font-weight: normal;
   padding: spacing(2) spacing(3);
@@ -95,7 +95,7 @@ select {
   background-color: $input-background-colour;
   border-radius: $input-border-radius;
   border: $input-border-width solid $input-border-colour;
-  color: $input-colour;
+  color: $text-input-colour;
   font-weight: normal;
   height: $input-height-small;
   padding: spacing(2) spacing(3) + 20px spacing(2) spacing(3);
@@ -160,8 +160,8 @@ select {
     padding: 0;
 
     &::before {
-      background: $multiple-choice-background-colour;
-      border: 2px solid $multiple-choice-colour;
+      background: $input-background-colour;
+      border: 2px solid $input-border-colour;
       content: "";
       position: absolute;
       left: 0px;
@@ -187,7 +187,7 @@ select {
   }
 
   & > input[type=radio] + label::after {
-    border: 7px solid $multiple-choice-colour;
+    border: 7px solid $input-border-colour;
     border-radius: 50%;
     left: 8px;
     top: 8px;
@@ -195,7 +195,7 @@ select {
     width: 0;
 
     @include media-query($from: tablet) {
-      border: 10px solid $multiple-choice-colour;
+      border: 10px solid $input-border-colour;
       left: 10px;
       top: 10px;
     }
@@ -268,7 +268,7 @@ select {
 
     & > input[type=radio] + label::after {
       @include media-query($from: tablet) {
-        border: 7px solid $multiple-choice-colour;
+        border: 7px solid $input-border-colour;
         left: 8px;
         top: 8px;
       }
@@ -295,7 +295,7 @@ select {
 }
 
 .form-hint {
-  color: $hint-text-colour;
+  color: $text-hint-colour;
 }
 
 .character-count {
