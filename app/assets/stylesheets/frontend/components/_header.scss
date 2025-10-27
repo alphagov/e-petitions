@@ -1,98 +1,100 @@
 @use "../settings" as *;
 @use "../helpers" as *;
 
-body > header {
-  background-color: $header-background-colour;
-  color: $text-inverse-colour;
+body {
+  & > a.skip-to-content {
+    height: 1px;
+    width: 1px;
+    margin: -1px;
+    overflow: hidden;
+    position: absolute;
 
-  a {
-    color: $inverse-link-colour;
-    text-decoration: none;
-
-    &:hover:not(:focus) {
-      color: $inverse-link-hover-colour;
-    }
-
-    &:active:not(:focus) {
-      color: $inverse-link-active-colour;
-    }
-
-    &.skip-to-content {
-      height: 1px;
-      width: 1px;
-      margin: -1px;
-      overflow: hidden;
-      position: absolute;
-
-      &:focus {
-        height: auto;
-        width: auto;
-        margin: 0;
-        overflow: visible;
-        padding: spacing(2) spacing(3);
-        top: 4px;
-        left: 4px;
-        z-index: 2;
-      }
+    &:focus {
+      height: auto;
+      width: auto;
+      margin: 0;
+      overflow: visible;
+      padding: spacing(2) spacing(3);
+      top: 4px;
+      left: 4px;
+      z-index: 2;
     }
   }
 
-  .back-to-parliament {
-    background-color: $theme-colour;
-
-    @include responsive-padding(3, top);
-    @include responsive-padding(3, bottom);
+  & > header {
+    background-color: $header-background-colour;
+    color: $text-inverse-colour;
 
     a {
-      display: flex;
-      width: fit-content;
-      align-items: center;
+      color: $inverse-link-colour;
+      text-decoration: none;
 
       &:hover:not(:focus) {
-        box-shadow: inset 0px -1px 0 0 $inverse-link-hover-colour;
+        color: $inverse-link-hover-colour;
       }
 
       &:active:not(:focus) {
-        box-shadow: inset 0px -1px 0 0 $inverse-link-active-colour;
+        color: $inverse-link-active-colour;
+      }
+    }
+
+    .back-to-parliament {
+      background-color: $theme-colour;
+
+      @include responsive-padding(3, top);
+      @include responsive-padding(3, bottom);
+
+      a {
+        display: flex;
+        width: fit-content;
+        align-items: center;
+
+        &:hover:not(:focus) {
+          box-shadow: inset 0px -1px 0 0 $inverse-link-hover-colour;
+        }
+
+        &:active:not(:focus) {
+          box-shadow: inset 0px -1px 0 0 $inverse-link-active-colour;
+        }
+
+        svg {
+          margin-right: spacing(3);
+        }
+      }
+    }
+
+    .logo {
+      @include responsive-padding(5, top);
+      @include responsive-padding(5, bottom);
+
+      a {
+        display: inline-block;
+
+        &:hover:not(:focus) {
+          box-shadow: inset 0px -1px 0 0 $inverse-link-hover-colour;
+        }
+
+        &:active:not(:focus) {
+          box-shadow: inset 0px -1px 0 0 $inverse-link-active-colour;
+        }
       }
 
       svg {
-        margin-right: spacing(3);
-      }
-    }
-  }
+        width: 151px;
 
-  .logo {
-    @include responsive-padding(5, top);
-    @include responsive-padding(5, bottom);
-
-    a {
-      display: inline-block;
-
-      &:hover:not(:focus) {
-        box-shadow: inset 0px -1px 0 0 $inverse-link-hover-colour;
-      }
-
-      &:active:not(:focus) {
-        box-shadow: inset 0px -1px 0 0 $inverse-link-active-colour;
+        @include media-query($from: tablet) {
+          width: 214px;
+        }
       }
     }
 
-    svg {
-      width: 151px;
+    .strapline {
+      @include font-size(20);
+      margin-top: spacing(2);
 
-      @include media-query($from: tablet) {
-        width: 214px;
+      span {
+        white-space: nowrap;
       }
-    }
-  }
-
-  .strapline {
-    @include font-size(20);
-    margin-top: spacing(2);
-
-    span {
-      white-space: nowrap;
     }
   }
 }
