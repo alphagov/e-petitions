@@ -30,19 +30,19 @@ When('I search for {string}') do |facet|
     check "Open petitions"
     select "Recently published", from: "Sort results"
   when "Awaiting government response"
-    check "Open petitions"
+    check "Open petitions" unless current_path.starts_with?("/archived")
     check "Closed petitions"
     within_fieldset "Government response" do
       check "Awaiting"
     end
   when "Government responses"
-    check "Open petitions"
+    check "Open petitions" unless current_path.starts_with?("/archived")
     check "Closed petitions"
     within_fieldset "Government response" do
       check "Yes"
     end
   when "Awaiting a debate in Parliament"
-    check "Open petitions"
+    check "Open petitions" unless current_path.starts_with?("/archived")
     check "Closed petitions"
     within_fieldset "Debated in Parliament" do
       check "Awaiting"
@@ -50,7 +50,7 @@ When('I search for {string}') do |facet|
     end
     select "Upcoming debates", from: "Sort results"
   when "Debated in Parliament"
-    check "Open petitions"
+    check "Open petitions" unless current_path.starts_with?("/archived")
     check "Closed petitions"
     within_fieldset "Debated in Parliament" do
       check "Yes"

@@ -469,7 +469,8 @@ Given(/^these archived petitions? exist?:?$/) do |table|
       state:           petition[1],
       signature_count: petition[2],
       created_at:      petition[3],
-      rejected_at:     petition[4]
+      rejected_at:     petition[4],
+      opened_at:       petition[5]
     }
 
     FactoryBot.create(:archived_petition, attributes)

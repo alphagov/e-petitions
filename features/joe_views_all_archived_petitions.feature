@@ -5,25 +5,25 @@ Feature: Joe views all archived petition
 
   Background:
     Given these archived petitions exist:
-      | action                   | state    | signature_count | created_at | rejected_at |
-      | Wombles are great        | closed   | 835             | 2012-01-01 |             |
-      | Common People            | closed   | 639             | 2014-01-01 |             |
-      | Save the planet          | closed   | 243             | 2014-01-01 |             |
-      | Wombles to Parliament    | closed   | 243             | 2013-01-01 |             |
-      | Free gig tickets         | rejected |                 | 2013-01-01 | 2013-01-08  |
-      | Wombles are &*!%         | hidden   |                 | 2013-02-01 | 2013-02-08  |
-      | Bring back the Wombles   | stopped  |                 | 2013-03-01 |             |
+      | action                   | state    | signature_count | created_at | rejected_at | opened_at  |
+      | Wombles are great        | closed   | 835             | 2012-01-01 |             | 2012-01-10 |
+      | Common People            | closed   | 639             | 2014-01-01 |             | 2014-01-10 |
+      | Save the planet          | closed   | 243             | 2014-01-01 |             | 2014-01-11 |
+      | Wombles to Parliament    | closed   | 243             | 2013-01-01 |             | 2013-01-10 |
+      | Free gig tickets         | rejected |                 | 2013-01-01 | 2013-01-08  |            |
+      | Wombles are &*!%         | hidden   |                 | 2013-02-01 | 2013-02-08  |            |
+      | Bring back the Wombles   | stopped  |                 | 2013-03-01 |             | 2013-03-10 |
 
   Scenario:
     When I am on the petitions page
-    And I follow "View archived petition"
+    And I follow "View archived petitions"
     Then I should see "Search archived petitions"
     And I should see "We’ve found 4 petitions"
     And I should see the following list of archived petitions:
-      | Wombles are great         | Total signatures 835 |
-      | Common People             | Total signatures 639 |
       | Save the planet           | Total signatures 243 |
+      | Common People             | Total signatures 639 |
       | Wombles to Parliament     | Total signatures 243 |
+      | Wombles are great         | Total signatures 835 |
     And the markup should be valid
     When I search for "Rejected petitions"
     Then I should see "We’ve found 1 petition"
@@ -33,11 +33,11 @@ Feature: Joe views all archived petition
     When I search for "All petitions"
     Then I should see "We’ve found 5 petitions"
     And I should see the following list of archived petitions:
-      | Wombles are great         | Total signatures 835       |
-      | Common People             | Total signatures 639       |
       | Save the planet           | Total signatures 243       |
+      | Common People             | Total signatures 639       |
       | Wombles to Parliament     | Total signatures 243       |
       | Free gig tickets          | Rejected on 8 January 2013 |
+      | Wombles are great         | Total signatures 835       |
     And I should not see "Wombles are &*!%"
     And I should not see "Bring back the Wombles"
     And the markup should be valid

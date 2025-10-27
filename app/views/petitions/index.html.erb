@@ -123,7 +123,7 @@
       </aside>
 
       <p>
-        <%= link_to "View archived petitions", archived_petitions_path(state: "published") %>
+        <%= link_to "View archived petitions", archived_petitions_path(status: %w[closed], sort: "recent") %>
       </p>
     </div>
 
