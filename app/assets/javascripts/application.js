@@ -29,7 +29,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
 
   for (const button of applySortButtons) {
     const select = button.previousElementSibling;
-    button.classList.add('visually-hidden');
+    button.classList.add('display-none');
 
     select.addEventListener('change', (event) => {
       event.target.form.submit();
