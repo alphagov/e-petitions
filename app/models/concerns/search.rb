@@ -61,6 +61,7 @@ module Search
     remove_possible_method :count
 
     attribute :state, :string
+    attribute :keyword, :boolean, default: false
     attribute :page, :integer, default: 1
     attribute :count, :integer, default: -> { default_page_size }
 
@@ -76,7 +77,7 @@ module Search
 
   class_methods do
     def mapping(state, **filters)
-      self.mappings[state] = filters
+      self.mappings[state] = filters.merge(keyword: true)
       self.mapped_filters += filters.keys
     end
 
@@ -148,6 +149,18 @@ module Search
     end
   end
 
+  def keyword_params
+    current_params.merge(keyword: true)
+  end
+
+  def keyword_search?
+    keyword
+  end
+
+  def semantic_params
+    current_params.except(:keyword).merge(sort: "relevance")
+  end
+
   def current_params
     changed_params.map { |attribute| [attribute, public_send(attribute)] }.sort.to_h.compact_blank
   end
@@ -169,7 +182,7 @@ module Search
   end
 
   def semantic_search?
-    embedding.present?
+    !keyword && embedding.present?
   end
 
   def formatted_total_entries
@@ -213,7 +226,7 @@ module Search
 
   def changed_params
     if state_changed?
-      changed.map(&:to_sym) - mapped_filters.to_a
+      changed.map(&:to_sym).without(:keyword) - mapped_filters.to_a
     else
       changed.map(&:to_sym)
     end

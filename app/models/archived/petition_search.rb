@@ -6,7 +6,7 @@ module Archived
     self.model = Archived::Petition
 
     self.permitted_params = [
-      :state, :q, :query, :page, :count, :sort, :parliament,
+      :keyword, :state, :q, :query, :page, :count, :sort, :parliament,
       parliament: [], status: [], response: [], debate: []
     ]
 

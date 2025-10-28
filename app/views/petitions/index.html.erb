@@ -1,6 +1,10 @@
 <%= render 'parliament_dissolution_warning' %>
 
 <%= form_tag petitions_path, method: 'get', enforce_utf8: false do %>
+  <% if @petitions.keyword_search? %>
+    <%= hidden_field_tag :keyword, true %>
+  <% end %>
+
   <div class="grid-row margin-top-7">
     <div class="grid-column">
       <h1 class="margin-bottom-3">Search petitions</h1>
@@ -29,7 +33,7 @@
           </div>
         </section>
 
-        <% unless @petitions.selected_filters.empty? %>
+        <% unless @petitions.selected_filters.empty? && !@petitions.keyword_search? %>
           <section class="search-form__selected-filters">
             <header>
               <h3>Selected filters</h3>
@@ -41,6 +45,14 @@
             </header>
 
             <ul>
+              <% if @petitions.keyword_search? %>
+                <li>
+                  <%= link_to petitions_path(@petitions.semantic_params) do %>
+                    <span class="visually-hidden">Remove </span>Keyword search
+                  <% end %>
+                </li>
+              <% end %>
+
               <% @petitions.selected_filters.each do |key, value, params| %>
                 <li>
                   <%= link_to petitions_path(params) do %>
@@ -147,6 +159,19 @@
         <hr>
 
         <p>No petitions could be found matching your search filters.</p>
+
+        <% if @petitions.semantic_search? %>
+          <p>
+            No petitions could be found matching your search filters.
+            Try searching again by using keywords.
+          </p>
+
+          <p>
+            <%= link_to petitions_path(@petitions.keyword_params) do %>
+              Search by keyword instead of relevance
+            <% end %>
+          </p>
+        <% end %>
       <% else %>
         <%= render partial: "petitions/petition", collection: @petitions %>
 

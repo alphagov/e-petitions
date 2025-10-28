@@ -5,7 +5,7 @@ class PetitionSearch
   self.model = Petition
 
   self.permitted_params = [
-    :state, :q, :query, :page, :count, :sort,
+    :keyword, :state, :q, :query, :page, :count, :sort,
     status: [], response: [], debate: []
   ]
 
