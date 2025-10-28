@@ -8,6 +8,7 @@ class PetitionsController < PublicController
   before_action :redirect_to_home_page_if_dissolved, only: [:start, :new, :create]
   before_action :redirect_to_home_page_unless_opened, only: [:index, :start, :new, :create]
   before_action :redirect_to_archived_petition_if_archived, only: [:show]
+  before_action :redirect_to_show_page_if_petition_exists, only: [:index]
 
   before_action :redirect_to_home_page_if_suspended, only: [:start, :new, :create]
 
@@ -115,6 +116,12 @@ class PetitionsController < PublicController
     redirect_to home_url if Site.disable_petition_creation?
   end
 
+  def redirect_to_show_page_if_petition_exists
+    if query_param.match?(/^\d+$/)
+      redirect_to petition_url(query_param) if Petition.visible.exists?(query_param)
+    end
+  end
+
   def retrieve_petitions
     @petitions = PetitionSearch.new(params)
   end
@@ -135,6 +142,10 @@ class PetitionsController < PublicController
     if state_present? && !valid_state?
       redirect_to petitions_url(search_params(state: :all))
     end
+  end
+
+  def query_param
+    params.fetch(:query, params.fetch(:q, ""))
   end
 
   def state_present?

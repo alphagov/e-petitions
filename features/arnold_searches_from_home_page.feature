@@ -36,6 +36,11 @@ Scenario: Arnold searches for petitions when parliament is opened
     | Overthrow the Wombles        | Total signatures 17 |
     | Wombles                      | Total signatures 13 |
 
+Scenario: Arnold searches for petitions by id
+  Given I am on the home page
+  When I search all petitions using the id of the petition "Uncle Bulgaria"
+  Then I should be on the petition page for "Uncle Bulgaria"
+
 Scenario: Arnold searches for petitions when parliament is dissolving
   Given Parliament is dissolving
   When I am on the home page

@@ -34,3 +34,9 @@ Feature: Joe searches for an archived petition
     And I should see 1 petition
     Then I follow "Previous"
     And I should see 25 petitions
+
+  Scenario: Searching for petition by id
+    When I go to the archived petitions page
+    And I fill in "search" with the id of the archived petition "Wombles are great"
+    And I press "Search"
+    Then I should be on the archived petition page for "Wombles are great"

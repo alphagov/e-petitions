@@ -106,3 +106,9 @@ Feature: Suzy Singer searches by free text
     Then I should see 1 petition
     And I follow "Previous"
     Then I should see 25 petitions
+
+  Scenario: Searching for petition by id
+    When I go to the petitions page
+    And I fill in "search" with the id of the petition "Uncle Bulgaria"
+    And I press "Search"
+    Then I should be on the petition page for "Uncle Bulgaria"

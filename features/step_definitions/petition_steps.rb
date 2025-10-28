@@ -482,6 +482,21 @@ When (/^I search all petitions for "(.*?)"$/) do |search_term|
   click_button "Search petitions"
 end
 
+When('I search all petitions using the id of the petition {string}') do |action|
+  petition = Petition.find_by!(action: action)
+  step %{I search all petitions for "#{petition.id}"}
+end
+
+When('I fill in {string} with the id of the petition {string}') do |field, action|
+  petition = Petition.find_by!(action: action)
+  step %{I fill in "#{field}" with "#{petition.id}"}
+end
+
+When('I fill in {string} with the id of the archived petition {string}') do |field, action|
+  petition = Archived::Petition.find_by!(action: action)
+  step %{I fill in "#{field}" with "#{petition.id}"}
+end
+
 Given(/^all the open petitions have been closed$/) do
   Petition.open_state.find_each do |petition|
     petition.close_early!(1.day.ago)

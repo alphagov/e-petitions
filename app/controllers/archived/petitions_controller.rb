@@ -2,6 +2,7 @@ require 'csv'
 
 class Archived::PetitionsController < PublicController
   before_action :redirect_to_valid_state, only: [:index]
+  before_action :redirect_to_show_page_if_petition_exists, only: [:index]
   before_action :fetch_petitions, only: [:index]
   before_action :fetch_petition, only: [:show]
 
@@ -78,6 +79,16 @@ class Archived::PetitionsController < PublicController
 
   def valid_state?
     archived_petition_facets.include?(sanitized_state)
+  end
+
+  def redirect_to_show_page_if_petition_exists
+    if query_param.match?(/^\d+$/)
+      redirect_to petition_url(query_param) if Archived::Petition.visible.exists?(query_param)
+    end
+  end
+
+  def query_param
+    params.fetch(:query, params.fetch(:q, ""))
   end
 
   def search_params(overrides = {})
