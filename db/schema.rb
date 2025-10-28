@@ -372,6 +372,12 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_12_194807) do
     t.index ["petition_id"], name: "index_email_requested_receipts_on_petition_id"
   end
 
+  create_table "embeddings", id: :string, force: :cascade do |t|
+    t.halfvec "embedding", limit: 1024
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "feedback", force: :cascade do |t|
     t.string "comment", limit: 32768, null: false
     t.string "petition_link_or_title"

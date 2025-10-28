@@ -1,9 +1,28 @@
 require 'faraday'
 require 'aws-sdk-bedrockruntime'
 require 'openai'
+require 'digest/md5'
 
 module Embedding
   class GenerationError < RuntimeError; end
+
+  class Record < ActiveRecord::Base
+    self.table_name = "embeddings"
+
+    class << self
+      def fetch(key, &block)
+        begin
+          record = find_or_create_by(id: key) do |r|
+            r.embedding = yield
+          end
+
+          record.embedding
+        rescue ActiveRecord::RecordNotUnique
+          retry
+        end
+      end
+    end
+  end
 
   module Backends
     class Ollama
@@ -102,7 +121,9 @@ module Embedding
 
   class << self
     def generate(input)
-      client.generate(input)
+      cache(input) do
+        client.generate(input)
+      end
     end
 
     def backend
@@ -115,6 +136,20 @@ module Embedding
 
     def reload
       Thread.current[:__embedding__] = nil
+    end
+
+    private
+
+    def cache(input, &block)
+      Record.fetch(cache_key(input), &block)
+    end
+
+    def cache_key(input)
+      Digest::MD5.hexdigest(normalize(input))
+    end
+
+    def normalize(input)
+      input.to_s.strip
     end
   end
 end
