@@ -61,6 +61,17 @@ RSpec.describe Admin::LocksController, type: :controller, admin: true do
           }
         end
       end
+
+      context "when the petition doesn't exist" do
+        let(:json) { JSON.parse(response.body) }
+
+        it "returns an error" do
+          get :show, params: { petition_id: "999999" }, format: :json
+
+          expect(response).to have_http_status(:not_found)
+          expect(json).to match("error" => { "status" => 404, "message" => "Not Found" })
+        end
+      end
     end
 
     describe "POST /admin/petitions/:petition_id/lock.json" do
@@ -79,7 +90,7 @@ RSpec.describe Admin::LocksController, type: :controller, admin: true do
 
         it "updates the locked_by association" do
           expect {
-            get :create, params: { petition_id: petition.to_param }, format: :json
+            post :create, params: { petition_id: petition.to_param }, format: :json
           }.to change {
             petition.reload.locked_by
           }.from(nil).to eq(moderator)
@@ -87,7 +98,7 @@ RSpec.describe Admin::LocksController, type: :controller, admin: true do
 
         it "updates the locked_at timestamp" do
           expect {
-            get :create, params: { petition_id: petition.to_param }, format: :json
+            post :create, params: { petition_id: petition.to_param }, format: :json
           }.to change {
             petition.reload.locked_at
           }.from(nil).to be_within(1.second).of(Time.current)
@@ -99,7 +110,7 @@ RSpec.describe Admin::LocksController, type: :controller, admin: true do
 
         it "doesn't update the locked_by association" do
           expect {
-            get :create, params: { petition_id: petition.to_param }, format: :json
+            post :create, params: { petition_id: petition.to_param }, format: :json
           }.not_to change {
             petition.reload.locked_by
           }
@@ -107,7 +118,7 @@ RSpec.describe Admin::LocksController, type: :controller, admin: true do
 
         it "updates the locked_at timestamp" do
           expect {
-            get :create, params: { petition_id: petition.to_param }, format: :json
+            post :create, params: { petition_id: petition.to_param }, format: :json
           }.to change {
             petition.reload.locked_at
           }.to be_within(1.second).of(Time.current)
@@ -120,7 +131,7 @@ RSpec.describe Admin::LocksController, type: :controller, admin: true do
 
         it "doesn't update the locked_by association" do
           expect {
-            get :create, params: { petition_id: petition.to_param }, format: :json
+            post :create, params: { petition_id: petition.to_param }, format: :json
           }.not_to change {
             petition.reload.locked_by
           }
@@ -128,22 +139,33 @@ RSpec.describe Admin::LocksController, type: :controller, admin: true do
 
         it "doesn't update the locked_at timestamp" do
           expect {
-            get :create, params: { petition_id: petition.to_param }, format: :json
+            post :create, params: { petition_id: petition.to_param }, format: :json
           }.not_to change {
             petition.reload.locked_at
           }
+        end
+      end
+
+      context "when the petition doesn't exist" do
+        let(:json) { JSON.parse(response.body) }
+
+        it "returns an error" do
+          post :create, params: { petition_id: "999999" }, format: :json
+
+          expect(response).to have_http_status(:not_found)
+          expect(json).to match("error" => { "status" => 404, "message" => "Not Found" })
         end
       end
     end
 
     describe "PATCH /admin/petitions/:petition_id/lock.json" do
       it "returns 200 OK" do
-        get :update, params: { petition_id: petition.to_param }, format: :json
+        patch :update, params: { petition_id: petition.to_param }, format: :json
         expect(response).to have_http_status(:ok)
       end
 
       it "renders the :update template" do
-        get :update, params: { petition_id: petition.to_param }, format: :json
+        patch :update, params: { petition_id: petition.to_param }, format: :json
         expect(response).to render_template("admin/locks/update")
       end
 
@@ -152,7 +174,7 @@ RSpec.describe Admin::LocksController, type: :controller, admin: true do
 
         it "updates the locked_by association" do
           expect {
-            get :update, params: { petition_id: petition.to_param }, format: :json
+            patch :update, params: { petition_id: petition.to_param }, format: :json
           }.to change {
             petition.reload.locked_by
           }.from(nil).to eq(moderator)
@@ -160,7 +182,7 @@ RSpec.describe Admin::LocksController, type: :controller, admin: true do
 
         it "updates the locked_at timestamp" do
           expect {
-            get :update, params: { petition_id: petition.to_param }, format: :json
+            patch :update, params: { petition_id: petition.to_param }, format: :json
           }.to change {
             petition.reload.locked_at
           }.from(nil).to be_within(1.second).of(Time.current)
@@ -172,7 +194,7 @@ RSpec.describe Admin::LocksController, type: :controller, admin: true do
 
         it "doesn't update the locked_by association" do
           expect {
-            get :update, params: { petition_id: petition.to_param }, format: :json
+            patch :update, params: { petition_id: petition.to_param }, format: :json
           }.not_to change {
             petition.reload.locked_by
           }
@@ -180,7 +202,7 @@ RSpec.describe Admin::LocksController, type: :controller, admin: true do
 
         it "updates the locked_at timestamp" do
           expect {
-            get :update, params: { petition_id: petition.to_param }, format: :json
+            patch :update, params: { petition_id: petition.to_param }, format: :json
           }.to change {
             petition.reload.locked_at
           }.to be_within(1.second).of(Time.current)
@@ -193,7 +215,7 @@ RSpec.describe Admin::LocksController, type: :controller, admin: true do
 
         it "updates the locked_by association" do
           expect {
-            get :update, params: { petition_id: petition.to_param }, format: :json
+            patch :update, params: { petition_id: petition.to_param }, format: :json
           }.to change {
             petition.reload.locked_by
           }.from(other_user).to eq(moderator)
@@ -201,22 +223,33 @@ RSpec.describe Admin::LocksController, type: :controller, admin: true do
 
         it "updates the locked_at timestamp" do
           expect {
-            get :update, params: { petition_id: petition.to_param }, format: :json
+            patch :update, params: { petition_id: petition.to_param }, format: :json
           }.to change {
             petition.reload.locked_at
           }.to be_within(1.second).of(Time.current)
+        end
+      end
+
+      context "when the petition doesn't exist" do
+        let(:json) { JSON.parse(response.body) }
+
+        it "returns an error" do
+          patch :update, params: { petition_id: "999999" }, format: :json
+
+          expect(response).to have_http_status(:not_found)
+          expect(json).to match("error" => { "status" => 404, "message" => "Not Found" })
         end
       end
     end
 
     describe "DELETE /admin/petitions/:petition_id/lock.json" do
       it "returns 200 OK" do
-        get :destroy, params: { petition_id: petition.to_param }, format: :json
+        delete :destroy, params: { petition_id: petition.to_param }, format: :json
         expect(response).to have_http_status(:ok)
       end
 
       it "renders the :destroy template" do
-        get :destroy, params: { petition_id: petition.to_param }, format: :json
+        delete :destroy, params: { petition_id: petition.to_param }, format: :json
         expect(response).to render_template("admin/locks/destroy")
       end
 
@@ -225,7 +258,7 @@ RSpec.describe Admin::LocksController, type: :controller, admin: true do
 
         it "doesn't update the locked_by association" do
           expect {
-            get :destroy, params: { petition_id: petition.to_param }, format: :json
+            delete :destroy, params: { petition_id: petition.to_param }, format: :json
           }.not_to change {
             petition.reload.locked_by
           }
@@ -233,7 +266,7 @@ RSpec.describe Admin::LocksController, type: :controller, admin: true do
 
         it "doesn't update the locked_at timestamp" do
           expect {
-            get :destroy, params: { petition_id: petition.to_param }, format: :json
+            delete :destroy, params: { petition_id: petition.to_param }, format: :json
           }.not_to change {
             petition.reload.locked_at
           }
@@ -245,7 +278,7 @@ RSpec.describe Admin::LocksController, type: :controller, admin: true do
 
         it "updates the locked_by association" do
           expect {
-            get :destroy, params: { petition_id: petition.to_param }, format: :json
+            delete :destroy, params: { petition_id: petition.to_param }, format: :json
           }.to change {
             petition.reload.locked_by
           }.from(moderator).to(nil)
@@ -253,7 +286,7 @@ RSpec.describe Admin::LocksController, type: :controller, admin: true do
 
         it "updates the locked_at timestamp" do
           expect {
-            get :destroy, params: { petition_id: petition.to_param }, format: :json
+            delete :destroy, params: { petition_id: petition.to_param }, format: :json
           }.to change {
             petition.reload.locked_at
           }.to be_nil
@@ -266,7 +299,7 @@ RSpec.describe Admin::LocksController, type: :controller, admin: true do
 
         it "doesn't update the locked_by association" do
           expect {
-            get :destroy, params: { petition_id: petition.to_param }, format: :json
+            delete :destroy, params: { petition_id: petition.to_param }, format: :json
           }.not_to change {
             petition.reload.locked_by
           }
@@ -274,10 +307,21 @@ RSpec.describe Admin::LocksController, type: :controller, admin: true do
 
         it "doesn't update the locked_at timestamp" do
           expect {
-            get :destroy, params: { petition_id: petition.to_param }, format: :json
+            delete :destroy, params: { petition_id: petition.to_param }, format: :json
           }.not_to change {
             petition.reload.locked_at
           }
+        end
+      end
+
+      context "when the petition doesn't exist" do
+        let(:json) { JSON.parse(response.body) }
+
+        it "returns an error" do
+          delete :destroy, params: { petition_id: "999999" }, format: :json
+
+          expect(response).to have_http_status(:not_found)
+          expect(json).to match("error" => { "status" => 404, "message" => "Not Found" })
         end
       end
     end
