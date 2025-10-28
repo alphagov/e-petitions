@@ -41,8 +41,8 @@
     <hr>
 
     <p>
-      Get this data in <%= link_to 'JSON', local_petition_path(@constituency, :json) %>
-      or <%= link_to 'CSV', local_petition_path(@constituency, :csv) %> format
+      Get this data in <%= link_to 'JSON', local_petition_path(@constituency, :json), download: "#{@constituency.slug}-open-popular-petitions.json" %>
+      or <%= link_to 'CSV', local_petition_path(@constituency, :csv), download: "#{@constituency.slug}-open-popular-petitions.csv" %> format
     </p>
   </div>
 </div>

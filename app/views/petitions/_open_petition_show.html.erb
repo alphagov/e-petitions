@@ -85,7 +85,7 @@
     </h2>
 
     <p>
-      <%= link_to "Get petition data in JSON format", petition_path(petition, :json) %>
+      <%= link_to "Get petition data in JSON format", petition_path(petition, :json), download: "petition-#{petition.id}.json" %>
     </p>
   </footer>
 </section>

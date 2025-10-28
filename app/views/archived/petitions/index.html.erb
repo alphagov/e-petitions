@@ -196,8 +196,8 @@
 
         <p>
           Get this data in
-          <%= link_to "JSON", archived_petitions_path(:json, @petitions.current_params) %> or
-          <%= link_to 'CSV', archived_petitions_path(:csv, @petitions.current_params.without(:page)) %> format
+          <%= link_to "JSON", archived_petitions_path(:json, @petitions.current_params), download: "archived-petitions.json" %> or
+          <%= link_to 'CSV', archived_petitions_path(:csv, @petitions.current_params.without(:page)), download: "archived-petitions.csv" %> format
         </p>
       <% end %>
     </div>
