@@ -28,31 +28,27 @@ module Archived
     # Remove Enumerable#sort method so we can use it as an attribute
     remove_possible_method :sort
 
-    parameter :sort, default: "",
-      values: %w[popular recent relevant waiting_longest latest_response upcoming_debates latest_debate]
+    parameter :sort, default: "default",
+      values: %w[default popular recent waiting_longest latest_response upcoming_debates latest_debate]
 
     def sort
-      if semantic_search?
-        super.presence || "relevant"
-      else
-        super == "relevant" ? "popular" : (super.presence || "popular")
-      end
+      super == "popular" && !semantic_search? ? "default" : super
     end
 
     def sortings
-      I18n.t(:"archived_petitions.search.sorting.menu").select do |label, name|
-        if semantic_search?
-          true
-        elsif name == "relevant"
-          false
-        else
-          true
-        end
+      if semantic_search?
+        I18n.t(:"archived_petitions.search.sorting.semantic_menu")
+      else
+        I18n.t(:"archived_petitions.search.sorting.menu")
       end
     end
 
     def sorting_description
-      I18n.t(sort, scope: :"archived_petitions.search.sorting.descriptions")
+      if semantic_search?
+        I18n.t(sort, scope: :"archived_petitions.search.sorting.semantic_descriptions")
+      else
+        I18n.t(sort, scope: :"archived_petitions.search.sorting.descriptions")
+      end
     end
 
     def parliaments
@@ -95,27 +91,6 @@ module Archived
 
     def debate_for_execute(scope)
       debate.empty? ? scope : scope.where(debate_state: debate)
-    end
-
-    def sort_for_execute(scope)
-      case sort
-      when "popular"
-        scope.by_most_signatures
-      when "recent"
-        scope.by_most_recently_published
-      when "relevant"
-        scope.by_relevance(embedding)
-      when "waiting_longest"
-        scope.by_waiting_for_response_longest
-      when "latest_response"
-        scope.by_most_recent_response
-      when "upcoming_debates"
-        scope.by_most_relevant_debate_date
-      when "latest_debate"
-        scope.by_most_recent_debate_outcome
-      else
-        scope.by_most_popular
-      end
     end
   end
 end

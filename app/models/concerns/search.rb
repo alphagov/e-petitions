@@ -150,7 +150,7 @@ module Search
   end
 
   def keyword_params
-    current_params.merge(keyword: true)
+    current_params.merge(keyword: true, sort: "default")
   end
 
   def keyword_search?
@@ -158,7 +158,7 @@ module Search
   end
 
   def semantic_params
-    current_params.except(:keyword).merge(sort: "relevance")
+    current_params.except(:keyword).merge(sort: "default")
   end
 
   def current_params
@@ -170,7 +170,7 @@ module Search
   end
 
   def clear_filter_params
-    current_filters.excluding(:page, *filters)
+    current_filters.excluding(:page, :keyword, *filters)
   end
 
   def scope
@@ -303,6 +303,29 @@ module Search
         .except(:order)
     else
       scope
+    end
+  end
+
+  def sort_for_execute(scope)
+    case sort
+    when "popular"
+      scope.by_most_signatures
+    when "recent"
+      scope.by_most_recently_published
+    when "waiting_longest"
+      scope.by_waiting_for_response_longest
+    when "latest_response"
+      scope.by_most_recent_response
+    when "upcoming_debates"
+      scope.by_most_relevant_debate_date
+    when "latest_debate"
+      scope.by_most_recent_debate_outcome
+    else
+      if semantic_search?
+        scope.by_relevance(embedding)
+      else
+        scope.by_most_signatures
+      end
     end
   end
 end

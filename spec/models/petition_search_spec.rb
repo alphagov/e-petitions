@@ -9,7 +9,7 @@ RSpec.describe PetitionSearch, type: :model do
       let(:state) { "all" }
 
       it "configures the search correctly" do
-        expect(search).to have_attributes(status: [], response: [], debate: [], sort: "popular")
+        expect(search).to have_attributes(status: [], response: [], debate: [], sort: "default")
       end
     end
 
@@ -17,7 +17,7 @@ RSpec.describe PetitionSearch, type: :model do
       let(:state) { "open" }
 
       it "configures the search correctly" do
-        expect(search).to have_attributes(status: ["open"], response: [], debate: [], sort: "popular")
+        expect(search).to have_attributes(status: ["open"], response: [], debate: [], sort: "default")
       end
     end
 
@@ -33,7 +33,7 @@ RSpec.describe PetitionSearch, type: :model do
       let(:state) { "closed" }
 
       it "configures the search correctly" do
-        expect(search).to have_attributes(status: ["closed"], response: [], debate: [], sort: "popular")
+        expect(search).to have_attributes(status: ["closed"], response: [], debate: [], sort: "default")
       end
     end
 
