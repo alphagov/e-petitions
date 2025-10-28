@@ -1,7 +1,7 @@
 <%= content_for :notifications do %>
   <div class="highlight margin-top-7">
     <p>Archived petitions are closed and cannot be signed</p>
-    <p><%= link_to "Back to current petitions", petitions_path(state: "open") %></p>
+    <p><%= link_to "Back to current petitions", petitions_path(status: %w[open]) %></p>
   </div>
 <% end %>
 
