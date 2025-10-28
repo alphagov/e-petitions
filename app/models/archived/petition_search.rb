@@ -77,19 +77,6 @@ module Archived
       super.preload(:creator, :rejection, :government_response, :debate_outcome)
     end
 
-    def query_for_execute(scope)
-      if semantic_search?
-        scope.nearest_neighbours(embedding)
-      elsif search?
-        scope.basic_search(query)
-          .except(:select)
-          .select(star)
-          .except(:order)
-      else
-        scope
-      end
-    end
-
     def parliament_for_execute(scope)
       parliament.empty? ? scope : scope.where(parliament_id: parliament)
     end

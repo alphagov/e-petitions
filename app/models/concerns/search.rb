@@ -279,4 +279,17 @@ module Search
   def attribute_for_execute(name, scope)
     scope
   end
+
+  def query_for_execute(scope)
+    if semantic_search?
+      scope.nearest_neighbours(embedding)
+    elsif search?
+      scope.basic_search(query)
+        .except(:select)
+        .select(star)
+        .except(:order)
+    else
+      scope
+    end
+  end
 end
