@@ -5,13 +5,13 @@
 
   <%= form_tag search_path, method: 'get', enforce_utf8: false do %>
     <% if Parliament.dissolved? %>
-      <input type="hidden" name="state" value="closed">
+      <input type="hidden" name="status[]" value="closed">
     <% elsif Parliament.dissolution_announced? %>
-      <input type="hidden" name="state" value="open">
+      <input type="hidden" name="status[]" value="open">
     <% elsif Parliament.opened? %>
-      <input type="hidden" name="state" value="open">
+      <input type="hidden" name="status[]" value="open">
     <% else %>
-      <input type="hidden" name="state" value="published">
+      <input type="hidden" name="status[]" value="closed">
     <% end %>
 
     <%= label_tag 'search' do %>

@@ -26,8 +26,8 @@ Scenario: Arnold searches for petitions when parliament is opened
   When I search all petitions for "Wombles"
   Then I should be on the all petitions page
   And I should have the following query string:
-    | state | open    |
-    | query | Wombles |
+    | query    | Wombles  |
+    | status[] | open     |
   And I should see my search term "Wombles" filled in the search field
   And I should see "We’ve found 4 petitions"
   And I should see the following search results:
@@ -47,8 +47,8 @@ Scenario: Arnold searches for petitions when parliament is dissolving
   And I search all petitions for "Wombles"
   Then I should be on the all petitions page
   And I should have the following query string:
-    | state | open    |
-    | query | Wombles |
+    | query    | Wombles |
+    | status[] | open    |
   And I should see my search term "Wombles" filled in the search field
   And I should see "We’ve found 4 petitions"
   And I should see the following search results:
@@ -64,8 +64,8 @@ Scenario: Arnold searches for petitions when parliament is dissolved
   And I search all petitions for "Wombles"
   Then I should be on the all petitions page
   And I should have the following query string:
-    | state | closed  |
-    | query | Wombles |
+    | query    | Wombles |
+    | status[] | closed  |
   And I should see my search term "Wombles" filled in the search field
   And I should see "We’ve found 5 petitions"
   And I should see the following search results:
@@ -81,8 +81,8 @@ Scenario: Arnold searches for petitions when parliament is pending
   And I search all petitions for "Rivers"
   Then I should be on the archived petitions page
   And I should have the following query string:
-    | state | published |
-    | query | Rivers    |
+    | query    | Rivers |
+    | status[] | closed |
   And I should see my search term "Rivers" filled in the search field
   And I should see "We’ve found 3 petitions"
   And I should see the following search results:
