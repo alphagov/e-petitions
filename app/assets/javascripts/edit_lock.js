@@ -23,7 +23,7 @@
             $message.text('This petition is currently being edited by ' + data.locked_by.name);
             $html.show();
           }
-        } else {
+        } else if (!data.error) {
           EditLock.obtainLock();
         }
       },

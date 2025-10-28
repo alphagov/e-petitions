@@ -41,5 +41,14 @@ class Admin::LocksController < Admin::AdminController
 
   def fetch_petition
     @petition = Petition.find(params[:petition_id])
+  rescue ActiveRecord::RecordNotFound
+    json = {
+      error: {
+        status: 404,
+        message: "Not Found"
+      }
+    }
+
+    render json: json, status: :not_found
   end
 end
