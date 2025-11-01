@@ -6,24 +6,6 @@ require 'digest/md5'
 module Embedding
   class GenerationError < RuntimeError; end
 
-  class Record < ActiveRecord::Base
-    self.table_name = "embeddings"
-
-    class << self
-      def fetch(key, &block)
-        begin
-          record = find_or_create_by(id: key) do |r|
-            r.embedding = yield
-          end
-
-          record.embedding
-        rescue ActiveRecord::RecordNotUnique
-          retry
-        end
-      end
-    end
-  end
-
   module Backends
     class Ollama
       with_options instance_writer: false do
@@ -141,15 +123,15 @@ module Embedding
     private
 
     def cache(input, &block)
-      Record.fetch(cache_key(input), &block)
+      Rails.cache.fetch(cache_key(input), &block)
     end
 
     def cache_key(input)
-      Digest::MD5.hexdigest(normalize(input))
+      [:embedding, normalize(input)]
     end
 
     def normalize(input)
-      input.to_s.strip
+      input.to_s.parameterize
     end
   end
 end

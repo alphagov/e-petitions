@@ -372,12 +372,6 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_12_194807) do
     t.index ["petition_id"], name: "index_email_requested_receipts_on_petition_id"
   end
 
-  create_table "embeddings", id: :string, force: :cascade do |t|
-    t.halfvec "embedding", limit: 1024
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
   create_table "feedback", force: :cascade do |t|
     t.string "comment", limit: 32768, null: false
     t.string "petition_link_or_title"
@@ -768,6 +762,17 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_12_194807) do
     t.integer "signature_count_interval", default: 60, null: false
     t.boolean "update_signature_counts", default: false, null: false
     t.integer "threshold_for_moderation_delay", default: 500, null: false
+  end
+
+  create_table "solid_cache_entries", force: :cascade do |t|
+    t.binary "key", null: false
+    t.binary "value", null: false
+    t.datetime "created_at", null: false
+    t.bigint "key_hash", null: false
+    t.integer "byte_size", null: false
+    t.index ["byte_size"], name: "index_solid_cache_entries_on_byte_size"
+    t.index ["key_hash", "byte_size"], name: "index_solid_cache_entries_on_key_hash_and_byte_size"
+    t.index ["key_hash"], name: "index_solid_cache_entries_on_key_hash", unique: true
   end
 
   create_table "tags", id: :serial, force: :cascade do |t|
