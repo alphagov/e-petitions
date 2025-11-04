@@ -21,13 +21,13 @@ Then('the analytics cookie preference should be set to false') do
 end
 
 Then('I should see the cookie settings') do
-  within(".//div[@id='cookiepreferences']") do
+  within(".//dialog[@id='cookiepreferences']") do
     expect(page).to have_selector(".//h2", text: "Cookie settings")
   end
 end
 
 Then('I should not see the cookie settings') do
-  expect(page).not_to have_selector(".//div[@id='cookiepreferences']", visible: true)
+  expect(page).not_to have_selector(".//dialog[@id='cookiepreferences']", visible: true)
 end
 
 Given(/^the site is disabled$/) do

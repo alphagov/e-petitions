@@ -1,9 +1,18 @@
 <template id="cookiepreferencesTemplate">
   <div class="cookie-manager">
-    <div class="cookie-manager-overlay"></div>
-    <div class="cookie-preferences" id="cookiepreferences" role="region" tabindex="-1">
+    <dialog class="cookie-preferences" id="cookiepreferences" aria-labelledby="cookie-preferences__title">
       <div class="cookie-preferences__header">
-        <h2>Cookie settings</h2>
+        <button id="closePreferences" class="button-icon" autofocus>
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" aria-label="Close cookie settings">
+            <title>Close cookie settings</title>
+            <path fill="currentColor" d="M697.4 759.2l61.8-61.8L573.8 512l185.4-185.4-61.8-61.8L512 450.2 326.6 264.8l-61.8 61.8L450.2 512 264.8 697.4l61.8 61.8L512 573.8z"/>
+          </svg>
+          <span class="visually-hidden">Close cookie settings</span>
+        </button>
+
+        <h2 id="cookie-preferences__title">
+          Cookie settings
+        </h2>
 
         <p>
           Cookies are small files saved on your phone, tablet or computer when
@@ -16,6 +25,7 @@
           We use two types of cookies. You can choose which cookies you are
           happy for us to use.
         </p>
+
         <p>
           Read our <a href="/cookies">cookie policy</a> for more information.
         </p>
@@ -71,10 +81,7 @@
         <button id="savePreferences" class="button">
           Save cookie settings
         </button>
-        <button id="closePreferences" class="button button-inverse">
-          Close cookie settings
-        </button>
       </div>
-    </div>
+    </dialog>
   </div>
 </template>

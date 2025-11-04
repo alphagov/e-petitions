@@ -85,3 +85,18 @@ button:not(:disabled), .button:not(:disabled) {
     @extend %focused-text;
   }
 }
+
+.button-icon {
+  @extend %button;
+
+  padding: 0;
+
+  & > svg {
+    width: 32px;
+    height: 32px;
+  }
+
+  &:active, &:focus {
+    @extend %focused-text;
+  }
+}

@@ -1,7 +1,11 @@
 @use "../helpers" as *;
 @use "../settings" as *;
 
-body.cookie-overlay-open {
+:root {
+  scroll-behavior: smooth;
+}
+
+body:has(dialog[open]) {
   height: 100vh;
 
   main, footer {
@@ -19,22 +23,16 @@ body.cookie-overlay-open {
 }
 
 .cookie-manager {
-  .cookie-manager-overlay {
-    display: none;
+  dialog::backdrop {
     background-color: $colour-black;
-    left: 0;
-    right: 0;
-    top: 0;
-    bottom: 0;
     opacity: .35;
-    position: fixed;
-    z-index: 5;
   }
 }
 
 #cookiebanner, #cookiepreferences {
   h2 {
     @include font-size(33);
+    margin-top: 0;
   }
 
   h3 {
@@ -61,8 +59,11 @@ body.cookie-overlay-open {
 }
 
 #cookiepreferences {
-  display: none;
   background-color: $colour-white;
+  border: none;
+  height: auto;
+  max-width: none;
+  max-height: none;
   position: absolute;
   left: 50%;
   right: auto;
@@ -82,6 +83,10 @@ body.cookie-overlay-open {
   @include responsive-padding(7, all);
 
   & .cookie-preferences {
+    &__header {
+      position: relative;
+    }
+
     &__settings > form > div {
       @include responsive-margin(5, top);
       @include responsive-padding(5, top);
@@ -93,4 +98,10 @@ body.cookie-overlay-open {
       }
     }
   }
+}
+
+#closePreferences {
+  position: absolute;
+  top: -2px;
+  right: -2px;
 }

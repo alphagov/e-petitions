@@ -58,7 +58,8 @@ class CookieBanner {
       manager.saveCookiePreferences(false);
     });
 
-    manageButton.addEventListener('click', () => {
+    manageButton.addEventListener('click', (event) => {
+      event.target.blur();
       manager.preferences.show();
     });
   }
@@ -82,7 +83,6 @@ class CookiePreferences {
     root.append(element);
 
     this.preferences = document.getElementById('cookiepreferences');
-    this.overlay = this.preferences.previousElementSibling;
 
     this.form = document.getElementById('preferencesForm');
     this.analyticsCookies = this.form.elements['analyticsCookies'];
@@ -100,20 +100,22 @@ class CookiePreferences {
   }
 
   toggle(visibility) {
-    document.body.classList.toggle('cookie-overlay-open', visibility);
-    this.overlay.style.display = visibility ? 'block' : 'none';
-    this.preferences.style.display = visibility ? 'block' : 'none';
+    if (visibility && !this.preferences.open) {
+      this.preferences.showModal();
+    } else if (!visibility && this.preferences.open) {
+      this.preferences.close();
+    }
   }
 
   show(analytics = false) {
     this.toggle(true);
     this.analyticsCookies.value = analytics ? 'true' : false;
-
-    window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
   hide() {
     this.toggle(false);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    window.location = '#main-content';
   }
 
   get allowAnalyticsCookies() {
@@ -153,6 +155,8 @@ export default class CookieManager {
 
     cookiePreferencesLinkWrapper.addEventListener('click', (event) => {
       event.preventDefault();
+      event.target.blur();
+
       this.preferences.show(this.allowAnalyticsCookies);
     });
 
