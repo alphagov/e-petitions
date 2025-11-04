@@ -10,8 +10,8 @@ Scenario: Charlie has to search for a petition before creating one
     | Do not remove rioters benefits | open     |            1023 | 2011-08-21 |
   And I am on the home page
   When I follow "Start a petition" within ".//main"
-  Then I should see "Start your petition"
-  When I follow "Start a petition" within ".//main"
+  Then I should see "Start a petition"
+  When I follow "Start your petition"
   Then I should be asked to confirm my eligibility
   When I confirm that I am UK citizen or resident
   Then I should see "Petition title"
@@ -25,7 +25,7 @@ Scenario: Charlie has to search for a petition before creating one
 
 Scenario: Charlie cannot create a petition if he is not a UK citizen
   Given I am on the start a new petition page
-  And I follow "Start a petition" within ".//main"
+  And I follow "Start your petition"
   Then I should see "Are you a British citizen or UK resident?"
   When I choose "No"
   And press "Continue"
@@ -54,7 +54,7 @@ Scenario: Charlie starts to create a petition when parliament is dissolved
 
 Scenario: Charlie cannot craft an xss attack when searching for petitions
   Given I am on the start a new petition page
-  When I follow "Start a petition" within ".//main"
+  When I follow "Start your petition"
   Then I should be asked to confirm my eligibility
   When I confirm that I am UK citizen or resident
   Then I should see "Petition title"
@@ -64,7 +64,7 @@ Scenario: Charlie cannot craft an xss attack when searching for petitions
 
 Scenario: Charlie creates a petition
   Given I am on the start a new petition page
-  And I follow "Start a petition" within ".//main"
+  And I follow "Start your petition"
   And I confirm that I am UK citizen or resident
   And I fill in the petition details
   And I fill in my details
