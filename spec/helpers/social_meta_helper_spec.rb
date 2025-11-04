@@ -3,6 +3,110 @@ require 'rails_helper'
 RSpec.describe SocialMetaHelper, type: :helper do
   let(:headers) { helper.request.env }
 
+  describe "#meta_description_tag" do
+    let(:params) do
+      ActionController::Parameters.new(params_hash)
+    end
+
+    subject { helper.meta_description_tag }
+
+    before do
+      allow(controller).to receive(:params).and_return(params)
+    end
+
+    context "when on a page with description in the locale file" do
+      let(:params_hash) do
+        { controller: "petitions", action: "index" }
+      end
+
+      it "returns a meta description tag" do
+        expect(subject).to eq(%[<meta name="description" content="Search results for open petitions. You can sign and share petitions.">])
+      end
+    end
+
+    context "when on a namespaced page with description in the locale file" do
+      let(:params_hash) do
+        { controller: "archived/petitions", action: "index" }
+      end
+
+      it "returns a meta description tag" do
+        expect(subject).to eq(%[<meta name="description" content="Search results for archived petitions. These petitions cannot be signed anymore.">])
+      end
+    end
+
+    context "when on the first petition creator page" do
+      let(:params_hash) do
+        { controller: "petitions", action: "new" }
+      end
+
+      before do
+        assign(:new_petition, PetitionCreator.new(params, request))
+      end
+
+      it "returns a meta description tag" do
+        expect(subject).to eq(%[<meta name="description" content="Check if you meet the criteria to create and submit a petition for the UK Parliament or UK Government.">])
+      end
+    end
+
+    context "when on a petition creator page" do
+      let(:params_hash) do
+        { controller: "petitions", action: "create", stage: "action" }
+      end
+
+      before do
+        assign(:new_petition, PetitionCreator.new(params, request))
+      end
+
+      it "returns a meta description tag" do
+        expect(subject).to eq(%[<meta name="description" content="Add a clear and concise title to your petition for the UK Parliament or UK Government.">])
+      end
+    end
+
+    context "when on the first signature creator page" do
+      let(:petition) { FactoryBot.create(:open_petition) }
+
+      let(:params_hash) do
+        { controller: "signatures", action: "new", petition_id: petition.to_param }
+      end
+
+      before do
+        assign(:petition, petition)
+        assign(:signature, SignatureCreator.new(petition, params, request))
+      end
+
+      it "returns a meta description tag" do
+        expect(subject).to eq(%[<meta name="description" content="Confirm your are a British citizen or UK resident to be able to sign this petition.">])
+      end
+    end
+
+    context "when on a signature creator page" do
+      let(:petition) { FactoryBot.create(:open_petition) }
+
+      let(:params_hash) do
+        { controller: "signatures", action: "create", petition_id: petition.to_param, stage: "signature" }
+      end
+
+      before do
+        assign(:petition, petition)
+        assign(:signature, SignatureCreator.new(petition, params, request))
+      end
+
+      it "returns a meta description tag" do
+        expect(subject).to eq(%[<meta name="description" content="Confirm all your details before signing this petition.">])
+      end
+    end
+
+    context "when on a page without a description in the locale file" do
+      let(:params_hash) do
+        { controller: "pages", action: "manifest" }
+      end
+
+      it "returns nil" do
+        expect(subject).to be_nil
+      end
+    end
+  end
+
   describe "#open_graph_tag" do
     context "when using a string for content" do
       subject do
