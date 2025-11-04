@@ -28,12 +28,6 @@ Rails.application.routes.draw do
       end
 
       scope format: true do
-        constraints format: 'xml' do
-          defaults format: 'xml' do
-            get '/browserconfig', action: 'browserconfig'
-          end
-        end
-
         constraints format: 'json' do
           defaults format: 'json' do
             get '/manifest', action: 'manifest'
@@ -48,14 +42,6 @@ Rails.application.routes.draw do
         get  '/',       action: 'new',    as: :feedback
         post '/',       action: 'create', as: nil
         get  '/thanks', action: 'thanks', as: :thanks_feedback
-      end
-    end
-
-    controller 'icons' do
-      scope action: 'show', format: true do
-        constraints size: /\d{2,3}x\d{2,3}/, type: 'precomposed', format: 'png' do
-          get '/apple-touch-icon(-:size)(-:type)', as: :apple_touch_icon
-        end
       end
     end
 

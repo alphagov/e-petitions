@@ -335,27 +335,6 @@ RSpec.describe 'Requests for pages when we do not support the format on that pag
     it_behaves_like 'a route that supports html and json formats'
   end
 
-  context 'the browserconfig url' do
-    let(:url) { '/browserconfig' }
-    let(:params) { {} }
-
-    it 'does not support json via extension' do
-      get url + '.json', params: params
-      expect(response.status).to eq 404
-    end
-
-    it 'supports xml via extension' do
-      get url + '.xml', params: params
-      expect(response.status).to eq 200
-      expect(response.content_type).to eq "application/xml; charset=utf-8"
-    end
-
-    it 'does not response without an extension' do
-      get url, params: params
-      expect(response.status).to eq 404
-    end
-  end
-
   context 'the manifest url' do
     let(:url) { '/manifest' }
     let(:params) { {} }

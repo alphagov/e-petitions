@@ -44,10 +44,6 @@ RSpec.describe "pages", type: :routes do
       expect(privacy_url).to eq("https://petition.parliament.uk/privacy")
     end
 
-    it "#browserconfig_url" do
-      expect(browserconfig_url).to eq("https://petition.parliament.uk/browserconfig.xml")
-    end
-
     it "#manifest_url" do
       expect(manifest_url).to eq("https://petition.parliament.uk/manifest.json")
     end

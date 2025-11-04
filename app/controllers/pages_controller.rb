@@ -27,14 +27,6 @@ class PagesController < PublicController
     end
   end
 
-  def browserconfig
-    expires_in 1.hour, public: true
-
-    respond_to do |format|
-      format.xml
-    end
-  end
-
   def manifest
     expires_in 1.hour, public: true
 
