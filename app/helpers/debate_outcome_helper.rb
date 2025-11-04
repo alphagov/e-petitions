@@ -8,7 +8,7 @@ module DebateOutcomeHelper
   OUTCOME_IMAGE_1X = [ OUTCOME_IMAGE_WIDTH / 2, OUTCOME_IMAGE_HEIGHT / 2 ]
   OUTCOME_IMAGE_2X = [ OUTCOME_IMAGE_WIDTH, OUTCOME_IMAGE_HEIGHT ]
 
-  def debate_outcome_image(outcome)
+  def debate_outcome_image(outcome, options = {})
     if outcome.image.attached?
       urls = {
         '1x' => outcome_image_path(outcome.image.variant(resize_to_limit: OUTCOME_IMAGE_1X)),
@@ -22,7 +22,9 @@ module DebateOutcomeHelper
     end
 
     sources = urls.map { |size, url| "#{url} #{size}" }
-    image_tag(urls['2x'], srcset: sources.join(', '), alt: "Watch the petition '#{outcome.petition.action}' being debated")
+    defaults = { srcset: sources.join(', '), alt: "Watch the petition '#{outcome.petition.action}' being debated" }
+
+    image_tag(urls['2x'], defaults.merge(options))
   end
 
   def debate_outcome_links?(debate_outcome)
