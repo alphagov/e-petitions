@@ -13,3 +13,4 @@ Disallow: /petitions/*/sponsors/
 Disallow: /petitions/*/signatures/
 Disallow: /ping
 Disallow: /signatures/
+Disallow: /sponsors/
