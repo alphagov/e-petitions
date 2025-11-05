@@ -22,7 +22,10 @@ module FormHelper
       errors = Array(field).map { |f| object.errors[f] }.compact.flatten(1)
 
       if errors.present?
-        content_tag :span, errors.first, { class: 'error-message' }.merge(options)
+        content_tag(:span, { class: 'error-message' }.merge(options)) do
+          concat(content_tag(:span, 'Error: ', class: 'visually-hidden'))
+          concat(errors.first)
+        end
       end
     end
   end

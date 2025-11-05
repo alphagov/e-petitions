@@ -304,6 +304,7 @@ select {
 
 .error-message, .too-many-characters {
   color: $error-colour;
+  font-weight: bold;
 }
 
 .form-group {
