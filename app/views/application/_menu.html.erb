@@ -10,10 +10,10 @@
 
   <div id="navigation">
     <ul class="container">
-      <li><%= link_to "Home", home_path %></li>
-      <li><%= link_to "Browse all petitions", petitions_path %></li>
-      <li><%= link_to "How petitions work", help_path %></li>
-      <li><%= link_to "Petition standards", help_path(anchor: 'standards') %></li>
+      <%= navigation_item "Home", home_path %>
+      <%= navigation_item "Browse all petitions", petitions_path %>
+      <%= navigation_item "How petitions work", help_path %>
+      <%= navigation_item "Petition standards", standards_path %>
     </ul>
   </div>
 </nav>

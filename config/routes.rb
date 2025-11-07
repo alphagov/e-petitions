@@ -25,6 +25,7 @@ Rails.application.routes.draw do
         get '/cookies',       defaults: { slug: 'cookies' }
         get '/help',          defaults: { slug: 'help' }
         get '/privacy',       defaults: { slug: 'privacy' }
+        get '/standards',     defaults: { slug: 'standards' }
       end
 
       scope format: true do
@@ -110,6 +111,7 @@ Rails.application.routes.draw do
     get '/crown-copyright',      to: redirect('https://www.nationalarchives.gov.uk/information-management/our-services/crown-copyright.htm')
     get '/departments',          to: redirect('/')
     get '/departments/:id',      to: redirect('/')
+    get '/help/standards',       to: redirect('/standards')
     get '/how-it-works',         to: redirect('/help')
     get '/privacy-policy',       to: redirect('/privacy')
     get '/faq',                  to: redirect('/help')

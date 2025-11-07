@@ -31,8 +31,9 @@ en-GB:
         index: "Create or sign a petition to demand UK Government or UK Parliament to act on an issue you consider important."
         accessibility: "Find out how we make this website accessible for as many people as possible."
         cookies: "Find out how our cookies help us remember your preferences and keep our site running. Learn how our cookies work and how to manage them."
-        help: "Find out what you need to do to create an e-petition and the standards an e-petition must meet."
+        help: "Find out what you need to do to create an e-petition."
         privacy: "This privacy notice provides the information required by UK GDPR about the personal data that we collect from you when you create or sign a petition."
+        standards: "Find out the standards an e-petition must meet."
 
       signatures:
         create:

@@ -8,6 +8,12 @@ window.PETS.NavigationMenu = NavigationMenu;
 window.PETS.SignatureCounter = SignatureCounter;
 
 window.addEventListener('DOMContentLoaded', (event) => {
+  const location = window.location;
+
+  if (location.pathname === '/help' && location.hash === '#standards') {
+    window.location = "/help/standards";
+  }
+
   const counters = document.querySelectorAll('[data-module=signature-counter]');
   const textareas = document.querySelectorAll('textarea[data-max-length]');
 

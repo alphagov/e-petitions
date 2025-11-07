@@ -64,6 +64,10 @@ namespace :errors do
       def home_page?
         false
       end
+
+      def navigation_item(name, page)
+        %[<li><a href="#{page}">#{name}</a></li>].html_safe
+      end
     end
 
     lookup_context = ActionView::LookupContext.new('app/views')

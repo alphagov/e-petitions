@@ -14,6 +14,12 @@ module NavigationHelpers
     when /^the help page$/
       help_url
 
+    when /^the old standards page$/
+      help_url(anchor: 'standards')
+
+    when /^the new standards page$/
+      standards_url
+
     when /^the privacy page$/
       privacy_url
 

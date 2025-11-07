@@ -7,7 +7,7 @@ RSpec.describe 'Requests for pages when we do not support the format on that pag
   before do
     FactoryBot.create(:parliament, :archived)
 
-    %i[accessibility cookies help privacy].each do |page|
+    %i[accessibility cookies help privacy standards].each do |page|
       FactoryBot.create(:page, page)
     end
   end
@@ -164,14 +164,15 @@ RSpec.describe 'Requests for pages when we do not support the format on that pag
 
   simple_html_only_urls = %w[
     accessibility
+    cookies
     help
     privacy
+    standards
     feedback
     feedback/thanks
     petitions/local
     petitions/start
     petitions/new
-    cookies
   ]
 
   simple_html_only_urls.each do |simple_url|

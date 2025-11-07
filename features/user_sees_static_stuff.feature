@@ -14,6 +14,13 @@ Feature: User views static pages
     And I should see "How petitions work" in the browser page title
     And the markup should be valid
 
+  Scenario: I navigate to Standards
+    When I go to the home page
+    And I follow "Petition standards" within ".//footer"
+    Then I should be on the standards page
+    And I should see "Standards for petitions" in the browser page title
+    And the markup should be valid
+
   Scenario: I navigate to Privacy notice
     When I go to the home page
     And I follow "Privacy"
@@ -50,3 +57,9 @@ Feature: User views static pages
     And I press "Accept additional cookies"
     And I follow "Cookie policy"
     Then I should be redirected to "https://www.parliament.uk/site-information/privacy/"
+
+  @javascript
+  Scenario: I navigate to the old standards url
+    When I go to the old standards page
+    Then I should see "Standards for petitions"
+    And I should be on the new standards page

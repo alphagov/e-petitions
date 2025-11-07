@@ -25,6 +25,10 @@ RSpec.describe "trying to access", type: :routes do
     expect(get "/terms-and-conditions").to permanently_redirect_to("https://petition.parliament.uk/help")
   end
 
+  it "the old /help/standards page redirects to the standards page" do
+    expect(get "/help/standards").to permanently_redirect_to("https://petition.parliament.uk/standards")
+  end
+
   it "the old /how-it-works page redirects to the help page" do
     expect(get "/how-it-works").to permanently_redirect_to("https://petition.parliament.uk/help")
   end

@@ -1048,6 +1048,11 @@ FactoryBot.define do
       slug { "privacy" }
       title { "# Privacy notice" }
     end
+
+    trait :standards do
+      slug { "standards" }
+      title { "# Standards for petitions" }
+    end
   end
 
   factory :rejection_reason do
