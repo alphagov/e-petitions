@@ -4,11 +4,11 @@
 #hero-banner {
   background-color: $hero-background-colour;
 
-  @include responsive-padding(7, "top");
-  @include responsive-padding(7, "bottom");
+  @include responsive-padding(8, "top");
+  @include responsive-padding(8, "bottom");
 
   h1 {
-    @include responsive-margin(5, "top");
-    @include responsive-margin(3, "bottom");
+    @include font-size(44);
+    @include responsive-margin(5, "bottom");
   }
 }

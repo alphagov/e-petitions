@@ -2,6 +2,16 @@ $font-family: National, Arial, Helvetica, sans-serif;
 $root-font-size: 16px;
 
 $typography-scale: (
+  55: (
+    null: (
+      font-size: 44px,
+      line-height: 1.0
+    ),
+    tablet: (
+      font-size: 55px,
+      line-height: 1.0
+    )
+  ),
   44: (
     null: (
       font-size: 36px,

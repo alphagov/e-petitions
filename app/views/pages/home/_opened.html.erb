@@ -6,20 +6,22 @@
   <% end %>
 
   <h1>
-    Find, sign and create petitions that call for action from the UK Government or UK Parliament
+    Find, sign and create petitions
   </h1>
 
   <%= render "pages/home/search_petitions", search_path: petitions_path %>
 <% end %>
 
+<%= render "pages/home/start_petition" %>
+
+<hr>
+
 <% if no_petitions_yet? %>
-  <div class="section-panel-borderless no-petitions-yet">
-    <p class="lede">The Petitions service is open</p>
-  </div>
-<% end %>
-
-<% unless no_petitions_yet? %>
+  <section class="petition-items">
+    <h2>The Petitions service is open</h2>
+    <p>No petitions have been published yet – please check back later</p>
+  </section>
+<% else %>
   <%= render "pages/home/trending_petitions" %>
+  <%= render "pages/home/explanation_petitions" %>
 <% end %>
-
-<%= render "pages/home/explanation_petitions" %>

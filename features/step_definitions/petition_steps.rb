@@ -478,7 +478,7 @@ Given(/^these archived petitions? exist?:?$/) do |table|
 end
 
 When (/^I search all petitions for "(.*?)"$/) do |search_term|
-  fill_in "Search by topic or keyword", with: search_term
+  fill_in "Search", with: search_term
   click_button "Search petitions"
 end
 

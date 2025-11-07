@@ -9,8 +9,9 @@ $spacing-units: (
   7: 30px,
   8: 50px,
   9: 65px,
-  10: 90px,
-  11: 120px
+  10: 80px,
+  11: 100px,
+  12: 120px
 );
 
 $responsive-spacing-units: (
@@ -48,15 +49,19 @@ $responsive-spacing-units: (
     tablet: 50px
   ),
   9: (
-    null: 40px,
+    null: 45px,
     tablet: 65px
   ),
   10: (
     null: 60px,
-    tablet: 90px
+    tablet: 80px
   ),
   11: (
-    null: 80px,
+    null: 75px,
+    tablet: 100px
+  ),
+  12: (
+    null: 90px,
     tablet: 120px
   )
 );

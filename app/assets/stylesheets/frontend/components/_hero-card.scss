@@ -1,0 +1,12 @@
+@use "../settings" as *;
+@use "../helpers" as *;
+
+.hero-card {
+  @include responsive-margin(8, top);
+  @include responsive-margin(8, bottom);
+  @include responsive-padding(5, all);
+
+  background-color: $hero-background-colour;
+  border: 1px solid $border-colour;
+  border-radius: 8px;
+}

@@ -1,8 +1,4 @@
 <section id="search-petitions">
-  <h2>
-    Search petitions
-  </h2>
-
   <%= form_tag search_path, method: 'get', enforce_utf8: false do %>
     <% if Parliament.dissolved? %>
       <input type="hidden" name="status[]" value="closed">
@@ -14,9 +10,9 @@
       <input type="hidden" name="status[]" value="closed">
     <% end %>
 
-    <%= label_tag 'search' do %>
-      Search by topic or keyword
-    <% end %>
+    <h2 class="visually-hidden">
+      <%= label_tag 'search', 'Search' %>
+    </h2>
 
     <div class="item-group">
       <%= text_field_tag 'query', nil, id: 'search' %>
@@ -26,14 +22,8 @@
       <% end %>
     </div>
 
-    <div class="item-group">
-      or
-    </div>
-
-    <div class="item-group">
-      <%= link_to start_petitions_path, class: "button button-inverse" do %>
-        Start a petition
-      <% end %>
-    </div>
+    <p>
+      or <%= link_to "find petitions signed in a local constituency", local_petitions_path %>
+    </p>
   <% end %>
 </section>
