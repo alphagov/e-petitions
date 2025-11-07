@@ -2,8 +2,8 @@
 @use "../helpers" as *;
 
 .petition-items {
-  @include responsive-margin(7, top);
-  @include responsive-padding(7, bottom);
+  @include responsive-margin(8, top);
+  @include responsive-padding(8, bottom);
 
   border-bottom: 1px solid $border-colour;
 
@@ -14,18 +14,21 @@
   ul {
     display: flex;
     flex-direction: column;
-    gap: spacing(3);
+    gap: spacing(5);
 
     @include media-query($from: tablet) {
+      gap: spacing(7);
+    }
+
+    @include media-query($from: laptop) {
       flex-direction: row;
-      gap: spacing(4);
     }
 
     li {
-      @include responsive-padding(4, all);
+      @include responsive-padding(5, all);
 
       border: 1px solid $border-colour;
-      border-radius: $button-border-radius;
+      border-radius: 8px;
 
       flex-grow: 1;
       flex-basis: 0;
@@ -34,18 +37,22 @@
       flex-direction: column;
       justify-content: space-between;
 
-      @include media-query($from: tablet) {
+      @include media-query($from: laptop) {
         max-width: 50%;
       }
 
       h3 {
         @include font-size(22);
 
-        margin-top: 0;
+        margin: 0;
         text-wrap: balance;
 
         a {
           display: block;
+        }
+
+        & + div.wrapper {
+          @include responsive-margin(4, top);
         }
       }
 
@@ -54,7 +61,8 @@
         display: flex;
         flex-direction: column;
 
-        margin-top: 0;
+        @include responsive-margin(5, top);
+
         margin-bottom: 0;
         padding: spacing(3) spacing(4);
 
@@ -82,16 +90,33 @@
         }
       }
 
+      hr {
+        @include responsive-margin(6, top);
+        @include responsive-margin(5, bottom);
+      }
+
+      a[rel=external] {
+        display: block;
+        margin-bottom: spacing(3);
+
+        @include media-query($from: mobile) {
+          display: inline;
+          margin-bottom: 0;
+        }
+      }
+
       p.signature-count {
         @include font-size(22);
+        @include responsive-margin(5, top);
+        @include responsive-padding(4, top);
 
         border-top: 1px solid $border-colour;
-        margin-top: spacing(4);
-        padding-top: spacing(3);
+        margin-bottom: 0;
 
         span {
           @include font-size(33);
 
+          color: $colour-black;
           font-weight: bold;
           display: block;
         }
