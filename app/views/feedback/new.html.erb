@@ -12,7 +12,7 @@
       <%= form_row for: [@feedback, :comment] do %>
         <%= f.label :comment, "Comments" %>
         <%= error_messages_for_field @feedback, :comment %>
-        <%= f.text_area :comment %>
+        <%= f.text_area :comment, rows: 5 %>
       <% end %>
 
       <%= form_row for: [@feedback, :petition_link_or_title] do %>
