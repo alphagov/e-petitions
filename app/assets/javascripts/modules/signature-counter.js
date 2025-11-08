@@ -81,7 +81,7 @@ export default class SignatureCounter {
   updateSignatureGoal(threshold) {
     const hiddenText = document.createElement('span');
 
-    hiddenText.classList.add('visuallyhidden');
+    hiddenText.classList.add('visually-hidden');
     hiddenText.textContent = this.signatureGoalText(threshold);
 
     this.signatureGoal.textContent = this.format(threshold);

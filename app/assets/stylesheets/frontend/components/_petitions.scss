@@ -347,23 +347,32 @@
       height: 25px;
       width: 100%;
 
-      border: none;
+      border: 2px solid transparent;
+      background-color: $colour-grey-4;
+      overflow: visible;
 
       &::-moz-progress-bar {
         background-color: $colour-blue;
-      }
-
-      &::-webkit-progress-bar {
-        background-color: $colour-grey-4;
+        box-sizing: content-box;
+        border: 2px solid transparent;
+        margin: -2px;
+        height: 25px;
       }
 
       &::-webkit-progress-value {
         background-color: $colour-blue;
+        box-sizing: content-box;
+        border: 2px solid transparent;
+        margin: -2px;
+        height: 21px;
       }
 
+      &::-webkit-progress-bar,
       &::-webkit-progress-inner-element {
-        background-color: $colour-grey-4;
-        border: none;
+        background: none;
+        box-sizing: content-box;
+        height: 21px;
+        width: 100%;
       }
     }
   }
