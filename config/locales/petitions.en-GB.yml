@@ -494,7 +494,7 @@ en-GB:
     response_target:
       title: At %{response_threshold} signatures
       description_html: |
-        At %{response_threshold} signatures, government will respond to this petition.
+        If a petition gets %{response_threshold} signatures, government will respond to it.
     awaiting_response:
       title: Waiting for a government response
       description_html: |
@@ -506,11 +506,11 @@ en-GB:
     debate_target:
       title: At %{debate_threshold} signatures
       description_html: |
-        At %{debate_threshold} signatures, this petition will be considered for debate in Parliament.
+        If a petition gets %{debate_threshold} signatures, it will be considered for debate in Parliament.
     awaiting_debate:
       title: Waiting for a decision about a debate in Parliament
       description_html: |
-        The Petitions committee will consider this petition for a debate in Parliament.
+        The Petitions Committee will consider this petition for a debate in Parliament.
     debate_scheduled:
       title: Debate in Parliament scheduled
       description_html: |
@@ -523,4 +523,4 @@ en-GB:
     not_debated:
       title: Parliament did not debate this petition
       description_html: |
-        The petitions committee considered this petition and decided not to debate it.
+        The Petitions Committee decided not to debate this petition.
