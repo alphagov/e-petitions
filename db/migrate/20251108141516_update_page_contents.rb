@@ -1,0 +1,495 @@
+class UpdatePageContents < ActiveRecord::Migration[8.0]
+  class Page < ActiveRecord::Base
+    class << self
+      def create_or_update_by!(attributes, &block)
+        page = create_or_find_by!(attributes, &block)
+
+        unless page.previously_new_record?
+          yield page
+          page.save!
+        end
+      end
+    end
+  end
+
+  def change
+    up_only do
+      Page.create_or_update_by!(slug: 'accessibility') do |page|
+        page.title = 'Accessibility statement'
+        page.content = <<~MD
+          # Accessibility statement
+
+          **We’re committed to making this website accessible so it can be used by as many people as possible.**
+
+          This statement applies to content published within the UK Parliament Petitions website.
+
+          This domain is owned by UK Parliament.
+
+          We aim to make this websites accessible to the widest possible audience. This means, for example, that you should be able to:
+
+          * change colours, contrast levels and fonts
+          * zoom in up to 300% without the text spilling off the screen
+          * navigate the website using a keyboard
+          * navigate the website using speech recognition software
+          * listen to the website using a screen reader
+
+          ## What we’re doing to improve accessibility
+
+          To make UK Parliament websites accessible, we:
+
+          * integrate accessibility into our procurement procedures
+          * provide accessibility training for our staff
+          * include individuals with disabilities in our design personas
+
+          ## How accessible is this website?
+
+          This website should be fully accessible.
+
+          ## How to request content in a different format
+
+          If you need information in a different format please [contact us][1] and tell us:
+
+          * the web address (URL) of the content that you need
+          * your contact name and email address
+          * the type of format you need
+
+          ## Reporting accessibility problems with this website
+
+          If you find any problems or if you think we’re not meeting the accessibility requirements, please [contact us][1] to report this.
+
+          ## Enforcement procedure
+
+          If you contact us with a complaint and you’re not happy with our response contact the Equality Advisory and Support Service (EASS).
+
+          The Equality and Human Rights Commission (EHRC) is responsible for enforcing the Public Sector Bodies (Websites and Mobile Applications) (No. 2) Accessibility Regulations 2018 (the ‘accessibility regulations’).
+
+          ## Technical information about this website’s accessibility
+
+          UK Parliament is committed to making this website accessible, in accordance with the Public Sector Bodies (Websites and Mobile Applications) (No. 2) Accessibility Regulations 2018.
+
+          ## Compliance status
+
+          This website is compliant with the Web Content Accessibility Guidelines version 2.1 AA standard.
+
+          ## How we tested this website
+
+          Our websites were and are currently being tested for compliance with the Web Content Accessibility Guidelines V2.1 level A and level AA using a combination of automated tools for accessibility WCAG 2.0 standards.
+
+          ## Preparation of this accessibility statement
+
+          This statement was prepared on 21 September 2020.
+
+          This website is being tested via a combination of accessibility tools throughout September 2020. The testing is being carried out by Parliament UK.
+
+          Our sites are checked for accessibility on a regular basis. These tests are carried out by Parliament UK through automated testing via a combination of tools for accessibility.
+
+          [1]: /feedback
+        MD
+      end
+
+      Page.create_or_update_by!(slug: 'cookies') do |page|
+        page.title = 'Cookies'
+        page.content = <<~MD
+          # Cookies
+
+          This website puts small files (known as ‘cookies’) onto your computer to collect information about how you browse the site.
+
+          These essential cookies are used to:
+
+          * remember the notifications you’ve seen so that we don’t show them to you again
+          * help prevent people from fraudulently signing petitions
+          * These cookies aren’t used to identify you personally and are strictly necessary to ensure the secure running of this website.
+
+          Find out more about [how to manage cookies][1].
+
+          ## Session cookies
+
+          We store a session cookie on your computer to help keep your information secure while you use the service.
+
+          | Name           | Purpose                                                                                               | Expires                     |
+          |----------------|-------------------------------------------------------------------------------------------------------|-----------------------------|
+          | _epets_session | This keeps your information secure while you use the petitions service                                | When you close your browser |
+          | signed_tokens  | Randomly generated references used to identify what links you’ve clicked to verify your email address | When you close your browser |
+
+          [1]: https://ico.org.uk/your-data-matters/online/cookies
+        MD
+      end
+
+      Page.create_or_update_by!(slug: 'help') do |page|
+        page.title = 'How petitions work'
+        page.content = <<~MD
+          # How to create an e-petition
+
+          You can call for action from the UK Government or UK Parliament by creating and submitting an e-petition.
+
+          These are online petitions created on [petition.parliament.uk][1].
+
+          Once a petition is published, it is open for 6 months to gather signatures.
+
+          * If an e-petition receives 10,000 signatures, it will receive a response from the Government.
+          * If it receives 100,000 signatures it may be debated in Parliament.
+
+          ## Creating and submitting an e-petition
+
+          You can start an e-petition on the website.
+
+          You’ll be asked to:
+
+          * write a clear petition action
+          * provide details about what you want to happen and why
+          * get five supporters for your petition so it can be checked by the petitions team.
+
+          You’ll also need to make sure it meets the standards for petitions.
+
+          ## Who can create an e-petition?
+
+          British citizens and UK residents can create an e-petition.
+
+          ## What e-petitions can be about
+
+          E-petitions must ask for a clear action from the UK Government or Parliament.
+
+          The petition must also be about something the UK Government or Parliament is responsible for. For example, if it’s something your local council is responsible for, you’ll need to [contact your local council instead][2].
+
+          Your petition will be rejected if it doesn’t meet these requirements.
+
+          ## Standards for e-petitions
+
+          E-petitions must also meet the standards for petitions before they can be accepted and published on the [open petitions page][5].
+
+          Your petition will be rejected if it does not meet [the standards for petitions][3].
+
+          ## Petitions created on other websites
+
+          The Government is only obliged to respond to e-petitions started on [petition.parliament.uk][1]. The Petitions Committee also only considers e-petitions started on [petition.parliament.uk][1] for debate.
+
+          ## How to start an e-petition
+
+          The [e-petition form][4] asks you to:
+
+          * confirm you’re a British citizen or UK resident
+          * summarise what you want the UK Government or Parliament to do
+          * check there isn’t already a petition asking for a similar action
+          * give more details about what you want to happen, and why.
+
+          You’ll then be asked to:
+
+          * check your petition and make any final changes
+          * sign your petition
+          * confirm your full name, email address, and UK postcode
+          * confirm whether you’d like to get updates about your petition
+          * submit the form.
+
+          ## After you’ve finished creating your petition
+
+          When you’ve completed the form, you’ll receive an email with:
+
+          * the full petition text
+          * a link for your supporters to sign it.
+
+          ## How to get supporters for your petition
+
+          Share your petition with people who might be willing to support it.
+
+          They must be British citizens or UK residents.
+
+          They can confirm their support for your petition by clicking on the link.
+
+          You need five people to support your petition. At this stage, a maximum of 21 people can sign your petition.
+
+          ## Publication of your petition
+
+          Once five people have signed your petition, we’ll check it meets the standards for e-petitions.
+
+          ## If your petition meets the standards
+
+          Your petition will be published on the [open petitions page][5]. British citizens and UK residents will be able to sign your petition. Your petition will stay open for six months to gather signatures.
+
+          ## If your petition doesn’t meet the standards
+
+          If your petition doesn’t meet the standards for petitions, it will be rejected and will not be open to collect signatures.
+
+          You'll receive information about why this happened. You can start again with a new petition.
+
+          There are examples on the [rejected petitions page][6]. They can be viewed but not signed.
+
+          ## Once your petition has been published
+
+          What happens next depends on how many signatures your petition gets.
+
+          ### Petitions with 10,000 or more signatures
+
+          Petitions that get 10,000 signatures get a response from the UK Government.
+
+          The response is provided by the government department responsible for the petition topic. It appears on the same page as the petition, along with the publication date.
+
+          Petitions with responses from the UK Government are available on the [government responses page][13].
+
+          ### Petitions with more than 100,000 signatures
+
+          The Petitions Committee has the power to arrange debates on petitions. All petitions that get 100,000 signatures will be considered for debate, and are usually debated.
+
+          The committee might decide not to arrange a debate on a petition. For example, this might happen if the issue:
+
+          * has already been debated recently
+          * is scheduled for debate in the near future.
+
+          If this happens, we’ll email you with further information.
+
+          ## The Petitions Committee
+
+          The Petitions Committee is a group of 11 MPs from government and opposition parties who consider e-petitions. The committee may contact you about the issue covered by your petition.
+
+          Read [more about the Petitions Committee][8].
+
+          ## Contact the Petitions Committee team
+
+          The Petitions Committee team can:
+
+          * answer queries about how Parliament handles petitions
+          * help with questions about how to use this service.
+
+          They can't:
+
+          * forward feedback to the people who started a petition
+          * comment on the ideas raised in a specific petition.
+
+          Email: petitionscommittee@parliament.uk
+
+          ### Phone enquiries
+
+          Phone calls are handled by the House of Commons Enquiry Service. You can call them Monday to Friday, 10am to 12pm and 2pm to 4pm.
+
+          The enquiry service can help you to understand how Parliament handles petitions.
+
+          They can’t:
+
+          * help with technical problems with this service
+          * forward your feedback to the people who started a petition
+          * comment on the ideas raised in a specific petition.
+
+          Phone: 0800 112 4272 (Freephone) or 020 7219 4272
+
+          Text Relay: 18001 followed by 020 7219 4272
+
+          ## Feedback
+          [Give feedback][10] about the UK Government and Parliament petitions website.
+
+          ## Further information
+
+          ### Paper petitions
+          You can [ask your MP to present a paper petition to the House of Commons][11].
+
+          The rules for this type of petition are different. They can be about local issues, for example.
+
+          ### Petitions to recall Members of Parliament
+
+          Petitions to recall Members of Parliament are known as ‘recall petitions’.
+
+          They do not appear on this website and the Petitions Committee are not responsible for them.
+
+          Find out more about recall petitions on [the Electoral Commission website][12].
+
+          [1]: https://petition.parliament.uk
+          [2]: https://www.gov.uk/find-local-council
+          [3]: /standards
+          [4]: /petitions/start
+          [5]: /petitions?status[]=open&sort=recent
+          [6]: /petitions?status[]=rejected&sort=recent
+          [7]: https://www.gov.uk/honours
+          [8]: https://www.parliament.uk/petitions-committee
+          [9]: mailto:petitionscommittee@parliament.uk
+          [10]: /feedback
+          [11]: https://www.parliament.uk/get-involved/sign-a-petition/paper-petitions/
+          [12]: https://www.electoralcommission.org.uk/voting-and-elections/how-elections-work/types-elections/recall-petitions
+          [13]: /petitions?status[]=open&status[]=closed&response[]=responded&sort=latest_response
+        MD
+      end
+
+      Page.create_or_update_by!(slug: 'privacy') do |page|
+        page.title = 'Privacy notice'
+        page.content = <<~MD
+          # Privacy notice
+
+          Last updated: November 2025
+
+          We respect your right to privacy and manage your personal data in line with our responsibilities under the United Kingdom General Data Protection Regulation (UK GDPR) and Data Protection Act 2018 (DPA 2018). This privacy notice provides the information required by the UK GDPR about the personal data that we collect from you and how we may use your information.
+
+          In this notice, references to ‘us’, ‘our’ or ‘we’ are to the House of Commons; and to ‘you’ or ‘your’ are to an individual whose personal data we process.
+
+          Everything that we do with your personal data – for example, collecting, storing, using, sharing or deleting it – is referred to as “processing”.
+
+          This notice will be updated periodically. We will communicate any significant changes as appropriate.
+
+          ## 1. About us
+
+          The Corporate Officer of the House of Commons (the Clerk of the House) is the Controller of any personal data processed as described in this Privacy Notice.
+
+          The House of Commons Data Protection Officer is the Head of Information Compliance.
+
+          If you have any questions about the use of your personal data, please contact the Information Compliance Team:
+
+          * Email: [hcinformationcompliance@parliament.uk][1]
+          * Telephone: 0207 219 4296
+          * Post: Information Compliance Team, House of Commons, SW1A 0AA
+
+          ## 2. The personal data we process
+
+          When you contact us, visit us, access or use our services either online, by post, in person or by other means, we may collect, store and use your personal data.
+
+          The personal data we collect from people who start and sign petitions will include: your name, your email address, your postcode, the country you live in, whether you are a British citizen, the IP address you use when starting or signing a petition.
+
+          ## 3. Use of your personal data
+
+          The Petitions service is provided by the House of Commons. Your personal data will be processed for the purposes of starting and signing petitions to raise issues with the UK Government and Parliament.
+
+          We use your personal data to:
+
+          * check that you’re eligible to sign a petition
+          * make sure that people only sign a petition once
+          * contact you about petitions you start
+          * with your consent, send you updates about petitions you have signed.
+
+          If you start a petition and we accept it, your name will be published with the petition for the time it is open for signatures. We won’t publish any other personal information about you.
+
+          If you’ve signed a petition, we won’t publish any personal information about you. We’ll use your postcode to work out how many people in each parliamentary constituency have signed a petition.
+
+          For the purpose of petitions, we consider that the lawful basis for processing your data is that we are engaged in a public task. The processing is necessary for the performance of a public task, namely the exercise of a function of the House of Commons (UK GDPR Article 6 (1)(e) and DPA 2018 (8)(b)). Specifically, processing this data is necessary for the e-petitions website and the work of the Petitions Committee.
+
+          For the purpose of informing you about the status of petitions, we rely on your consent to send updates to an email address provided by you (UK GDPR Article 6(1)(a)).
+
+          Whilst there is no requirement to provide special category data, any information you provide which includes racial or ethnic origin; religious or philosophical beliefs; trade union membership; genetic and biometric data; health data; sex life or sexual orientation will be considered necessary for reasons of substantial public interest, namely the exercise of a function of the House of Commons (UK GDPR Article 9 (2)(g) and DPA 2018 Schedule 1 (7)(b)).
+
+          Our policy for processing special category data can be found here:
+          [Data protection policies - UK Parliament][2]
+
+          Guidance about the lawful basis for processing personal data can be found on the [Information Commissioner’s website][3].
+
+          ## 4. Sharing your personal data
+
+          We may share or disclose your personal data with:
+
+          * Suppliers and contractors of goods or services contracted by House of Commons in relation to the purpose of fulfilling a public task
+          * Other organisations where there is a lawful basis to do so or a duty to disclose in order to comply with any legal obligation. For example, the Police, for the purposes of prevention and detection of crime
+          * Unboxed Consulting Limited who provide technical support for the petitions system will have access to the system for troubleshooting and maintenance purposes only.
+
+          We will never share or sell your personal data to other organisations for direct marketing purposes.
+
+          ## 5. Retention and security of your personal data
+
+          We will retain your personal data for as long as is necessary for the purpose it was collected. In most cases, a retention period will apply which can be found in the Houses of Parliament [Authorised Retention Disposal Policy][4] on our website.
+
+          In relation to Petitions, we will hold your personal data for six months after the dissolution of the current Parliament. A Parliament is the period of parliamentary time between one general election and the next. There are some exceptions as follows:
+
+          * In connection with committee inquiries, we may lawfully retain your personal data for archiving in the public interest and this may amount to indefinite retention.
+          * Where the personal data held are subject to the requirements of parliamentary privilege, some individual’s rights under the UK GDPR may not apply in order to prevent an infringement of those privileges.
+
+          However, we will consider individual rights requests in relation to historic evidence on a case-by-case basis. Please also see section 6 of this notice.
+
+          We take the security of your data seriously. All personal data you provide to us (whether electronically or in paper form) will be stored securely in accordance with our policies. We have technical and organisational security measures in place to oversee the effective and secure processing of your personal data and to minimise the possibility of the loss or unauthorised access of your personal data.
+
+          Some personal data controlled by us is held outside the UK, including on data servers in the European Economic Area (EEA). Under the Data Protection Act 2018, all countries within the EEA are regarded as providing an adequate level of data protection. We would not transfer personal data to a person in a country outside the UK or EEA unless satisfied that that person and country had safeguards in place to protect personal data.
+
+          ## 6. Your rights
+
+          We will ensure you can exercise your rights in relation to the personal data you provide to us in accordance with the UK GDPR and the Data Protection Act 2018 (DPA 2018). Under data protection law, you have the following rights:
+
+          * The right to be informed
+          * The right of access
+          * The right to rectification
+          * The right to erasure
+          * The right to restrict processing
+          * The right to data portability
+          * The right to object
+          * Rights in relation to automated decision making and profiling.
+
+          You can submit a rights request at any time by contacting the Petitions Committee directly at [petitionscommitteeprivacy@parliament.uk][5].
+
+          Please note that your rights are subject to certain important restrictions which are described below:
+
+          * Where we are processing your personal data for the starting or signing of e-petitions (relying on the lawful basis ‘public task’), your rights to erasure and data portability do not apply. However, if you wish to exercise these rights, we will consider requests on a case-by-case basis.
+
+          * Personal data associated with the signing of an e-petition can only be erased by removing the signature from the petition in cases where a petition has been signed by mistake or where the requester no longer supports the request of the petition. This is to ensure the validity and accuracy of the total number of signatures on each petition.
+
+          * Where we are processing your personal data for the purpose of sending you updates (relying on the lawful basis of ‘consent’), you may withdraw your consent at any time.
+
+          * We may exempt some personal data from our obligation to comply with some rights where required for the purpose of avoiding an infringement of the privileges of either House of Parliament (DPA 2018 Schedule 2 (13)).
+
+          * We may also exempt some personal data from our obligation to comply with some rights where we have archived your personal data in the public interest (DPA 2018 Schedule 2 (28)).
+
+          If you have any concerns relating to the use of your personal data by the Petitions Committee, please contact [petitionscommitteeprivacy@parliament.uk][5] in the first instance.
+
+          You may also complain to the Data Protection Officer whose contact details can be found at Section 1.
+
+          You also have the right to complain to the Information Commissioner’s Office, the supervisory authority, by contacting them: [www.ico.org.uk/global/contact-us][6].
+
+          Further information about data protection in Parliament can be found on our website: [www.parliament.uk/site-information/data-protection][7].
+
+          [1]: mailto:hcinformationcompliance@parliament.uk
+          [2]: https://www.parliament.uk/site-information/data-protection/policies/
+          [3]: https://ico.org.uk/for-organisations/uk-gdpr-guidance-and-resources/lawful-basis/a-guide-to-lawful-basis/
+          [4]: https://www.parliament.uk/business/publications/parliamentary-archives/who-we-are/information-records-management-service/
+          [5]: mailto:petitionscommitteeprivacy@parliament.uk
+          [6]: https://www.ico.org.uk/global/contact-us/
+          [7]: https://www.parliament.uk/site-information/data-protection/
+        MD
+      end
+
+      Page.create_or_update_by!(slug: 'standards') do |page|
+        page.title = 'Standards for petitions'
+        page.content = <<~MD
+          # Standards for petitions
+
+          Petitions must call for a specific action from the UK Government or the House of Commons.
+
+          Petitions must be about something that the Government or the House of Commons is directly responsible for.
+
+          Petitions can disagree with the Government and can ask for it to change its policies.
+
+          Petitions can be critical of the UK Government or Parliament.
+
+          We reject petitions that don’t meet the rules. If we reject your petition, we’ll tell you why. If we can, we’ll suggest other ways you could raise your issue.
+
+          We’ll have to reject your petition if:
+
+          * It calls for the same action as a petition that’s already open
+          * It doesn’t ask for a clear action from the UK Government or the House of Commons
+          * It’s about something the UK Government or House of Commons is not directly responsible for.
+          * That includes: something that your local council is responsible for; something that another Government (such as the Scottish Government, the Welsh Government or the Northern Ireland Executive) is responsible for; something that is an operational decision for a government or parliamentary body, and something that an independent organisation has done.
+          * It calls for action at a local level
+          * It calls for action relating to a particular individual, or organisation that the UK Government or Parliament is not responsible for – except where the organisation’s role or powers are set out in law, and the petition is to amend that law.
+          * It’s defamatory or libellous, or contains false or unproven statements
+          * It refers to a case where there are active legal proceedings
+          * It contains material that may be protected by an injunction or court order
+          * It contains material that could be confidential or commercially sensitive
+          * It could cause personal distress or loss. This includes petitions that could intrude into someone’s personal grief or shock without their consent.
+          * It accuses an identifiable person or organisation of wrongdoing, such as committing a crime
+          * It names individual officials of public bodies, unless they are senior managers
+          * It names family members of elected representatives, eg MPs, or of officials of public bodies
+          * It asks for someone to be given an honour, or have an honour taken away. You can nominate someone for an honour here: [www.gov.uk/honours][1]
+          * It asks for someone to be given a job, or to lose their job. This includes petitions calling for someone to resign and petitions asking for a vote of no confidence in an individual Minister or the Government as a whole
+          * It contains party political material
+          * It’s nonsense or a joke
+          * It’s an advert, spam, or promotes a specific product or service
+          * It’s a Freedom of Information request
+          * It contains swearing or other offensive language
+          * It’s offensive or extreme in its views. That includes petitions that attack, criticise or negatively focus on an individual or a group of people because of characteristics such as their age, disability, ethnic origin, gender identity, medical condition, nationality, race, religion, sex, or sexual orientation
+          * It contains material that it wouldn’t be appropriate to publish as a parliamentary petition
+
+          We publish the text of petitions that we reject, as long as they’re not:
+
+          * defamatory, libellous or illegal in another way;
+          * making false or unproven statements;
+          * about a case there are active legal proceedings or about something that a court has issued an injunction over;
+          * about an individual person, or organisation that the UK Government or Parliament is not responsible for;
+          * offensive or extreme;
+          * confidential or likely to cause personal distress. That includes petitions that could intrude into someone’s personal grief or shock without their consent;
+          * a joke, an advert or nonsense; or
+          * containing material that it wouldn’t be appropriate to publish as a parliamentary petition.
+
+          [1]: https://www.gov.uk/honours
+        MD
+      end
+    end
+  end
+end

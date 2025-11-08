@@ -10,8 +10,14 @@ window.PETS.SignatureCounter = SignatureCounter;
 window.addEventListener('DOMContentLoaded', (event) => {
   const location = window.location;
 
-  if (location.pathname === '/help' && location.hash === '#standards') {
-    window.location = "/help/standards";
+  if (location.pathname === '/help') {
+    if (location.hash === '#petitions-committee') {
+      location.hash = "#the-petitions-committee";
+    }
+
+    if (location.hash === '#standards') {
+      window.location = "/help/standards";
+    }
   }
 
   const counters = document.querySelectorAll('[data-module=signature-counter]');

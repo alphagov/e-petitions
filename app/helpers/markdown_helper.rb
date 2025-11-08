@@ -27,24 +27,6 @@ module MarkdownHelper
     tags: ALLOWED_TAGS, attributes: ALLOWED_ATTRIBUTES, scrubber: nil
   }
 
-  class CustomHTMLRenderer < Redcarpet::Render::HTML
-    def header(text, level)
-      text, id = text.split('|', 2)
-
-      if id.present?
-        %(<h#{level} id="#{id}">#{text}</h#{level}>\n)
-      else
-        %(<h#{level}>#{text}</h#{level}>\n)
-      end
-    end
-  end
-
-  class CustomTextRenderer < Redcarpet::Render::StripDown
-    def header(text, level)
-      %(#{text.split('|', 2).first}\n)
-    end
-  end
-
   def markdown_to_html(markup, options = {})
     sanitize_markdown(markdown_parser(html_renderer(options), options).render(markup), options)
   end
@@ -53,14 +35,22 @@ module MarkdownHelper
     markdown_parser(text_renderer, options).render(markup)
   end
 
+  def markdown_to_contents(markup, options = {})
+    sanitize_markdown(markdown_parser(contents_renderer(options), options).render(markup), options).presence
+  end
+
   private
 
   def html_renderer(options)
-    CustomHTMLRenderer.new(options_for_renderer(options))
+    Redcarpet::Render::HTML.new(options_for_renderer(options))
   end
 
   def text_renderer
-    CustomTextRenderer.new
+    Redcarpet::Render::StripDown.new
+  end
+
+  def contents_renderer(options)
+    Redcarpet::Render::HTML_TOC.new(options)
   end
 
   def markdown_parser(renderer, options)

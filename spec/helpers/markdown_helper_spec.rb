@@ -21,10 +21,6 @@ RSpec.describe MarkdownHelper, type: :helper do
     it "sanitizes <script> tags" do
       expect(helper.markdown_to_html(%[<script>alert('Hello, World!');</script>])).to eq(%[alert('Hello, World!');\n])
     end
-
-    it "adds ids to headings" do
-      expect(helper.markdown_to_html(%[## Standards for petitions|standards])).to eq(%[<h2 id="standards">Standards for petitions</h2>\n])
-    end
   end
 
   describe "#markdown_to_text" do
@@ -34,10 +30,6 @@ RSpec.describe MarkdownHelper, type: :helper do
 
     it "autolinks urls" do
       expect(helper.markdown_to_text("www.example.com")).to eq(%[www.example.com (http://www.example.com)\n])
-    end
-
-    it "removes any heading ids" do
-      expect(helper.markdown_to_text(%[## Standards for petitions|standards])).to eq(%[Standards for petitions\n])
     end
   end
 end

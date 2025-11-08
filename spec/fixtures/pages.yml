@@ -219,7 +219,7 @@ help:
 
     If this happens, we’ll email you with further information.
 
-    ## The Petitions Committee|petitions-committee
+    ## The Petitions Committee
 
     The Petitions Committee is a group of 11 MPs from government and opposition parties who consider e-petitions. The committee may contact you about the issue covered by your petition.
 
@@ -275,7 +275,7 @@ help:
 
     [1]: https://petition.parliament.uk
     [2]: https://www.gov.uk/find-local-council
-    [3]: /help#standards
+    [3]: /standards
     [4]: /petitions/start
     [5]: /petitions?state=open
     [6]: /petitions?state=rejected
@@ -293,7 +293,7 @@ privacy:
   content: |-
     # Privacy notice
 
-    Last updated: September 2022
+    Last updated: November 2025
 
     We respect your right to privacy and manage your personal data in line with our responsibilities under the United Kingdom General Data Protection Regulation (UK GDPR) and Data Protection Act 2018 (DPA 2018). This privacy notice provides the information required by the UK GDPR about the personal data that we collect from you and how we may use your information.
 
@@ -336,16 +336,16 @@ privacy:
 
     If you’ve signed a petition, we won’t publish any personal information about you. We’ll use your postcode to work out how many people in each parliamentary constituency have signed a petition.
 
-    For the purpose of petitions, we consider that the lawful basis for processing your data is that we are engaged in a public task. The processing is necessary for the performance of a public task, namely the exercise of a function of the House of Commons (UK GDPR Article 6 (1) (e) and DPA 2018 (8)). Specifically, processing this data is necessary for the e-petitions website and the work of the Petitions Committee.
+    For the purpose of petitions, we consider that the lawful basis for processing your data is that we are engaged in a public task. The processing is necessary for the performance of a public task, namely the exercise of a function of the House of Commons (UK GDPR Article 6 (1)(e) and DPA 2018 (8)(b)). Specifically, processing this data is necessary for the e-petitions website and the work of the Petitions Committee.
 
     For the purpose of informing you about the status of petitions, we rely on your consent to send updates to an email address provided by you (UK GDPR Article 6(1)(a)).
 
     Whilst there is no requirement to provide special category data, any information you provide which includes racial or ethnic origin; religious or philosophical beliefs; trade union membership; genetic and biometric data; health data; sex life or sexual orientation will be considered necessary for reasons of substantial public interest, namely the exercise of a function of the House of Commons (UK GDPR Article 9 (2)(g) and DPA 2018 Schedule 1 (7)(b)).
 
     Our policy for processing special category data can be found here:
-    [House of Commons Data Protection information - UK Parliament][2]
+    [Data protection policies - UK Parliament][2]
 
-    Guidance about the lawful basis for processing personal data can be found on the [Information Commissioner’s website][3]
+    Guidance about the lawful basis for processing personal data can be found on the [Information Commissioner’s website][3].
 
     ## 4. Sharing your personal data
 
@@ -359,7 +359,7 @@ privacy:
 
     ## 5. Retention and security of your personal data
 
-    We will retain your personal data for as long as is necessary for the purpose it was collected. In most cases, a retention period will apply which can be found in the Houses of Parliament Authorised Records Disposal Policy on our website.
+    We will retain your personal data for as long as is necessary for the purpose it was collected. In most cases, a retention period will apply which can be found in the Houses of Parliament [Authorised Retention Disposal Policy][4] on our website.
 
     In relation to Petitions, we will hold your personal data for six months after the dissolution of the current Parliament. A Parliament is the period of parliamentary time between one general election and the next. There are some exceptions as follows:
 
@@ -374,7 +374,7 @@ privacy:
 
     ## 6. Your rights
 
-    We will ensure you can exercise your rights in relation to the personal data you provide to us in accordance with UK GDPR and DPA 2018. Under data protection law, you have the following rights:
+    We will ensure you can exercise your rights in relation to the personal data you provide to us in accordance with the UK GDPR and the Data Protection Act 2018 (DPA 2018). Under data protection law, you have the following rights:
 
     * The right to be informed
     * The right of access
@@ -385,33 +385,35 @@ privacy:
     * The right to object
     * Rights in relation to automated decision making and profiling.
 
-    Where we are relying on your consent to use your personal data, you can withdraw that consent at any time by contacting [petitionscommitteeprivacy@parliament.uk][5] or the Data Protection Officer.
+    You can submit a rights request at any time by contacting the Petitions Committee directly at [petitionscommitteeprivacy@parliament.uk][5].
 
-    Personal data associated with the signing of an e-petition can only be erased by removing the signature from the petition, in cases where a petition has been signed by mistake or where the requester no longer supports the request of the petition. This is to ensure that validity and accuracy of the total number of signatures on each petition. You can request the removal of your signature from a petition for these reasons by contacting [petitionscommitteeprivacy@parliament.uk][5] or the Data Protection Officer.
+    Please note that your rights are subject to certain important restrictions which are described below:
 
-    Some of your rights are subject to the exceptions specified in the UK GDPR and Data Protection Act 2018, in particular:
+    * Where we are processing your personal data for the starting or signing of e-petitions (relying on the lawful basis ‘public task’), your rights to erasure and data portability do not apply. However, if you wish to exercise these rights, we will consider requests on a case-by-case basis.
 
-    * Processing for the performance of a public task – some rights do not apply for the processing of personal data for the starting or signing of e-petitions.
-    * Parliamentary Privilege - some rights do not apply where required for the purpose of avoiding an infringement of the privileges of either House of Parliament. (para. 13 of Schedule 2 DPA 2018)
-    * Archiving in the public interest – some rights do not apply for the processing of personal data for archiving purposes (para. 28 of schedule 2 DPA)
+    * Personal data associated with the signing of an e-petition can only be erased by removing the signature from the petition in cases where a petition has been signed by mistake or where the requester no longer supports the request of the petition. This is to ensure the validity and accuracy of the total number of signatures on each petition.
 
-    Please note: Formal Individual Rights Requests are managed by the House of Commons Information Compliance Service who will retain your request, including any relevant personal data, to demonstrate we have met our legal obligations under data protection legislation.  These records are kept securely for two years, after which they are destroyed.
+    * Where we are processing your personal data for the purpose of sending you updates (relying on the lawful basis of ‘consent’), you may withdraw your consent at any time.
 
-    If you have any concerns relating to the use of your personal data by the Petitions Committee please contact [petitionscommitteeprivacy@parliament.uk][5] in the first instance.
+    * We may exempt some personal data from our obligation to comply with some rights where required for the purpose of avoiding an infringement of the privileges of either House of Parliament (DPA 2018 Schedule 2 (13)).
+
+    * We may also exempt some personal data from our obligation to comply with some rights where we have archived your personal data in the public interest (DPA 2018 Schedule 2 (28)).
+
+    If you have any concerns relating to the use of your personal data by the Petitions Committee, please contact [petitionscommitteeprivacy@parliament.uk][5] in the first instance.
 
     You may also complain to the Data Protection Officer whose contact details can be found at Section 1.
 
-    You also have the right to complain to the Information Commissioner, the supervisory authority, about our processing of your personal data. They can be contacted at Information Commissioner’s Office, Wycliffe House, Water Lane, Wilmslow, Cheshire, SK9 5AF.
+    You also have the right to complain to the Information Commissioner’s Office, the supervisory authority, by contacting them: [www.ico.org.uk/global/contact-us][6].
 
-    Further details about your rights can be found on our website, [House of Commons Data Protection information - UK Parliament][6], and the [Information Commissioner’s website][7].
+    Further information about data protection in Parliament can be found on our website: [www.parliament.uk/site-information/data-protection][7].
 
     [1]: mailto:hcinformationcompliance@parliament.uk
-    [2]: https://www.parliament.uk/site-information/data-protection/commons-data-protection-information/
-    [3]: https://ico.org.uk/for-organisations/guide-to-data-protection/guide-to-the-general-data-protection-regulation-gdpr/lawful-basis-for-processing/
-    [4]: https://www.parliament.uk/business/publications/parliamentary-archives/who-we-are/information-records-management-service
+    [2]: https://www.parliament.uk/site-information/data-protection/policies/
+    [3]: https://ico.org.uk/for-organisations/uk-gdpr-guidance-and-resources/lawful-basis/a-guide-to-lawful-basis/
+    [4]: https://www.parliament.uk/business/publications/parliamentary-archives/who-we-are/information-records-management-service/
     [5]: mailto:petitionscommitteeprivacy@parliament.uk
-    [6]: https://www.parliament.uk/site-information/data-protection/commons-data-protection-information/
-    [7]: https://ico.org.uk/your-data-matters/
+    [6]: https://www.ico.org.uk/global/contact-us/
+    [7]: https://www.parliament.uk/site-information/data-protection/
 
 standards:
   slug: "standards"

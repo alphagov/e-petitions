@@ -1,33 +1,18 @@
 <%= render 'parliament_dissolution_warning' if @page.show_dissolution_warning? %>
 
-<div class="grid-row margin-top-7">
-  <div class="grid-column-two-thirds-from-laptop">
-    <div class="markdown">
-      <%= markdown_to_html(@page.content, tables: true) %>
-    </div>
+<div class="grid-row grid-row--reverse margin-top-7">
+  <div class="grid-column-one-third-from-laptop hide-until-laptop">
+    <% if contents = markdown_to_contents(@page.content, nesting_level: 2..2) %>
+      <nav class="sticky-menu" aria-label="Contents">
+        <h3>Contents</h3>
+        <%= contents %>
+      </nav>
+    <% end %>
   </div>
 
-  <div class="grid-column-one-third-from-laptop hide-until-laptop">
-    <nav class="sticky-menu" aria-label="Other information">
-      <h3>Other information</h3>
-
-      <ul>
-        <li>
-          <%= link_to "How petitions work", help_path %>
-        </li>
-        <li>
-          <%= link_to "Petition standards", standards_path %>
-        </li>
-        <li>
-          <%= link_to "Cookie policy", cookies_path %>
-        </li>
-        <li>
-          <%= link_to "Privacy notice", privacy_path %>
-        </li>
-        <li>
-          <%= link_to "Accessibility statement", accessibility_path %>
-        </li>
-      </ul>
-    </nav>
+  <div class="grid-column-two-thirds-from-laptop">
+    <div class="markdown">
+      <%= markdown_to_html(@page.content, tables: true, with_toc_data: true) %>
+    </div>
   </div>
 </div>
