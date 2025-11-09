@@ -13,7 +13,7 @@ class Constituency < ActiveRecord::Base
   validates :ons_code, presence: true, format: %r[\A(?:E|W|S|N)\d{8}\z]
   validates :mp_id, length: { maximum: 30 }
   validates :mp_name, length: { maximum: 100 }
-  validates :example_postcode, presence: true
+  validates :example_postcode, presence: true, postcode: true
 
   delegate :query, :example_postcodes, to: "self.class"
 

@@ -55,6 +55,8 @@ RSpec.describe Constituency, type: :model do
     it { is_expected.not_to validate_presence_of(:mp_date) }
 
     it { is_expected.to validate_presence_of(:example_postcode) }
+    it { is_expected.to allow_value("RM70HD").for("example_postcode") }
+    it { is_expected.not_to allow_value("RMR0HD").for("example_postcode") }
 
     it "should not allow an :example_postcode that doesn't belong to the constituency" do
       constituency = FactoryBot.create(:constituency, :romford)
