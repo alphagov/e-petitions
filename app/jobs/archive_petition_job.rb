@@ -16,11 +16,13 @@ class ArchivePetitionJob < ApplicationJob
         p.action = petition.action
         p.background = petition.background
         p.additional_details = petition.additional_details
+        p.embedding = petition.embedding
         p.committee_note = petition.committee_note
         p.departments = petition.departments
         p.tags = petition.tags
         p.topics = petition.topics
         p.state = petition.state
+        p.response_state = petition.response_state
         p.debate_state = petition.debate_state
         p.special_consideration = petition.special_consideration
         p.anonymized_at = petition.anonymized_at
@@ -41,6 +43,7 @@ class ArchivePetitionJob < ApplicationJob
         p.debate_outcome_at = petition.debate_outcome_at
         p.created_at = petition.created_at
         p.updated_at = petition.updated_at
+        p.published_at = petition.published_at
 
         p.state_at_removal = petition.state_at_removal
         p.removed_at = petition.removed_at

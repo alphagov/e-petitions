@@ -78,11 +78,11 @@ Given(/^a petition "(.*?)" exists and hasn’t passed the threshold for a ?(resp
 end
 
 Given(/^a petition "(.*?)" exists and passed the threshold for a response less than a day ago$/) do |action|
-  FactoryBot.create(:open_petition, action: action, response_threshold_reached_at: 2.hours.ago)
+  FactoryBot.create(:awaiting_response_petition, action: action, response_threshold_reached_at: 2.hours.ago)
 end
 
 Given(/^a petition "(.*?)" exists and passed the threshold for a response (\d+) days? ago$/) do |action, amount|
-  FactoryBot.create(:open_petition, action: action, response_threshold_reached_at: amount.days.ago)
+  FactoryBot.create(:awaiting_response_petition, action: action, response_threshold_reached_at: amount.days.ago)
 end
 
 Given(/^a petition "(.*?)" passed the threshold for a debate less than a day ago and has no debate date set$/) do |action|
@@ -395,7 +395,7 @@ end
 
 Given(/^there are (\d+) petitions awaiting a government response$/) do |response_count|
   response_count.times do |count|
-    FactoryBot.create(:awaiting_petition, :action => "Petition #{count}")
+    FactoryBot.create(:awaiting_response_petition, :action => "Petition #{count}")
   end
 end
 
@@ -412,7 +412,7 @@ Given(/^a petition "(.*?)" exists with government response$/) do |action|
 end
 
 Given(/^a petition "(.*?)" exists awaiting government response$/) do |action|
-  @petition = FactoryBot.create(:awaiting_petition, action: action)
+  @petition = FactoryBot.create(:awaiting_response_petition, action: action)
 end
 
 Given(/^an? ?(pending|validated|sponsored|flagged|dormant|open)? petition "(.*?)" exists with tags "([^"]*)"$/) do |state, action, tags|

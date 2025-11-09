@@ -99,8 +99,14 @@ FactoryBot.define do
       end
     end
 
+    trait :awaiting do
+      response_threshold_reached_at { 6.months.ago }
+      response_state { "awaiting" }
+    end
+
     trait :response do
       government_response_at { 1.week.ago }
+      response_state { "responded" }
 
       transient do
         response_summary { "Response Summary" }
@@ -517,12 +523,14 @@ FactoryBot.define do
     end
   end
 
-  factory :awaiting_petition, :parent => :open_petition do
+  factory :awaiting_response_petition, :parent => :open_petition do
     response_threshold_reached_at { 1.week.ago }
+    response_state { 'awaiting' }
   end
 
-  factory :responded_petition, :parent => :awaiting_petition do
+  factory :responded_petition, :parent => :awaiting_response_petition do
     government_response_at { 1.week.ago }
+    response_state { 'responded' }
 
     transient do
       response_summary { "Response Summary" }
@@ -795,7 +803,7 @@ FactoryBot.define do
   end
 
   factory :government_response do
-    association :petition, factory: :awaiting_petition
+    association :petition, factory: :awaiting_response_petition
     responded_on { 1.day.ago.to_date }
     details { "Government Response Details" }
     summary { "Government Response Summary" }

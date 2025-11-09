@@ -322,7 +322,7 @@ RSpec.describe Petition, type: :model do
       end
 
       context "when a petition has reached the response threshold" do
-        let(:petition) { FactoryBot.create(:awaiting_petition) }
+        let(:petition) { FactoryBot.create(:awaiting_response_petition) }
 
         it "is included in the list" do
           expect(Petition.awaiting_response).to include(petition)
@@ -2033,11 +2033,13 @@ RSpec.describe Petition, type: :model do
   end
 
   describe "#increment_signature_count!" do
-    let(:signature_count) { 8 }
+    let(:response_state) { 'pending' }
     let(:debate_state) { 'pending' }
+    let(:signature_count) { 8 }
 
     let(:petition) do
       FactoryBot.create(:open_petition, {
+        response_state: response_state,
         debate_state: debate_state,
         signature_count: signature_count,
         last_signed_at: 2.days.ago,
@@ -2250,20 +2252,90 @@ RSpec.describe Petition, type: :model do
       end
     end
 
-    context "when the signature count crosses the threshold for a response" do
-      let(:signature_count) { 9 }
+    context "when the petition hasn't been responded to" do
+      let(:response_state) { "pending" }
 
-      before do
-        expect(Site).to receive(:threshold_for_response).and_return(10)
-        FactoryBot.create(:validated_signature, petition: petition, increment: false)
+      context "when the signature count crosses the threshold for a response" do
+        let(:signature_count) { 9 }
+
+        before do
+          expect(Site).to receive(:threshold_for_response).and_return(10)
+          FactoryBot.create(:validated_signature, petition: petition, increment: false)
+        end
+
+        it "records the time it happened" do
+          expect {
+            petition.increment_signature_count!
+          }.to change {
+            petition.response_threshold_reached_at
+          }.to be_within(1.second).of(Time.current)
+        end
+
+        it "sets the response_state to 'awaiting'" do
+          expect {
+            petition.increment_signature_count!
+          }.to change {
+            petition.response_state
+          }.from("pending").to("awaiting")
+        end
       end
+    end
 
-      it "records the time it happened" do
-        expect {
-          petition.increment_signature_count!
-        }.to change {
-          petition.response_threshold_reached_at
-        }.to be_within(1.second).of(Time.current)
+    context "when the petition is awaiting a response" do
+      let(:response_state) { "awaiting" }
+
+      context "when the signature count crosses the threshold for a response" do
+        let(:signature_count) { 9 }
+
+        before do
+          expect(Site).to receive(:threshold_for_response).and_return(10)
+          FactoryBot.create(:validated_signature, petition: petition, increment: false)
+        end
+
+        it "records the time it happened" do
+          expect {
+            petition.increment_signature_count!
+          }.to change {
+            petition.response_threshold_reached_at
+          }.to be_within(1.second).of(Time.current)
+        end
+
+        it "doesn't change response_state" do
+          expect {
+            petition.increment_signature_count!
+          }.not_to change {
+            petition.response_state
+          }.from("awaiting")
+        end
+      end
+    end
+
+    context "when the petition has been responded to" do
+      let(:response_state) { "responded" }
+
+      context "when the signature count crosses the threshold for a response" do
+        let(:signature_count) { 9 }
+
+        before do
+          expect(Site).to receive(:threshold_for_response).and_return(10)
+          FactoryBot.create(:validated_signature, petition: petition, increment: false)
+        end
+
+        it "records the time it happened" do
+          expect {
+            petition.increment_signature_count!
+          }.to change {
+            petition.response_threshold_reached_at
+          }.to be_within(1.second).of(Time.current)
+        end
+
+        it "doesn't change response_state" do
+          expect {
+            petition.increment_signature_count!
+          }.not_to change {
+            petition.response_state
+          }.from("responded")
+        end
       end
     end
 
@@ -2358,6 +2430,7 @@ RSpec.describe Petition, type: :model do
   describe "#decrement_signature_count!" do
     let(:signature_count) { 8 }
     let(:debate_state) { 'awaiting' }
+    let(:response_state) { 'awaiting' }
 
     let(:petition) do
       FactoryBot.create(:open_petition, {
@@ -2367,7 +2440,8 @@ RSpec.describe Petition, type: :model do
         moderation_threshold_reached_at: 5.days.ago.floor,
         response_threshold_reached_at: 2.days.ago,
         debate_threshold_reached_at: 2.days.ago,
-        debate_state: debate_state
+        debate_state: debate_state,
+        response_state: response_state
       })
     end
 
@@ -2394,7 +2468,7 @@ RSpec.describe Petition, type: :model do
       end
     end
 
-    context "when the signature count crosses below the threshold for a debate" do
+    context "when the signature count crosses below the threshold for moderation" do
       let(:signature_count) { 6 }
 
       before do
@@ -2455,6 +2529,27 @@ RSpec.describe Petition, type: :model do
       it "resets the timestamp" do
         petition.decrement_signature_count!
         expect(petition.response_threshold_reached_at).to be_nil
+      end
+
+      context "and it has not been responded to" do
+        let(:response_state) { "awaiting" }
+
+        it "sets the response_state to 'pending'" do
+          petition.decrement_signature_count!
+          expect(petition.response_state).to eq("pending")
+        end
+      end
+
+      context "and it has been responded to" do
+        let(:response_state) { "responded" }
+
+        it "doesn't change response_state" do
+          expect {
+            petition.decrement_signature_count!
+          }.not_to change {
+            petition.response_state
+          }.from("responded")
+        end
       end
     end
 
@@ -2651,7 +2746,7 @@ RSpec.describe Petition, type: :model do
     end
 
     context "when response_threshold_reached_at is present" do
-      let(:petition) { FactoryBot.create(:awaiting_petition) }
+      let(:petition) { FactoryBot.create(:awaiting_response_petition) }
 
       before do
         expect(Site).not_to receive(:threshold_for_response)

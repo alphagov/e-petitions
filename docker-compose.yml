@@ -27,6 +27,7 @@ x-environment: &environment
   DATABASE_URL: "postgres://postgres:ZW4IvOPrXcbp2hyp@postgres:5432"
   DATABASE_CLEANER_ALLOW_REMOTE_DATABASE_URL: "true"
   SPROCKETS_CACHE: "/cache"
+  OLLAMA_URL: "http://ollama:11434"
   PIDFILE: "/tmp/pids/server.pid"
 
 services:
@@ -44,7 +45,12 @@ services:
         ipv4_address: 172.24.99.53
 
   postgres:
-    image: postgres:16
+    image: e-petitions/postgres
+    build: docker/postgres
+    command: >
+      -c ssl=on
+      -c ssl_cert_file=/etc/ssl/certs/ssl-cert-snakeoil.pem
+      -c ssl_key_file=/etc/ssl/private/ssl-cert-snakeoil.key
     restart: always
     environment:
       - POSTGRES_USER=postgres
@@ -67,6 +73,17 @@ services:
     networks:
       default:
         ipv4_address: 172.24.99.30
+
+  ollama:
+    image: ollama/ollama
+    ports:
+      - "127.0.0.1:11434:11434"
+    volumes:
+      - type: volume
+        source: ollama
+        target: /root/.ollama
+    profiles:
+      - ollama
 
   web:
     <<: *application
@@ -137,3 +154,4 @@ volumes:
   db:
   cache:
   node_modules:
+  ollama:

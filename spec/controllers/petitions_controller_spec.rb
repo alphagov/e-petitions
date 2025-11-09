@@ -52,6 +52,31 @@ RSpec.describe PetitionsController, type: :controller do
   end
 
   describe "POST /petitions/new" do
+    let(:client) { double(Aws::BedrockRuntime::Client) }
+    let(:input) { "Save the planet - Limit temperature rise at two degrees"}
+    let(:embedding) { 1024.times.map { rand } }
+
+    let(:bedrock_request) do
+      {
+        body: {
+          inputText: input,
+          dimensions: 1024,
+          embeddingTypes: ['float']
+        }.to_json,
+        content_type: 'application/json',
+        accept: 'application/json',
+        model_id: 'amazon.titan-embed-text-v2:0'
+      }
+    end
+
+    let(:bedrock_body) do
+      StringIO.new({ "embedding" => embedding }.to_json)
+    end
+
+    let(:bedrock_reponse) do
+      double(Aws::BedrockRuntime::Types::InvokeModelResponse, body: bedrock_body)
+    end
+
     let(:params) do
       {
         action: "Save the planet",
@@ -69,6 +94,8 @@ RSpec.describe PetitionsController, type: :controller do
 
     before do
       allow(Constituency).to receive(:find_by_postcode).with("SE34LL").and_return(constituency)
+      allow(Aws::BedrockRuntime::Client).to receive(:new).and_return(client)
+      allow(client).to receive(:invoke_model).with(bedrock_request).and_return(bedrock_reponse)
     end
 
     context "valid post" do
@@ -81,6 +108,9 @@ RSpec.describe PetitionsController, type: :controller do
 
         expect(petition.creator).not_to be_nil
         expect(response).to redirect_to("https://petition.parliament.uk/petitions/thank-you")
+
+        expect(UpdatePetitionEmbeddingJob).to have_been_performed.with(petition)
+        expect(petition.embedding).not_to be_nil
       end
 
       it "should successfully create a new petition and a signature even when email has white space either end" do

@@ -31,6 +31,7 @@ RSpec.describe ArchivePetitionJob, type: :job do
         action: "Make Wombles Great Again",
         background: "The 70s was a great time for kids TV",
         additional_details: "Also the Clangers too",
+        embedding: 1024.times.map { 1.0 },
         committee_note: "This petition action was found to be false",
         tags: tags.map(&:id),
         departments: departments.map(&:id),
@@ -43,7 +44,8 @@ RSpec.describe ArchivePetitionJob, type: :job do
         moderation_lag: 30,
         last_signed_at: 3.months.ago,
         created_at: 8.months.ago,
-        updated_at: 1.month.ago
+        updated_at: 1.month.ago,
+        published_at: 6.months.ago
       )
     end
 
@@ -64,6 +66,7 @@ RSpec.describe ArchivePetitionJob, type: :job do
       expect(archived_petition.action).to eq(petition.action)
       expect(archived_petition.background).to eq(petition.background)
       expect(archived_petition.additional_details).to eq(petition.additional_details)
+      expect(archived_petition.embedding).to eq(petition.embedding)
       expect(archived_petition.committee_note).to eq(petition.committee_note)
       expect(archived_petition.tags).to eq(petition.tags)
       expect(archived_petition.tags).not_to be_empty
@@ -81,6 +84,7 @@ RSpec.describe ArchivePetitionJob, type: :job do
       expect(archived_petition.last_signed_at).to be_usec_precise_with(petition.last_signed_at)
       expect(archived_petition.created_at).to be_usec_precise_with(petition.created_at)
       expect(archived_petition.updated_at).to be_usec_precise_with(petition.updated_at)
+      expect(archived_petition.published_at).to be_usec_precise_with(petition.published_at)
     end
 
     it "copies the constituency_petition_journal data" do
@@ -124,11 +128,15 @@ RSpec.describe ArchivePetitionJob, type: :job do
 
   context "with a petition that reached the response threshold" do
     let(:petition) do
-      FactoryBot.create(:closed_petition, response_threshold_reached_at: 2.months.ago)
+      FactoryBot.create(:closed_petition,
+        response_threshold_reached_at: 2.months.ago,
+        response_state: "awaiting"
+      )
     end
 
     it "copies the attributes" do
       expect(archived_petition.response_threshold_reached_at).to be_usec_precise_with(petition.response_threshold_reached_at)
+      expect(archived_petition.response_state).to eq(petition.response_state)
     end
   end
 

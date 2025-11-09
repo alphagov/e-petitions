@@ -15,7 +15,7 @@ class Rejection < ActiveRecord::Base
     if petition.rejected_at?
       petition.update!(state: state_for_petition)
     else
-      petition.update!(state: state_for_petition, rejected_at: Time.current)
+      petition.update!(state: state_for_petition, **timestamps_for_petition)
     end
   end
 
@@ -31,6 +31,10 @@ class Rejection < ActiveRecord::Base
 
   def state_for_petition
     hide_petition? ? Petition::HIDDEN_STATE : Petition::REJECTED_STATE
+  end
+
+  def timestamps_for_petition(time = Time.current)
+    { rejected_at: time, published_at: time }
   end
 
   private
