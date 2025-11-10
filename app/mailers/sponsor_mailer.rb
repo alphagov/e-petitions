@@ -1,27 +1,35 @@
 class SponsorMailer < ApplicationMailer
   include NumberHelper
 
+  after_action do
+    if @creator && @creator.anonymized?
+      mail.perform_deliveries = false
+    elsif @sponsor && @sponsor.anonymized?
+      mail.perform_deliveries = false
+    end
+  end
+
   def sponsor_signed_email_below_threshold(sponsor)
-    @petition, @sponsor = sponsor.petition, sponsor
+    @petition, @creator = sponsor.petition, sponsor.petition.creator
     @sponsor_count = @petition.sponsor_count
 
-    mail to: @petition.creator.email,
+    mail to: @creator.email,
       subject: subject_for(:sponsor_signed_email_below_threshold)
   end
 
   def sponsor_signed_email_on_threshold(sponsor)
-    @petition, @sponsor = sponsor.petition, sponsor
+    @petition, @creator = sponsor.petition, sponsor.petition.creator
     @sponsor_count = @petition.sponsor_count
 
-    mail to: @petition.creator.email,
+    mail to: @creator.email,
       subject: subject_for(:sponsor_signed_email_on_threshold)
   end
 
   def sponsor_signed_email_on_threshold_with_delay(sponsor)
-    @petition, @sponsor = sponsor.petition, sponsor
+    @petition, @creator = sponsor.petition, sponsor.petition.creator
     @sponsor_count = @petition.sponsor_count
 
-    mail to: @petition.creator.email,
+    mail to: @creator.email,
       subject: subject_for(:sponsor_signed_email_on_threshold_with_delay)
   end
 

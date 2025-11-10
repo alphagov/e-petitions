@@ -1,6 +1,6 @@
 <p>Dear <%= @sponsor.name %>,</p>
 
-<p>Please <%= link_to "confirm your email", verify_sponsor_url(@sponsor, token: @sponsor.perishable_token) %> to support and sign <%= @petition.creator.name %>’s petition:</p>
+<p>Please <%= link_to "confirm your email", verify_sponsor_url(@sponsor, token: @sponsor.perishable_token) %> to support and sign <%= @petition.creator_name %>’s petition:</p>
 
 <hr>
 

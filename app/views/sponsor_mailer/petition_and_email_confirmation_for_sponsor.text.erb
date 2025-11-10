@@ -3,7 +3,7 @@ Dear <%= @sponsor.name %>,
 Please confirm your email:
 <%= verify_sponsor_url(@sponsor, token: @sponsor.perishable_token) %>
 
-to support and sign <%= @petition.creator.name %>’s petition:
+to support and sign <%= @petition.creator_name %>’s petition:
 
 --
 

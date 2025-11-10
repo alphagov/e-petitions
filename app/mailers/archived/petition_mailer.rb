@@ -2,6 +2,12 @@ module Archived
   class PetitionMailer < ApplicationMailer
     include ActiveSupport::NumberHelper
 
+    after_action do
+      if @signature && @signature.anonymized?
+        mail.perform_deliveries = false
+      end
+    end
+
     def email_signer(petition, signature, email)
       @petition, @signature, @email = petition, signature, email
 
