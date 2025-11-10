@@ -155,4 +155,50 @@ RSpec.describe SponsorMailer, type: :mailer do
       end
     end
   end
+
+  describe "skipping anonymized signatures" do
+    context "when sending an email to the creator" do
+      let(:mail) do
+        described_class.sponsor_signed_email_below_threshold(sponsor)
+      end
+
+      context "and the signature is not anonymized" do
+        it "will deliver the email" do
+          expect(mail.perform_deliveries).to eq(true)
+        end
+      end
+
+      context "and the signature is anonymized" do
+        let :creator do
+          FactoryBot.create(:validated_signature, creator: true, created_at: 13.months.ago, anonymized_at: 1.month.ago)
+        end
+
+        it "will not deliver the email" do
+          expect(mail.perform_deliveries).to eq(false)
+        end
+      end
+    end
+
+    context "when sending an email to the sponsor" do
+      let(:mail) do
+        described_class.petition_and_email_confirmation_for_sponsor(sponsor)
+      end
+
+      context "and the signature is not anonymized" do
+        it "will deliver the email" do
+          expect(mail.perform_deliveries).to eq(true)
+        end
+      end
+
+      context "and the signature is anonymized" do
+        let :sponsor do
+          FactoryBot.create(:sponsor, :pending, petition: petition, created_at: 13.months.ago, anonymized_at: 1.month.ago)
+        end
+
+        it "will not deliver the email" do
+          expect(mail.perform_deliveries).to eq(false)
+        end
+      end
+    end
+  end
 end
