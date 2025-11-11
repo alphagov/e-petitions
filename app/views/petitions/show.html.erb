@@ -1,35 +1,22 @@
 <%= render 'parliament_dissolution_warning' %>
 
-<div class="grid-row margin-top-7">
-  <div class="grid-column-two-thirds-from-laptop">
-    <% if @petition.rejected? %>
-      <%= render 'rejected_petition_show', petition: @petition %>
-    <% elsif @petition.closed? %>
-      <%= render 'closed_petition_show', petition: @petition %>
-    <% else %>
-      <%= render 'open_petition_show', petition: @petition %>
-    <% end %>
-  </div>
-
+<div class="grid-row grid-row--reverse margin-top-7">
   <div class="grid-column-one-third hide-until-laptop">
     <nav class="sticky-menu">
-      <h3>On this page</h3>
+      <h2>On this page</h2>
 
       <ul>
         <li>
           <%= link_to "About this petition", "#action" %>
         </li>
-        <% if @petition.published? %>
-          <li>
-            <%= link_to "Petition progress", "#progress" %>
-          </li>
-        <% end %>
         <% if @petition.open? %>
           <li>
             <%= link_to "Sign this petition", "#sign" %>
           </li>
+        <% end %>
+        <% if @petition.published? %>
           <li>
-            <%= link_to "Share this petition", "#share" %>
+            <%= link_to "Petition progress", "#progress" %>
           </li>
         <% end %>
         <% if @petition.government_response? %>
@@ -52,5 +39,15 @@
         </li>
       </ul>
     </nav>
+  </div>
+
+  <div class="grid-column-two-thirds-from-laptop">
+    <% if @petition.rejected? %>
+      <%= render 'rejected_petition_show', petition: @petition %>
+    <% elsif @petition.closed? %>
+      <%= render 'closed_petition_show', petition: @petition %>
+    <% else %>
+      <%= render 'open_petition_show', petition: @petition %>
+    <% end %>
   </div>
 </div>

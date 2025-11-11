@@ -4,7 +4,7 @@
   <div class="grid-column-one-third-from-laptop hide-until-laptop">
     <% if contents = markdown_to_contents(@page.content, nesting_level: 2..2) %>
       <nav class="sticky-menu" aria-label="Contents">
-        <h3>Contents</h3>
+        <h2>Contents</h2>
         <%= contents %>
       </nav>
     <% end %>
