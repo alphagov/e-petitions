@@ -1,5 +1,9 @@
 <%= render 'parliament_dissolution_warning' %>
 
+<% if Site.show_feedback_page_message? && !Parliament.dissolution_announced? %>
+  <% content_for(:message_banner) { markdown_to_html(Site.feedback_page_message) } %>
+<% end %>
+
 <div class="grid-row margin-top-7">
   <div class="grid-column-two-thirds-from-laptop">
     <h1>

@@ -1,10 +1,8 @@
-<% content_for :hero_banner do %>
-  <% if Site.show_home_page_message? %>
-    <div class="highlight">
-      <%= markdown_to_html(Site.home_page_message) %>
-    </div>
-  <% end %>
+<% if Site.show_home_page_message? && !Parliament.dissolution_announced? %>
+  <% content_for(:message_banner) { markdown_to_html(Site.home_page_message) } %>
+<% end %>
 
+<% content_for :hero_banner do %>
   <h1>
     Find, sign and create petitions
   </h1>

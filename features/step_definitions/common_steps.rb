@@ -118,7 +118,7 @@ Then(/^I should index the page$/) do
 end
 
 Then(/^I should see the Parliament dissolution warning message$/) do
-  within(:css, ".notification") do
+  within(:css, "body > header") do
     expect(page).to have_content "Parliament is dissolving"
     expect(page).to have_content "This means all petitions will close in 2 weeks"
     expect(page).to have_link "Petitions Committee website", href: "https://parliament.example.com/parliament-is-closing"
@@ -126,7 +126,7 @@ Then(/^I should see the Parliament dissolution warning message$/) do
 end
 
 Then(/^I should see the Parliament dissolved warning message$/) do
-  within(:css, ".notification") do
+  within(:css, "body > header") do
     expect(page).to have_content "Parliament has been dissolved"
     expect(page).to have_content "All petitions have been closed"
     expect(page).to have_link "Petitions Committee website", href: "https://parliament.example.com/parliament-is-closing"
