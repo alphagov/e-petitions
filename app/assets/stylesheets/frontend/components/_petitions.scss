@@ -1,3 +1,4 @@
+@use "sass:map";
 @use "../settings" as *;
 @use "../helpers" as *;
 
@@ -38,7 +39,11 @@
       justify-content: space-between;
 
       @include media-query($from: laptop) {
-        max-width: 50%;
+        max-width: calc((map.get($breakpoint-max-widths, laptop) - 60px) / 2);
+      }
+
+      @include media-query($from: desktop) {
+        max-width: calc((map.get($breakpoint-max-widths, desktop) - 60px) / 2);
       }
 
       h3 {
@@ -354,3 +359,18 @@
     justify-content: space-between;
   }
 }
+
+#trending-petitions {
+  ul {
+    li {
+      @include media-query($from: laptop) {
+        max-width: calc((map.get($breakpoint-max-widths, laptop) - 90px) / 3);
+      }
+
+      @include media-query($from: desktop) {
+        max-width: calc((map.get($breakpoint-max-widths, desktop) - 90px) / 3);
+      }
+    }
+  }
+}
+
