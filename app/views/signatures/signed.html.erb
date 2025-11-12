@@ -8,13 +8,11 @@
       <%= link_to @petition.action, petition_path(@petition) %>
     </p>
 
-    <%= render 'share_petition', petition: @petition %>
-
     <hr>
 
     <% if @signature.constituency %>
-      <section labelledby="contact-your-mp-heading">
-        <h2 id="contact-your-mp-heading">
+      <section>
+        <h2>
           Contact your MP
         </h2>
 
@@ -38,8 +36,8 @@
       <hr>
     <% end %>
 
-    <section labelledby="register-to-vote-heading">
-      <h2 id="register-to-vote-heading">
+    <section>
+      <h2>
         Register to vote
       </h2>
 

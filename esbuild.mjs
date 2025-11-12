@@ -10,6 +10,7 @@ const entryPoints = error
       'app/assets/javascripts/admin.js',
       'app/assets/javascripts/application.js',
       'app/assets/javascripts/cookie-manager.js',
+      'app/assets/javascripts/sharing.js',
       'app/assets/javascripts/signature-form.js'
     ]
 

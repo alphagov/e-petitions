@@ -43,12 +43,14 @@ en-GB:
         thank_you: "You need to confirm your email address before we can count your signature for this petition."
 
     open_graph:
-      site_name: "Petitions - UK Government and Parliament"
-      default_title: "Petitions - UK Government and Parliament"
+      site_name: "Petitions - UK Parliament and UK Government"
+      default_title: "Petitions - UK Parliament and UK Government"
+      default_description: "Find, sign or create petitions calling for the UK Parliament or UK Government to act"
       title: "Petition: %{petition}"
       archived_title: "Archived Petition: %{petition}"
 
     x:
-      default_title: "Petitions - UK Government and Parliament"
+      default_title: "Petitions - UK Parliament and UK Government"
+      default_description: "Find, sign or create petitions calling for the UK Parliament or UK Government to act"
       title: "Petition: %{petition}"
       archived_title: "Archived Petition: %{petition}"

@@ -20,6 +20,7 @@
 <%= open_graph_tag 'url', original_url %>
 <%= open_graph_tag 'type', 'website' %>
 <%= open_graph_tag 'title', page_title %>
+<%= open_graph_tag 'description', :default_description %>
 <% end %>
 <!-- X -->
 <%= x_card_tag 'card', 'summary' %>
@@ -33,5 +34,5 @@
 <%= x_card_tag 'description', @petition.background %>
 <% else %>
 <%= x_card_tag 'title', page_title %>
-<%= x_card_tag 'description', 'Official online petitions in response to issues of the day, listing the number that got a Government response, and those that have been debated in the House of Parliament' %>
+<%= x_card_tag 'description', :default_description %>
 <% end %>

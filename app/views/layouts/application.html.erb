@@ -15,9 +15,7 @@
     <% end %>
 
     <%= preload_link_tag 'National-LFS-Book.woff2', nopush: true %>
-    <%= preload_link_tag 'National-LF-BookItalic.woff2', nopush: true %>
     <%= preload_link_tag 'National-LFS-Semibold.woff2', nopush: true %>
-    <%= preload_link_tag 'National-LF-SemiboldItalic.woff2', nopush: true %>
 
     <%= stylesheet_link_tag 'application' %>
 
@@ -67,5 +65,9 @@
     <% end %>
 
     <%= javascript_include_tag 'application' %>
+
+    <% if open_petition_page? %>
+      <%= javascript_include_tag 'sharing' %>
+    <% end %>
   </body>
 </html>

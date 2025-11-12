@@ -204,36 +204,6 @@
   }
 }
 
-.petition-share {
-  display: flex;
-  gap: spacing(2);
-  flex-wrap: wrap;
-
-  li {
-    display: block;
-    min-width: fit-content;
-  }
-
-  a.button {
-    @include font-size(20);
-
-    display: flex;
-    align-items: center;
-    padding: spacing(3);
-
-    &:focus {
-      padding: spacing(3);
-    }
-  }
-
-  svg {
-    width: 24px;
-    height: 24px;
-    margin-right: spacing(2);
-  }
-
-}
-
 .tag {
   @include font-size(22);
 

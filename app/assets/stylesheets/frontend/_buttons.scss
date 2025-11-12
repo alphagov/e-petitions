@@ -100,3 +100,19 @@ button:not(:disabled), .button:not(:disabled) {
     @extend %focused-text;
   }
 }
+
+.button-share {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-right: 8px;
+
+  & > svg {
+    width: 32px;
+    height: 32px;
+  }
+}
+
+button[hidden] {
+  display: none;
+}
