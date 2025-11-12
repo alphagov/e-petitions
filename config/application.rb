@@ -88,5 +88,9 @@ module Epets
 
     # Add application mailer previews path
     config.action_mailer.preview_paths << "#{Rails.root}/app/previews"
+
+    # Add interceptors for inlining HTML email styles
+    config.action_mailer.interceptors = ["InlineStyles"]
+    config.action_mailer.preview_interceptors = ["InlineStyles"]
   end
 end

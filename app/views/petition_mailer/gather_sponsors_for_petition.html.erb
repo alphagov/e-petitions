@@ -1,4 +1,6 @@
-<p><small>You’re receiving this email because you created the petition: “<%= link_to @petition.action, new_petition_sponsor_url(@petition, token: @petition.sponsor_token) %>”.</small></p>
+<p>You’re receiving this email because you created the petition: “<%= link_to @petition.action, new_petition_sponsor_url(@petition, token: @petition.sponsor_token) %>”.</p>
+
+<hr>
 
 <p>Dear <%= @creator.name %>,</p>
 
