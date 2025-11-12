@@ -1,21 +1,15 @@
 <div class="grid-row margin-top-7">
   <div class="grid-column-two-thirds-from-laptop">
     <h1>
-      <% if @postcode.present? %>
-        We couldn’t find that postcode
-      <% else %>
-        Local to you
-      <% end %>
+      Search popular petitions in a constituency
     </h1>
 
-    <% if @postcode.blank? %>
-      <p>Find petitions about local issues</p>
-    <% else %>
+    <% if @postcode.present? %>
       <p>We couldn’t find the postcode <q><%= params[:postcode] %></q>. Try again?</p>
     <% end %>
 
     <%= form_tag local_petitions_path, method: 'get', enforce_utf8: false do %>
-      <%= label_tag 'postcode', 'UK postcode' %>
+      <%= label_tag 'postcode', 'Enter a full UK postcode' %>
 
       <div class="inline-group">
         <%= text_field_tag 'postcode', @postcode, size: 30, maxlength: 30 %>
