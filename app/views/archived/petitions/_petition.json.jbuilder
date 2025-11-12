@@ -30,6 +30,7 @@ json.attributes do
   json.response_threshold_reached_at api_date_format(petition.response_threshold_reached_at)
   json.government_response_at api_date_format(petition.government_response_at)
   json.debate_threshold_reached_at api_date_format(petition.debate_threshold_reached_at)
+  json.debate_scheduled_at api_date_format(petition.debate_scheduled_at)
   json.scheduled_debate_date api_date_format(petition.scheduled_debate_date)
   json.debate_outcome_at api_date_format(petition.debate_outcome_at)
 

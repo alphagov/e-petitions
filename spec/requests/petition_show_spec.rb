@@ -157,6 +157,7 @@ RSpec.describe "API request to show a petition", type: :request, show_exceptions
 
       expect(attributes).to match(
         a_hash_including(
+          "debate_scheduled_at" => a_string_matching(%r[\A\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z\z]),
           "scheduled_debate_date" => a_string_matching(%r[\A\d{4}-\d{2}-\d{2}\z])
         )
       )

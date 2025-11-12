@@ -168,6 +168,7 @@ RSpec.describe "API request to show an archived petition", type: :request, show_
 
       expect(attributes).to match(
         a_hash_including(
+          "debate_scheduled_at" => a_string_matching(%r[\A\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z\z]),
           "scheduled_debate_date" => a_string_matching(%r[\A\d{4}-\d{2}-\d{2}\z])
         )
       )
