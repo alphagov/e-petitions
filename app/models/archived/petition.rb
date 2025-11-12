@@ -383,6 +383,14 @@ module Archived
 
     def update_debate_state
       self.debate_state = evaluate_debate_state
+
+      if scheduled_debate_date?
+        if scheduled_debate_date.future?
+          self.debate_scheduled_at ||= Time.current
+        end
+      else
+        self.debate_scheduled_at = nil
+      end
     end
 
     def update_lock!(user, now = Time.current)

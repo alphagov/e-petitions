@@ -122,6 +122,7 @@ FactoryBot.define do
     end
 
     trait :scheduled_for_debate do
+      debate_scheduled_at { 1.day.ago }
       scheduled_debate_date { 1.week.from_now }
       debate_state { "scheduled" }
     end
@@ -349,6 +350,7 @@ FactoryBot.define do
     end
 
     trait :scheduled_for_debate do
+      debate_scheduled_at { 1.day.ago }
       scheduled_debate_date { 10.days.from_now }
     end
 
@@ -552,6 +554,7 @@ FactoryBot.define do
 
   factory :scheduled_debate_petition, :parent => :open_petition do
     debate_threshold_reached_at { 1.week.ago }
+    debate_scheduled_at { 1.day.ago }
     scheduled_debate_date { 1.week.from_now }
     debate_state { 'scheduled' }
   end
