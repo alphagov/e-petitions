@@ -12,7 +12,7 @@
 
 <p>Click this link to view the response online:</p>
 
-<p><%= link_to nil, archived_petition_url(@petition, reveal_response: "yes") %></p>
+<p><%= link_to nil, archived_petition_url(@petition, reveal_response: "yes", anchor: "response") %></p>
 
 <% if @petition.signature_count < @parliament.threshold_for_debate %>
 <p>The Petitions Committee will take a look at this petition and its response. They can press the government for action and gather evidence. If this petition reaches <%= @parliament.formatted_threshold_for_debate %> signatures, the Committee will consider it for a debate.</p>

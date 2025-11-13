@@ -1,0 +1,20 @@
+<li>
+  <%= time_tag(context.created_at) do %>
+    <strong><%= short_date_format(context.created_at) %></strong>
+  <% end %>
+
+  <div>
+    <h3>
+      Related activity
+    </h3>
+
+    <div class="related-activity">
+      <details>
+        <summary><%= context.subject %></summary>
+        <div>
+          <%= markdown_to_html(context.body, link_attributes: { rel: 'nofollow' }) %>
+        </div>
+      </details>
+    </div>
+  </div>
+</li>

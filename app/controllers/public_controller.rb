@@ -7,10 +7,12 @@ class PublicController < ApplicationController
         "https://*.googletagmanager.com"
 
       policy.frame_src :self,
+        "https://www.youtube.com",
         "https://*.google-analytics.com",
         "https://*.googletagmanager.com"
 
       policy.img_src :self, :data,
+        "https://*.ytimg.com",
         "https://*.google-analytics.com",
         "https://*.googletagmanager.com"
 
@@ -18,7 +20,8 @@ class PublicController < ApplicationController
         "https://*.googletagmanager.com",
         "'#{Site.google_tag_manager_hash}'"
     else
-      policy.img_src :self, :data
+      policy.frame_src :self, "https://www.youtube.com"
+      policy.img_src :self, :data, "https://*.ytimg.com"
       policy.script_src :self
     end
   end

@@ -1,6 +1,7 @@
 @use "sass:map";
 @use "../settings" as *;
 @use "../helpers" as *;
+@use "../lists" as *;
 
 .petition-items {
   @include responsive-margin(8, top);
@@ -234,66 +235,232 @@
 }
 
 .petition-timeline {
-  h2 {
+  & > h2 {
     @include font-size(27);
   }
 
-  ul {
+  & > ul {
     @include responsive-margin(7, bottom);
-  }
 
-  li {
-    @include responsive-margin(4, bottom);
-    @include responsive-padding(4, all);
+    & > li {
+      @include responsive-margin(6, bottom);
 
-    margin-left: 45px;
-    position: relative;
-    border: 1px solid $border-colour;
-    border-radius: $button-border-radius;
+      padding-left: 40px;
+      position: relative;
 
-    &:before {
-      content: "";
-      position: absolute;
-      left: -29px;
-      top: 0;
-      width: 0;
-      height: 100%;
-      border-left: 2px solid $border-colour;
-    }
-
-    &:after {
-      background-color: $border-colour;
-      content: "";
-      position: absolute;
-      left: -34px;
-      top: 0;
-      width: 14px;
-      height: 14px;
-      border-radius: 50%;
-      box-shadow: 0 0 0 10px $colour-white;
-    }
-
-    &.completed {
-      &:after {
-        background-image: url("data:image/svg+xml,%3C%3Fxml%20version%3D%221.0%22%20encoding%3D%22utf-8%22%3F%3E%3Csvg%20width%3D%2216px%22%20height%3D%2216px%22%20viewBox%3D%220%200%2016%2016%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Crect%20width%3D%2216%22%20height%3D%2216%22%20id%3D%22icon-bound%22%20fill%3D%22none%22%20%2F%3E%3Cpath%20fill%3D%22%23fff%22%20d%3D%22M0%2C9.014L1.414%2C7.6L5.004%2C11.189L14.593%2C1.6L16.007%2C3.014L5.003%2C14.017L0%2C9.014Z%22%20%2F%3E%3C%2Fsvg%3E");
-        background-color: $colour-blue;
-        background-repeat: no-repeat;
-        background-position: 5px 5px;
-        background-size: 14px 14px;
-        left: -39px;
-        top: 0;
-        width: 24px;
-        height: 24px;
+      @include media-query($from: tablet) {
+        padding-left: 50px;
       }
-    }
 
-    h3 {
-      @include font-size(22);
-      @include responsive-margin(2, bottom);
-    }
+      strong {
+        white-space: nowrap;
+      }
 
-    p {
-      @include font-size(20);
+      time {
+        @include font-size(22);
+        @include responsive-margin(4, bottom);
+
+        display: block;
+      }
+
+      h3 {
+        @include font-size(22);
+      }
+
+      ul, ol, p {
+        @include font-size(20);
+      }
+
+      p:not(:last-child) {
+        @include responsive-margin(4, bottom);
+      }
+
+      iframe {
+        display: block;
+        width: 100%;
+        aspect-ratio: calc(560/315);
+
+        @include responsive-margin(6, top);
+        @include responsive-margin(6, bottom);
+      }
+
+      details {
+        summary {
+          @include font-size(20);
+
+          display: inline-block;
+          color: $interactive-colour;
+          cursor: pointer;
+          padding-right: 22px;
+          position: relative;
+          text-decoration: underline;
+
+          &::after {
+            content: "";
+            border-bottom: 2px solid $interactive-colour;
+            border-right: 2px solid $interactive-colour;
+            position: absolute;
+            top: 4px;
+            right: 3px;
+            width: 11px;
+            height: 11px;
+            transform: rotate(45deg);
+          }
+
+          &:hover:not(:focus) {
+            color: $interactive-hover-colour;
+
+            &::after {
+              border-bottom: 2px solid $interactive-hover-colour;
+              border-right: 2px solid $interactive-hover-colour;
+            }
+          }
+
+          &:focus {
+            @extend %focused-text;
+
+            &::after {
+              border-bottom: 2px solid $focus-colour;
+              border-right: 2px solid $focus-colour;
+            }
+          }
+        }
+
+        & > div {
+          @include responsive-margin(2, top);
+          @include responsive-padding(5, top);
+
+          ul {
+            @extend %bulleted-list;
+          }
+
+          ol {
+            @extend %numbered-list;
+          }
+
+          blockquote {
+            @include responsive-margin(4, top);
+            @include responsive-margin(4, bottom);
+
+            padding-top: 0;
+            padding-bottom: 0;
+          }
+        }
+
+        &[open] {
+          summary {
+            &::after {
+              top: 10px;
+              transform: rotate(225deg);
+            }
+          }
+        }
+      }
+
+      .response-details {
+        details {
+          summary {
+            & > span {
+              display: none;
+            }
+
+            &::before {
+              content: "Read the response in full"
+            }
+          }
+
+          &[open] {
+            summary {
+              &::before {
+                content: "Hide full response"
+              }
+            }
+          }
+        }
+      }
+
+      .response-summary {
+        @include responsive-margin(4, bottom);
+
+        p {
+          @include font-size(22);
+
+          &:before {
+            content: open-quote;
+            display: inline;
+          }
+
+          &:after {
+            content: close-quote;
+            display: inline;
+          }
+        }
+      }
+
+      & > div {
+        border: 1px solid $border-colour;
+        border-radius: 8px;
+
+        @include responsive-padding(5, all);
+      }
+
+      &::before {
+        content: "";
+        border-left: 1px solid $border-colour;
+        position: absolute;
+        bottom: 0;
+        width: 0;
+        top: 25px;
+        left: 13px;
+
+        @include media-query($from: tablet) {
+          top: 28px;
+          left: 15px;
+        }
+      }
+
+      &::after {
+        background-color: $border-colour;
+        border-radius: 50%;
+        content: "";
+        position: absolute;
+        left: 8px;
+        top: 6px;
+        width: 11px;
+        height: 11px;
+
+        @include media-query($from: tablet) {
+          left: 8px;
+          top: 5px;
+          width: 15px;
+          height: 15px;
+        }
+      }
+
+      &:first-child {
+        &::before {
+          top: 28px;
+
+          @include media-query($from: tablet) {
+            top: 31px;
+          }
+        }
+
+        &::after {
+          background-color: $interactive-colour;
+          left: 5px;
+          top: 3px;
+          width: 17px;
+          height: 17px;
+
+          @include media-query($from: tablet) {
+            left: 5px;
+            top: 2px;
+            width: 21px;
+            height: 21px;
+          }
+        }
+      }
     }
   }
 }
@@ -302,10 +469,19 @@
   @include responsive-margin(6, top);
 
   .signature-count-number {
-    @include font-size(33);
+    @include font-size(44);
 
     color: $theme-colour;
     font-weight: bold;
+
+    .number {
+      @include font-size(33);
+    }
+
+    .text {
+      @include font-size(22);
+      font-weight: normal;
+    }
   }
 
   .signature-count-progress {

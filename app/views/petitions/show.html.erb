@@ -19,14 +19,14 @@
             <%= link_to "Petition progress", "#progress" %>
           </li>
         <% end %>
+        <% if @petition.positive_debate_outcome? %>
+          <li>
+            <%= link_to "Parliament debate", "#debate" %>
+          </li>
+        <% end %>
         <% if @petition.government_response? %>
           <li>
             <%= link_to "Government response", "#response" %>
-          </li>
-        <% end %>
-        <% if @petition.debate_outcome? %>
-          <li>
-            <%= link_to "Parliament debate", "#debate" %>
           </li>
         <% end %>
         <% if @petition.rejected? %>

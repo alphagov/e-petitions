@@ -26,27 +26,7 @@
   <% end %>
 
   <%= render "signature_count", petition: petition %>
-  <%# render 'threshold_details', petition: petition %>
-  <%# render 'related_activity_details', petition: petition %>
-
-  <% petition_timeline(petition) do |items| %>
-    <hr>
-
-    <div class="petition-timeline">
-      <h2 id="progress">
-        Petition progress
-      </h2>
-
-      <ul>
-        <% items.each do |item| %>
-          <%= tag.li(class: class_names(completed: item.completed)) do %>
-            <h3><%= item.title %></h3>
-            <p><%= item.description %></p>
-          <% end %>
-        <% end %>
-      </ul>
-    </div>
-  <% end %>
+  <%= render "petitions/timeline", petition: petition %>
 
   <hr>
 

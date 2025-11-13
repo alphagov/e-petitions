@@ -41,4 +41,20 @@ module DebateOutcomeHelper
       end
     end.compact
   end
+
+  def debate_outcome_video(video_url)
+    return unless video_url.present?
+    return unless video_url.match?(/\Ahttps:\/\/www\.youtube\.com\/watch\?v=\w+\z/)
+
+    uri = URI.parse(video_url)
+    params = Rack::Utils.parse_query(uri.query)
+    video_id = params["v"]
+
+    tag.iframe(
+      src: "https://www.youtube.com/embed/#{video_id}",
+      frameborder: 0, allowfullscreen: true,
+      referrerpolicy: "strict-origin-when-cross-origin",
+      title: "YouTube video player"
+    )
+  end
 end

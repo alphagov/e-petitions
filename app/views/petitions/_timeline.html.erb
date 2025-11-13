@@ -1,0 +1,19 @@
+<% petition_timeline(petition) do |events| %>
+  <hr>
+
+  <div class="petition-timeline">
+    <h2 id="progress">
+      Petition progress
+    </h2>
+
+    <p>
+      View all updates for this petition, with the most recent first.
+    </p>
+
+    <ul>
+      <% events.reverse_each do |event| %>
+        <%= render event.path, petition: petition, context: event.context %>
+      <% end %>
+    </ul>
+  </div>
+<% end %>

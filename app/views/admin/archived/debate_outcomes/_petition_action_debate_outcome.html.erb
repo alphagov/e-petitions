@@ -3,7 +3,7 @@
   <%= form_row for: [f.object, :overview] do %>
     <%= f.label :overview, class: 'form-label' %>
     <%= error_messages_for_field f.object, :overview %>
-    <%= f.text_area :overview, tabindex: increment, class: 'form-control' %>
+    <%= f.text_area :overview, rows: 8, tabindex: increment, class: 'form-control' %>
   <% end %>
 
   <h3 class="petition-action-subheading">Was this petition debated?</h3>

@@ -1,0 +1,15 @@
+<li>
+  <%= time_tag(petition.debate_scheduled_at) do %>
+    <strong><%= short_date_format(petition.debate_scheduled_at) %></strong>
+  <% end %>
+
+  <div>
+    <h3>
+      Debate in Parliament scheduled
+    </h3>
+
+    <p>
+      A debate about this petition will take place on <strong><%= short_date_format(petition.scheduled_debate_date) %></strong>.
+    </p>
+  </div>
+</li>

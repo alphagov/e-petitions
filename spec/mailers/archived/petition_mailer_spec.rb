@@ -65,7 +65,7 @@ RSpec.describe Archived::PetitionMailer, type: :mailer do
       end
 
       it "includes a link to read the response online" do
-        expect(mail).to have_body_text(%r[https://petition.parliament.uk/archived/petitions/#{petition.id}\?reveal_response=yes])
+        expect(mail).to have_body_text(%r[https://petition.parliament.uk/archived/petitions/#{petition.id}\?reveal_response=yes#response])
       end
 
       context "when the signature count is less than the debate threshold" do

@@ -5,9 +5,9 @@
 
 Rails.application.config.permissions_policy do |policy|
   policy.camera      :none
-  policy.gyroscope   :none
+  policy.gyroscope   :self, "https://www.youtube.com"
   policy.microphone  :none
   policy.usb         :none
-  policy.fullscreen  :none
+  policy.fullscreen  :self, "https://www.youtube.com"
   policy.payment     :none
 end

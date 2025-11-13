@@ -43,8 +43,8 @@ RSpec.describe "Content Security Policy header", type: :request do
         expect(subject).to match(/connect-src 'self';/)
       end
 
-      it "sets img-src to 'self' and data:" do
-        expect(subject).to match(/img-src 'self' data:;/)
+      it "sets img-src to 'self', data: and https://*.ytimg.com" do
+        expect(subject).to match(/img-src 'self' data: https:\/\/\*\.ytimg\.com;/)
       end
 
       it "sets script-src to 'self'" do
@@ -52,7 +52,11 @@ RSpec.describe "Content Security Policy header", type: :request do
       end
 
       it "sets style-src to 'self' and 'unsafe-inline'" do
-        expect(subject).to match(/style-src 'self' 'unsafe-inline'\z/)
+        expect(subject).to match(/style-src 'self' 'unsafe-inline';/)
+      end
+
+      it "sets frame-src to 'self' and https://www.youtube.com" do
+        expect(subject).to match(/frame-src 'self' https:\/\/www\.youtube\.com\z/)
       end
     end
 
@@ -77,7 +81,7 @@ RSpec.describe "Content Security Policy header", type: :request do
       end
 
       it "sets img-src to 'self', data:, https://*.google-analytics.com and https://*.googletagmanager.com" do
-        expect(subject).to match(/img-src 'self' data: https:\/\/\*\.google-analytics\.com https:\/\/\*\.googletagmanager\.com;/)
+        expect(subject).to match(/img-src 'self' data: https:\/\/\*\.ytimg\.com https:\/\/\*\.google-analytics\.com https:\/\/\*\.googletagmanager\.com;/)
       end
 
       it "sets script-src to 'self', https://*.googletagmanager.com and the GTM hash" do
@@ -89,7 +93,7 @@ RSpec.describe "Content Security Policy header", type: :request do
       end
 
       it "sets frame-src to 'self', https://*.google-analytics.com and https://*.googletagmanager.com" do
-        expect(subject).to match(/frame-src 'self' https:\/\/\*\.google-analytics\.com https:\/\/\*\.googletagmanager\.com\z/)
+        expect(subject).to match(/frame-src 'self' https:\/\/www\.youtube\.com https:\/\/\*\.google-analytics\.com https:\/\/\*\.googletagmanager\.com\z/)
       end
     end
   end

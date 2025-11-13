@@ -79,6 +79,9 @@ module Archived
     delegate :formatted_threshold_for_debate, to: :parliament
     delegate :show_on_a_map?, to: :parliament
 
+    delegate :debated_on, to: :debate_outcome, allow_nil: true
+    delegate :responded_on, to: :government_response, allow_nil: true
+
     with_options allow_nil: true, prefix: true do
       delegate :name, :email, to: :creator
       delegate :code, :details, to: :rejection
@@ -259,6 +262,10 @@ module Archived
 
     def content
       "#{action} - #{background}"
+    end
+
+    def deadline
+      closed_at
     end
 
     def notes?

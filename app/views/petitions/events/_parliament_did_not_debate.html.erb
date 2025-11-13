@@ -1,0 +1,17 @@
+<li>
+  <%= time_tag(petition.debate_outcome_at) do %>
+    <strong><%= short_date_format(petition.debate_outcome_at) %></strong>
+  <% end %>
+
+  <div>
+    <h3>
+      Parliament did not debate this petition
+    </h3>
+
+    <% if context.overview? -%>
+      <%= auto_link(simple_format(h(context.overview)), html: { rel: 'nofollow' }) %>
+    <% else %>
+      The Petitions Committee decided not to debate this petition.
+    <% end %>
+  </div>
+</li>

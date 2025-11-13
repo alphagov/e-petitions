@@ -131,6 +131,9 @@ class Petition < ActiveRecord::Base
     delegate :debate_pack_url, to: :debate_outcome, prefix: false
   end
 
+  delegate :debated_on, to: :debate_outcome, allow_nil: true
+  delegate :responded_on, to: :government_response, allow_nil: true
+
   delegate :threshold_for_response, :threshold_for_debate, to: :Site
   delegate :formatted_threshold_for_response, to: :Site
   delegate :formatted_threshold_for_debate, to: :Site

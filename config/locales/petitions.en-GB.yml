@@ -384,9 +384,9 @@ en-GB:
 
     debate_outcomes:
       link_titles:
-        video_url: "Watch the debate"
-        transcript_url: "Read the transcript"
-        debate_pack_url: "Read the research"
+        video_url: "Watch the debate on parliamentlive.tv"
+        transcript_url: "Read the transcript of the debate"
+        debate_pack_url: "Read the research used for the debate"
         public_engagement_url: "Read what the public said"
         debate_summary_url: "Read a summary of the debate"
 
