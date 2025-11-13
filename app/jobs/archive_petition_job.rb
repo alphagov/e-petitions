@@ -39,6 +39,7 @@ class ArchivePetitionJob < ApplicationJob
         p.response_threshold_reached_at = petition.response_threshold_reached_at
         p.government_response_at = petition.government_response_at
         p.debate_threshold_reached_at = petition.debate_threshold_reached_at
+        p.debate_scheduled_at = petition.debate_scheduled_at
         p.scheduled_debate_date = petition.scheduled_debate_date
         p.debate_outcome_at = petition.debate_outcome_at
         p.created_at = petition.created_at

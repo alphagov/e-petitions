@@ -156,10 +156,11 @@ RSpec.describe ArchivePetitionJob, type: :job do
 
   context "with a petition that has a debate scheduled" do
     let(:petition) do
-      FactoryBot.create(:closed_petition, scheduled_debate_date: 2.weeks.from_now)
+      FactoryBot.create(:closed_petition, debate_scheduled_at: 2.days.ago, scheduled_debate_date: 2.weeks.from_now)
     end
 
     it "copies the attributes" do
+      expect(archived_petition.debate_scheduled_at).to eq(petition.debate_scheduled_at)
       expect(archived_petition.scheduled_debate_date).to eq(petition.scheduled_debate_date)
     end
   end
