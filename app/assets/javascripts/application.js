@@ -9,6 +9,7 @@ window.PETS.SignatureCounter = SignatureCounter;
 
 window.addEventListener('DOMContentLoaded', (event) => {
   const location = window.location;
+  const petitionPath = /(?:\/archived)?\/petitions\/\d+/
 
   if (location.pathname === '/help') {
     if (location.hash === '#petitions-committee') {
@@ -17,6 +18,10 @@ window.addEventListener('DOMContentLoaded', (event) => {
 
     if (location.hash === '#standards') {
       window.location = "/help/standards";
+    }
+  } else if (location.pathname.match(petitionPath)) {
+    if (location.hash === '#response-threshold') {
+      location.hash = "#response";
     }
   }
 
