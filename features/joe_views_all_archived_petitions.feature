@@ -16,7 +16,7 @@ Feature: Joe views all archived petition
 
   Scenario:
     When I am on the petitions page
-    And I follow "View archived petitions"
+    And I follow "View archived petitions" within ".//div[@class='search-form']"
     Then I should see "Search archived petitions"
     And I should see "We’ve found 4 petitions"
     And I should see the following list of archived petitions:

@@ -15,10 +15,14 @@
       display: flex;
       justify-content: space-between;
 
-      @include responsive-margin(3, bottom);
+      @include responsive-margin(2, bottom);
 
       * {
         margin: 0;
+      }
+
+      h3 {
+        margin-bottom: 0;
       }
 
       p {
@@ -45,6 +49,22 @@
     }
   }
 
+  button[aria-expanded=false] + div {
+    display: none;
+
+    @include media-query($from: laptop) {
+      display: block;
+    }
+  }
+
+  &__hidden-content {
+    margin-top: spacing(4);
+
+    @include media-query($from: laptop) {
+      margin-top: 0;
+    }
+  }
+
   &__query, &__selected-filters, &__filters {
     @include media-query($from: laptop) {
       padding: spacing(4);
@@ -52,22 +72,24 @@
   }
 
   &__query {
+    margin-bottom: spacing(4);
+
     @include media-query($from: laptop) {
       border: 1px solid $border-colour;
-      border-radius: $button-border-radius $button-border-radius 0 0;
+      border-radius: 8px 8px 0 0;
+      margin-bottom: 0;
     }
   }
 
   &__selected-filters {
-    border: 1px solid $border-colour;
-    border-top: none;
-    display: none;
+    margin-bottom: spacing(4);
 
     @include media-query($from: laptop) {
-      display: block;
+      background-color: $colour-grey-7;
+      border: 1px solid $border-colour;
+      border-top: none;
+      margin-bottom: 0;
     }
-
-    background-color: $colour-grey-7;
 
     ul {
       @include font-size(18);
@@ -115,14 +137,12 @@
   }
 
   &__filters {
-    display: none;
-
     @include media-query($from: laptop) {
       display: block;
 
       border: 1px solid $border-colour;
       border-top: none;
-      border-radius: 0 0 $button-border-radius $button-border-radius;
+      border-radius: 0 0 8px 8px;
     }
 
     .form-group {

@@ -11,9 +11,9 @@ When('I search for {string}') do |facet|
     uncheck "Awaiting"
   end
 
-  within_fieldset "Debated in Parliament" do
-    uncheck "Yes"
-    uncheck "No"
+  within_fieldset "Debate status" do
+    uncheck "Debated"
+    uncheck "Will not be debated"
     uncheck "Awaiting"
     uncheck "Scheduled"
   end
@@ -44,7 +44,7 @@ When('I search for {string}') do |facet|
   when "Awaiting a debate in Parliament"
     check "Open petitions" unless current_path.starts_with?("/archived")
     check "Closed petitions"
-    within_fieldset "Debated in Parliament" do
+    within_fieldset "Debate status" do
       check "Awaiting"
       check "Scheduled"
     end
@@ -52,8 +52,8 @@ When('I search for {string}') do |facet|
   when "Debated in Parliament"
     check "Open petitions" unless current_path.starts_with?("/archived")
     check "Closed petitions"
-    within_fieldset "Debated in Parliament" do
-      check "Yes"
+    within_fieldset "Debate status" do
+      check "Debated"
     end
     select "Latest debates", from: "Sort results"
   else
