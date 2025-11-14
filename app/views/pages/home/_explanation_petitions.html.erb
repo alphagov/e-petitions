@@ -12,7 +12,7 @@
       <%= render "pages/home/responded_petitions", actioned: actioned %>
 
       <p>
-        <%= link_to(petitions_path(state: "with_response")) do %>
+        <%= link_to(petitions_path(status: %w[open closed], response: %w[responded])) do %>
           View petitions that received a government response
         <% end %>
       </p>
@@ -32,7 +32,7 @@
       <%= render "pages/home/debated_petitions", actioned: actioned %>
 
       <p>
-        <%= link_to(petitions_path(state: "debated")) do %>
+        <%= link_to(petitions_path(status: %w[open closed],  debate: %w[debated])) do %>
           See all petitions debated in Parliament
         <% end %>
       </p>

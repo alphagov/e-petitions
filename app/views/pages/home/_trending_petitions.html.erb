@@ -22,7 +22,7 @@
     </ul>
 
     <p>
-      <%= link_to "View all open petitions", petitions_path(state: "open") %>
+      <%= link_to "View all open petitions", petitions_path(status: %w[open]) %>
     </p>
   </section>
 <% end %>
