@@ -23,7 +23,7 @@
             <p>
               Watch the debate
               <span class="visually-hidden">for the ‘<%= petition.action %>’ petition</span>
-              on <%= link_to "parliamentlive.tv", petition.debate_outcome.video_url, rel: "external" %>
+              on <%= link_to video_service(petition.debate_outcome.video_url), petition.debate_outcome.video_url, rel: "external" %>
             </p>
           <% end %>
 

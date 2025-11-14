@@ -1,5 +1,3 @@
-require 'ostruct'
-
 module DebateOutcomeHelper
   DEBATE_OUTCOME_URLS = %i[video_url transcript_url debate_pack_url public_engagement_url debate_summary_url]
 
@@ -7,6 +5,10 @@ module DebateOutcomeHelper
   OUTCOME_IMAGE_HEIGHT = 944.0
   OUTCOME_IMAGE_1X = [ OUTCOME_IMAGE_WIDTH / 2, OUTCOME_IMAGE_HEIGHT / 2 ]
   OUTCOME_IMAGE_2X = [ OUTCOME_IMAGE_WIDTH, OUTCOME_IMAGE_HEIGHT ]
+
+  EMBEDDABLE_URL = /www\.youtube\.com\/(?:watch|live)/
+
+  DebateOutcomeUrl = Struct.new(:title, :url)
 
   def debate_outcome_image(outcome, options = {})
     if outcome.image.attached?
@@ -32,29 +34,51 @@ module DebateOutcomeHelper
   end
 
   def debate_outcome_links(debate_outcome)
-    DEBATE_OUTCOME_URLS.map do |url|
-      if debate_outcome.public_send(:"#{url}?")
-        OpenStruct.new(
-          title: I18n.t(url, scope: :"petitions.debate_outcomes.link_titles"),
-          url: debate_outcome.public_send(:"#{url}")
-        )
-      end
+    DEBATE_OUTCOME_URLS.map do |attribute|
+      url = debate_outcome.public_send(:"#{attribute}")
+
+      next unless url.present?
+      next if url.match?(EMBEDDABLE_URL)
+
+      title = I18n.t(attribute, scope: :"petitions.debate_outcomes.link_titles")
+
+      DebateOutcomeUrl.new(title, url)
     end.compact
   end
 
   def debate_outcome_video(video_url)
     return unless video_url.present?
-    return unless video_url.match?(/\Ahttps:\/\/www\.youtube\.com\/watch\?v=\w+\z/)
+    return unless video_url.match?(EMBEDDABLE_URL)
 
     uri = URI.parse(video_url)
     params = Rack::Utils.parse_query(uri.query)
-    video_id = params["v"]
+
+    if uri.path.starts_with?("/watch")
+      uri.path = "/embed/#{params["v"]}"
+    elsif uri.path.starts_with?("/live")
+      uri.path = "/embed/#{uri.path.split('/').last}"
+    end
+
+    uri.query = { start: params["t"].to_i }.to_query
 
     tag.iframe(
-      src: "https://www.youtube.com/embed/#{video_id}",
+      src: uri.to_s,
       frameborder: 0, allowfullscreen: true,
       referrerpolicy: "strict-origin-when-cross-origin",
       title: "YouTube video player"
     )
+  end
+
+  def video_service(url)
+    uri = URI.parse(url)
+
+    case uri.hostname
+    when /youtube/
+      "youtube.com"
+    when /parliamentlive\.tv/
+      "parliamentlive.tv"
+    else
+      uri.hostname
+    end
   end
 end
