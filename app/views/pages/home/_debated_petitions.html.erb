@@ -5,7 +5,7 @@
     <% actioned[:with_debated_outcome][:list].each.with_index do |petition, index| %>
       <li class="petition-item">
         <h3>
-          <%= link_to petition.action, petition_path(petition, anchor: 'debate-threshold') %>
+          <%= link_to petition.action, petition_path(petition, anchor: 'debate') %>
         </h3>
 
         <div class="wrapper">

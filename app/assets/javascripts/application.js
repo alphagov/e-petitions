@@ -23,6 +23,10 @@ window.addEventListener('DOMContentLoaded', (event) => {
     if (location.hash === '#response-threshold') {
       location.hash = "#response";
     }
+
+    if (location.hash === '#debate-threshold') {
+      location.hash = "#debate";
+    }
   }
 
   const counters = document.querySelectorAll('[data-module=signature-counter]');
