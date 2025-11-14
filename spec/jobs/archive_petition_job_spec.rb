@@ -343,12 +343,31 @@ RSpec.describe ArchivePetitionJob, type: :job do
   end
 
   context "with a petition that has a petition_email email that has been sent" do
+    let(:email_attributes) do
+      {
+        subject: "This is a previous government response",
+        body: "We will not be doing the things you asked about",
+        occurred_on: "2024-10-31",
+        email_count: 216,
+        emails_enqueued_at: 6.months.ago
+      }
+    end
+
     let(:petition) do
-      FactoryBot.create(:closed_petition, email_attributes: { email_count: 216, emails_enqueued_at: 6.months.ago })
+      FactoryBot.create(:closed_petition, email_attributes: email_attributes)
     end
 
     let(:email) { petition.emails.first }
     let(:archived_email) { archived_petition.emails.first }
+
+    it "copies the email attributes to the archived petition email" do
+      expect(archived_email.petition_id).to eq(email.petition_id)
+      expect(archived_email.subject).to eq(email.subject)
+      expect(archived_email.body).to eq(email.body)
+      expect(archived_email.occurred_on).to eq(email.occurred_on)
+      expect(archived_email.created_at).to be_usec_precise_with(email.created_at)
+      expect(archived_email.updated_at).to be_usec_precise_with(email.updated_at)
+    end
 
     it "copies the email count to the archived petition email" do
       expect(archived_email.email_count).to eq(email.email_count)

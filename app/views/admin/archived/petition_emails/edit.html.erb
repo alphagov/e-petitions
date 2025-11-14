@@ -17,6 +17,12 @@
         <p class="character-count">5000 characters max</p>
       <% end %>
 
+      <%= form_row :for => [f.object, :occurred_on] do %>
+        <%= f.label :occurred_on, 'Occurred on', class: 'form-label' %>
+        <%= error_messages_for_field f.object, :occurred_on %>
+        <%= f.date_field :occurred_on, tabindex: increment, class: 'form-control' %>
+      <% end %>
+
       <%= email_petitioners_with_count_submit_button(f, @petition) %>
       <%= f.submit "Preview", name: 'save_and_preview', class: 'button-secondary' %>
       <%= f.submit "Save", name: 'save', class: 'button-secondary' %>

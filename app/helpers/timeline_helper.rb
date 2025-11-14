@@ -20,7 +20,7 @@ module TimelineHelper
     end
 
     if government_response = petition.government_response
-      events << PetitionEvent.new(:government_responded, petition.government_response_at, government_response)
+      events << PetitionEvent.new(:government_responded, government_response.responded_on, government_response)
     end
 
     if petition.debate_threshold_reached_at?
@@ -33,14 +33,14 @@ module TimelineHelper
 
     if debate_outcome = petition.debate_outcome
       if debate_outcome.debated?
-        events << PetitionEvent.new(:parliament_debated, petition.debate_outcome_at, debate_outcome)
+        events << PetitionEvent.new(:parliament_debated, debate_outcome.debated_on, debate_outcome)
       else
         events << PetitionEvent.new(:parliament_did_not_debate, petition.debate_outcome_at, debate_outcome)
       end
     end
 
     petition.emails.each do |email|
-      events << PetitionEvent.new(:related_activity, email.created_at, email)
+      events << PetitionEvent.new(:related_activity, email.occurred_on, email)
     end
 
     events.sort_by!(&:timestamp)

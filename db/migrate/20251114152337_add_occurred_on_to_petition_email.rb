@@ -1,0 +1,5 @@
+class AddOccurredOnToPetitionEmail < ActiveRecord::Migration[8.0]
+  def change
+    add_column :petition_emails, :occurred_on, :date, if_not_exists: true
+  end
+end

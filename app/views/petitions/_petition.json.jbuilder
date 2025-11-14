@@ -98,6 +98,7 @@ json.attributes do
     json.other_parliamentary_business petition.emails do |email|
       json.subject email.subject
       json.body markdown_to_text(email.body)
+      json.occurred_on api_date_format(email.occurred_on)
       json.created_at api_date_format(email.created_at)
       json.updated_at api_date_format(email.updated_at)
     end

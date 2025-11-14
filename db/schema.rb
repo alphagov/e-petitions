@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_11_12_194807) do
+ActiveRecord::Schema[8.0].define(version: 2025_11_14_152637) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "intarray"
   enable_extension "pg_catalog.plpgsql"
@@ -116,6 +116,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_12_194807) do
     t.datetime "updated_at", precision: nil, null: false
     t.integer "email_count"
     t.datetime "emails_enqueued_at", precision: nil
+    t.date "occurred_on"
     t.index ["petition_id"], name: "index_archived_petition_emails_on_petition_id"
   end
 
@@ -516,6 +517,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_12_194807) do
     t.datetime "updated_at", precision: nil, null: false
     t.integer "email_count"
     t.datetime "emails_enqueued_at", precision: nil
+    t.date "occurred_on"
     t.index ["petition_id"], name: "index_petition_emails_on_petition_id"
   end
 

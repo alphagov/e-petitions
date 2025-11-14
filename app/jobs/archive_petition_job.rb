@@ -78,6 +78,7 @@ class ArchivePetitionJob < ApplicationJob
           p.emails.build do |e|
             e.subject = email.subject
             e.body = email.body
+            e.occurred_on = email.occurred_on
             e.sent_by = email.sent_by
             e.email_count = email.email_count
             e.emails_enqueued_at = email.emails_enqueued_at
