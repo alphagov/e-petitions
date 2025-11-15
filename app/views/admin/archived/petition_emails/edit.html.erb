@@ -26,6 +26,7 @@
       <%= email_petitioners_with_count_submit_button(f, @petition) %>
       <%= f.submit "Preview", name: 'save_and_preview', class: 'button-secondary' %>
       <%= f.submit "Save", name: 'save', class: 'button-secondary' %>
+      <%= link_to 'Cancel', new_admin_archived_petition_email_path(@petition), class: 'button-secondary' %>
 
     <% end -%>
   </div>
