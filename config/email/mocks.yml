@@ -121,7 +121,7 @@ petition: !ruby/object:Mocks::Petition &petition
 
       4.  Lack of Consensus
 
-          Previous consultations and trials, such as the 1968–71 experiment with permanent BST, have shown that public opinion is divided on this issue. While some people appreciate the lighter evenings, others strongly oppose the darker mornings, particularly in northern and rural areas. The Government believes that any change to the current system would need broad public support, which is currently lacking.
+          Previous consultations and trials, such as the [1968–71 experiment with permanent BST][1], have shown that public opinion is divided on this issue. While some people appreciate the lighter evenings, others strongly oppose the darker mornings, particularly in northern and rural areas. The Government believes that any change to the current system would need broad public support, which is currently lacking.
 
       5.  Energy Savings Are Unclear
 
@@ -134,6 +134,10 @@ petition: !ruby/object:Mocks::Petition &petition
       In conclusion, while the Government acknowledges the arguments in favour of permanent BST, the potential negative consequences for public health, safety, and social cohesion, particularly in northern regions, outweigh the perceived benefits. The current system of alternating between GMT and BST remains the most practical and balanced approach for the UK as a whole.
 
       Thank you for raising this important issue. The Government remains committed to ensuring that any decisions regarding timekeeping are made in the best interests of all citizens across the United Kingdom.
+
+      **Department for Environment, Food & Rural Affairs**
+
+      [1]: https://en.wikipedia.org/wiki/British_Summer_Time#Periods_of_deviation
     petition:
       *petition
   debate_outcome: !ruby/object:Mocks::DebateOutcome
@@ -586,7 +590,7 @@ archived_petition: !ruby/object:Mocks::Archived::Petition &archived_petition
 
       4.  Lack of Consensus
 
-          Previous consultations and trials, such as the 1968–71 experiment with permanent BST, have shown that public opinion is divided on this issue. While some people appreciate the lighter evenings, others strongly oppose the darker mornings, particularly in northern and rural areas. The Government believes that any change to the current system would need broad public support, which is currently lacking.
+          Previous consultations and trials, such as the [1968–71 experiment with permanent BST][1], have shown that public opinion is divided on this issue. While some people appreciate the lighter evenings, others strongly oppose the darker mornings, particularly in northern and rural areas. The Government believes that any change to the current system would need broad public support, which is currently lacking.
 
       5.  Energy Savings Are Unclear
 
@@ -599,6 +603,10 @@ archived_petition: !ruby/object:Mocks::Archived::Petition &archived_petition
       In conclusion, while the Government acknowledges the arguments in favour of permanent BST, the potential negative consequences for public health, safety, and social cohesion, particularly in northern regions, outweigh the perceived benefits. The current system of alternating between GMT and BST remains the most practical and balanced approach for the UK as a whole.
 
       Thank you for raising this important issue. The Government remains committed to ensuring that any decisions regarding timekeeping are made in the best interests of all citizens across the United Kingdom.
+
+      **Department for Environment, Food & Rural Affairs**
+
+      [1]: https://en.wikipedia.org/wiki/British_Summer_Time#Periods_of_deviation
     created_at: 2025-02-26T12:25:30Z
     updated_at: 2025-02-26T12:25:30Z
     petition:

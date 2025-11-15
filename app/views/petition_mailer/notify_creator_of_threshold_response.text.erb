@@ -7,7 +7,9 @@ Government responded:
 
 <%= h(@government_response.summary) %>
 
-<%= h(@government_response.details) %>
+<%= markdown_to_text(@government_response.details) %>
+
+--
 
 Click this link to view the response online:
 

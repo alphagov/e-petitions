@@ -45,7 +45,7 @@ json.attributes do
     json.government_response do
       json.responded_on api_date_format(response.responded_on)
       json.summary response.summary
-      json.details response.details
+      json.details markdown_to_text(response.details)
       json.created_at api_date_format(response.created_at)
       json.updated_at api_date_format(response.updated_at)
     end

@@ -25,11 +25,68 @@ RSpec.describe MarkdownHelper, type: :helper do
 
   describe "#markdown_to_text" do
     it "converts markdown to text" do
-      expect(helper.markdown_to_text("## Petitions: UK Government and Parliament")).to eq(%[Petitions: UK Government and Parliament\n])
+      markdown = <<~MD
+        # Petitions: UK Government and Parliament
+
+        Create or sign a petition to demand UK Government or UK Parliament to act.
+
+        1.  Create a petition
+
+            Go to https://petition.parliament.uk/petitions/start.
+
+        2.  Find sponsors to support your petition
+
+            You will receive an email to share when you create a petition.
+
+        3.  Share your petition once it's published
+
+            It will take ten working days to moderate your petition once it has enough supporters.
+
+        Your petition must comply with the [petition standards][1]:
+
+        * Not be offensive
+        * Be something that the UK Government or UK Parliament is responsible for
+
+        If you have any questions, contact the [Petitions Committee][2]
+
+        [1]: https://petition.parliament.uk/standards
+        [2]: mailto:petitions@parliament.uk
+      MD
+
+      text = <<~TXT
+        Petitions: UK Government and Parliament
+        ---------------------------------------
+
+        Create or sign a petition to demand UK Government or UK Parliament to act.
+
+        1. Create a petition
+
+        Go to https://petition.parliament.uk/petitions/start.
+
+        2. Find sponsors to support your petition
+
+        You will receive an email to share when you create a petition.
+
+        3. Share your petition once it's published
+
+        It will take ten working days to moderate your petition once it has enough supporters.
+
+        Your petition must comply with the petition standards[1]:
+
+        * Not be offensive
+        * Be something that the UK Government or UK Parliament is responsible for
+
+        If you have any questions, contact the Petitions Committee[2]
+
+        [1]: https://petition.parliament.uk/standards
+        [2]: mailto:petitions@parliament.uk
+      TXT
+
+      expect(helper.markdown_to_text(markdown)).to eq(text.strip)
     end
 
-    it "autolinks urls" do
-      expect(helper.markdown_to_text("www.example.com")).to eq(%[www.example.com (http://www.example.com)\n])
+    it "doesn't autolinks urls" do
+      expect(helper.markdown_to_text("www.example.com")).to eq(%[www.example.com])
     end
   end
 end

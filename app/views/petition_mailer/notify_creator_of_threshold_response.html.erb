@@ -7,7 +7,7 @@
 
 <blockquote>
   <%= auto_link(simple_format(h(@government_response.summary))) %>
-  <%= auto_link(simple_format(h(@government_response.details))) %>
+  <%= markdown_to_html(@government_response.details) %>
 </blockquote>
 
 <p>Click this link to view the response online:</p>
