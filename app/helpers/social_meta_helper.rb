@@ -7,6 +7,8 @@ module SocialMetaHelper
       description = t(@new_petition.stage, scope: :"metadata.description.petitions.create", default: nil)
     in {controller: "signatures", action: /\A(new|create)\z/}
       description = t(@signature.stage, scope: :"metadata.description.signatures.create", default: nil)
+    in {controller: "pages", action: "show"}
+      description = t(params[:slug], scope: :"metadata.description.pages", default: nil)
     else
       description = t(params[:action], scope: :"metadata.description.#{params[:controller]}", default: nil)
     end

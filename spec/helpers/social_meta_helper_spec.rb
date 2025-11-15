@@ -105,6 +105,16 @@ RSpec.describe SocialMetaHelper, type: :helper do
         expect(subject).to be_nil
       end
     end
+
+    context "when on a content page" do
+      let(:params_hash) do
+        { controller: "pages", action: "show", slug: "standards" }
+      end
+
+      it "returns a meta description tag" do
+        expect(subject).to eq(%[<meta name="description" content="Find out the standards an e-petition must meet.">])
+      end
+    end
   end
 
   describe "#open_graph_tag" do
