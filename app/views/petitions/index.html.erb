@@ -182,7 +182,7 @@
         <% end %>
 
         <p>
-          <%= link_to "View archived petitions", archived_petitions_path(status: %w[closed], sort: "recent") %>
+          <%= link_to "View archived petitions", archived_petitions_path(@petitions.current_params) %>
         </p>
       <% else %>
         <%= render partial: "petitions/petition", collection: @petitions %>
