@@ -45,3 +45,8 @@
     </div>
   </div>
 </footer>
+
+<% content_for :preload do %>
+  <%= preload_link_tag "frontend/uk-parliament-logo.svg", nopush: true %>
+  <%= preload_link_tag "frontend/uk-government-logo.svg", nopush: true %>
+<% end %>
