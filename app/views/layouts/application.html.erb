@@ -11,6 +11,7 @@
     <%= preload_link_tag 'application.js', nopush: true %>
 
     <% if Site.enable_analytics? %>
+      <%= tag.link rel: "preconnect", href: "https://www.googletagmanager.com" %>
       <%= preload_link_tag 'cookie-manager.js', nopush: true %>
     <% end %>
 
