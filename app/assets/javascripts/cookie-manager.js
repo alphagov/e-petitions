@@ -1,4 +1,4 @@
-import CookieManager from './modules/cookie-manager'
+import CookieManager from './modules/cookie-manager';
 
 window.PETS = window.PETS || {};
 window.PETS.CookieManager = CookieManager;

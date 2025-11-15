@@ -55,8 +55,8 @@ RSpec.describe "Content Security Policy header", type: :request do
         expect(subject).to match(/style-src 'self' 'unsafe-inline';/)
       end
 
-      it "sets frame-src to 'self' and https://www.youtube.com" do
-        expect(subject).to match(/frame-src 'self' https:\/\/www\.youtube\.com\z/)
+      it "sets frame-src to 'self' and https://www.youtube-nocookie.com" do
+        expect(subject).to match(/frame-src 'self' https:\/\/www\.youtube-nocookie\.com\z/)
       end
     end
 
@@ -92,8 +92,8 @@ RSpec.describe "Content Security Policy header", type: :request do
         expect(subject).to match(/style-src 'self' 'unsafe-inline';/)
       end
 
-      it "sets frame-src to 'self', https://*.google-analytics.com and https://*.googletagmanager.com" do
-        expect(subject).to match(/frame-src 'self' https:\/\/www\.youtube\.com https:\/\/\*\.google-analytics\.com https:\/\/\*\.googletagmanager\.com\z/)
+      it "sets frame-src to 'self', https://www.youtube-nocookie.com, https://*.google-analytics.com and https://*.googletagmanager.com" do
+        expect(subject).to match(/frame-src 'self' https:\/\/www\.youtube-nocookie\.com https:\/\/\*\.google-analytics\.com https:\/\/\*\.googletagmanager\.com\z/)
       end
     end
   end

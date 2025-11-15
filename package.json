@@ -16,6 +16,7 @@
     "lighthouse:ci": "start-server-and-test start-server http-get://petitions.localhost:3000 test"
   },
   "dependencies": {
+    "@justinribeiro/lite-youtube": "^1.9.0",
     "esbuild": "^0.25.9",
     "jquery": "^3.7.1",
     "jquery-ujs": "^1.2.3",

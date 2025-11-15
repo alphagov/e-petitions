@@ -14,6 +14,8 @@
       <%= preload_link_tag 'cookie-manager.js', nopush: true %>
     <% end %>
 
+    <%= content_for :preload %>
+
     <%= preload_link_tag 'National-LFS-Book.woff2', nopush: true %>
     <%= preload_link_tag 'National-LFS-Semibold.woff2', nopush: true %>
 
@@ -65,9 +67,6 @@
     <% end %>
 
     <%= javascript_include_tag 'application' %>
-
-    <% if open_petition_page? %>
-      <%= javascript_include_tag 'sharing' %>
-    <% end %>
+    <%= content_for :footer %>
   </body>
 </html>

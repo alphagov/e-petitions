@@ -1,4 +1,4 @@
-import NavigationMenu from './modules/navigation-menu'
+import NavigationMenu from './modules/navigation-menu';
 
 window.PETS = window.PETS || {};
 window.PETS.NavigationMenu = NavigationMenu;

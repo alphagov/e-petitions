@@ -10,8 +10,11 @@ const entryPoints = error
       'app/assets/javascripts/admin.js',
       'app/assets/javascripts/application.js',
       'app/assets/javascripts/cookie-manager.js',
-      'app/assets/javascripts/sharing.js',
-      'app/assets/javascripts/signature-form.js'
+      'app/assets/javascripts/character-counter.js',
+      'app/assets/javascripts/signature-form.js',
+      'app/assets/javascripts/open-petition.js',
+      'app/assets/javascripts/closed-petition.js',
+      'app/assets/javascripts/archived-petition.js'
     ]
 
 const context = await esbuild.context({

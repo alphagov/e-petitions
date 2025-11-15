@@ -275,10 +275,26 @@
         @include responsive-margin(4, bottom);
       }
 
-      iframe {
+      iframe, lite-youtube {
         display: block;
         width: 100%;
         aspect-ratio: calc(560/315);
+
+        @include responsive-margin(6, top);
+        @include responsive-margin(6, bottom);
+      }
+
+      .video-fallback {
+        aspect-ratio: calc(560/315);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        gap: 1em;
+        padding: 1em;
+        background-color: #000;
+        color: #fff;
+        text-decoration: none;
 
         @include responsive-margin(6, top);
         @include responsive-margin(6, bottom);

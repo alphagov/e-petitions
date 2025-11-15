@@ -12,7 +12,9 @@
       <%= auto_link(simple_format(h(context.overview)), html: { rel: 'nofollow' }) %>
     <% end -%>
 
-    <%= debate_outcome_video(context.video_url) %>
+    <%= debate_outcome_video(context.video_url) do %>
+      <%= link_to "Watch the debate on www.youtube.com", context.video_url, class: "video-fallback" %>
+    <%end %>
 
     <% if debate_outcome_links?(context) %>
       <ul class="debate-outcome-links">

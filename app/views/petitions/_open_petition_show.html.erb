@@ -77,3 +77,11 @@
     </p>
   </footer>
 </section>
+
+<% content_for :preload do %>
+  <%= preload_link_tag 'open-petition.js', nopush: true %>
+<% end %>
+
+<% content_for :footer do %>
+  <%= javascript_include_tag 'open-petition' %>
+<% end %>

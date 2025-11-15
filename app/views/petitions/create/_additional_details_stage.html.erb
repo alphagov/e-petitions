@@ -44,3 +44,11 @@
     </div>
   </div>
 </div>
+
+<% content_for :preload do %>
+  <%= preload_link_tag 'character-counter.js', nopush: true %>
+<% end %>
+
+<% content_for :footer do %>
+  <%= javascript_include_tag 'character-counter' %>
+<% end %>

@@ -128,3 +128,11 @@
     </nav>
   </div>
 </div>
+
+<% content_for :preload do %>
+  <%= preload_link_tag 'archived-petition.js', nopush: true %>
+<% end %>
+
+<% content_for :footer do %>
+  <%= javascript_include_tag 'archived-petition' %>
+<% end %>

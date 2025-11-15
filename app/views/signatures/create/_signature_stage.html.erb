@@ -94,4 +94,10 @@
   </div>
 </div>
 
-<%= javascript_include_tag 'signature-form' %>
+<% content_for :preload do %>
+  <%= preload_link_tag 'signature-form.js', nopush: true %>
+<% end %>
+
+<% content_for :footer do %>
+  <%= javascript_include_tag 'signature-form' %>
+<% end %>

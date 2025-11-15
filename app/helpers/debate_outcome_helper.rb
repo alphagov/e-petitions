@@ -46,7 +46,7 @@ module DebateOutcomeHelper
     end.compact
   end
 
-  def debate_outcome_video(video_url)
+  def debate_outcome_video(video_url, &block)
     return unless video_url.present?
     return unless video_url.match?(EMBEDDABLE_URL)
 
@@ -54,19 +54,21 @@ module DebateOutcomeHelper
     params = Rack::Utils.parse_query(uri.query)
 
     if uri.path.starts_with?("/watch")
-      uri.path = "/embed/#{params["v"]}"
+      video_id = params["v"]
     elsif uri.path.starts_with?("/live")
-      uri.path = "/embed/#{uri.path.split('/').last}"
+      video_id = uri.path.split('/').last
     end
 
-    uri.query = { start: params["t"].to_i }.to_query
+    attributes = {
+      videoid: video_id,
+      videotitle: "Debate for #{@petition.action}",
+      autoload: true,
+      autopause: true,
+      nocookie: true,
+      videoStartAt: params["t"].to_i
+    }
 
-    tag.iframe(
-      src: uri.to_s,
-      frameborder: 0, allowfullscreen: true,
-      referrerpolicy: "strict-origin-when-cross-origin",
-      title: "YouTube video player"
-    )
+    tag.lite_youtube(**attributes, &block)
   end
 
   def video_service(url)

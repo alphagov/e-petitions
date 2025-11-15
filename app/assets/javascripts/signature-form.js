@@ -1,4 +1,4 @@
-import SignatureForm from './modules/signature-form'
+import SignatureForm from './modules/signature-form';
 
 window.PETS = window.PETS || {};
 window.PETS.SignatureForm = SignatureForm;

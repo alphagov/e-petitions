@@ -7,7 +7,7 @@ class PublicController < ApplicationController
         "https://*.googletagmanager.com"
 
       policy.frame_src :self,
-        "https://www.youtube.com",
+        "https://www.youtube-nocookie.com",
         "https://*.google-analytics.com",
         "https://*.googletagmanager.com"
 
@@ -20,7 +20,7 @@ class PublicController < ApplicationController
         "https://*.googletagmanager.com",
         "'#{Site.google_tag_manager_hash}'"
     else
-      policy.frame_src :self, "https://www.youtube.com"
+      policy.frame_src :self, "https://www.youtube-nocookie.com"
       policy.img_src :self, :data, "https://*.ytimg.com"
       policy.script_src :self
     end
