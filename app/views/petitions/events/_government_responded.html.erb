@@ -8,20 +8,26 @@
       Government responded to this petition
     </h3>
 
-    <div class="response-summary">
-      <%= auto_link(simple_format(h(context.summary)), html: { rel: 'nofollow' } ) %>
-    </div>
+    <% if context.summary? %>
+      <div class="response-summary">
+        <%= auto_link(simple_format(h(context.summary)), html: { rel: 'nofollow' } ) %>
+      </div>
 
-    <% if context.details? %>
+      <% if context.details? %>
+        <div class="response-details">
+          <%= tag.details(open: reveal_government_response?) do %>
+            <summary>
+              <span>Read the response in full</span>
+            </summary>
+            <div>
+              <%= markdown_to_html(context.details, link_attributes: { rel: 'nofollow' }) %>
+            </div>
+          <% end %>
+        </div>
+      <% end %>
+    <% else %>
       <div class="response-details">
-        <%= tag.details(open: reveal_government_response?) do %>
-          <summary>
-            <span>Read the response in full</span>
-          </summary>
-          <div>
-            <%= markdown_to_html(context.details, link_attributes: { rel: 'nofollow' }) %>
-          </div>
-        <% end %>
+        <%= markdown_to_html(context.details, link_attributes: { rel: 'nofollow' }) %>
       </div>
     <% end %>
   </div>
