@@ -18,8 +18,8 @@ class ApplicationController < ActionController::Base
   protected
 
   def authenticate
-    authenticate_or_request_with_http_basic(Site.name) do |username, password|
-      Site.authenticate(username, password)
+    authenticate_or_request_with_http_digest(Site.host_with_port) do |username|
+      Site.authenticate(username)
     end
   end
 

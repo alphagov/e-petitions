@@ -640,8 +640,8 @@ RSpec.describe Site, type: :model do
     end
 
     it "delegates authenticate to the instance" do
-      expect(site).to receive(:authenticate).with("username", "password").and_return(true)
-      expect(Site.authenticate("username", "password")).to eq(true)
+      expect(site).to receive(:authenticate).with("username").and_return("digest")
+      expect(Site.authenticate("username")).to eq("digest")
     end
   end
 
@@ -760,19 +760,22 @@ RSpec.describe Site, type: :model do
   end
 
   describe "#authenticate" do
+    let(:credentials) { "petitions:petition.parliament.uk:letmein" }
+    let(:digest) { OpenSSL::Digest::MD5.hexdigest(credentials) }
+
     subject :site do
       described_class.create!(username: "petitions", password: "letmein")
     end
 
-    context "when the username and password are correct" do
-      it "returns true" do
-        expect(site.authenticate("petitions", "letmein")).to eq(true)
+    context "when the username is correct " do
+      it "returns the MD5 hash" do
+        expect(site.authenticate("petitions")).to eq(digest)
       end
     end
 
-    context "when the username and password are incorrect" do
-      it "returns false" do
-        expect(site.authenticate("petitions", "!letmein")).to eq(false)
+    context "when the username is incorrect" do
+      it "returns nil" do
+        expect(site.authenticate("petitionsdemo")).to be_nil
       end
     end
   end
