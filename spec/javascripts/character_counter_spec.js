@@ -68,56 +68,44 @@ describe('Character counter', function() {
       initCounter();
     });
 
-    it("Has the correct character count if some characters are entered by keyup event", function () {
-      dispatchEvent('Word entered', 'keyup');
+    it("Has the correct character count if some characters are entered by an input event", function () {
+      dispatchEvent('Word entered', 'input');
 
       expect($counter.textContent).toEqual('You have 38 characters remaining');
     });
 
-    it("Has the correct character count if some words are entered by paste event", function () {
-      dispatchEvent('Words entered', 'paste');
-
-      expect($counter.textContent).toEqual('You have 37 characters remaining');
-    });
-
-    it("Has the correct character count if some words are entered by change event", function () {
-      dispatchEvent('Words entered', 'change');
-
-      expect($counter.textContent).toEqual('You have 37 characters remaining');
-    });
-
     it("Has the correct character count if a single character is entered", function () {
-      dispatchEvent('w', 'keyup');
+      dispatchEvent('w', 'input');
 
       expect($counter.textContent).toEqual('You have 49 characters remaining');
     });
 
     it("Has the correct character count if 49 characters are entered", function () {
-      dispatchEvent('Vestibulum vel eleifend nunc. Aliquam fermentum n', 'keyup');
+      dispatchEvent('Vestibulum vel eleifend nunc. Aliquam fermentum n', 'input');
 
       expect($counter.textContent).toEqual('You have 1 character remaining');
     });
 
     it("Has the correct character count if 50 characters are entered", function () {
-      dispatchEvent('Vestibulum vel eleifend nunc. Aliquam fermentum nu', 'keyup');
+      dispatchEvent('Vestibulum vel eleifend nunc. Aliquam fermentum nu', 'input');
 
       expect($counter.textContent).toEqual('You have 0 characters remaining');
     });
 
     it("Has the correct character count if 51 characters are entered", function () {
-      dispatchEvent('Vestibulum vel eleifend nunc. Aliquam fermentum num', 'keyup');
+      dispatchEvent('Vestibulum vel eleifend nunc. Aliquam fermentum num', 'input');
 
       expect($counter.textContent).toEqual('You have 1 character too many');
     });
 
     it("Has the correct character count if 52 characters are entered", function () {
-      dispatchEvent('Vestibulum vel eleifend nunc. Aliquam fermentum numb', 'keyup');
+      dispatchEvent('Vestibulum vel eleifend nunc. Aliquam fermentum numb', 'input');
 
       expect($counter.textContent).toEqual('You have 2 characters too many');
     });
 
     it("Has added the error classes if too many characters are entered", function () {
-      dispatchEvent('Vestibulum vel eleifend nunc. Aliquam fermentum numb', 'keyup');
+      dispatchEvent('Vestibulum vel eleifend nunc. Aliquam fermentum numb', 'input');
 
       expect($textbox.classList).toContain('form-control--error');
       expect($counter.classList).toContain('too-many-characters');

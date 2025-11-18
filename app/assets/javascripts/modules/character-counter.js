@@ -12,15 +12,7 @@ export default class CharacterCounter {
 
     this.textarea.setAttribute('aria-controls', ariaId);
 
-    textarea.addEventListener('change', () => {
-      this.updateCount();
-    });
-
-    textarea.addEventListener('keyup', () => {
-      this.updateCount();
-    });
-
-    textarea.addEventListener('paste', () => {
+    textarea.addEventListener('input', () => {
       this.updateCount();
     });
 
