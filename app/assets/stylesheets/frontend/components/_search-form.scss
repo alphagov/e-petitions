@@ -1,12 +1,17 @@
+@use "sass:map";
 @use "../settings" as *;
 @use "../helpers" as *;
 
 .search-form {
   margin-bottom: spacing(4);
 
-  position: sticky;
-  top: spacing(6);
-  z-index: 100;
+  @media screen and (min-width: map.get($breakpoints, laptop)) {
+    @media screen and (min-height: 1024px) {
+      position: sticky;
+      z-index: 100;
+      top: spacing(6);
+    }
+  }
 
   section {
     margin-top: 0;
