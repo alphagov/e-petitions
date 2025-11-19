@@ -79,17 +79,17 @@ GEM
     appsignal (3.13.1)
       rack
     aws-eventstream (1.4.0)
-    aws-partitions (1.1184.0)
-    aws-sdk-bedrockruntime (1.64.0)
+    aws-partitions (1.1185.0)
+    aws-sdk-bedrockruntime (1.65.0)
       aws-sdk-core (~> 3, >= 3.234.0)
       aws-sigv4 (~> 1.5)
-    aws-sdk-cloudwatchlogs (1.130.0)
+    aws-sdk-cloudwatchlogs (1.131.0)
       aws-sdk-core (~> 3, >= 3.234.0)
       aws-sigv4 (~> 1.5)
     aws-sdk-codedeploy (1.92.0)
       aws-sdk-core (~> 3, >= 3.234.0)
       aws-sigv4 (~> 1.5)
-    aws-sdk-core (3.237.0)
+    aws-sdk-core (3.238.0)
       aws-eventstream (~> 1, >= 1.3.0)
       aws-partitions (~> 1, >= 1.992.0)
       aws-sigv4 (~> 1.9)
@@ -100,7 +100,7 @@ GEM
     aws-sdk-kms (1.117.0)
       aws-sdk-core (~> 3, >= 3.234.0)
       aws-sigv4 (~> 1.5)
-    aws-sdk-s3 (1.203.1)
+    aws-sdk-s3 (1.204.0)
       aws-sdk-core (~> 3, >= 3.234.0)
       aws-sdk-kms (~> 1)
       aws-sigv4 (~> 1.5)
@@ -602,13 +602,13 @@ CHECKSUMS
   addressable (2.8.7) sha256=462986537cf3735ab5f3c0f557f14155d778f4b43ea4f485a9deb9c8f7c58232
   appsignal (3.13.1) sha256=de220a1359b393b8da30ab34ab06dadb116673d37c56d62f799c932cd5c87c57
   aws-eventstream (1.4.0) sha256=116bf85c436200d1060811e6f5d2d40c88f65448f2125bc77ffce5121e6e183b
-  aws-partitions (1.1184.0) sha256=9b994b2df49d31b756523fd66119d8f3947a908e71174f4554b9dce1c728fa69
-  aws-sdk-bedrockruntime (1.64.0) sha256=a080286d644fb89cf189860db39d3f52cf6a906b58f1b01fd8f0e6c9b7a7cd96
-  aws-sdk-cloudwatchlogs (1.130.0) sha256=36698bcbafed232359527c66b1421401f0e1c3b223b7324c9585021f08e7a2a9
+  aws-partitions (1.1185.0) sha256=cc711b7c3381e83abfd9e3a84b8a50e37f23c82fd0386ef6b91c15b6e4981b1b
+  aws-sdk-bedrockruntime (1.65.0) sha256=b44bf799085ebdb70f501a64cc582a58a76885b59ef4550a3b0cb7071f45d2b5
+  aws-sdk-cloudwatchlogs (1.131.0) sha256=af4ab7a9d7769cc5cab2cdf89fc6a6d3cadd626b8d6254f3562db1eef6cfde50
   aws-sdk-codedeploy (1.92.0) sha256=1f6a18879b47e18cb0abb1e133bdc423a695d1fb8eaded01ccc4aa1e5f8b4eb2
-  aws-sdk-core (3.237.0) sha256=9a8b14167a75be07ba7cfd9d27075aa12f1ed897d6eaed808a1c6a20963af32b
+  aws-sdk-core (3.238.0) sha256=379ab70effc304ba2ca361d2a7140cb5ea6be23abbc948c75bd405282604cb92
   aws-sdk-kms (1.117.0) sha256=d3d655ae825ca0d6715555e2543e062fe14ccacf30bace04f3aefd6005b76c14
-  aws-sdk-s3 (1.203.1) sha256=edaa6ecc641ffa8564f38df237876876ac679b937ca8cd7873f6f9857d8f99b9
+  aws-sdk-s3 (1.204.0) sha256=b680a2552ee8225a24d4df115caacb140aa3adc35cb9d975e20e53549b607e63
   aws-sigv4 (1.12.1) sha256=6973ff95cb0fd0dc58ba26e90e9510a2219525d07620c8babeb70ef831826c00
   base64 (0.3.0) sha256=27337aeabad6ffae05c265c450490628ef3ebd4b67be58257393227588f5a97b
   bcrypt (3.1.20) sha256=8410f8c7b3ed54a3c00cd2456bf13917d695117f033218e2483b2e40b0784099
