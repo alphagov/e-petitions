@@ -43,7 +43,7 @@ module Archived
     # can't add `allow_blank: true` here because Active Record validations
     # will not call the DateValidator as all invalid dates are coerced to nil.
     # Therefore the allowing of blank values is handling in the validtor.
-    validates :scheduled_debate_date, date: true
+    validates :scheduled_debate_date, :debate_scheduled_on, date: true
 
     # Validate associated models so that archive petition job fails if they're not valid.
     validates_associated :debate_outcome, :government_response, :note, :rejection
@@ -488,7 +488,19 @@ module Archived
       debate_state == 'not_debated'
     end
 
+    def debate_scheduled_on
+      super || default_debate_scheduled_on
+    end
+
+    def debate_scheduled_on?
+      debate_scheduled_on.present?
+    end
+
     private
+
+    def default_debate_scheduled_on
+      debate_scheduled_at? ? debate_scheduled_at.to_date : nil
+    end
 
     def evaluate_debate_state
       if scheduled_debate_date?

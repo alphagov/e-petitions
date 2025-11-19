@@ -80,6 +80,7 @@ RSpec.describe Admin::Archived::ScheduleDebateController, type: :controller, adm
       let(:scheduled_debate_date_attributes) do
         {
           scheduled_debate_date: '2014-12-01',
+          debate_scheduled_on: '2014-11-24'
         }
       end
 
@@ -115,6 +116,7 @@ RSpec.describe Admin::Archived::ScheduleDebateController, type: :controller, adm
               do_patch
               petition.reload
               expect(petition.scheduled_debate_date).to eq Date.parse('2014-12-01')
+              expect(petition.debate_scheduled_on).to eq Date.parse('2014-11-24')
             end
 
             describe "emails out debate scheduled response" do
@@ -222,6 +224,7 @@ RSpec.describe Admin::Archived::ScheduleDebateController, type: :controller, adm
             do_patch
             petition.reload
             expect(petition.scheduled_debate_date).to eq Date.parse('2014-12-01')
+            expect(petition.debate_scheduled_on).to eq Date.parse('2014-11-24')
           end
         end
 
@@ -274,6 +277,7 @@ RSpec.describe Admin::Archived::ScheduleDebateController, type: :controller, adm
               do_patch
               petition.reload
               expect(petition.scheduled_debate_date).to eq Date.parse('2014-12-01')
+              expect(petition.debate_scheduled_on).to eq Date.parse('2014-11-24')
             end
 
             describe "does not email out debate scheduled response" do
@@ -355,6 +359,7 @@ RSpec.describe Admin::Archived::ScheduleDebateController, type: :controller, adm
             do_patch
             petition.reload
             expect(petition.scheduled_debate_date).to eq Date.parse('2014-12-01')
+            expect(petition.debate_scheduled_on).to eq Date.parse('2014-11-24')
           end
         end
 

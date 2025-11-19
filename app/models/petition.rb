@@ -116,7 +116,7 @@ class Petition < ActiveRecord::Base
   # can't add `allow_blank: true` here because Active Record validations
   # will not call the DateValidator as all invalid dates are coerced to nil.
   # Therefore the allowing of blank values is handling in the validtor.
-  validates :scheduled_debate_date, date: true
+  validates :scheduled_debate_date, :debate_scheduled_on, date: true
 
   validates :committee_note, length: { maximum: 800, allow_blank: true }
   validates :open_at, presence: true, if: :open?
@@ -1154,5 +1154,19 @@ class Petition < ActiveRecord::Base
 
   def time_for_publishing(time)
     open_at || time
+  end
+
+  def debate_scheduled_on
+    super || default_debate_scheduled_on
+  end
+
+  def debate_scheduled_on?
+    debate_scheduled_on.present?
+  end
+
+  private
+
+  def default_debate_scheduled_on
+    debate_scheduled_at? ? debate_scheduled_at.to_date : nil
   end
 end

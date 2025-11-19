@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_11_14_152637) do
+ActiveRecord::Schema[8.0].define(version: 2025_11_19_110134) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "intarray"
   enable_extension "pg_catalog.plpgsql"
@@ -176,6 +176,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_14_152637) do
     t.datetime "published_at", precision: nil
     t.string "response_state", limit: 30, default: "pending", null: false
     t.datetime "debate_scheduled_at", precision: nil
+    t.date "debate_scheduled_on"
     t.index "to_tsvector('english'::regconfig, (action)::text)", name: "index_archived_petitions_on_action", using: :gin
     t.index "to_tsvector('english'::regconfig, (background)::text)", name: "index_archived_petitions_on_background", using: :gin
     t.index "to_tsvector('english'::regconfig, additional_details)", name: "index_archived_petitions_on_additional_details", using: :gin
@@ -587,6 +588,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_14_152637) do
     t.datetime "published_at", precision: nil
     t.string "response_state", limit: 30, default: "pending", null: false
     t.datetime "debate_scheduled_at", precision: nil
+    t.date "debate_scheduled_on"
     t.index "((last_signed_at > signature_count_validated_at))", name: "index_petitions_on_validated_at_and_signed_at"
     t.index "to_tsvector('english'::regconfig, (action)::text)", name: "index_petitions_on_action", using: :gin
     t.index "to_tsvector('english'::regconfig, (background)::text)", name: "index_petitions_on_background", using: :gin

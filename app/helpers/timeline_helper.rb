@@ -27,8 +27,8 @@ module TimelineHelper
       events << PetitionEvent.new(:debate_threshold_reached, petition.debate_threshold_reached_at, nil)
     end
 
-    if petition.debate_scheduled_at?
-      events << PetitionEvent.new(:debate_scheduled, petition.debate_scheduled_at, nil)
+    if petition.debate_scheduled_on?
+      events << PetitionEvent.new(:debate_scheduled, petition.debate_scheduled_on, nil)
     end
 
     if debate_outcome = petition.debate_outcome

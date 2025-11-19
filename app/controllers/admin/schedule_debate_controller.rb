@@ -28,7 +28,7 @@ class Admin::ScheduleDebateController < Admin::AdminController
   end
 
   def params_for_update
-    params.require(:petition).permit(:scheduled_debate_date)
+    params.require(:petition).permit(:scheduled_debate_date, :debate_scheduled_on)
   end
 
   def send_email_to_petitioners?

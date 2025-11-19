@@ -1,9 +1,16 @@
-<%= form_for petition, url: admin_archived_petition_schedule_debate_path(petition), method: :patch do |f| %>
+<h2 class="petition-action-heading">Scheduled debate date</h2>
 
+<%= form_for petition, url: admin_archived_petition_schedule_debate_path(petition), method: :patch do |f| %>
   <%= form_row :for => [f.object, :scheduled_debate_date] do %>
-    <%= f.label :scheduled_debate_date, class: 'form-label petition-action-heading' %>
+    <%= f.label :scheduled_debate_date, 'Debate date', class: 'form-label' %>
     <%= error_messages_for_field f.object, :scheduled_debate_date %>
     <%= f.date_field :scheduled_debate_date, tabindex: increment, class: 'form-control' %>
+  <% end %>
+
+  <%= form_row :for => [f.object, :debate_scheduled_on] do %>
+    <%= f.label :debate_scheduled_on, 'Scheduled on', class: 'form-label' %>
+    <%= error_messages_for_field f.object, :debate_scheduled_on %>
+    <%= f.date_field :debate_scheduled_on, tabindex: increment, class: 'form-control' %>
   <% end %>
 
   <%= email_petitioners_with_count_submit_button(f, petition) %>
