@@ -11,7 +11,7 @@
   <div id="navigation">
     <ul class="container">
       <%= navigation_item "Home", home_path %>
-      <%= navigation_item "Browse all petitions", petitions_path %>
+      <%= navigation_item "Browse petitions", petitions_path(status: %w[open]) %>
       <%= navigation_item "How petitions work", help_path %>
       <%= navigation_item "Petition standards", standards_path %>
     </ul>

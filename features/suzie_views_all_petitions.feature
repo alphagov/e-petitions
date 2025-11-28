@@ -5,8 +5,8 @@ Feature: Suzy Signer views all petitions
 
   Scenario:
     Given a set of petitions
-    When I view all petitions from the home page
-    Then I should see all petitions
+    When I browse petitions from the home page
+    Then I should see 3 open petitions
     And the markup should be valid
 
   Scenario: Suzie browses open petitions
@@ -89,7 +89,7 @@ Feature: Suzy Signer views all petitions
   Scenario: Downloading the JSON data for petitions
     Given a set of petitions
     And I am on the all petitions page
-    Then I should see all petitions
+    Then I should see 3 petitions
     And the markup should be valid
     When I click the JSON link
     Then I should be on the all petitions JSON page
@@ -98,7 +98,7 @@ Feature: Suzy Signer views all petitions
   Scenario: Downloading the CSV data for petitions
     Given a set of petitions
     And I am on the all petitions page
-    Then I should see all petitions
+    Then I should see 3 petitions
     And the markup should be valid
     When I click the CSV link
     Then I should get a download with the filename "filtered-petitions.csv"

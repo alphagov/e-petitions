@@ -189,17 +189,17 @@ Then(/^I should be redirected to the archived url$/) do
   expect(current_path).to eq(archived_petition_path(@petition))
 end
 
-When(/^I view all petitions from the home page$/) do
+When(/^I browse petitions from the home page$/) do
   visit home_url
-  click_link "Browse all petitions"
+  click_link "Browse petitions"
 end
 
 When(/^I choose to create a petition anyway$/) do
   click_link_or_button "My petition is different"
 end
 
-Then(/^I should see all petitions$/) do
-  expect(page).to have_css(".petition-item", :count => 3)
+Then(/^I should see (\d+) (open|closed|rejected) petitions?$/) do |count, status|
+  expect(page).to have_css(".petition-item", text: "Status #{status.capitalize}", count: count)
 end
 
 Then(/^I should see the petition details$/) do
