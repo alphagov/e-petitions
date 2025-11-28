@@ -139,7 +139,7 @@ class UpdatePageContents < ActiveRecord::Migration[8.0]
           * provide details about what you want to happen and why
           * get five supporters for your petition so it can be checked by the petitions team.
 
-          You’ll also need to make sure it meets the standards for petitions.
+          You’ll also need to make sure it meets the [standards for petitions][3].
 
           ## Who can create an e-petition?
 
