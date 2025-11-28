@@ -287,24 +287,41 @@
         width: 100%;
         aspect-ratio: calc(560/315);
 
-        @include responsive-margin(6, top);
-        @include responsive-margin(6, bottom);
+        @include responsive-margin(4, top);
+        @include responsive-margin(4, bottom);
       }
 
-      .video-fallback {
-        aspect-ratio: calc(560/315);
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        flex-direction: column;
-        gap: 1em;
-        padding: 1em;
-        background-color: #000;
-        color: #fff;
-        text-decoration: none;
+      .video-link {
+        background-color: #000000;
+        display: block;
+        position: relative;
 
-        @include responsive-margin(6, top);
-        @include responsive-margin(6, bottom);
+        @include responsive-margin(4, top);
+        @include responsive-margin(4, bottom);
+
+        & > img {
+          aspect-ratio: calc(560/315);
+          object-fit: cover;
+          width: 100%;
+        }
+
+        &:hover {
+          & > img {
+            opacity: 0.8;
+          }
+        }
+
+        &::after {
+          background-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20640%20640%22%3E%3Cpath%20fill%3D%22%23f03%22%20d%3D%22M581.7%20188.1c-6.2-23.7-24.8-42.3-48.3-48.6C490.9%20128%20320.1%20128%20320.1%20128s-170.8%200-213.4%2011.5c-23.5%206.3-42%2024.9-48.3%2048.6C47%20231%2047%20320.4%2047%20320.4s0%2089.4%2011.4%20132.3c6.3%2023.6%2024.8%2041.5%2048.3%2047.8C149.3%20512%20320.1%20512%20320.1%20512s170.8%200%20213.4-11.5c23.5-6.3%2042-24.2%2048.3-47.8%2011.4-42.9%2011.4-132.3%2011.4-132.3s0-89.4-11.4-132.3z%22%2F%3E%3Cpath%20fill%3D%22%23fff%22%20d%3D%22M264.2%20401.6V239.2l142.7%2081.2z%22%2F%3E%3C%2Fsvg%3E");
+          content: "";
+          position: absolute;
+          left: 50%;
+          top: 50%;
+          margin-top: -60px;
+          margin-left: -60px;
+          width: 120px;
+          height: 120px;
+        }
       }
 
       details {

@@ -59,16 +59,13 @@ module DebateOutcomeHelper
       video_id = uri.path.split('/').last
     end
 
-    attributes = {
-      videoid: video_id,
-      videotitle: "Debate for #{@petition.action}",
-      autoload: true,
-      autopause: true,
-      nocookie: true,
-      videoStartAt: params["t"].to_i
-    }
+    poster_url = "https://i.ytimg.com/vi/#{video_id}/maxresdefault.jpg"
+    image_tag = tag.img(src: poster_url, alt: "Watch the debate on youtube.com")
 
-    tag.lite_youtube(**attributes, &block)
+    start_at = params["t"].to_i
+    watch_url = "https://www.youtube.com/watch?v=#{video_id}&t=#{start_at}"
+
+    tag.a(image_tag, href: watch_url, class: "video-link")
   end
 
   def video_service(url)

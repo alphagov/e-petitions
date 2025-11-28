@@ -1,4 +1,3 @@
-import '@justinribeiro/lite-youtube';
 import Sharing from './modules/sharing';
 import SignatureCounter from './modules/signature-counter';
 
