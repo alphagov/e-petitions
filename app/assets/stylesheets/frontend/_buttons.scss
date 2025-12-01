@@ -145,6 +145,51 @@ button:not(:disabled), .button:not(:disabled) {
   }
 }
 
+.button-menu {
+  @extend %button;
+  @extend %link-decoration;
+  @extend %button-link;
+
+  position: relative;
+  padding-right: 22px;
+
+  &::after {
+    content: "";
+    border-bottom: 2px solid $interactive-colour;
+    border-right: 2px solid $interactive-colour;
+    position: absolute;
+    top: 4px;
+    right: 3px;
+    width: 11px;
+    height: 11px;
+    transform: rotate(45deg);
+  }
+
+  &[aria-expanded=true]::after {
+    top: 10px;
+    transform: rotate(225deg);
+  }
+
+  &:hover:not(:focus) {
+    color: $interactive-hover-colour;
+
+    &::after {
+      border-bottom: 2px solid $interactive-hover-colour;
+      border-right: 2px solid $interactive-hover-colour;
+    }
+  }
+
+  &:focus {
+    @extend %focused-text;
+
+    &::after {
+      border-bottom: 2px solid $focus-colour;
+      border-right: 2px solid $focus-colour;
+    }
+  }
+}
+
+
 .button-icon {
   @extend %button;
 

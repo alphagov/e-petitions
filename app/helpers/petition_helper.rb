@@ -26,9 +26,9 @@ module PetitionHelper
 
   def petition_list_header
     @_petition_list_header ||= if @petitions.semantic_search?
-      t(:"semantic_html", scope: :"petitions.list_headers", query: @petitions.url_safe_query, default: "")
+      t(:"semantic_html", scope: :"petitions.list_headers", default: "")
     else
-      t(:"#{@petitions.scope}_html", scope: :"petitions.list_headers", query: @petitions.url_safe_query, default: "")
+      t(:"#{@petitions.scope}_html", scope: :"petitions.list_headers", url: alternative_list_url, default: "")
     end
   end
 
@@ -38,5 +38,55 @@ module PetitionHelper
 
   def reveal_government_response?
     params[:reveal_response] == "yes"
+  end
+
+  def parliament_menu(parliament, &block)
+    menu = "parliament-menu-#{parliament.id}"
+    label = tag.span("#{parliament.start_year} to #{parliament.end_year}")
+
+    options = {
+      type: "button",
+      class: "button-menu",
+      aria: { expanded: "true", controls: menu }
+    }
+
+    tag.button(label, **options) + tag.ul(id: menu, class: "petition-lists", &block)
+  end
+
+  def petition_list_item(facet)
+    url = petitions_path(@petitions.facet_params(state: facet))
+    current = @petitions.scope == facet
+    label = t(facet, scope: :"petitions.lists")
+
+    if current
+      tag.li(link_to(label, url), aria: { current: "true" })
+    else
+      tag.li(link_to(label, url))
+    end
+  end
+
+  def archived_petition_list_item(parliament, facet)
+    url = archived_petitions_url(@petitions.facet_params(state: facet, parliament: parliament.id))
+    current = @parliament.id == parliament.id && @petitions.scope == facet
+    label = t(facet, scope: :"petitions.lists")
+
+    if current
+      tag.li(link_to(label, url), aria: { current: "true" })
+    else
+      tag.li(link_to(label, url))
+    end
+  end
+
+  private
+
+  def alternative_list_url
+    case @petitions.scope
+    when :recent
+      petitions_path(@petitions.current_params.merge(state: "open"))
+    when :open
+      petitions_path(@petitions.current_params.merge(state: "recent"))
+    else
+      petitions_path
+    end
   end
 end

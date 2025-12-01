@@ -49,6 +49,8 @@ class Petition < ActiveRecord::Base
   extend Searchable(:action, :background, :additional_details)
   include Browseable, NearestNeighbours, Taggable, Departments, Topics, Anonymization
 
+  self.default_page_size = 25
+
   facet :all,      -> { by_most_popular }
   facet :open,     -> { open_state.by_most_popular }
   facet :recent,   -> { open_state.by_most_recently_published }
@@ -190,7 +192,7 @@ class Petition < ActiveRecord::Base
     end
 
     def by_waiting_for_response_longest
-      reorder('government_response_at ASC NULLS LAST, created_at ASC')
+      reorder('response_threshold_reached_at ASC NULLS LAST, created_at ASC')
     end
 
     def current

@@ -94,7 +94,7 @@ body > nav {
       width: auto;
     }
 
-    &.current {
+    &[aria-current="true"] {
       border-left: 3px solid $link-colour;
 
       @include media-query($from: tablet) {

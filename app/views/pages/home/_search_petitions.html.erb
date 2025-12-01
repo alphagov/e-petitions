@@ -1,13 +1,13 @@
 <section id="search-petitions">
   <%= form_tag search_path, method: 'get', enforce_utf8: false do %>
     <% if Parliament.dissolved? %>
-      <input type="hidden" name="status[]" value="closed">
+      <input type="hidden" name="state" value="closed">
     <% elsif Parliament.dissolution_announced? %>
-      <input type="hidden" name="status[]" value="open">
+      <input type="hidden" name="state" value="open">
     <% elsif Parliament.opened? %>
-      <input type="hidden" name="status[]" value="open">
+      <input type="hidden" name="state" value="open">
     <% else %>
-      <input type="hidden" name="status[]" value="closed">
+      <input type="hidden" name="state" value="published">
     <% end %>
 
     <h2 class="visually-hidden">
@@ -15,7 +15,7 @@
     </h2>
 
     <div class="item-group">
-      <%= text_field_tag 'query', nil, id: 'search' %>
+      <%= text_field_tag 'q', nil, id: 'search' %>
 
       <%= button_tag name: nil, class: "button" do %>
         Search petitions

@@ -112,32 +112,64 @@ en-GB:
           </span>
 
     lists:
-      all: "All petitions (%{quantity})"
-      open: "Open petitions (%{quantity})"
-      recent: "Recent petitions (%{quantity})"
-      closed: "Closed petitions (%{quantity})"
-      published: "Published petitions (%{quantity})"
-      rejected: "Rejected petitions (%{quantity})"
-      awaiting_response: "Awaiting government response (%{quantity})"
-      with_response: "Government responses (%{quantity})"
-      debated: "Debated in Parliament (%{quantity})"
-      not_debated: "Not debated in Parliament (%{quantity})"
-      awaiting_debate: "Awaiting a debate in Parliament (%{quantity})"
+      all: "All petitions"
+      open: "Open petitions"
+      recent: "Recent petitions"
+      closed: "Closed petitions"
+      published: "Published petitions"
+      rejected: "Rejected petitions"
+      awaiting_response: "Awaiting government response"
+      with_response: "Government responses"
+      debated: "Debated in Parliament"
+      not_debated: "Not debated in Parliament"
+      awaiting_debate: "Awaiting a debate in Parliament"
 
     list_headers:
+      all_html: |-
+        <p>
+          These petitions are sorted by popularity.
+        </p>
       open_html: |-
         <p>
           These petitions are sorted by popularity.<br>
-          <a href="/petitions?state=recent&amp;q=%{query}">Sort them by date of publishing</a>.
+          <a href="%{url}">Sort them by date of publishing</a>.
         </p>
       recent_html: |-
         <p>
           These petitions are sorted by date of publishing.<br>
-          <a href="/petitions?state=open&amp;q=%{query}">Sort them by popularity</a>.
+          <a href="%{url}">Sort them by popularity</a>.
+        </p>
+      closed_html: |-
+        <p>
+          These petitions are sorted by popularity.
+        </p>
+      published_html: |-
+        <p>
+          These petitions are sorted by popularity.
+        </p>
+      rejected_html: |-
+        <p>
+          These petitions are sorted by the date of rejection.
+        </p>
+      awaiting_response_html: |-
+        <p>
+          These petitions are sorted by how long they’ve been waiting for a response from Government.
+        </p>
+      with_response_html: |-
+        <p>
+          These petitions are sorted by the date of the response from Government.
+        </p>
+      debated_html: |-
+        <p>
+          These petitions are sorted by the date of the debate in Parliament.
         </p>
       not_debated_html: |-
         <p>
-          The Petitions Committee decided not to debate these petitions
+          The Petitions Committee decided not to debate these petitions.
+        </p>
+      awaiting_debate_html: |-
+        <p>
+          These petitions are sorted by how long they’ve been waiting for a decision about a debate in Parliament.
         </p>
       semantic_html: |-
         <p>

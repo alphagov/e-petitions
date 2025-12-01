@@ -53,6 +53,8 @@ module Archived
     extend Searchable(:action, :background, :additional_details)
     include Browseable, NearestNeighbours, Taggable, Departments, Topics, Anonymization
 
+    self.default_page_size = 25
+
     facet :all, -> { by_most_signatures }
     facet :awaiting_response, -> { awaiting_response.by_waiting_for_response_longest }
     facet :awaiting_debate, -> { awaiting_debate.by_most_relevant_debate_date }
@@ -134,11 +136,15 @@ module Archived
       end
 
       def by_waiting_for_response_longest
-        reorder('government_response_at ASC NULLS LAST, created_at ASC')
+        reorder('response_threshold_reached_at ASC NULLS LAST, created_at ASC')
       end
 
       def awaiting_response
         response_threshold_reached.not_responded
+      end
+
+      def responded
+        where(response_state: 'responded').preload(:government_response)
       end
 
       def not_responded
@@ -146,7 +152,7 @@ module Archived
       end
 
       def with_response
-        where.not(government_response_at: nil).preload(:government_response)
+        responded
       end
 
       def response_threshold_reached

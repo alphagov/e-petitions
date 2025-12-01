@@ -44,7 +44,7 @@ Feature: Suzy Singer searches by free text
   Scenario: Search for open petitions
     When I search for "Open petitions" with "Wombles"
     Then I should see my search term "Wombles" filled in the search field
-    And I should see "These petitions gained the most signatures since they were published"
+    And I should see "These petitions are sorted by popularity"
     And I should see "We’ve found 4 petitions"
     And I should not see "Wombles are great"
     And I should not see "The Wombles of Wimbledon"
@@ -58,7 +58,7 @@ Feature: Suzy Singer searches by free text
   Scenario: Search for recent petitions
     When I search for "Recent petitions" with "Wombles"
     Then I should see my search term "Wombles" filled in the search field
-    And I should see "These petitions have been recently published"
+    And I should see "These petitions are sorted by date of publishing"
     And I should see "We’ve found 4 petitions"
     And I should not see "Wombles are great"
     And I should not see "The Wombles of Wimbledon"

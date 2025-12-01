@@ -1,19 +1,19 @@
 json.links do
   json.self request.url
 
-  json.first petitions_url(:json, @petitions.first_params)
-  json.last petitions_url(:json, @petitions.last_params)
+  json.first search_petitions_url(:json, @petitions.first_page)
+  json.last search_petitions_url(:json, @petitions.last_page)
 
   if @petitions.last_page?
     json.next nil
   else
-    json.next petitions_url(:json, @petitions.next_params)
+    json.next search_petitions_url(:json, @petitions.next_page)
   end
 
   if @petitions.first_page?
     json.prev nil
   else
-    json.prev petitions_url(:json, @petitions.previous_params)
+    json.prev search_petitions_url(:json, @petitions.previous_page)
   end
 end
 

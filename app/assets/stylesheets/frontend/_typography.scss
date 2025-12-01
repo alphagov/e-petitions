@@ -63,6 +63,10 @@ h1 > .heading-secondary {
   font-weight: normal;
 }
 
+h2 + h3 {
+  @include responsive-margin(5, top);
+}
+
 p {
   @include font-size(22);
   margin-top: 0;

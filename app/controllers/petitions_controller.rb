@@ -1,18 +1,19 @@
 require 'csv'
 
 class PetitionsController < PublicController
-  before_action :redirect_to_valid_state, only: [:index]
-  before_action :do_not_cache, except: [:index, :show]
-  before_action :set_cors_headers, only: [:index, :show, :count], if: :json_request?
+  before_action :redirect_to_valid_state, only: [:index, :search]
+  before_action :do_not_cache, except: [:index, :search, :show]
+  before_action :set_cors_headers, only: [:index, :search, :show, :count], if: :json_request?
 
   before_action :redirect_to_home_page_if_dissolved, only: [:start, :new, :create]
-  before_action :redirect_to_home_page_unless_opened, only: [:index, :start, :new, :create]
+  before_action :redirect_to_home_page_unless_opened, only: [:index, :search, :start, :new, :create]
   before_action :redirect_to_archived_petition_if_archived, only: [:show]
-  before_action :redirect_to_show_page_if_petition_exists, only: [:index]
+  before_action :redirect_to_show_page_if_petition_exists, only: [:index, :search]
 
   before_action :redirect_to_home_page_if_suspended, only: [:start, :new, :create]
 
   before_action :retrieve_petitions, only: [:index]
+  before_action :redirect_to_last_page_if_out_of_bounds, only: [:index], unless: :json_request?
   before_action :retrieve_petition, only: [:show, :count, :gathering_support, :moderation_info]
   before_action :build_petition_creator, only: [:new, :create]
 
@@ -21,13 +22,23 @@ class PetitionsController < PublicController
   before_action :redirect_to_moderation_info_url, if: :in_moderation?, only: [:gathering_support, :show]
   before_action :redirect_to_petition_url, if: :moderated?, only: [:gathering_support, :moderation_info]
 
-  after_action :set_content_disposition, if: :csv_request?, only: [:index]
+  after_action :set_content_disposition, if: :csv_request?, only: [:index, :search]
 
   def index
     respond_to do |format|
       format.html
       format.json
       format.csv
+    end
+  end
+
+  def search
+    @petitions = PetitionSearch.new(params)
+
+    respond_to do |format|
+      format.html
+      format.json
+      format.csv { render :index }
     end
   end
 
@@ -123,7 +134,19 @@ class PetitionsController < PublicController
   end
 
   def retrieve_petitions
-    @petitions = PetitionSearch.new(params)
+    scope = Petition.visible
+
+    if json_request?
+      scope = scope.preload(:creator, :rejection, :government_response, :debate_outcome)
+    end
+
+    @petitions = scope.search(params)
+  end
+
+  def redirect_to_last_page_if_out_of_bounds
+    if @petitions.out_of_bounds?
+      redirect_to petitions_url(@petitions.last_params)
+    end
   end
 
   def retrieve_petition

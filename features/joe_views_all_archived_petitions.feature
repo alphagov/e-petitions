@@ -16,14 +16,14 @@ Feature: Joe views all archived petition
 
   Scenario:
     When I am on the petitions page
-    And I follow "View archived petitions" within ".//div[@class='search-form']"
+    And I follow "View archived petitions"
     Then I should see "Search archived petitions"
     And I should see "We’ve found 4 petitions"
     And I should see the following list of archived petitions:
-      | Save the planet           | Total signatures 243 |
-      | Common People             | Total signatures 639 |
-      | Wombles to Parliament     | Total signatures 243 |
       | Wombles are great         | Total signatures 835 |
+      | Common People             | Total signatures 639 |
+      | Save the planet           | Total signatures 243 |
+      | Wombles to Parliament     | Total signatures 243 |
     And the markup should be valid
     When I search for "Rejected petitions"
     Then I should see "We’ve found 1 petition"
@@ -33,11 +33,11 @@ Feature: Joe views all archived petition
     When I search for "All petitions"
     Then I should see "We’ve found 5 petitions"
     And I should see the following list of archived petitions:
-      | Save the planet           | Total signatures 243       |
+      | Wombles are great         | Total signatures 835       |
       | Common People             | Total signatures 639       |
+      | Save the planet           | Total signatures 243       |
       | Wombles to Parliament     | Total signatures 243       |
       | Free gig tickets          | Rejected on 8 January 2013 |
-      | Wombles are great         | Total signatures 835       |
     And I should not see "Wombles are &*!%"
     And I should not see "Bring back the Wombles"
     And the markup should be valid

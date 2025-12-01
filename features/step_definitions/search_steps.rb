@@ -1,66 +1,5 @@
 When('I search for {string}') do |facet|
-  if page.has_field?("Open petitions")
-    uncheck "Open petitions"
-  end
-
-  uncheck "Closed petitions"
-  uncheck "Rejected petitions"
-
-  within_fieldset "Government response" do
-    uncheck "Yes"
-    uncheck "Awaiting"
-  end
-
-  within_fieldset "Debate status" do
-    uncheck "Debated"
-    uncheck "Will not be debated"
-    uncheck "Awaiting"
-    uncheck "Scheduled"
-  end
-
-  case facet
-  when "All petitions"
-  when "Open petitions"
-    check "Open petitions"
-  when "Closed petitions"
-    check "Closed petitions"
-  when "Rejected petitions"
-    check "Rejected petitions"
-  when "Recent petitions"
-    check "Open petitions"
-    select "Recently published", from: "Sort results"
-  when "Awaiting government response"
-    check "Open petitions" unless current_path.starts_with?("/archived")
-    check "Closed petitions"
-    within_fieldset "Government response" do
-      check "Awaiting"
-    end
-  when "Government responses"
-    check "Open petitions" unless current_path.starts_with?("/archived")
-    check "Closed petitions"
-    within_fieldset "Government response" do
-      check "Yes"
-    end
-  when "Awaiting a debate in Parliament"
-    check "Open petitions" unless current_path.starts_with?("/archived")
-    check "Closed petitions"
-    within_fieldset "Debate status" do
-      check "Awaiting"
-      check "Scheduled"
-    end
-    select "Upcoming debates", from: "Sort results"
-  when "Debated in Parliament"
-    check "Open petitions" unless current_path.starts_with?("/archived")
-    check "Closed petitions"
-    within_fieldset "Debate status" do
-      check "Debated"
-    end
-    select "Latest debates", from: "Sort results"
-  else
-    raise ArgumentError, "Unexpected facet: #{facet.inspect}"
-  end
-
-  click_on "Apply filters"
+  click_link facet
 end
 
 When(/^I browse to see only "([^"]*)" petitions$/) do |facet|
@@ -103,7 +42,7 @@ When(/^I fill in "(.*?)" as my search term$/) do |search_term|
 end
 
 Then(/^I should see my search term "(.*?)" filled in the search field$/) do |search_term|
-  expect(page).to have_field('query', with: search_term)
+  expect(page).to have_field('Search', with: search_term)
 end
 
 Then(/^I should see the following similar petitions:$/) do |table|

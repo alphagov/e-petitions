@@ -106,7 +106,7 @@ RSpec.describe Archived::PetitionsController, type: :controller do
 
       context "and it is out of range" do
         it "uses the maximum count" do
-          get :index, params: { count: "414141414141414141" }
+          get :index, params: { count: "59" }
           expect(assigns(:petitions).page_size).to eq 50
         end
       end

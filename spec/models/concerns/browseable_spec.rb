@@ -140,6 +140,55 @@ RSpec.describe Browseable, type: :model do
       end
     end
 
+    describe "#first_params" do
+      let(:arel_table) { double(:arel_table) }
+      let(:petition)   { double(:petition) }
+      let(:petitions)  { [petition] }
+      let(:results)    { double(:results, to_a: petitions) }
+
+      before do
+        allow(klass).to receive(:basic_search).with('search').and_return(klass)
+        allow(arel_table).to receive(:[]).with("*").and_return("*")
+        allow(klass).to receive(:basic_search).with('search').and_return(klass)
+        allow(klass).to receive(:except).with(:select).and_return(klass)
+        allow(klass).to receive(:arel_table).and_return(arel_table)
+        allow(klass).to receive(:select).with("*").and_return(klass)
+        allow(klass).to receive(:except).with(:order).and_return(klass)
+        allow(klass).to receive(:paginate).with(page: 3, per_page: 50).and_return(results)
+        allow(results).to receive(:to_a).and_return(petitions)
+        allow(results).to receive(:total_pages).and_return(10)
+        allow(results).to receive(:previous_page).and_return(2)
+      end
+
+      context "with default params" do
+        it "returns a hash of params for building the previous page link" do
+          expect(search.first_params).to eq({ q: 'search' })
+        end
+      end
+
+      context "with a custom state param" do
+        let(:params) { { q: 'search', page: '3', state: 'open' } }
+
+        it "returns a hash of params for building the previous page link" do
+          expect(search.first_params).to eq({ q: 'search', state: :open })
+        end
+      end
+
+      context "with a filter param" do
+        let(:params) { { q: 'search', page: '3', topic: 'covid-19' } }
+        let(:scope) { ->(param){ topic(param) } }
+        let(:filters) { { topic: scope } }
+
+        before do
+          expect(klass).to receive(:topic).with('covid-19').and_return(klass)
+        end
+
+        it "returns a hash of params for building the previous page link" do
+          expect(search.first_params).to eq({ q: 'search', topic: 'covid-19' })
+        end
+      end
+    end
+
     describe "#last_page?" do
       context "when the current page is the same as the total pages" do
         let(:params) { { q: 'search', page: '10' } }
@@ -160,6 +209,55 @@ RSpec.describe Browseable, type: :model do
       end
     end
 
+    describe "#last_params" do
+      let(:arel_table) { double(:arel_table) }
+      let(:petition)   { double(:petition) }
+      let(:petitions)  { [petition] }
+      let(:results)    { double(:results, to_a: petitions) }
+
+      before do
+        allow(klass).to receive(:basic_search).with('search').and_return(klass)
+        allow(arel_table).to receive(:[]).with("*").and_return("*")
+        allow(klass).to receive(:basic_search).with('search').and_return(klass)
+        allow(klass).to receive(:except).with(:select).and_return(klass)
+        allow(klass).to receive(:arel_table).and_return(arel_table)
+        allow(klass).to receive(:select).with("*").and_return(klass)
+        allow(klass).to receive(:except).with(:order).and_return(klass)
+        allow(klass).to receive(:paginate).with(page: 3, per_page: 50).and_return(results)
+        allow(results).to receive(:to_a).and_return(petitions)
+        allow(results).to receive(:total_pages).and_return(10)
+        allow(results).to receive(:previous_page).and_return(2)
+      end
+
+      context "with default params" do
+        it "returns a hash of params for building the previous page link" do
+          expect(search.last_params).to eq({ q: 'search', page: 10 })
+        end
+      end
+
+      context "with a custom state param" do
+        let(:params) { { q: 'search', page: '3', state: 'open' } }
+
+        it "returns a hash of params for building the previous page link" do
+          expect(search.last_params).to eq({ q: 'search', state: :open, page: 10 })
+        end
+      end
+
+      context "with a filter param" do
+        let(:params) { { q: 'search', page: '3', topic: 'covid-19' } }
+        let(:scope) { ->(param){ topic(param) } }
+        let(:filters) { { topic: scope } }
+
+        before do
+          expect(klass).to receive(:topic).with('covid-19').and_return(klass)
+        end
+
+        it "returns a hash of params for building the previous page link" do
+          expect(search.last_params).to eq({ q: 'search', page: 10, topic: 'covid-19' })
+        end
+      end
+    end
+
     describe "#previous_params" do
       let(:arel_table) { double(:arel_table) }
       let(:petition)   { double(:petition) }
@@ -176,12 +274,13 @@ RSpec.describe Browseable, type: :model do
         allow(klass).to receive(:except).with(:order).and_return(klass)
         allow(klass).to receive(:paginate).with(page: 3, per_page: 50).and_return(results)
         allow(results).to receive(:to_a).and_return(petitions)
+        allow(results).to receive(:total_pages).and_return(10)
         allow(results).to receive(:previous_page).and_return(2)
       end
 
       context "with default params" do
         it "returns a hash of params for building the previous page link" do
-          expect(search.previous_params).to eq({ q: 'search', state: :all, page: 2 })
+          expect(search.previous_params).to eq({ q: 'search', page: 2 })
         end
       end
 
@@ -203,7 +302,7 @@ RSpec.describe Browseable, type: :model do
         end
 
         it "returns a hash of params for building the previous page link" do
-          expect(search.previous_params).to eq({ q: 'search', state: :all, page: 2, topic: 'covid-19' })
+          expect(search.previous_params).to eq({ q: 'search', page: 2, topic: 'covid-19' })
         end
       end
     end
@@ -224,12 +323,13 @@ RSpec.describe Browseable, type: :model do
         allow(klass).to receive(:except).with(:order).and_return(klass)
         allow(klass).to receive(:paginate).with(page: 3, per_page: 50).and_return(results)
         allow(results).to receive(:to_a).and_return(petitions)
+        allow(results).to receive(:total_pages).and_return(10)
         allow(results).to receive(:next_page).and_return(4)
       end
 
       context "with default params" do
         it "returns a hash of params for building the previous page link" do
-          expect(search.next_params).to eq({ q: 'search', state: :all, page: 4 })
+          expect(search.next_params).to eq({ q: 'search', page: 4 })
         end
       end
 
@@ -251,7 +351,7 @@ RSpec.describe Browseable, type: :model do
         end
 
         it "returns a hash of params for building the previous page link" do
-          expect(search.next_params).to eq({ q: 'search', state: :all, page: 4, topic: 'covid-19' })
+          expect(search.next_params).to eq({ q: 'search', page: 4, topic: 'covid-19' })
         end
       end
     end

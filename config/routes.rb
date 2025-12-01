@@ -59,6 +59,7 @@ Rails.application.routes.draw do
 
     resources :petitions, only: %i[new show index] do
       collection do
+        get  'search' if Rails.env.development?
         get  'start'
         post 'new', action: 'create', as: nil
         get  'thank-you'
@@ -98,7 +99,9 @@ Rails.application.routes.draw do
     end
 
     namespace :archived do
-      resources :petitions, only: %i[index show]
+      resources :petitions, only: %i[index show] do
+        get 'search', on: :collection if Rails.env.development?
+      end
 
       resources :signatures, only: [] do
         match 'unsubscribe', via: %i[get post], on: :member

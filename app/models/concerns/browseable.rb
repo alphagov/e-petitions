@@ -89,7 +89,7 @@ module Browseable
     end
 
     def to_hash
-      params.slice(*filter_keys)
+      params.slice(*filter_keys).symbolize_keys
     end
 
     private
@@ -140,15 +140,27 @@ module Browseable
     end
 
     def first_page?
-      current_page <= 1
+      current_page <= first_page
     end
 
-    def second_page?
-      current_page == 2
+    def first_page
+      1
+    end
+
+    def first_params
+      new_params(first_page)
     end
 
     def last_page?
-      current_page >= total_pages
+      current_page >= last_page
+    end
+
+    def last_page
+      total_pages
+    end
+
+    def last_params
+      new_params(last_page)
     end
 
     def query
@@ -179,12 +191,8 @@ module Browseable
       new_params(current_page)
     end
 
-    def facet_params(facet, options = {})
-      {}.tap do |new_params|
-        new_params[:state] = facet
-        new_params.merge!(filters)
-        new_params.merge!(options)
-      end
+    def facet_params(facet)
+      current_params.merge(facet)
     end
 
     def scope
@@ -239,13 +247,16 @@ module Browseable
     end
 
     def new_params(page)
+      page = page.clamp(1, total_pages)
+      page = nil if page == 1
+
       {}.tap do |new_params|
         new_params[:q] = query if query.present?
-        new_params[:state] = scope
+        new_params[:state] = scope unless scope == :all
         new_params[:page] = page
         new_params[:count] = page_size if params.key?(:count)
         new_params.merge!(filters)
-      end
+      end.compact_blank
     end
 
     def results
@@ -263,7 +274,7 @@ module Browseable
         relation = filters.apply(relation)
         relation = relation.instance_exec(&klass.facet_definitions[scope])
         relation = relation.except(:order)
-        relation.nearest_neighbours(embedding)
+        relation.by_relevance(embedding)
       elsif search?
         relation = relation.basic_search(query)
         relation = relation.except(:select).select(star)

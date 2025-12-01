@@ -231,6 +231,14 @@ class Parliament < ActiveRecord::Base
     "#{period} #{government} government"
   end
 
+  def start_year
+    state_opening_at && state_opening_at.year
+  end
+
+  def end_year
+    dissolution_at && dissolution_at.year
+  end
+
   def opened?(now = Time.current)
     opening_at? && opening_at <= now
   end

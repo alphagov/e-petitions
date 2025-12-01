@@ -65,8 +65,8 @@ namespace :errors do
         false
       end
 
-      def navigation_item(name, page)
-        %[<li><a href="#{page}">#{name}</a></li>].html_safe
+      def navigation_item(name, url, page = nil)
+        %[<li><a href="#{url}">#{name}</a></li>].html_safe
       end
     end
 

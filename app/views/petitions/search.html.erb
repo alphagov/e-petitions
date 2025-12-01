@@ -1,0 +1,206 @@
+<%= render 'parliament_dissolution_warning' %>
+
+<%= form_tag search_petitions_path, method: 'get', enforce_utf8: false do %>
+  <% if @petitions.keyword_search? %>
+    <%= hidden_field_tag :keyword, true %>
+  <% end %>
+
+  <div class="grid-row margin-top-7">
+    <div class="grid-column">
+      <h1 class="margin-bottom-3">Search petitions</h1>
+      <p>
+        <%= t(:"petitions.search.status_html", count: @petitions.total_entries, formatted_count: @petitions.formatted_total_entries) %>
+      </p>
+    </div>
+  </div>
+
+  <div class="grid-row margin-top-5">
+    <div class="grid-column-one-third-from-laptop">
+      <div class="search-form">
+        <section class="search-form__query">
+          <h2>
+            <label for="search">Search</label>
+          </h2>
+
+          <div class="input-group">
+            <%= text_field_tag 'query', @petitions.query, id: "search" %>
+            <%= button_tag name: nil, class: 'button icon-button' do %>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" aria-hidden="true">
+                <path fill="currentColor" d="M2.083 2.083a7.112 7.112 0 0 1 10.646 9.391l3.01 3.01a.888.888 0 1 1-1.255 1.256l-3.01-3.01a7.112 7.112 0 0 1-9.39-10.647Zm5.037-.291a5.328 5.328 0 1 0 0 10.656 5.328 5.328 0 0 0 0-10.656Z"/>
+              </svg>
+              <span class="visually-hidden">Search</span>
+            <% end %>
+          </div>
+        </section>
+
+        <div data-module="navigation-menu" data-breakpoint="992px">
+          <button class="button-toggle" data-expanded-false="Show filters" data-expanded-true="Hide filters" type="button" aria-controls="filters" aria-expanded="false" hidden>
+            <span>Show filters</span>
+          </button>
+
+          <div class="search-form__hidden-content">
+            <% unless @petitions.selected_filters.empty? && !@petitions.keyword_search? %>
+              <section class="search-form__selected-filters">
+                <header>
+                  <h3>Selected filters</h3>
+                  <p>
+                    <%= link_to search_petitions_path(@petitions.clear_filter_params) do %>
+                      Clear<span class="visually-hidden"> filters</span>
+                    <% end %>
+                  </p>
+                </header>
+
+                <ul>
+                  <% if @petitions.keyword_search? %>
+                    <li>
+                      <%= link_to search_petitions_path(@petitions.semantic_params) do %>
+                        <span class="visually-hidden">Remove </span>Keyword search
+                      <% end %>
+                    </li>
+                  <% end %>
+
+                  <% @petitions.selected_filters.each do |key, value, params| %>
+                    <li>
+                      <%= link_to search_petitions_path(params) do %>
+                        <span class="visually-hidden">Remove </span>
+                        <%= @petitions.selected_filter(key, value) %>
+                      <% end %>
+                    </li>
+                  <% end %>
+                </ul>
+              </section>
+            <% end %>
+
+            <section id="filters" class="search-form__filters">
+            <fieldset>
+              <legend>
+                <h3>Status</h3>
+              </legend>
+
+              <div class="form-group">
+                <div class="multiple-choice small">
+                  <%= filter_tag :status, "Open petitions", "open", @petitions.status %>
+                </div>
+
+                <div class="multiple-choice small">
+                  <%= filter_tag :status, "Closed petitions", "closed", @petitions.status %>
+                </div>
+
+                <div class="multiple-choice small">
+                  <%= filter_tag :status, "Rejected petitions", "rejected", @petitions.status %>
+                </div>
+              </div>
+            </fieldset>
+
+            <fieldset>
+              <legend>
+                <h3>Government response</h3>
+              </legend>
+
+              <div class="form-group">
+                <div class="multiple-choice small">
+                  <%= filter_tag :response, "Yes", "responded", @petitions.response %>
+                </div>
+
+                <div class="multiple-choice small">
+                  <%= filter_tag :response, "Awaiting response", "awaiting", @petitions.response %>
+                </div>
+              </div>
+            </fieldset>
+
+            <fieldset>
+              <legend>
+                <h3>Debate status</h3>
+              </legend>
+
+              <div class="form-group">
+                <div class="multiple-choice small">
+                  <%= filter_tag :debate, "Debated", "debated", @petitions.debate %>
+                </div>
+
+                <div class="multiple-choice small">
+                  <%= filter_tag :debate, "Will not be debated", "not_debated", @petitions.debate %>
+                </div>
+
+                <div class="multiple-choice small">
+                  <%= filter_tag :debate, "Awaiting decision", "awaiting", @petitions.debate %>
+                </div>
+
+                <div class="multiple-choice small">
+                  <%= filter_tag :debate, "Scheduled", "scheduled", @petitions.debate %>
+                </div>
+              </div>
+            </fieldset>
+
+            <div class="button-group">
+              <button class="button">
+                Apply filters
+              </button>
+            </div>
+          </section>
+          </div>
+        </div>
+
+        <p>
+          <%= link_to "View archived petitions", search_archived_petitions_path(status: %w[closed], sort: "recent") %>
+        </p>
+      </div>
+    </div>
+
+    <div class="grid-column-two-thirds-from-laptop">
+      <h2 class="heading-3">
+        <label for="sort">Sort results</label>
+      </h2>
+
+      <div class="inline-group">
+        <%= select_tag(:sort, options_for_select(@petitions.sortings, @petitions.sort), id: "sort") %>
+        <%= button_tag("Apply sorting", name: nil, class: "button") %>
+      </div>
+
+      <% unless @petitions.empty? %>
+        <p>
+          <%= @petitions.sorting_description %>
+        </p>
+      <% end %>
+
+      <% if @petitions.empty? %>
+        <hr>
+
+        <p>No petitions could be found matching your search filters.</p>
+
+        <% if @petitions.semantic_search? %>
+          <p>
+            No petitions could be found matching your search filters.
+            Try searching again by using keywords.
+          </p>
+
+          <p>
+            <%= link_to search_petitions_path(@petitions.keyword_params) do %>
+              Search by keyword instead of relevance
+            <% end %>
+          </p>
+        <% end %>
+
+        <p>
+          <%= link_to "View archived petitions", search_archived_petitions_path(@petitions.current_params) %>
+        </p>
+      <% else %>
+        <%= render partial: "petitions/petition", collection: @petitions %>
+
+        <% if @petitions.total_pages > 1 %>
+          <hr>
+
+          <%= paginate @petitions %>
+        <% end %>
+
+        <hr>
+
+        <p>
+          Get this data in
+          <%= link_to "JSON", search_petitions_path(:json, @petitions.current_params), download: "petitions.json" %> or
+          <%= link_to 'CSV', search_petitions_path(:csv, @petitions.current_params.without(:page)), download: "petitions.csv" %> format
+        </p>
+      <% end %>
+    </div>
+  </div>
+<% end %>
