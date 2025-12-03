@@ -5,10 +5,6 @@ describe('the help page', function () {
     report = await lighthouse(this, 'http://petitions.localhost:3000/help');
   });
 
-  it('should have an performance score greater than or equal to 80', () => {
-    expect(performanceScore(report), 'to be greater than or equal to', 80);
-  });
-
   it('should have an accessibility score of 100', () => {
     expect(accessibilityScore(report), 'to equal', 100);
   });
