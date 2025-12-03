@@ -132,12 +132,12 @@ en-GB:
       open_html: |-
         <p>
           These petitions are sorted by popularity.<br>
-          <a href="%{url}">Sort them by date of publishing</a>.
+          <a href="%{url}">Sort them by date of publishing</a>
         </p>
       recent_html: |-
         <p>
           These petitions are sorted by date of publishing.<br>
-          <a href="%{url}">Sort them by popularity</a>.
+          <a href="%{url}">Sort them by popularity</a>
         </p>
       closed_html: |-
         <p>
