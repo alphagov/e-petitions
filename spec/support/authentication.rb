@@ -11,41 +11,8 @@ RSpec.configure do |config|
       }
     end
 
-    def http_authentication(options, &block)
-      options.reverse_merge!(nc: "00000001", cnonce: "0a4f113b", password_is_ha1: false)
-      password = options.delete(:password)
-      method = options.delete(:method) || "GET"
-      action = options.delete(:action) || :index
-
-      # Make an unauthenticated request to get nonce, opaque, qop and realm attributes
-      case method.to_s.upcase
-      when "GET"
-        get action
-      when "POST"
-        post action
-      end
-
-      expect(response).to have_http_status(401)
-
-      credentials = decode_credentials(response.headers["WWW-Authenticate"])
-      credentials.merge!(options)
-
-      path_info = request.env["PATH_INFO"].to_s
-      uri = options[:uri] || path_info
-      credentials[:uri] = uri
-
-      request.env["ORIGINAL_FULLPATH"] = path_info
-      request.env["HTTP_AUTHORIZATION"] = encode_credentials(request.method, credentials, password, options[:password_is_ha1])
-
-      yield
-    end
-
-    def encode_credentials(http_method, credentials, password, password_is_ha1 = true)
-      ActionController::HttpAuthentication::Digest.encode_credentials(http_method, credentials, password, password_is_ha1)
-    end
-
-    def decode_credentials(header)
-      ActionController::HttpAuthentication::Digest.decode_credentials(header)
+    def http_authentication(username, password)
+      request.env['HTTP_AUTHORIZATION'] = ActionController::HttpAuthentication::Basic.encode_credentials(username, password)
     end
   end
 

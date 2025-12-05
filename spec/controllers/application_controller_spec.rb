@@ -75,20 +75,17 @@ RSpec.describe ApplicationController, type: :controller do
     end
 
     context "and the request is authenticated" do
-      let(:credentials) { "username:petition.parliament.uk:password" }
-      let(:digest) { OpenSSL::Digest::MD5.hexdigest(credentials) }
-
       before do
+        http_authentication "username", "password"
+
         request.env["REMOTE_ADDR"] = "0.0.0.0"
-        expect(Site).to receive(:protected?).twice.and_return(true)
-        expect(Site).to receive(:authenticate).with("username").and_return(digest)
+        expect(Site).to receive(:protected?).and_return(true)
+        expect(Site).to receive(:authenticate).with("username", "password").and_return(true)
       end
 
       it "responds with 200 OK" do
-        http_authentication(username: "username", password: "password") do
-          get :index
-          expect(response).to have_http_status(200)
-        end
+        get :index
+        expect(response).to have_http_status(200)
       end
     end
   end

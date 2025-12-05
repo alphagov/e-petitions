@@ -1,6 +1,6 @@
-require 'active_support/number_helper'
-require 'openssl'
+require 'bcrypt'
 require 'uri'
+require 'active_support/number_helper'
 
 class Site < ActiveRecord::Base
   class ServiceUnavailable < StandardError; end
@@ -35,8 +35,8 @@ class Site < ActiveRecord::Base
       Thread.current[:__site__] ||= first_or_create(defaults)
     end
 
-    def authenticate(username)
-      instance.authenticate(username)
+    def authenticate(username, password)
+      instance.authenticate(username, password)
     end
 
     def email_protocol
@@ -511,8 +511,8 @@ class Site < ActiveRecord::Base
     enable_analytics
   end
 
-  def authenticate(username)
-    self.username == username ? password_digest : nil
+  def authenticate(username, password)
+    self.username == username && self.password_digest == password
   end
 
   def email_protocol
@@ -571,11 +571,15 @@ class Site < ActiveRecord::Base
     end
   end
 
+  def password_digest
+    super.present? ? BCrypt::Password.new(super) : nil
+  end
+
   def password=(new_password)
     @password = new_password.presence
 
     if @password
-      self.password_digest = OpenSSL::Digest::MD5.hexdigest(credentials(@password))
+      self.password_digest = BCrypt::Password.create(@password, cost: 10)
     end
   end
 
@@ -682,9 +686,5 @@ class Site < ActiveRecord::Base
 
   def type_cast_feature_flag(value)
     value.in?(FALSE_VALUES) ? false : true
-  end
-
-  def credentials(password)
-    [username, host_with_port, password].join(":")
   end
 end
