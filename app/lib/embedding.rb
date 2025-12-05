@@ -7,41 +7,6 @@ module Embedding
   class GenerationError < RuntimeError; end
 
   module Backends
-    class Ollama
-      with_options instance_writer: false do
-        class_attribute :url, default: ENV.fetch('OLLAMA_URL', 'http://127.0.0.1:11434')
-        class_attribute :path, default: '/api/embed'
-        class_attribute :model, default: ENV.fetch('OLLAMA_MODEL', 'mxbai-embed-large')
-        class_attribute :headers, default: { content_type: 'application/json' }
-        class_attribute :open_timeout, default: 5
-        class_attribute :timeout, default: 5
-      end
-
-      def generate(input)
-        body = { input: input, model: model }.to_json
-
-        response = faraday.post(path, body, headers) do |request|
-          request.options[:timeout] = timeout
-          request.options[:open_timeout] = open_timeout
-        end
-
-        response.body.fetch('embeddings').first
-      rescue StandardError => e
-        raise Embedding::GenerationError, "Unable to generate an embedding using Ollama"
-      end
-
-      private
-
-      def faraday
-        @faraday ||= Faraday.new(url) do |f|
-          f.response :follow_redirects
-          f.response :json
-          f.response :raise_error
-          f.adapter :net_http_persistent
-        end
-      end
-    end
-
     class AmazonBedrock
       with_options instance_writer: false do
         class_attribute :model_id, default: ENV.fetch('BEDROCK_MODEL_ID', 'amazon.titan-embed-text-v2:0')
@@ -109,7 +74,7 @@ module Embedding
     end
 
     def backend
-      Backends.const_get(ENV.fetch('EMBEDDING_BACKEND', 'Ollama'))
+      Backends.const_get(ENV.fetch('EMBEDDING_BACKEND', 'OpenAI'))
     end
 
     def client

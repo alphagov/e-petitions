@@ -1,6 +1,8 @@
 x-application: &application
   image: e-petitions/ruby
   build: docker/ruby
+  models:
+    - embedding
   volumes:
     - type: bind
       source: .
@@ -26,7 +28,6 @@ x-application: &application
 x-environment: &environment
   DATABASE_URL: "postgres://postgres:ZW4IvOPrXcbp2hyp@postgres:5432"
   DATABASE_CLEANER_ALLOW_REMOTE_DATABASE_URL: "true"
-  OLLAMA_URL: "http://ollama:11434"
   PIDFILE: "/tmp/pids/server.pid"
 
 services:
@@ -72,17 +73,6 @@ services:
     networks:
       default:
         ipv4_address: 172.24.99.30
-
-  ollama:
-    image: ollama/ollama
-    ports:
-      - "127.0.0.1:11434:11434"
-    volumes:
-      - type: volume
-        source: ollama
-        target: /root/.ollama
-    profiles:
-      - ollama
 
   web:
     <<: *application
@@ -153,4 +143,7 @@ volumes:
   cache:
   db:
   node_modules:
-  ollama:
+
+models:
+  embedding:
+    model: ai/mxbai-embed-large:latest
