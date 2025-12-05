@@ -6,7 +6,8 @@ module NearestNeighbours
       arel_table[column].nearest(embedding)
     end
 
-    def nearest_neighbours(embedding, column: :embedding, distance: 0.75)
+    def nearest_neighbours(embedding, column: :embedding, distance: nil)
+      distance ||= Site.semantic_search_threshold
       where(relevance(embedding, column).lt(distance))
     end
 

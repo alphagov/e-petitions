@@ -146,6 +146,19 @@ class Site < ActiveRecord::Base
       !!instance.semantic_searching
     end
 
+    def semantic_search_threshold
+      instance.semantic_search_threshold
+    end
+
+    def with_semantic_searching
+      semantic_searching = instance.semantic_searching
+      instance.semantic_searching = true
+
+      yield
+    ensure
+      instance.semantic_searching = semantic_searching
+    end
+
     def home_page_message
       instance.home_page_message
     end
@@ -401,6 +414,7 @@ class Site < ActiveRecord::Base
   end
 
   store_accessor :feature_flags, :semantic_searching
+  store_accessor :feature_flags, :semantic_search_threshold
   store_accessor :feature_flags, :home_page_message
   store_accessor :feature_flags, :home_page_message_colour
   store_accessor :feature_flags, :show_home_page_message
@@ -423,6 +437,14 @@ class Site < ActiveRecord::Base
 
   def semantic_searching=(value)
     super(type_cast_feature_flag(value))
+  end
+
+  def semantic_search_threshold
+    super || default_semantic_search_threshold
+  end
+
+  def semantic_search_threshold=(value)
+    super(value.to_f)
   end
 
   def home_page_message_colour
@@ -622,6 +644,10 @@ class Site < ActiveRecord::Base
   end
 
   private
+
+  def default_semantic_search_threshold
+    0.75
+  end
 
   def scope
     self.class.unscoped.where(id: id)

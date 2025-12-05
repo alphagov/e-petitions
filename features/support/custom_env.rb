@@ -4,12 +4,24 @@ require 'rspec/mocks'
 require 'multi_test'
 require 'faker'
 require 'rake'
+require 'vcr'
 
 # Use webmock to disable net connections except for localhost and exceptions
 WebMock.disable_net_connect!(
   allow_localhost: true,
   allow: 'chromedriver.storage.googleapis.com'
 )
+
+VCR.configure do |config|
+  config.cassette_library_dir = Rails.root.join("spec/fixtures/vcr")
+  config.hook_into :webmock
+  config.ignore_localhost = true
+end
+
+VCR.cucumber_tags do |t|
+  t.tag '@embeddings'
+  t.tag '@semantic_search'
+end
 
 MultiTest.disable_autorun
 

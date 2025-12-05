@@ -319,6 +319,10 @@ FactoryBot.define do
       if evaluator.email_attributes
         petition.emails << build(:petition_email, petition: petition, **evaluator.email_attributes)
       end
+
+      if Site.semantic_searching?
+        petition.embedding = Embedding.generate(petition.content)
+      end
     end
 
     after(:create) do |petition, evaluator|

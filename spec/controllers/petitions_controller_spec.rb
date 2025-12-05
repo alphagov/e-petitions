@@ -47,29 +47,26 @@ RSpec.describe PetitionsController, type: :controller do
   end
 
   describe "POST /petitions/new" do
-    let(:client) { double(Aws::BedrockRuntime::Client) }
+    let(:client) { double(OpenAI::Client) }
+    let(:resource) { double(OpenAI::Resources::Embeddings) }
     let(:input) { "Save the planet - Limit temperature rise at two degrees"}
     let(:embedding) { 1024.times.map { rand } }
 
-    let(:bedrock_request) do
+    let(:openai_request) do
       {
-        body: {
-          inputText: input,
-          dimensions: 1024,
-          embeddingTypes: ['float']
-        }.to_json,
-        content_type: 'application/json',
-        accept: 'application/json',
-        model_id: 'amazon.titan-embed-text-v2:0'
+        input: input,
+        model: "ai/mxbai-embed-large:latest",
+        dimensions: 1024,
+        encoding_format: 'float'
       }
     end
 
-    let(:bedrock_body) do
-      StringIO.new({ "embedding" => embedding }.to_json)
+    let(:openai_embedding) do
+      double(OpenAI::Models::Embedding, embedding: embedding)
     end
 
-    let(:bedrock_reponse) do
-      double(Aws::BedrockRuntime::Types::InvokeModelResponse, body: bedrock_body)
+    let(:openai_reponse) do
+      double(OpenAI::Models::CreateEmbeddingResponse, data: [openai_embedding])
     end
 
     let(:params) do
@@ -90,8 +87,9 @@ RSpec.describe PetitionsController, type: :controller do
 
     before do
       allow(Constituency).to receive(:find_by_postcode).with("SE34LL").and_return(constituency)
-      allow(Aws::BedrockRuntime::Client).to receive(:new).and_return(client)
-      allow(client).to receive(:invoke_model).with(bedrock_request).and_return(bedrock_reponse)
+      allow(OpenAI::Client).to receive(:new).and_return(client)
+      allow(client).to receive(:embeddings).and_return(resource)
+      allow(resource).to receive(:create).with(openai_request).and_return(openai_reponse)
     end
 
     context "valid post" do

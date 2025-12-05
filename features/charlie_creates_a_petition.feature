@@ -1,3 +1,4 @@
+@semantic_search
 Feature: As Charlie
   In order to have an issue discussed in parliament
   I want to be able to create a petition and verify my email address.

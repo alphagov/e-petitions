@@ -126,7 +126,7 @@ class PetitionCreator
   end
 
   def duplicates
-    Petition.current.by_most_popular.search(q: action, count: 3).presence
+    Petition.current.semantic_search(q: action, count: 3).presence
   end
 
   def united_kingdom?

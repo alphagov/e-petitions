@@ -117,6 +117,7 @@ module Browseable
 
     def initialize(klass, params = {})
       @klass, @params = klass, params
+      @semantic_searching = Site.semantic_searching?
     end
 
     def current_page
@@ -234,12 +235,16 @@ module Browseable
 
     private
 
+    def semantic_searching?
+      @semantic_searching
+    end
+
     def embedding_column?
       model.column_names.include?("embedding")
     end
 
     def generate_embedding
-      return unless Site.semantic_searching?
+      return unless semantic_searching?
       return unless query.present?
       return unless embedding_column?
 
@@ -274,6 +279,7 @@ module Browseable
         relation = filters.apply(relation)
         relation = relation.instance_exec(&klass.facet_definitions[scope])
         relation = relation.except(:order)
+        relation = relation.nearest_neighbours(embedding)
         relation.by_relevance(embedding)
       elsif search?
         relation = relation.basic_search(query)
@@ -311,6 +317,12 @@ module Browseable
 
     def filter(key, transformer)
       self.filter_definitions[key] = transformer
+    end
+
+    def semantic_search(params)
+      Site.with_semantic_searching do
+        Search.new(all, params)
+      end
     end
 
     def search(params)
