@@ -97,18 +97,14 @@ Then(/^I should see that my fellow constituents support "(.*?)"$/) do |petition_
   petition = Petition.find_by!(action: petition_action)
   all_signature_count = petition.signatures.validated.count
   local_signature_count = petition.signatures.validated.where(constituency_id: @my_constituency.external_id).count
-  within :css, '.local-petitions' do
-    within ".//*#{XPathHelpers.class_matching('petition-item')}[.//a[.='#{petition_action}']]" do
-      expect(page).to have_text("#{local_signature_count} #{'signature'.pluralize(local_signature_count)} from #{@my_constituency.name}")
-      expect(page).to have_text("#{all_signature_count} #{'signature'.pluralize(all_signature_count)} total")
-    end
+  within ".//*#{XPathHelpers.class_matching('petition-item')}[.//a[.='#{petition_action}']]" do
+    expect(page).to have_text("#{local_signature_count} #{'signature'.pluralize(local_signature_count)} from #{@my_constituency.name}")
+    expect(page).to have_text("#{all_signature_count} #{'signature'.pluralize(all_signature_count)} total")
   end
 end
 
 Then(/^I should not see that my fellow constituents support "(.*?)"$/) do |petition_action|
-  within :css, '.local-petitions' do |list|
-    expect(list).not_to have_selector(".//*#{XPathHelpers.class_matching('petition-item')}[a[.='#{petition_action}']]")
-  end
+  expect(page).not_to have_selector(".//*#{XPathHelpers.class_matching('petition-item')}[a[.='#{petition_action}']]")
 end
 
 Given(/^the constituency api is down$/) do
@@ -116,23 +112,19 @@ Given(/^the constituency api is down$/) do
 end
 
 Then(/^I should see an explanation that my constituency couldn’t be found$/) do
-  expect(page).not_to have_selector(:css, '.local-petitions .petition-item')
+  expect(page).not_to have_selector(:css, '.petition-item')
   expect(page).to have_content("We couldn’t find the postcode")
 end
 
 Then(/^I should see an explanation that there are no petitions popular in my constituency$/) do
-  within(:css, '.local-petitions') do
-    expect(page).not_to have_selector(:css, '.petition-item')
-    expect(page).to have_content('No petitions are popular in your constituency')
-  end
+  expect(page).not_to have_selector(:css, '.petition-item')
+  expect(page).to have_content('No open petitions have been signed in your constituency')
 end
 
 Then(/^the petitions I see should be ordered by my fellow constituents level of support$/) do
-  within :css, '.local-petitions' do
-    petitions = page.all(:css, '.petition-item')
-    my_constituents_signature_counts = petitions.map { |petition| Integer(petition.text.match(/(\d+) signatures? from/)[1]) }
-    expect(my_constituents_signature_counts).to eq my_constituents_signature_counts.sort.reverse
-  end
+  petitions = page.all(:css, '.petition-item')
+  my_constituents_signature_counts = petitions.map { |petition| Integer(petition.text.match(/(\d+) signatures? from/)[1]) }
+  expect(my_constituents_signature_counts).to eq my_constituents_signature_counts.sort.reverse
 end
 
 Then(/^I should see a link to the MP for my constituency$/) do

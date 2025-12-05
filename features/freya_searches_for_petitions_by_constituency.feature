@@ -22,7 +22,7 @@ Feature: Freya searches petitions by constituency
     Then I should be on the local petitions results page
     And the markup should be valid
     And I should see "Petitions in South Dorset" in the browser page title
-    And I should see "Popular open petitions in the constituency of South Dorset"
+    And I should see "Open petitions signed in the constituency of South Dorset"
     And I should see a link to view all local petitions
     And I should see a link to the MP for my constituency
     And I should see that my fellow constituents support "Save the monkeys"
@@ -33,7 +33,7 @@ Feature: Freya searches petitions by constituency
     When I click the view all local petitions
     Then I should be on the all local petitions results page
     And the markup should be valid
-    And I should see "Popular petitions in the constituency of South Dorset"
+    And I should see "All petitions signed in the constituency of South Dorset"
     And I should see a link to view open local petitions
     And I should see that my fellow constituents support "What about other primates?"
     And I should see that closed petitions are identified
@@ -103,6 +103,7 @@ Feature: Freya searches petitions by constituency
 
   Scenario: Downloading the JSON data for open local petitions when the mp has passed away
     Given a constituency "Sheffield, Brightside and Hillsborough" with MP "Harry Harpham" is found by postcode "S4 8AA"
+    And some constituents in "Sheffield, Brightside and Hillsborough" support "Build more quirky theme parks"
     And the MP has passed away
     When I am on the local petitions page
     And I search for petitions local to me in "S4 8AA"
@@ -113,6 +114,7 @@ Feature: Freya searches petitions by constituency
 
   Scenario: Downloading the JSON data for all local petitions when the mp has passed away
     Given a constituency "Sheffield, Brightside and Hillsborough" with MP "Harry Harpham" is found by postcode "S4 8AA"
+    And some constituents in "Sheffield, Brightside and Hillsborough" support "Build more quirky theme parks"
     And the MP has passed away
     When I am on the local petitions page
     And I search for petitions local to me in "S4 8AA"
@@ -126,6 +128,7 @@ Feature: Freya searches petitions by constituency
 
   Scenario: Downloading the CSV data for local petitions when the mp has passed away
     Given a constituency "Sheffield, Brightside and Hillsborough" with MP "Harry Harpham" is found by postcode "S4 8AA"
+    And some constituents in "Sheffield, Brightside and Hillsborough" support "Build more quirky theme parks"
     And the MP has passed away
     When I am on the local petitions page
     And I search for petitions local to me in "S4 8AA"
@@ -135,6 +138,7 @@ Feature: Freya searches petitions by constituency
 
   Scenario: Downloading the CSV data for local petitions when the mp has passed away
     Given a constituency "Sheffield, Brightside and Hillsborough" with MP "Harry Harpham" is found by postcode "S4 8AA"
+    And some constituents in "Sheffield, Brightside and Hillsborough" support "Build more quirky theme parks"
     And the MP has passed away
     When I am on the local petitions page
     And I search for petitions local to me in "S4 8AA"
