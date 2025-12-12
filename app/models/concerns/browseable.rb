@@ -279,7 +279,7 @@ module Browseable
         relation = filters.apply(relation)
         relation = relation.instance_exec(&klass.facet_definitions[scope])
         relation = relation.except(:order)
-        relation = relation.nearest_neighbours(embedding)
+        relation = relation.where(klass.semantic_query(query, embedding))
         relation.by_relevance(embedding)
       elsif search?
         relation = relation.basic_search(query)

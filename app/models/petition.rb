@@ -151,6 +151,23 @@ class Petition < ActiveRecord::Base
   end
 
   class << self
+    def semantic_query(query, embedding, distance: nil)
+      parameters = {
+        distance: distance || Site.semantic_search_threshold,
+        query: query,
+        embedding: type_caster.type_cast_for_database(:embedding, embedding)
+      }
+
+      sql = [
+        "(to_tsvector('english', petitions.action) @@ plainto_tsquery('english', :query))",
+        "(to_tsvector('english', petitions.background) @@ plainto_tsquery('english', :query))",
+        "(to_tsvector('english', petitions.additional_details) @@ plainto_tsquery('english', :query))",
+        "(petitions.embedding <=> :embedding < :distance)"
+      ]
+
+      [sql.join(" OR "), parameters]
+    end
+
     def by_most_popular
       reorder(signature_count: :desc, created_at: :desc)
     end
