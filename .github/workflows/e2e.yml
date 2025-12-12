@@ -86,7 +86,7 @@ jobs:
 
       - name: Save lighthouse reports
         if: ${{ inputs.save_reports && failure() }}
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v6
         with:
           name: lighthouse-reports-public
           path: ${{ github.workspace }}/tmp/lighthouse/*
@@ -95,7 +95,7 @@ jobs:
 
       - name: Save rails logs
         if: ${{ inputs.save_logs && failure() }}
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v6
         with:
           name: rails-logs-public
           path: ${{ github.workspace }}/log/production.log

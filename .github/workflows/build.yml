@@ -79,7 +79,7 @@ jobs:
 
       - name: Save screenshots
         if: ${{ inputs.save_screenshots && failure() }}
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v6
         with:
           name: selenium-screenshots-public
           path: ${{ github.workspace }}/tmp/capybara/*.png
@@ -88,7 +88,7 @@ jobs:
 
       - name: Save rails logs
         if: ${{ inputs.save_logs && failure() }}
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v6
         with:
           name: rails-logs-public
           path: ${{ github.workspace }}/log/test.log
