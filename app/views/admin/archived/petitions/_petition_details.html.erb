@@ -35,6 +35,11 @@
     <% end %>
   <% end %>
 
+  <% if @petition.opened_at? %>
+    <dt>Opened</dt>
+    <dd><%= date_format_admin(@petition.opened_at) %></dd>
+  <% end %>
+
   <% if @petition.removed? %>
     <dt>Removed</dt>
     <dd><%= date_time_format(@petition.removed_at) %></dd>
