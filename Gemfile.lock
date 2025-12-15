@@ -337,6 +337,7 @@ GEM
     openai (0.39.0)
       base64
       connection_pool
+    openssl (3.3.2)
     orm_adapter (0.5.0)
     pg (1.6.2)
     pg (1.6.2-aarch64-linux)
@@ -567,6 +568,7 @@ DEPENDENCIES
   omniauth-rails_csrf_protection
   omniauth-saml
   openai
+  openssl
   pg
   pry
   puma
@@ -723,6 +725,7 @@ CHECKSUMS
   omniauth-rails_csrf_protection (1.0.2) sha256=1170fd672aff092b9b7ebebc1453559f073ed001e3ce62a1df616e32f8dc5fe0
   omniauth-saml (2.2.4) sha256=5acc45aee728ecc5c8f9f02b56c424cb359b62d9a25fb8039f15432c1a61f6eb
   openai (0.39.0) sha256=0072e8d28d2f1448546e093dfbaf0a74f0705f13add140e757ec1b6df30b18ea
+  openssl (3.3.2) sha256=7f4e01215dc9c4be1fca71d692406be3e6340b39c1f71a47fea9c497decd0f6c
   orm_adapter (0.5.0) sha256=aa5d0be5d540cbb46d3a93e88061f4ece6a25f6e97d6a47122beb84fe595e9b9
   pg (1.6.2) sha256=58614afd405cc9c2c9e15bffe8432e0d6cfc58b722344ad4a47c73a85189c875
   pg (1.6.2-aarch64-linux) sha256=0503c6be5b0ca5ca3aaf91f2ed638f90843313cb81e8e7d7b60ad4bb62c3d131
