@@ -39,6 +39,7 @@ gem 'nokogiri'
 gem 'omniauth'
 gem 'omniauth-rails_csrf_protection'
 gem 'omniauth-saml'
+gem 'openssl'
 
 gem 'aws-sdk-bedrockruntime'
 gem 'aws-sdk-codedeploy'
