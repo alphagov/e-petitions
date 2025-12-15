@@ -61,25 +61,29 @@
 <% end %>
 
 <% if @petition.in_todo_list? %>
-  <dt>Created on</dt>
+  <dt>Created</dt>
   <dd><%= date_time_format(@petition.created_at) %></dd>
 
   <% if @petition.moderation_threshold_reached_at? %>
-    <dt>Sponsored on</dt>
+    <dt>Sponsored</dt>
     <dd><%= date_time_format(@petition.moderation_threshold_reached_at) %></dd>
   <% end %>
 <% else %>
+  <% if @petition.opened_at? %>
+    <dt>Opened</dt>
+    <dd><%= date_format_admin(@petition.opened_at) %></dd>
+  <% end %>
   <% if @petition.open? %>
     <dt>Deadline</dt>
     <dd><%= date_format_admin(@petition.deadline) %></dd>
   <% elsif @petition.rejection? %>
-    <dt>Rejected on</dt>
+    <dt>Rejected</dt>
     <dd><%= date_format_admin(@petition.rejected_at) %></dd>
   <% elsif @petition.stopped? %>
-    <dt>Stopped on</dt>
+    <dt>Stopped</dt>
     <dd><%= date_format_admin(@petition.stopped_at) %></dd>
   <% elsif @petition.closed? %>
-    <dt>Closed on</dt>
+    <dt>Closed</dt>
     <dd><%= date_format_admin(@petition.closed_at) %></dd>
   <% end %>
 
