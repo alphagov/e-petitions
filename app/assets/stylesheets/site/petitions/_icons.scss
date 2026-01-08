@@ -17,8 +17,6 @@
 // Icons
 // .icon .icon-share-facebook
 // .icon .icon-share-email
-// .icon .icon-share-twitter
-// .icon .icon-share-x
 // .icon .icon-share-whatsapp
 // .icon .icon-email
 // .icon .icon-warning-white
@@ -153,26 +151,6 @@
   @include device-pixel-ratio() {
     background-image: image-url("icons/icon_share-email-2x.png");
     background-size: 18px 13px;
-  }
-}
-.icon-share-twitter {
-  width: 16px;
-  height: 13px;
-  background-image: image-url("icons/icon_share-twitter.png");
-
-  @include device-pixel-ratio() {
-    background-image: image-url("icons/icon_share-twitter-2x.png");
-    background-size: 16px 13px;
-  }
-}
-.icon-share-x {
-  width: 16px;
-  height: 13px;
-  background-image: image-url("icons/icon_share-x.png");
-
-  @include device-pixel-ratio() {
-    background-image: image-url("icons/icon_share-x-2x.png");
-    background-size: 16px 13px;
   }
 }
 .icon-share-whatsapp {
