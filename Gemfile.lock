@@ -334,8 +334,9 @@ GEM
     omniauth-saml (2.2.4)
       omniauth (~> 2.1)
       ruby-saml (~> 1.18)
-    openai (0.42.0)
+    openai (0.43.0)
       base64
+      cgi
       connection_pool
     openssl (3.3.2)
     orm_adapter (0.5.0)
@@ -725,7 +726,7 @@ CHECKSUMS
   omniauth (2.1.4) sha256=42a05b0496f0d22e1dd85d42aaf602f064e36bb47a6826a27ab55e5ba608763c
   omniauth-rails_csrf_protection (1.0.2) sha256=1170fd672aff092b9b7ebebc1453559f073ed001e3ce62a1df616e32f8dc5fe0
   omniauth-saml (2.2.4) sha256=5acc45aee728ecc5c8f9f02b56c424cb359b62d9a25fb8039f15432c1a61f6eb
-  openai (0.42.0) sha256=3abeb5538f74b688f1f13f75fe910139c3167a7610ae332ed79d8a241b24261c
+  openai (0.43.0) sha256=55b90cdfe08b2f309e9321f54ddd51727657ab81f6c911665847a7407ac2cf06
   openssl (3.3.2) sha256=7f4e01215dc9c4be1fca71d692406be3e6340b39c1f71a47fea9c497decd0f6c
   orm_adapter (0.5.0) sha256=aa5d0be5d540cbb46d3a93e88061f4ece6a25f6e97d6a47122beb84fe595e9b9
   pg (1.6.3) sha256=1388d0563e13d2758c1089e35e973a3249e955c659592d10e5b77c468f628a99
