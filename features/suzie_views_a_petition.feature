@@ -91,7 +91,6 @@ Feature: Suzie views a petition
     And I should not see "This petition is closed"
     And I can share it via Email
     And I can share it via Facebook
-    And I can share it via X
     And I can share it via Whatsapp
 
   Scenario: Suzie views a petition containing urls, email addresses and html tags

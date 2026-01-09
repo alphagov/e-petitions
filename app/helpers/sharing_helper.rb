@@ -15,14 +15,6 @@ module SharingHelper
     "mailto:?#{share_via_email_params(petition)}"
   end
 
-  def share_via_x(petition, options = {})
-    link_to(share_button(:x), share_via_x_url(petition), options)
-  end
-
-  def share_via_x_url(petition)
-    "https://x.com/intent/post?#{share_via_x_params(petition)}"
-  end
-
   def share_via_whatsapp(petition, options = {})
     link_to(share_button(:whatsapp), share_via_whatsapp_url(petition), options)
   end
@@ -39,10 +31,6 @@ module SharingHelper
 
   def share_via_email_params(petition)
     share_params(subject: share_title(petition), body: petition_url(petition))
-  end
-
-  def share_via_x_params(petition)
-    share_params(text: share_title(petition), url: petition_url(petition))
   end
 
   def share_via_whatsapp_params(petition)
