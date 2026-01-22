@@ -3,7 +3,7 @@
   "private": true,
   "devDependencies": {
     "jasmine-browser-runner": "^3.0.0",
-    "jasmine-core": "^5.0.0",
+    "jasmine-core": "^6.0.1",
     "lighthouse": "^13.0.0",
     "mocha": "^11.0.1",
     "start-server-and-test": "^2.0.9",
