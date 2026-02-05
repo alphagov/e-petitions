@@ -35,6 +35,25 @@
       "note": ""
     },
     {
+      "warning_type": "Unmaintained Dependency",
+      "warning_code": 123,
+      "fingerprint": "715ee6d743a8af33c7b930d728708ce19c765fb40e2ad9d2b974db04d92dc7d1",
+      "check_name": "EOLRuby",
+      "message": "Support for Ruby 3.2.9 ends on 2026-03-31",
+      "file": ".ruby-version",
+      "line": 1,
+      "link": "https://brakemanscanner.org/docs/warning_types/unmaintained_dependency/",
+      "code": null,
+      "render_path": null,
+      "location": null,
+      "user_input": null,
+      "confidence": "Weak",
+      "cwe_id": [
+        1104
+      ],
+      "note": ""
+    },
+    {
       "warning_type": "SSL Verification Bypass",
       "warning_code": 71,
       "fingerprint": "83faaaee2d372a0a73dc703bf46452d519d79dbf3b069a5007f71392ec7d4a3e",
@@ -151,7 +170,7 @@
       "check_name": "Redirect",
       "message": "Possible unprotected redirect",
       "file": "app/controllers/pages_controller.rb",
-      "line": 17,
+      "line": 16,
       "link": "https://brakemanscanner.org/docs/warning_types/redirect/",
       "code": "redirect_to(Page.find_by!(:slug => params[:slug], :enabled => true).redirect_url, :allow_other_host => true)",
       "render_path": null,
@@ -168,6 +187,6 @@
       "note": ""
     }
   ],
-  "updated": "2025-04-16 18:27:47 +0000",
+  "updated": "2026-02-05 16:12:41 +0000",
   "brakeman_version": "6.2.2"
 }
