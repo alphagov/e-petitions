@@ -202,7 +202,7 @@ GEM
       railties (>= 6.1.0)
     faker (3.6.0)
       i18n (>= 1.8.11, < 2)
-    faraday (1.10.4)
+    faraday (1.10.5)
       faraday-em_http (~> 1.0)
       faraday-em_synchrony (~> 1.0)
       faraday-excon (~> 1.1)
@@ -215,11 +215,11 @@ GEM
       faraday-retry (~> 1.0)
       ruby2_keywords (>= 0.0.4)
     faraday-em_http (1.0.0)
-    faraday-em_synchrony (1.0.0)
+    faraday-em_synchrony (1.0.1)
     faraday-excon (1.1.0)
     faraday-httpclient (1.0.1)
-    faraday-multipart (1.0.4)
-      multipart-post (~> 2)
+    faraday-multipart (1.2.0)
+      multipart-post (~> 2.0)
     faraday-net_http (1.0.2)
     faraday-net_http_persistent (1.2.0)
     faraday-patron (1.0.0)
@@ -659,12 +659,12 @@ CHECKSUMS
   factory_bot (6.5.5) sha256=ce59295daee1b4704dab8a2fee6816f513d467c6aa3bc587860767d74a66efbe
   factory_bot_rails (6.5.1) sha256=d3cc4851eae4dea8a665ec4a4516895045e710554d2b5ac9e68b94d351bc6d68
   faker (3.6.0) sha256=4ce80bf91c8d09bbfff4c5596690bf862d60eac420f86737ca8ce12a54dc464a
-  faraday (1.10.4) sha256=a384c541cde688d68bf85055723aecb4100c3fa41b53beb2011b245960ab2f19
+  faraday (1.10.5) sha256=b144f1d2b045652fa820b5f532723e1643cc28b93dae911d784e5c5f88e8f6ed
   faraday-em_http (1.0.0) sha256=7a3d4c7079789121054f57e08cd4ef7e40ad1549b63101f38c7093a9d6c59689
-  faraday-em_synchrony (1.0.0) sha256=460dad1c30cc692d6e77d4c391ccadb4eca4854b315632cd7e560f74275cf9ed
+  faraday-em_synchrony (1.0.1) sha256=bf3ce45dcf543088d319ab051f80985ea6d294930635b7a0b966563179f81750
   faraday-excon (1.1.0) sha256=b055c842376734d7f74350fe8611542ae2000c5387348d9ba9708109d6e40940
   faraday-httpclient (1.0.1) sha256=4c8ff1f0973ff835be8d043ef16aaf54f47f25b7578f6d916deee8399a04d33b
-  faraday-multipart (1.0.4) sha256=9012021ab57790f7d712f590b48d5f948b19b43cfa11ca83e6459f06090b0725
+  faraday-multipart (1.2.0) sha256=7d89a949693714176f612323ca13746a2ded204031a6ba528adee788694ef757
   faraday-net_http (1.0.2) sha256=63992efea42c925a20818cf3c0830947948541fdcf345842755510d266e4c682
   faraday-net_http_persistent (1.2.0) sha256=0b0cbc8f03dab943c3e1cc58d8b7beb142d9df068b39c718cd83e39260348335
   faraday-patron (1.0.0) sha256=dc2cd7b340bb3cc8e36bcb9e6e7eff43d134b6d526d5f3429c7a7680ddd38fa7
