@@ -51,7 +51,7 @@ module Archived
     before_save :update_debate_state, if: :scheduled_debate_date_changed?
 
     extend Searchable(:action, :background, :additional_details)
-    include Browseable, NearestNeighbours, Taggable, Departments, Topics, Anonymization
+    include Browseable, NearestNeighbours, HybridSearching, Taggable, Departments, Topics, Anonymization
 
     self.default_page_size = 25
 
@@ -95,23 +95,6 @@ module Archived
     alias_attribute :open_at, :opened_at
 
     class << self
-      def semantic_query(query, embedding, distance: nil)
-        parameters = {
-          distance: distance || Site.semantic_search_threshold,
-          query: query,
-          embedding: type_caster.type_cast_for_database(:embedding, embedding)
-        }
-
-        sql = [
-          "(to_tsvector('english', archived_petitions.action) @@ plainto_tsquery('english', :query))",
-          "(to_tsvector('english', archived_petitions.background) @@ plainto_tsquery('english', :query))",
-          "(to_tsvector('english', archived_petitions.additional_details) @@ plainto_tsquery('english', :query))",
-          "(archived_petitions.embedding <=> :embedding < :distance)"
-        ]
-
-        [sql.join(" OR "), parameters]
-      end
-
       def for_state(state)
         where(state: state)
       end

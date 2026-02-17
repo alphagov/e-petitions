@@ -168,10 +168,6 @@ module Browseable
       @query ||= params[:q].to_s
     end
 
-    def embedding
-      @embedding ||= generate_embedding
-    end
-
     def url_safe_query
       Rack::Utils.escape(query)
     end
@@ -209,7 +205,7 @@ module Browseable
     end
 
     def semantic_search?
-      embedding.present?
+      search? && semantic_searching?
     end
 
     def in_batches(&block)
@@ -239,18 +235,6 @@ module Browseable
       @semantic_searching
     end
 
-    def embedding_column?
-      model.column_names.include?("embedding")
-    end
-
-    def generate_embedding
-      return unless semantic_searching?
-      return unless query.present?
-      return unless embedding_column?
-
-      Embedding.generate(query)
-    end
-
     def new_params(page)
       page = page.clamp(1, total_pages)
       page = nil if page == 1
@@ -276,21 +260,15 @@ module Browseable
       relation = klass
 
       if semantic_search?
-        relation = filters.apply(relation)
-        relation = relation.instance_exec(&klass.facet_definitions[scope])
-        relation = relation.except(:order)
-        relation = relation.where(klass.semantic_query(query, embedding))
-        relation.by_relevance(embedding)
+        relation = relation.hybrid_search(query)
       elsif search?
         relation = relation.basic_search(query)
-        relation = relation.except(:select).select(star)
-        relation = relation.except(:order)
-        relation = filters.apply(relation)
-        relation.instance_exec(&klass.facet_definitions[scope])
-      else
-        relation = filters.apply(relation)
-        relation.instance_exec(&klass.facet_definitions[scope])
       end
+
+      relation = relation.except(:select).select(star)
+      relation = relation.except(:order)
+      relation = filters.apply(relation)
+      relation.instance_exec(&klass.facet_definitions[scope])
     end
 
     def star
@@ -317,12 +295,6 @@ module Browseable
 
     def filter(key, transformer)
       self.filter_definitions[key] = transformer
-    end
-
-    def semantic_search(params)
-      Site.with_semantic_searching do
-        Search.new(all, params)
-      end
     end
 
     def search(params)

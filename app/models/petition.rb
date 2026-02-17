@@ -47,7 +47,7 @@ class Petition < ActiveRecord::Base
   after_create :update_last_petition_created_at
 
   extend Searchable(:action, :background, :additional_details)
-  include Browseable, NearestNeighbours, Taggable, Departments, Topics, Anonymization
+  include Browseable, NearestNeighbours, HybridSearching, Taggable, Departments, Topics, Anonymization
 
   self.default_page_size = 25
 
@@ -151,21 +151,8 @@ class Petition < ActiveRecord::Base
   end
 
   class << self
-    def semantic_query(query, embedding, distance: nil)
-      parameters = {
-        distance: distance || Site.semantic_search_threshold,
-        query: query,
-        embedding: type_caster.type_cast_for_database(:embedding, embedding)
-      }
-
-      sql = [
-        "(to_tsvector('english', petitions.action) @@ plainto_tsquery('english', :query))",
-        "(to_tsvector('english', petitions.background) @@ plainto_tsquery('english', :query))",
-        "(to_tsvector('english', petitions.additional_details) @@ plainto_tsquery('english', :query))",
-        "(petitions.embedding <=> :embedding < :distance)"
-      ]
-
-      [sql.join(" OR "), parameters]
+    def duplicates(action, limit: 3)
+      semantic_search(action).limit(limit).presence
     end
 
     def by_most_popular

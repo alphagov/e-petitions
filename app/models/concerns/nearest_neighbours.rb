@@ -2,17 +2,23 @@ module NearestNeighbours
   extend ActiveSupport::Concern
 
   module ClassMethods
-    def relevance(embedding, column)
-      arel_table[column].nearest(embedding)
-    end
-
     def nearest_neighbours(embedding, column: :embedding, distance: nil)
       distance ||= Site.semantic_search_threshold
-      where(relevance(embedding, column).lt(distance))
+      relevance = arel_table[column].nearest(embedding)
+
+      where(relevance.lt(distance))
     end
 
     def by_relevance(embedding, column: :embedding)
-      reorder(relevance(embedding, column))
+      reorder(arel_table[column].nearest(embedding))
+    end
+
+    def semantic_search(query, column: :embedding, distance: nil)
+      distance ||= Site.semantic_search_threshold
+      embedding = Embedding.generate(query)
+      relevance = arel_table[column].nearest(embedding)
+
+      where(relevance.lt(distance)).reorder(relevance)
     end
   end
 

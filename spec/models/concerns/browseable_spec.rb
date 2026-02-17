@@ -513,6 +513,11 @@ RSpec.describe Browseable, type: :model do
 
       context "when there is not a search term" do
         before do
+          expect(arel_table).to receive(:[]).with("*").and_return("*")
+          expect(klass).to receive(:except).with(:select).and_return(klass)
+          expect(klass).to receive(:arel_table).and_return(arel_table)
+          expect(klass).to receive(:select).with("*").and_return(klass)
+          expect(klass).to receive(:except).with(:order).and_return(klass)
           expect(klass).to receive(:paginate).with(page: 3, per_page: 50).and_return(results)
         end
 
