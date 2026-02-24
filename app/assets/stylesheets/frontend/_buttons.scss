@@ -89,6 +89,42 @@ button:not(:disabled), .button:not(:disabled) {
   @extend %button-link;
 }
 
+.button-back {
+  @extend %button;
+  @extend %link-decoration;
+  @extend %button-link;
+
+  @include responsive-margin(7, bottom);
+
+  display: inline-block;
+  position: relative;
+  padding-left: 15px;
+
+  &::before {
+    content: "";
+    border-left: 2px solid $interactive-colour;
+    border-bottom: 2px solid $interactive-colour;
+    position: absolute;
+    top: 7px;
+    left:3px;
+    width: 11px;
+    height: 11px;
+    transform: rotate(45deg);
+  }
+
+  &:hover:not(:focus) {
+    &::before {
+      border-color: $interactive-hover-colour;
+    }
+  }
+
+  &:focus {
+    &::before {
+      border-color: $focus-colour;
+    }
+  }
+}
+
 .button-toggle {
   @extend %button;
   @extend %link-decoration;

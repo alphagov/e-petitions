@@ -12,6 +12,8 @@
 
 <div class="grid-row margin-top-7">
   <div class="grid-column-two-thirds-from-laptop">
+    <%= form.button "Back", name: "move_back", value: "uk_citizenship", class: "button-back" %>
+
     <%= form_row for: [petition, :action] do %>
       <h1>
         <span class="heading-secondary">Start a petition</span>
@@ -38,7 +40,6 @@
 
     <div class="button-group">
       <%= form.button "Continue", name: "move_next", class: "button" %>
-      <%= form.button "Back", name: "move_back", value: "uk_citizenship", class: "button button-inverse" %>
     </div>
   </div>
 </div>
