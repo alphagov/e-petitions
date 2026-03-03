@@ -13,7 +13,17 @@ default: &defaults
 
   # Actions that should not be monitored by AppSignal
   ignore_actions:
-    - Admin::UserSessionsController#status
+    - Admin::LocksController#create
+    - Admin::LocksController#destroy
+    - Admin::LocksController#show
+    - Admin::SessionsController#status
+    - DeliverDebateOutcomeEmailJob#perform
+    - DeliverDebateScheduledEmailJob#perform
+    - DeliverPetitionEmailJob#perform
+    - DeliverPetitionMailshotJob#perform
+    - DeliverThresholdResponseEmailJob#perform
+    - EmailConfirmationForSignerEmailJob#perform
+    - EmailDuplicateSignaturesEmailJob#perform
     - PetitionsController#count
     - PingController#ping
 
