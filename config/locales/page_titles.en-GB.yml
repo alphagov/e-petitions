@@ -10,7 +10,7 @@ en-GB:
     local_petitions:
       index:
         zero: "Local to you - Petitions"
-        one: "Petitions in %{postcode}"
+        one: "Constituencies in %{postcode}"
       show: "Petitions in %{constituency}"
     petitions:
       index: "View all petitions - Petitions"

@@ -6,7 +6,7 @@ RSpec.describe LocalPetitionsController, type: :controller do
   describe "GET /petitions/local" do
     context "when the postcode is valid" do
       before do
-        expect(Constituency).to receive(:find_by_postcode).with("N11TY").and_return(constituency)
+        expect(Constituency).to receive(:find_all_by_postcode).with("N11TY").and_return([constituency])
 
         get :index, params: { postcode: "n1 1ty" }
       end
@@ -23,7 +23,7 @@ RSpec.describe LocalPetitionsController, type: :controller do
     context "when the postcode is valid but parliament is dissolved" do
       before do
         expect(Parliament).to receive(:dissolved?).and_return(true)
-        expect(Constituency).to receive(:find_by_postcode).with("N11TY").and_return(constituency)
+        expect(Constituency).to receive(:find_all_by_postcode).with("N11TY").and_return([constituency])
 
         get :index, params: { postcode: "n1 1ty" }
       end
@@ -35,7 +35,7 @@ RSpec.describe LocalPetitionsController, type: :controller do
 
     context "when the postcode is invalid" do
       before do
-        expect(Constituency).to receive(:find_by_postcode).with("SW1A1AA").and_return(nil)
+        expect(Constituency).to receive(:find_all_by_postcode).with("SW1A1AA").and_return([])
         get :index, params: { postcode: "sw1a 1aa" }
       end
 
@@ -62,7 +62,7 @@ RSpec.describe LocalPetitionsController, type: :controller do
 
     context "when the postcode is blank" do
       before do
-        expect(Constituency).not_to receive(:find_by_postcode)
+        expect(Constituency).not_to receive(:find_all_by_postcode)
         get :index, params: { postcode: "" }
       end
 
@@ -77,7 +77,7 @@ RSpec.describe LocalPetitionsController, type: :controller do
 
     context "when the postcode is not set" do
       before do
-        expect(Constituency).not_to receive(:find_by_postcode)
+        expect(Constituency).not_to receive(:find_all_by_postcode)
         get :index
       end
 

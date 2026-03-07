@@ -6,6 +6,8 @@ Feature: Freya searches petitions by constituency
   Background:
     Given a constituency "South Dorset" with MP "Emma Pee MP" is found by postcode "BH20 6HH"
     And a constituency "Rochester and Strood" is found by postcode "ME2 2NU"
+    And a constituency "Belfast East" with MP "Rt Hon Gavin Robinson MP" is found by postcode "BT6 9GN"
+    And a constituency "Belfast South and Mid Down" with MP "Claire Hanna MP" is found by postcode "BT6 9GN"
     And an open petition "Save the monkeys" with some signatures
     And an open petition "Restore vintage diggers" with some signatures
     And an open petition "Build more quirky theme parks" with some signatures
@@ -38,6 +40,25 @@ Feature: Freya searches petitions by constituency
     And I should see that my fellow constituents support "What about other primates?"
     And I should see that closed petitions are identified
     And the petitions I see should be ordered by my fellow constituents level of support
+
+  Scenario: Searching for local petitions when there is more than one constituency for a postcode
+    Given I am on the local petitions page
+    When I search for petitions local to me in "BT6 9GN"
+    Then I should be on the local petitions page
+    And the markup should be valid
+    And I should see "Constituencies in BT6 9GN" in the browser page title
+    And I should see "We found more than one constituency for the postcode BT6 9GN"
+    And I should see a link "Belfast East" to "/petitions/local/belfast-east"
+    And I should see "Rt Hon Gavin Robinson MP"
+    And I should see a link "Belfast South and Mid Down" to "/petitions/local/belfast-south-and-mid-down"
+    And I should see "Claire Hanna MP"
+    When I click the constituency link for "Belfast East"
+    Then I should be on the local petitions results page
+    And the markup should be valid
+    And I should see "Petitions in Belfast East" in the browser page title
+    And I should see "Open petitions signed in the constituency of Belfast East"
+    And I should see a link to view all local petitions
+    And I should see a link to the MP for my constituency
 
   Scenario: Downloading the JSON data for open local petitions
     Given I am on the local petitions page
