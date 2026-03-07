@@ -1,0 +1,28 @@
+<Constituencies>
+  <Constituency>
+    <Constituency_Id>4421</Constituency_Id>
+    <Name>Belfast East</Name>
+    <ONSCode>N05000001</ONSCode>
+    <RepresentingMembers>
+      <RepresentingMember>
+        <Member_Id>4360</Member_Id>
+        <Member>Rt Hon Gavin Robinson MP</Member>
+        <StartDate>2024-07-04T00:00:00</StartDate>
+        <EndDate>2026-03-06T00:00:00</EndDate>
+      </RepresentingMember>
+    </RepresentingMembers>
+  </Constituency>
+  <Constituency>
+    <Constituency_Id>4423</Constituency_Id>
+    <Name>Belfast South and Mid Down</Name>
+    <ONSCode>N05000003</ONSCode>
+    <RepresentingMembers>
+      <RepresentingMember>
+        <Member_Id>4827</Member_Id>
+        <Member>Claire Hanna MP</Member>
+        <StartDate>2024-07-04T00:00:00</StartDate>
+        <EndDate>2026-03-06T00:00:00</EndDate>
+      </RepresentingMember>
+    </RepresentingMembers>
+  </Constituency>
+</Constituencies>

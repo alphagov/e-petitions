@@ -44,14 +44,17 @@ class Constituency < ActiveRecord::Base
     end
 
     def find_by_postcode(postcode)
-      return if Site.disable_constituency_api?
-      return unless valid_postcode?(postcode)
+      find_all_by_postcode(postcode).first
+    end
 
-      results = query.fetch(postcode)
+    def find_all_by_postcode(postcode)
+      return [] if Site.disable_constituency_api?
+      return [] unless valid_postcode?(postcode)
 
-      if attributes = results.first
+      query.fetch(postcode).map do |attributes|
         constituency = find_or_initialize_by(external_id: attributes[:external_id])
         constituency.attributes = attributes
+
         if constituency.changed? || constituency.new_record?
           constituency.save!
         end
