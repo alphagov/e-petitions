@@ -53,6 +53,7 @@ RSpec.describe "API request to show a petition", type: :request, show_exceptions
           "committee_note" => a_string_matching(petition.committee_note),
           "state" => a_string_matching(petition.state),
           "signature_count" => eq_to(petition.signature_count),
+          "closing_date" => a_string_matching(%r[\A\d{4}-\d{2}-\d{2}]),
           "opened_at" => a_string_matching(%r[\A\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z\z]),
           "created_at" => a_string_matching(%r[\A\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z\z]),
           "updated_at" => a_string_matching(%r[\A\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z\z])

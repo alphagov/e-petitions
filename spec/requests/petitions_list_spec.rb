@@ -141,29 +141,35 @@ RSpec.describe "API request to list petitions", type: :request, show_exceptions:
       )
     end
 
-    it "includes the creator_name field for open petitions" do
-      petition = FactoryBot.create :open_petition, creator_name: "Bob Jones"
+    it "includes the creator_name and closing_date field for open petitions" do
+      petition = FactoryBot.create :open_petition, creator_name: "Bob Jones", open_at: "2020-01-01T12:00:00Z"
 
       get "/petitions.json"
       expect(response).to be_successful
 
       expect(data).to match(
         a_collection_containing_exactly(
-          a_hash_including("attributes" => a_hash_including("creator_name" => "Bob Jones"))
+          a_hash_including("attributes" => a_hash_including("creator_name" => "Bob Jones", "closing_date" => "2020-07-01"))
         )
       )
     end
 
     (Petition::VISIBLE_STATES - Array(Petition::OPEN_STATE)).each do |state_name|
-      it "does not include the creator_name field for #{state_name} petitions" do
+      it "does not include the creator_name or closing_date field for #{state_name} petitions" do
         petition = FactoryBot.create "#{state_name}_petition".to_sym
 
-      get "/petitions.json"
-      expect(response).to be_successful
+        get "/petitions.json"
+        expect(response).to be_successful
 
         expect(data).not_to match(
           a_collection_containing_exactly(
             a_hash_including("attributes" => a_hash_including("creator_name" => "Bob Jones"))
+          )
+        )
+
+        expect(data).not_to match(
+          a_collection_containing_exactly(
+            a_hash_including("attributes" => a_hash_including("closing_date" => "2020-07-01"))
           )
         )
       end

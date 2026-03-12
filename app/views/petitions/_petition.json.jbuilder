@@ -12,6 +12,7 @@ json.attributes do
   json.committee_note petition.committee_note
   json.state petition.state
   json.signature_count petition.signature_count
+  json.closing_date api_date_format(petition.deadline.to_date) if petition.open?
 
   json.created_at api_date_format(petition.created_at)
   json.updated_at api_date_format(petition.updated_at)
