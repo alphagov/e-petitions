@@ -1,15 +1,15 @@
 require 'csv'
 
 class Archived::PetitionsController < PublicController
-  before_action :redirect_to_valid_state, only: [:index, :search]
-  before_action :redirect_to_show_page_if_petition_exists, only: [:index, :search]
+  before_action :redirect_to_valid_state, only: [:index]
+  before_action :redirect_to_show_page_if_petition_exists, only: [:index]
   before_action :fetch_parliament, only: [:index]
   before_action :fetch_petitions, only: [:index]
   before_action :redirect_to_last_page_if_out_of_bounds, only: [:index], unless: :json_request?
   before_action :fetch_petition, only: [:show]
 
-  before_action :set_cors_headers, only: [:index, :search, :show], if: :json_request?
-  after_action :set_content_disposition, if: :csv_request?, only: [:index, :search]
+  before_action :set_cors_headers, only: [:index, :show], if: :json_request?
+  after_action :set_content_disposition, if: :csv_request?, only: [:index]
 
   helper_method :archived_petition_facets
 
@@ -18,16 +18,6 @@ class Archived::PetitionsController < PublicController
       format.html
       format.json
       format.csv
-    end
-  end
-
-  def search
-    @petitions = Archived::PetitionSearch.new(params)
-
-    respond_to do |format|
-      format.html
-      format.json
-      format.csv { render :index }
     end
   end
 
