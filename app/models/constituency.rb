@@ -48,6 +48,7 @@ class Constituency < ActiveRecord::Base
     end
 
     def find_all_by_postcode(postcode)
+      return [] if postcode.blank?
       return [] if Site.disable_constituency_api?
       return [] unless valid_postcode?(postcode)
 

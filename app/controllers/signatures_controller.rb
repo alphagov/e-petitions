@@ -1,6 +1,7 @@
 class SignaturesController < PublicController
   before_action :retrieve_petition, only: [:new, :create, :thank_you]
   before_action :retrieve_signature, only: [:verify, :unsubscribe, :signed]
+  before_action :retrieve_constituencies, only: [:signed]
 
   # Verify petition is in a valid state before processing signature
   before_action :redirect_to_petition_page_if_rejected, only: [:new, :create, :thank_you, :verify, :signed]
@@ -144,6 +145,10 @@ class SignaturesController < PublicController
     unless @petition.visible?
       raise ActiveRecord::RecordNotFound, "Unable to find Signature with id: #{signature_id}"
     end
+  end
+
+  def retrieve_constituencies
+    @constituencies = Constituency.find_all_by_postcode(@signature.postcode)
   end
 
   def build_signature
