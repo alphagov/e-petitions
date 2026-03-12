@@ -65,10 +65,32 @@
       <% if @petitions.empty? %>
         <hr>
 
-        <p>No petitions could be found matching your search filters.</p>
+        <p>
+          There are no results for <q><%= @petitions.query %></q>.
+        </p>
+
+        <h3>
+          Suggestions
+        </h3>
+
+        <ul class="bulleted-list">
+          <li>
+            Make sure that all words are spelled correctly.
+          </li>
+          <li>
+            Search again with different keywords.
+          </li>
+          <li>
+            Search again with more general keywords.
+          </li>
+        </ul>
 
         <p>
-          <%= link_to "Search archived petitions from previous parliaments", archived_petitions_path(@petitions.current_params) %>
+          <% if @petitions.scope == :all %>
+            You can also <%= link_to "try searching petitions from previous parliaments", archived_petitions_path(@petitions.current_params) %>
+          <% else %>
+            You can also <%= link_to "try searching all petitions", petitions_path(@petitions.current_params.merge(state: "all")) %>
+          <% end %>
         </p>
       <% else %>
         <% if petition_list_header? %>
