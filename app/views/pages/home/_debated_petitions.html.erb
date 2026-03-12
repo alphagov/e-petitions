@@ -21,41 +21,51 @@
 
           <% if petition.debate_outcome.video_url.present? %>
             <p>
-              Watch the debate
-              <span class="visually-hidden">for the ‘<%= petition.action %>’ petition</span>
-              on <%= link_to video_service(petition.debate_outcome.video_url), petition.debate_outcome.video_url, rel: "external" %>
+              <%= link_to video_service(petition.debate_outcome.video_url), rel: "external" do %>
+                Watch the debate
+                <span class="visually-hidden">for the ‘<%= petition.action %>’ petition</span>
+                on <%= video_service(petition.debate_outcome.video_url) %>
+              <% end %>
             </p>
           <% end %>
 
           <% if petition.debate_outcome.transcript_url.present? %>
             <p>
-              Read the transcript
-              <span class="visually-hidden">for the ‘<%= petition.action %>’ petition</span>
-              at <%= link_to "parliament.uk", petition.debate_outcome.transcript_url, rel: "external" %>
+              <%= link_to petition.debate_outcome.transcript_url, rel: "external" do %>
+                Read the transcript
+                <span class="visually-hidden">for the ‘<%= petition.action %>’ petition</span>
+                at parliament.uk
+              <% end %>
             </p>
           <% end %>
 
           <% if petition.debate_outcome.debate_pack_url.present? %>
             <p>
-              Read the research
-              <span class="visually-hidden">for the ‘<%= petition.action %>’ petition</span>
-              at <%= link_to "parliament.uk", petition.debate_outcome.debate_pack_url, rel: "external" %>
+              <%= link_to petition.debate_outcome.debate_pack_url, rel: "external" do %>
+                Read the research
+                <span class="visually-hidden">for the ‘<%= petition.action %>’ petition</span>
+                at parliament.uk
+              <% end %>
             </p>
           <% end %>
 
           <% if petition.debate_outcome.public_engagement_url.present? %>
             <p>
-              Read what the public said
-              <span class="visually-hidden">for the ‘<%= petition.action %>’ petition</span>
-              at <%= link_to "parliament.uk", petition.debate_outcome.public_engagement_url, rel: "external" %>
+              <%= link_to petition.debate_outcome.public_engagement_url, rel: "external" do %>
+                Read what the public said
+                <span class="visually-hidden">about the ‘<%= petition.action %>’ petition</span>
+                at parliament.uk
+              <% end %>
             </p>
           <% end %>
 
           <% if petition.debate_outcome.debate_summary_url.present? %>
             <p>
-              Read a summary of the debate
-              <span class="visually-hidden">for the ‘<%= petition.action %>’ petition</span>
-              at <%= link_to "parliament.uk", petition.debate_outcome.debate_summary_url, rel: "external" %>
+              <%= link_to petition.debate_outcome.debate_summary_url, rel: "external" do %>
+                Read a summary of the debate
+                <span class="visually-hidden">for the ‘<%= petition.action %>’ petition</span>
+                at parliament.uk
+              <% end %>
             </p>
           <% end %>
 
