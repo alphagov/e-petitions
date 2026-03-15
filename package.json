@@ -2,16 +2,17 @@
   "name": "e-petitions",
   "private": true,
   "devDependencies": {
+    "@playwright/test": "^1.58.2",
+    "chrome-launcher": "^1.2.1",
     "jasmine-browser-runner": "^4.0.0",
     "jasmine-core": "^6.0.1",
-    "lighthouse": "^13.0.0",
-    "mocha": "^11.0.1",
-    "start-server-and-test": "^2.0.9",
-    "unexpected": "^13.2.1"
+    "jest": "^30.3.0",
+    "lighthouse": "^13.0.3",
+    "start-server-and-test": "^2.0.9"
   },
   "scripts": {
     "start-server": "bin/rails server -b 0.0.0.0 -p 3000",
-    "test": "mocha --timeout 30000",
+    "test": "jest --testTimeout 30000",
     "lighthouse:ci": "start-server-and-test start-server http-get://petitions.localhost:3000 test"
   }
 }
