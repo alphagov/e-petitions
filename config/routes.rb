@@ -105,6 +105,12 @@ Rails.application.routes.draw do
       end
     end
 
+    controller 'login' do
+      get  '/login', action:  'new',     as: :login
+      post '/login', action:  'create',  as: nil
+      get  '/logout', action: 'destroy', as: :logout
+    end
+
     # REDIRECT OLD PAGES
     get '/api/petitions',        to: redirect('/')
     get '/api/petitions/:id',    to: redirect('/')

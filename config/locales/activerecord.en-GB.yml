@@ -9,6 +9,14 @@ en-GB:
             email:
               invalid: "Email not recognised."
 
+        login_form:
+          attributes:
+            username:
+              blank: "Enter a username"
+              invalid: "Invalid username/password combination"
+            password:
+              blank: "Enter a password"
+
         petition_creator:
           attributes:
             action:

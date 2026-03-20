@@ -89,7 +89,14 @@ Given(/^the request is not local$/) do
 end
 
 Then(/^I am asked for a username and password$/) do
-  expect(page.status_code).to eq 401
+  expect(page).to have_content("Login to view the website")
+  expect(page).to have_field("Username")
+  expect(page).to have_field("Password")
+end
+
+When(/^I fill in the username and password$/) do
+  fill_in "Username", with: "username"
+  fill_in "Password", with: "password"
 end
 
 Then(/^I will see a 404 error page$/) do

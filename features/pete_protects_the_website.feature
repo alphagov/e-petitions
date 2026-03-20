@@ -15,3 +15,8 @@ Feature: Pete protects the website
     And the request is not local
     And I am on the home page
     Then I am asked for a username and password
+    When I fill in the username and password
+    And I press "Login"
+    Then I should see "Find, sign and create petitions"
+    When I am on the logout page
+    Then I am asked for a username and password

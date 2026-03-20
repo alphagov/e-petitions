@@ -1,0 +1,31 @@
+<%= form_for @login, url: login_url, authenticity_token: false do |form| %>
+  <div class="grid-row margin-top-7 signature-form">
+    <div class="grid-column-one-half-from-laptop">
+      <h1>
+        Login to view the website
+      </h1>
+
+      <%= form_row for: [@login, :username] do %>
+        <%= form.label :username do %>
+          Username
+        <% end %>
+
+        <%= error_messages_for_field @login, :username %>
+        <%= form.text_field :username, maxlength: 255, size: nil %>
+      <% end %>
+
+      <%= form_row for: [@login, :password] do %>
+        <%= form.label :password do %>
+          Password
+        <% end %>
+
+        <%= error_messages_for_field @login, :password %>
+        <%= form.password_field :password, maxlength: 255, size: nil %>
+      <% end %>
+
+      <p>
+        <%= form.button "Login", class: "button" %>
+      </p>
+    </div>
+  </div>
+<% end %>

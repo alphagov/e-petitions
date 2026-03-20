@@ -14,7 +14,7 @@ RSpec.describe Admin::AdminController, type: :controller do
         expect(Site).not_to receive(:protected?)
       end
 
-      it "does not request authentication" do
+      it "does not redirect to the login page" do
         get :index
         expect(response).to have_http_status(200)
       end
@@ -26,22 +26,7 @@ RSpec.describe Admin::AdminController, type: :controller do
         expect(Site).not_to receive(:protected?)
       end
 
-      it "does not request authentication" do
-        get :index
-        expect(response).to have_http_status(200)
-      end
-    end
-
-    context "and the request is authenticated" do
-      before do
-        http_authentication "username", "password"
-
-        expect(request).not_to receive(:local?)
-        expect(Site).not_to receive(:protected?)
-        expect(Site).not_to receive(:authenticate)
-      end
-
-      it "does not request authentication" do
+      it "does not redirect to the login page" do
         get :index
         expect(response).to have_http_status(200)
       end

@@ -18,9 +18,17 @@ class ApplicationController < ActionController::Base
   protected
 
   def authenticate
-    authenticate_or_request_with_http_basic(Site.name) do |username, password|
-      Site.authenticate(username, password)
+    unless authenticated?
+      if request.format.html?
+        redirect_to login_url
+      else
+        head :forbidden
+      end
     end
+  end
+
+  def authenticated?
+    cookies[:login] == Site.login_digest
   end
 
   def csv_request?

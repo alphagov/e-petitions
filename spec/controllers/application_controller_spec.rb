@@ -56,7 +56,7 @@ RSpec.describe ApplicationController, type: :controller do
         expect(Site).not_to receive(:protected?)
       end
 
-      it "does not request authentication" do
+      it "does not redirect to the login page" do
         get :index
         expect(response).to have_http_status(200)
       end
@@ -68,19 +68,31 @@ RSpec.describe ApplicationController, type: :controller do
         expect(Site).to receive(:protected?).and_return(true)
       end
 
-      it "requests authentication" do
-        get :index
-        expect(response).to have_http_status(401)
+      context "and the request is a HTML request" do
+        it "redirects to the login page" do
+          get :index
+          expect(response).to redirect_to("https://petition.parliament.uk/login")
+        end
+      end
+
+      context "and the request is a JSON request" do
+        it "responds with 403 Forbidden" do
+          get :index, as: :json
+          expect(response).to have_http_status(:forbidden)
+        end
       end
     end
 
     context "and the request is authenticated" do
-      before do
-        http_authentication "username", "password"
+      let(:password_digest) { BCrypt::Password.create("password") }
+      let(:login_digest) { Digest::SHA256.base64digest("username:#{password_digest}") }
 
+      before do
+        cookies[:login] = login_digest
         request.env["REMOTE_ADDR"] = "0.0.0.0"
+
         expect(Site).to receive(:protected?).and_return(true)
-        expect(Site).to receive(:authenticate).with("username", "password").and_return(true)
+        expect(Site).to receive(:login_digest).and_return(login_digest)
       end
 
       it "responds with 200 OK" do
