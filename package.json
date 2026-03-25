@@ -8,7 +8,7 @@
     "jasmine-core": "^6.0.1",
     "jest": "^30.3.0",
     "lighthouse": "^13.0.3",
-    "start-server-and-test": "^2.0.9"
+    "start-server-and-test": "^3.0.0"
   },
   "scripts": {
     "start-server": "bin/rails server -b 0.0.0.0 -p 3000",
