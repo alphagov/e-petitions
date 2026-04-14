@@ -200,7 +200,7 @@ GEM
     factory_bot_rails (6.5.1)
       factory_bot (~> 6.5)
       railties (>= 6.1.0)
-    faker (3.6.1)
+    faker (3.7.1)
       i18n (>= 1.8.11, < 2)
     faraday (1.10.5)
       faraday-em_http (~> 1.0)
@@ -661,7 +661,7 @@ CHECKSUMS
   execjs (2.10.0) sha256=6bcb8be8f0052ff9d370b65d1c080f2406656e150452a0abdb185a133048450d
   factory_bot (6.5.5) sha256=ce59295daee1b4704dab8a2fee6816f513d467c6aa3bc587860767d74a66efbe
   factory_bot_rails (6.5.1) sha256=d3cc4851eae4dea8a665ec4a4516895045e710554d2b5ac9e68b94d351bc6d68
-  faker (3.6.1) sha256=c513d23c1d26b426283e913b25e0b714576011d7c1ad368a9ac6ea2113a1ccde
+  faker (3.7.1) sha256=b96c9f26db51c604c5155c9036d8960f747dfde3afbd9fd29ecb130e3bc69e6e
   faraday (1.10.5) sha256=b144f1d2b045652fa820b5f532723e1643cc28b93dae911d784e5c5f88e8f6ed
   faraday-em_http (1.0.0) sha256=7a3d4c7079789121054f57e08cd4ef7e40ad1549b63101f38c7093a9d6c59689
   faraday-em_synchrony (1.0.1) sha256=bf3ce45dcf543088d319ab051f80985ea6d294930635b7a0b966563179f81750
