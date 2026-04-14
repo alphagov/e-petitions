@@ -9,7 +9,7 @@ RUN wget --quiet -O - https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key 
     gpg --dearmor -o /usr/share/keyrings/pgdg.gpg
 
 # Add apt repositories
-RUN echo 'deb [signed-by=/usr/share/keyrings/nodesource.gpg] https://deb.nodesource.com/node_22.x nodistro main' \
+RUN echo 'deb [signed-by=/usr/share/keyrings/nodesource.gpg] https://deb.nodesource.com/node_24.x nodistro main' \
     > /etc/apt/sources.list.d/nodesource.list && \
     echo 'deb [signed-by=/usr/share/keyrings/pgdg.gpg] http://apt.postgresql.org/pub/repos/apt/ bookworm-pgdg main' \
     > /etc/apt/sources.list.d/pgdg.list && \
