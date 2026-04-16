@@ -4,71 +4,83 @@ accessibility:
   content: |-
     # Accessibility statement
 
-    **We’re committed to making this website accessible so it can be used by as many people as possible.**
+    We’re committed to making this website accessible so it can be used by as many people as possible.
 
     This statement applies to content published within the UK Parliament Petitions website.
 
     This domain is owned by UK Parliament.
 
-    We aim to make this websites accessible to the widest possible audience. This means, for example, that you should be able to:
+    We want as many people as possible to be able to use our website. This means you should be able to: 
 
-    * change colours, contrast levels and fonts
-    * zoom in up to 300% without the text spilling off the screen
-    * navigate the website using a keyboard
-    * navigate the website using speech recognition software
-    * listen to the website using a screen reader
+    * change colours, contrast levels and fonts using browser functionality or device settings 
+    * zoom in up to 400% without the text spilling off the screen 
+    * navigate most of our websites using a keyboard 
+    * navigate most of our websites using speech recognition software 
+    * listen to most of our websites using a screen reader 
 
-    ## What we’re doing to improve accessibility
+    We also try to make website content and information as simple as possible to understand. 
 
-    To make UK Parliament websites accessible, we:
+    If you have a disability, [search AbilityNet's “how to” guides to make your device easier to use][1].
 
-    * integrate accessibility into our procurement procedures
-    * provide accessibility training for our staff
+    ## Feedback and contact information
+
+    ### Requesting alternative formats
+
+    If you need information in an alternative format, like accessible PDF, easy read, audio recording, BSL, or Braille, you can contact the Petitions team directly at [Petitions feedback and contact][2] and tell us:  
+
+    * the web address (URL) of the content that you need 
+    * the details of what is required 
+    * the format you need 
+    * your contact name and email address
+
+    You can also email us at [webmaster@parliament.uk][3] and we’ll consider your request and aim to respond within 5 working days.
+
+    ### Reporting accessibility problems with our websites
+
+    We’re always looking to improve the accessibility of our websites. If you find any problems that are not listed on this page, please email [webmaster@parliament.uk][3] to report this.
+
+    ### Enforcement procedure
+
+    If you contact us with a complaint and you're not happy with our response, please contact the [Equality Advisory and Support Service (EASS)][4].
+
+    The Equality and Human Rights Commission (EHRC) is responsible for enforcing the [Public Sector Bodies (Websites and Mobile Applications) (No. 2) Accessibility Regulations 2018)][5].
+
+    ## Technical information about the accessibility of our websites
+
+    ### Compliance status
+
+    This website is compliant with the [Web Content Accessibility Guidelines (WCAG) version 2.2][6].
+
+    This website is certified to comply with the [WCAG 2.2 AA level][7].
+
+    ### How we test our websites
+
+    We regularly test our websites for compliance with WCAG 2.2 level A and AA using automated tools and working with third party suppliers.
+
+    ### What we're doing to improve accessibility
+
+    We've prioritised our work to improve the accessibility of our websites based on analytics. We aim for any new PDF, HTML or alternative file format documents to meet WCAG 2.2 accessibility standards.
+
+    To make our websites accessible, we:
+
+    * integrate accessibility into our design system and procurement procedures 
+    * involve individuals with accessibility needs in website user testing 
+    * provide accessibility training for our staff 
     * include individuals with disabilities in our design personas
 
-    ## How accessible is this website?
+    ### Preparation of this accessibility statement
 
-    This website should be fully accessible.
+    This statement was prepared on 10 March 2026 and will be reviewed March 2027.
 
-    ## How to request content in a different format
+    This website was last tested on 21 October 2025. The test was carried out by the Digital Accessibility Centre.
 
-    If you need information in a different format please [contact us][1] and tell us:
-
-    * the web address (URL) of the content that you need
-    * your contact name and email address
-    * the type of format you need
-
-    ## Reporting accessibility problems with this website
-
-    If you find any problems or if you think we’re not meeting the accessibility requirements, please [contact us][1] to report this.
-
-    ## Enforcement procedure
-
-    If you contact us with a complaint and you’re not happy with our response contact the Equality Advisory and Support Service (EASS).
-
-    The Equality and Human Rights Commission (EHRC) is responsible for enforcing the Public Sector Bodies (Websites and Mobile Applications) (No. 2) Accessibility Regulations 2018 (the ‘accessibility regulations’).
-
-    ## Technical information about this website’s accessibility
-
-    UK Parliament is committed to making this website accessible, in accordance with the Public Sector Bodies (Websites and Mobile Applications) (No. 2) Accessibility Regulations 2018.
-
-    ## Compliance status
-
-    This website is compliant with the Web Content Accessibility Guidelines version 2.1 AA standard.
-
-    ## How we tested this website
-
-    Our websites were and are currently being tested for compliance with the Web Content Accessibility Guidelines V2.1 level A and level AA using a combination of automated tools for accessibility WCAG 2.0 standards.
-
-    ## Preparation of this accessibility statement
-
-    This statement was prepared on 21 September 2020.
-
-    This website is being tested via a combination of accessibility tools throughout September 2020. The testing is being carried out by Parliament UK.
-
-    Our sites are checked for accessibility on a regular basis. These tests are carried out by Parliament UK through automated testing via a combination of tools for accessibility.
-
-    [1]: /feedback
+    [1]: https://mcmw.abilitynet.org.uk/
+    [2]: /feedback
+    [3]: mailto:webmaster@parliament.uk
+    [4]: https://www.equalityadvisoryservice.com/
+    [5]: https://www.legislation.gov.uk/uksi/2018/952/contents/made
+    [6]: https://www.w3.org/TR/WCAG22/
+    [7]: https://digitalaccessibilitycentre.org/index.php/Parliament-Petitions/
 
 cookies:
   slug: "cookies"
@@ -109,20 +121,20 @@ help:
 
     Once a petition is published, it is open for 6 months to gather signatures.
 
-    * If an e-petition receives 10,000 signatures, it will receive a response from the Government.
-    * If it receives 100,000 signatures it may be debated in Parliament.
+    * If an e-petition receives 10,000 signatures, it will receive a response from the Government
+    * If it receives 100,000 signatures it may be debated in Parliament
 
     ## Creating and submitting an e-petition
 
-    You can start an e-petition on the website.
+    You can [start an e-petition on the website][4].
 
     You’ll be asked to:
 
     * write a clear petition action
     * provide details about what you want to happen and why
-    * get five supporters for your petition so it can be checked by the petitions team.
+    * get five supporters for your petition so it can be checked by the petitions team
 
-    You’ll also need to make sure it meets the standards for petitions.
+    You’ll also need to make sure it meets the [standards for petitions][3].
 
     ## Who can create an e-petition?
 
@@ -138,7 +150,7 @@ help:
 
     ## Standards for e-petitions
 
-    E-petitions must also meet the standards for petitions before they can be accepted and published on the open petitions page.
+    E-petitions must also meet the standards for petitions before they can be accepted and published on the [open petitions page][5].
 
     Your petition will be rejected if it does not meet [the standards for petitions][3].
 
@@ -153,7 +165,7 @@ help:
     * confirm you’re a British citizen or UK resident
     * summarise what you want the UK Government or Parliament to do
     * check there isn’t already a petition asking for a similar action
-    * give more details about what you want to happen, and why.
+    * give more details about what you want to happen, and why
 
     You’ll then be asked to:
 
@@ -161,14 +173,14 @@ help:
     * sign your petition
     * confirm your full name, email address, and UK postcode
     * confirm whether you’d like to get updates about your petition
-    * submit the form.
+    * submit the form
 
     ## After you’ve finished creating your petition
 
     When you’ve completed the form, you’ll receive an email with:
 
     * the full petition text
-    * a link for your supporters to sign it.
+    * a link for your supporters to sign it
 
     ## How to get supporters for your petition
 
@@ -190,7 +202,7 @@ help:
 
     ## If your petition doesn’t meet the standards
 
-    If your petition doesn’t meet the standards for petitions, it will be rejected and will not be open to collect signatures.
+    If your petition doesn’t meet the [standards for petitions][3], it will be rejected and will not be open to collect signatures.
 
     You'll receive information about why this happened. You can start again with a new petition.
 
@@ -215,7 +227,7 @@ help:
     The committee might decide not to arrange a debate on a petition. For example, this might happen if the issue:
 
     * has already been debated recently
-    * is scheduled for debate in the near future.
+    * is scheduled for debate in the near future
 
     If this happens, we’ll email you with further information.
 
@@ -230,12 +242,12 @@ help:
     The Petitions Committee team can:
 
     * answer queries about how Parliament handles petitions
-    * help with questions about how to use this service.
+    * help with questions about how to use this service
 
     They can't:
 
     * forward feedback to the people who started a petition
-    * comment on the ideas raised in a specific petition.
+    * comment on the ideas raised in a specific petition
 
     Email: petitionscommittee@parliament.uk
 
@@ -249,7 +261,7 @@ help:
 
     * help with technical problems with this service
     * forward your feedback to the people who started a petition
-    * comment on the ideas raised in a specific petition.
+    * comment on the ideas raised in a specific petition
 
     Phone: 0800 112 4272 (Freephone) or 020 7219 4272
 
@@ -295,11 +307,11 @@ privacy:
 
     Last updated: November 2025
 
-    We respect your right to privacy and manage your personal data in line with our responsibilities under the United Kingdom General Data Protection Regulation (UK GDPR) and Data Protection Act 2018 (DPA 2018). This privacy notice provides the information required by the UK GDPR about the personal data that we collect from you and how we may use your information.
+    We respect your right to privacy and manage your personal data in line with our responsibilities under the [United Kingdom General Data Protection Regulation (UK GDPR)][8] and [Data Protection Act 2018 (DPA 2018)][9]. This privacy notice provides the information required by the UK GDPR about the personal data that we collect from you and how we may use your information.
 
     In this notice, references to ‘us’, ‘our’ or ‘we’ are to the House of Commons; and to ‘you’ or ‘your’ are to an individual whose personal data we process.
 
-    Everything that we do with your personal data – for example, collecting, storing, using, sharing or deleting it – is referred to as “processing”.
+    Everything that we do with your personal data – for example, collecting, storing, using, sharing or deleting it – is referred to as ‘processing’.
 
     This notice will be updated periodically. We will communicate any significant changes as appropriate.
 
@@ -311,15 +323,22 @@ privacy:
 
     If you have any questions about the use of your personal data, please contact the Information Compliance Team:
 
-    * Email: [hcinformationcompliance@parliament.uk][1]
-    * Telephone: 0207 219 4296
-    * Post: Information Compliance Team, House of Commons, SW1A 0AA
+    Email: [hcinformationcompliance@parliament.uk][1]
+    Telephone: 0207 219 4296
+    Post: Information Compliance Team, House of Commons, SW1A 0AA
 
     ## 2. The personal data we process
 
     When you contact us, visit us, access or use our services either online, by post, in person or by other means, we may collect, store and use your personal data.
 
-    The personal data we collect from people who start and sign petitions will include: your name, your email address, your postcode, the country you live in, whether you are a British citizen, the IP address you use when starting or signing a petition.
+    The personal data we collect from people who start and sign petitions will include:
+
+    * your name
+    * your email address
+    * your postcode
+    * the country you live in
+    * whether you are a British citizen
+    * the IP address you use when starting or signing a petition
 
     ## 3. Use of your personal data
 
@@ -330,7 +349,7 @@ privacy:
     * check that you’re eligible to sign a petition
     * make sure that people only sign a petition once
     * contact you about petitions you start
-    * with your consent, send you updates about petitions you have signed.
+    * with your consent, send you updates about petitions you have signed
 
     If you start a petition and we accept it, your name will be published with the petition for the time it is open for signatures. We won’t publish any other personal information about you.
 
@@ -342,8 +361,7 @@ privacy:
 
     Whilst there is no requirement to provide special category data, any information you provide which includes racial or ethnic origin; religious or philosophical beliefs; trade union membership; genetic and biometric data; health data; sex life or sexual orientation will be considered necessary for reasons of substantial public interest, namely the exercise of a function of the House of Commons (UK GDPR Article 9 (2)(g) and DPA 2018 Schedule 1 (7)(b)).
 
-    Our policy for processing special category data can be found here:
-    [Data protection policies - UK Parliament][2]
+    Find out more about [our policy for processing special category data][2].
 
     Guidance about the lawful basis for processing personal data can be found on the [Information Commissioner’s website][3].
 
@@ -351,9 +369,9 @@ privacy:
 
     We may share or disclose your personal data with:
 
-    * Suppliers and contractors of goods or services contracted by House of Commons in relation to the purpose of fulfilling a public task
-    * Other organisations where there is a lawful basis to do so or a duty to disclose in order to comply with any legal obligation. For example, the Police, for the purposes of prevention and detection of crime
-    * Unboxed Consulting Limited who provide technical support for the petitions system will have access to the system for troubleshooting and maintenance purposes only.
+    * suppliers and contractors of goods or services contracted by House of Commons in relation to the purpose of fulfilling a public task
+    * other organisations where there is a lawful basis to do so or a duty to disclose in order to comply with any legal obligation. For example, the Police, for the purposes of prevention and detection of crime
+    * Unboxed Consulting Limited who provide technical support for the petitions system will have access to the system for troubleshooting and maintenance purposes only
 
     We will never share or sell your personal data to other organisations for direct marketing purposes.
 
@@ -363,8 +381,8 @@ privacy:
 
     In relation to Petitions, we will hold your personal data for six months after the dissolution of the current Parliament. A Parliament is the period of parliamentary time between one general election and the next. There are some exceptions as follows:
 
-    * In connection with committee inquiries, we may lawfully retain your personal data for archiving in the public interest and this may amount to indefinite retention.
-    * Where the personal data held are subject to the requirements of parliamentary privilege, some individual’s rights under the UK GDPR may not apply in order to prevent an infringement of those privileges.
+    * in connection with committee inquiries, we may lawfully retain your personal data for archiving in the public interest and this may amount to indefinite retention
+    * where the personal data held are subject to the requirements of parliamentary privilege, some individual’s rights under the UK GDPR may not apply in order to prevent an infringement of those privileges
 
     However, we will consider individual rights requests in relation to historic evidence on a case-by-case basis. Please also see section 6 of this notice.
 
@@ -376,14 +394,14 @@ privacy:
 
     We will ensure you can exercise your rights in relation to the personal data you provide to us in accordance with the UK GDPR and the Data Protection Act 2018 (DPA 2018). Under data protection law, you have the following rights:
 
-    * The right to be informed
-    * The right of access
-    * The right to rectification
-    * The right to erasure
-    * The right to restrict processing
-    * The right to data portability
-    * The right to object
-    * Rights in relation to automated decision making and profiling.
+    * the right to be informed
+    * the right of access
+    * the right to rectification
+    * the right to erasure
+    * the right to restrict processing
+    * the right to data portability
+    * the right to object
+    * rights in relation to automated decision making and profiling
 
     You can submit a rights request at any time by contacting the Petitions Committee directly at [petitionscommitteeprivacy@parliament.uk][5].
 
@@ -414,6 +432,8 @@ privacy:
     [5]: mailto:petitionscommitteeprivacy@parliament.uk
     [6]: https://www.ico.org.uk/global/contact-us/
     [7]: https://www.parliament.uk/site-information/data-protection/
+    [8]: https://www.legislation.gov.uk/eur/2016/679/contents
+    [9]: https://www.legislation.gov.uk/ukpga/2018/12/contents/enacted
 
 standards:
   slug: "standards"

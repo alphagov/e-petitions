@@ -1,7 +1,7 @@
 <%= content_for :notifications do %>
   <div class="highlight margin-top-7">
-    <p>This petition was submitted during the <%= @parliament.period %> parliament</p>
-    <p><%= link_to "View other petitions from this parliament", archived_petitions_path(parliament: @parliament) %></p>
+    <p>This petition was submitted during the <%= @parliament.start_year %> to <%= @parliament.end_year %> Parliament</p>
+    <p><%= link_to "View other petitions from this Parliament", archived_petitions_path(parliament: @parliament) %></p>
   </div>
 <% end %>
 

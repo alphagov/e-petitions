@@ -50,7 +50,7 @@
             <hr>
 
             <p>
-              <%= link_to "View archived petitions from previous parliaments", archived_petitions_path(state: "published") %>
+              <%= link_to "View archived petitions from previous Parliaments", archived_petitions_path(state: "published") %>
             </p>
           </div>
         </section>
@@ -87,7 +87,7 @@
 
         <p>
           <% if @petitions.scope == :all %>
-            You can also <%= link_to "try searching petitions from previous parliaments", archived_petitions_path(@petitions.current_params) %>
+            You can also <%= link_to "try searching petitions from previous Parliaments", archived_petitions_path(@petitions.current_params) %>
           <% else %>
             You can also <%= link_to "try searching all petitions", petitions_path(@petitions.current_params.merge(state: "all")) %>
           <% end %>

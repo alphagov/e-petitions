@@ -90,7 +90,7 @@ Scenario: Charlie tries to submit an invalid petition
   And I confirm that I am UK citizen or resident
 
   When I press "Continue"
-  Then I should see "Petition title must be completed"
+  Then I should see "Give your petition a title of 80 characters or fewer"
 
   When I fill in "Petition title" with text longer than 80 characters
   And I press "Continue"
@@ -135,10 +135,10 @@ Scenario: Charlie tries to submit an invalid petition
   Then I should see "Confirm your details"
 
   When I press "Continue"
-  Then I should see "Full name must be completed"
-  And I should see "Email must be completed"
-  And I should see "Email confirmation must be completed"
-  And I should see "Postcode must be completed"
+  Then I should see "Provide your full name"
+  And I should see "Provide your email address"
+  And I should see "Confirm your email address"
+  And I should see "Provide your postcode"
 
   When I fill in "Full name" with "=cmd"
   And I press "Continue"

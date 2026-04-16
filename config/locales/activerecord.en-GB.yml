@@ -21,7 +21,7 @@ en-GB:
           attributes:
             action:
               invalid: "Petition title can’t start with a '=', '+', '-' or '@'"
-              blank: "Petition title must be completed"
+              blank: "Give your petition a title of 80 characters or fewer"
               too_long: "Petition title is too long"
             uk_citizenship:
               accepted: "You must be a British citizen or normally live in the UK to create petitions"
@@ -266,11 +266,11 @@ en-GB:
   errors:
     attributes:
       email:
-        blank: "Email must be completed"
+        blank: "Provide your email address"
         invalid: "Email not recognised"
         plus_address: "You can’t use ‘plus addressing’ in your email address"
       email_confirmation:
-        blank: "Email confirmation must be completed"
+        blank: "Confirm your email address"
         confirmation: "Email confirmation does not match"
         invalid: "Email confirmation not recognised"
         plus_address: "You can’t use ‘plus addressing’ in the confirmation of your email address"
@@ -291,14 +291,14 @@ en-GB:
         blank: "Comments must be completed"
       name:
         invalid: "Full name can’t start with a '=', '+', '-' or '@'"
-        blank: "Full name must be completed"
+        blank: "Provide your full name"
         has_uri: "Full name can’t contain links"
         too_long: "Full name is too long"
       location_code:
         blank: "Location must be completed"
         invalid: "Location must be one of those listed below"
       postcode:
-        blank: "Postcode must be completed"
+        blank: "Provide your postcode"
         invalid: "Postcode not recognised"
         too_long: "Postcode is too long"
       uk_citizenship:
