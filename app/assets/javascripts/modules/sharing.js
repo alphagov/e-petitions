@@ -33,7 +33,7 @@ export default class Sharing {
 
   getMetaContent(property) {
     const meta = document.querySelector(`meta[property='og:${property}']`);
-    return meta ? meta.content : null;
+    return meta ? meta.content.replace(/\s+$/, '') : null;
   }
 
   get title() {
@@ -48,7 +48,11 @@ export default class Sharing {
     return this.getMetaContent('url');
   }
 
+  get text() {
+    return `${this.title}\n\n${this.description}\n\n${this.url}`;
+  }
+
   get shareData() {
-    return { title: this.title, text: this.description, url: this.url }
+    return { text: this.text }
   }
 }
