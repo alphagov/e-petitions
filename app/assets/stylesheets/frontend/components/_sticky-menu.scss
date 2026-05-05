@@ -6,7 +6,7 @@
   padding-left: spacing(5);
 
   @media screen and (min-width: map.get($breakpoints, laptop)) {
-    @media screen and (min-height: 1024px) {
+    @media screen and (min-height: 768px) {
       position: sticky;
       z-index: 100;
       top: spacing(6);
@@ -15,7 +15,7 @@
 
   h2, h3 {
     @extend %h3;
-    font-weight: normal;
+    font-weight: bold;
   }
 
   ul {
