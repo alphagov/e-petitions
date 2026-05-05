@@ -1,6 +1,12 @@
 @use "./settings" as *;
 @use "./helpers" as *;
 
+@counter-style dashes {
+  system: cyclic;
+  symbols: "\2013";
+  suffix: " ";
+}
+
 %list {
   @include font-size(22);
 
@@ -16,15 +22,24 @@
   &:last-child {
     margin-bottom: 0;
   }
+
+  %list {
+    margin-top: spacing(3);
+  }
 }
 
 %list > li {
-  margin-bottom: 6px;
+  margin-bottom: spacing(3);
 }
 
 %bulleted-list {
   padding-left: spacing(6);
   list-style-type: disc;
+}
+
+%dash-list {
+  padding-left: spacing(6);
+  list-style-type: dashes;
 }
 
 %numbered-list {
@@ -52,9 +67,17 @@ li {
 .bulleted-list,
 .markdown ul {
   @extend %bulleted-list;
+
+  ul {
+    @extend %dash-list;
+  }
 }
 
 .numbered-list,
 .markdown ol {
   @extend %numbered-list;
+
+  ul {
+    @extend %dash-list;
+  }
 }
