@@ -106,8 +106,8 @@ Rails.application.routes.draw do
     end
 
     controller 'login' do
-      get  '/login', action:  'new',     as: :login
-      post '/login', action:  'create',  as: nil
+      get  '/login',  action: 'new',     as: :login
+      post '/login',  action: 'create',  as: nil
       get  '/logout', action: 'destroy', as: :logout
     end
 

@@ -1,5 +1,6 @@
 class LoginController < PublicController
   skip_before_action :verify_authenticity_token
+  skip_before_action :service_unavailable
   skip_before_action :authenticate
 
   before_action :redirect_to_home_page_unless_site_protected
