@@ -36,6 +36,19 @@
         </div>
       <% end %>
 
+      <%= form_row for: [@page, :disable_toc], class: 'inline' do %>
+        <%= form.label :disable_toc, class: 'form-label' %>
+        <%= error_messages_for_field @page, :redirect %>
+        <div class="multiple-choice">
+          <%= form.radio_button :disable_toc, false %>
+          <%= form.label :disable_toc_false, "Yes", for: "disable_toc_false" %>
+        </div>
+        <div class="multiple-choice">
+          <%= form.radio_button :disable_toc, true %>
+          <%= form.label :disable_toc_true, "No", for: "disable_toc_true" %>
+        </div>
+      <% end %>
+
       <%= form_row for: [@page, :redirect], class: 'inline' do %>
         <%= form.label :redirect, class: 'form-label' %>
         <%= error_messages_for_field @page, :redirect %>

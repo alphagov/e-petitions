@@ -81,6 +81,7 @@ accessibility:
     [5]: https://www.legislation.gov.uk/uksi/2018/952/contents/made
     [6]: https://www.w3.org/TR/WCAG22/
     [7]: https://digitalaccessibilitycentre.org/index.php/Parliament-Petitions/
+  disable_toc: false
 
 cookies:
   slug: "cookies"
@@ -108,6 +109,7 @@ cookies:
     | **signed_tokens**  | Randomly generated references used to identify what links you’ve clicked to verify your email address | When you close your browser |
 
     [1]: https://ico.org.uk/your-data-matters/online/cookies
+  disable_toc: true
 
 help:
   slug: "help"
@@ -298,6 +300,7 @@ help:
     [11]: https://www.parliament.uk/get-involved/sign-a-petition/paper-petitions/
     [12]: https://www.electoralcommission.org.uk/voting-and-elections/how-elections-work/types-elections/recall-petitions
     [13]: /petitions?state=with_response
+  disable_toc: false
 
 privacy:
   slug: "privacy"
@@ -434,6 +437,7 @@ privacy:
     [7]: https://www.parliament.uk/site-information/data-protection/
     [8]: https://www.legislation.gov.uk/eur/2016/679/contents
     [9]: https://www.legislation.gov.uk/ukpga/2018/12/contents/enacted
+  disable_toc: true
 
 standards:
   slug: "standards"
@@ -492,3 +496,4 @@ standards:
     * containing material that it wouldn’t be appropriate to publish as a parliamentary petition
 
     [1]: https://www.gov.uk/honours
+  disable_toc: true

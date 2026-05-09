@@ -20,6 +20,7 @@ Feature: User views static pages
     Then I should be on the standards page
     And I should see "Standards for petitions" in the browser page title
     And the markup should be valid
+    And I should not see "Contents" within ".//main"
 
   Scenario: I navigate to Privacy notice
     When I go to the home page
@@ -27,6 +28,7 @@ Feature: User views static pages
     Then I should be on the privacy page
     And I should see "Privacy notice" in the browser page title
     And the markup should be valid
+    And I should not see "Contents" within ".//main"
 
   Scenario: I navigate to the Cookies page
     When I go to the home page
@@ -34,6 +36,7 @@ Feature: User views static pages
     Then I should be on the cookies page
     And I should see "Cookies" in the browser page title
     And the markup should be valid
+    And I should not see "Contents" within ".//main"
 
   Scenario: I navigate to Accessibility statement
     When I go to the home page
