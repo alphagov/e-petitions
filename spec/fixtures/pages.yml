@@ -102,10 +102,10 @@ cookies:
 
     We store a session cookie on your computer to help keep your information secure while you use the service.
 
-    | Name           | Purpose                                                                                               | Expires                     |
-    |----------------|-------------------------------------------------------------------------------------------------------|-----------------------------|
-    | _epets_session | This keeps your information secure while you use the petitions service                                | When you close your browser |
-    | signed_tokens  | Randomly generated references used to identify what links you’ve clicked to verify your email address | When you close your browser |
+    | Name               | Purpose                                                                                               | Expires                     |
+    |--------------------|-------------------------------------------------------------------------------------------------------|-----------------------------|
+    | **_epets_session** | This keeps your information secure while you use the petitions service                                | When you close your browser |
+    | **signed_tokens**  | Randomly generated references used to identify what links you’ve clicked to verify your email address | When you close your browser |
 
     [1]: https://ico.org.uk/your-data-matters/online/cookies
 
