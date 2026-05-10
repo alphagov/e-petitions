@@ -71,10 +71,6 @@ module HomeHelper
       petitions = []
     else
       petitions = fetch_trending_petitions(trending_petitions_at, period, limit)
-
-      if petitions.empty?
-        petitions = fetch_popular_petitions(limit)
-      end
     end
 
     if block_given?

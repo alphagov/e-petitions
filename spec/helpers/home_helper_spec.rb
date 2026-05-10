@@ -162,11 +162,13 @@ RSpec.describe HomeHelper, type: :helper do
 
           it "doesn't yield" do
             expect { |b| helper.trending_petitions(&b) }.not_to yield_control
+            expect(Petition).not_to have_received(:popular)
           end
 
           context "and it is called without a block" do
             it "returns nil" do
               expect(helper.trending_petitions).to be_nil
+              expect(Petition).not_to have_received(:popular)
             end
           end
         end
@@ -174,13 +176,15 @@ RSpec.describe HomeHelper, type: :helper do
         context "and there are popular petitions" do
           let(:popular_petitions) { [[2, "Popular Petition", 2000]] }
 
-          it "yields the popular petitions" do
-            expect { |b| helper.trending_petitions(&b) }.to yield_with_args([[2, "Popular Petition", 2000]])
+          it "doesn't yield" do
+            expect { |b| helper.trending_petitions(&b) }.not_to yield_control
+            expect(Petition).not_to have_received(:popular)
           end
 
           context "and it is called without a block" do
-            it "returns the popular petitions" do
-              expect(helper.trending_petitions).to eq([[2, "Popular Petition", 2000]])
+            it "returns nil" do
+              expect(helper.trending_petitions).to be_nil
+              expect(Petition).not_to have_received(:popular)
             end
           end
         end
