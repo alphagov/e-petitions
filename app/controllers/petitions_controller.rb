@@ -33,6 +33,12 @@ class PetitionsController < PublicController
   end
 
   def show
+    fresh_when(
+      last_modified: @petition.last_modified_at,
+      cache_control: @petition.cache_control,
+      public: true
+    )
+
     respond_to do |format|
       format.html
       format.json
@@ -40,12 +46,24 @@ class PetitionsController < PublicController
   end
 
   def count
+    fresh_when(
+      last_modified: @petition.last_modified_at,
+      cache_control: @petition.cache_control,
+      public: true
+    )
+
     respond_to do |format|
       format.json
     end
   end
 
   def start
+    fresh_when(
+      last_modified: Site.package_built_at,
+      cache_control: Site.cache_control(max_age: 5.minutes),
+      public: true
+    )
+
     respond_to do |format|
       format.html
     end

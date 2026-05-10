@@ -15,19 +15,6 @@ RSpec.describe 'Cache-Control headers', type: :request do
     end
   end
 
-  context "when visiting the petition show page" do
-    let!(:petition) { FactoryBot.create(:open_petition) }
-
-    before do
-      get "/petitions/#{petition.id}"
-    end
-
-    it "doesn't change the cache control headers" do
-      expect(cache_control).to eq(max_age: "0", private: true, must_revalidate:  true)
-      expect(status).to eq(200)
-    end
-  end
-
   context "when visiting the new petition page" do
     let!(:petition) { FactoryBot.create(:open_petition) }
 

@@ -13,6 +13,9 @@ class GovernmentResponse < ActiveRecord::Base
 
   after_save do
     petition.update_columns(response_state: "responded")
+
+    # Update site in case it affects the home page
+    Site.touch
   end
 
   after_destroy do
@@ -27,6 +30,9 @@ class GovernmentResponse < ActiveRecord::Base
         government_response_at: nil,
         response_state: response_state_after_destruction
       )
+
+      # Update site in case it affects the home page
+      Site.touch
     end
   end
 

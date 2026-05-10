@@ -18,6 +18,6 @@ Rails.application.reload_routes_unless_loaded
 
 RSpec.configure do |config|
   config.fixture_paths = ["#{::Rails.root}/spec/fixtures"]
-  config.global_fixtures = %i[rejection_reasons regions]
+  config.global_fixtures = %i[pages rejection_reasons regions]
   config.include Requests::JsonHelpers, type: :request
 end

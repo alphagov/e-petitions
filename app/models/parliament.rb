@@ -173,6 +173,18 @@ class Parliament < ActiveRecord::Base
         archived.pluck(:period, :id)
       end
     end
+
+    def last_modified_at
+      [maximum(:updated_at), Site.package_built_at].compact.max
+    end
+
+    def cache_control(max_age: 1.minute)
+      {
+        max_age: max_age,
+        stale_while_revalidate: max_age * 2,
+        stale_if_error: max_age * 5
+      }
+    end
   end
 
   validates_presence_of :government, :opening_at
@@ -365,6 +377,20 @@ class Parliament < ActiveRecord::Base
   def show_on_a_map?
     opening_at > CUTOFF_DATE
   end
+
+  def last_modified_at
+    [updated_at, constituencies.last_modified_at].max
+  end
+
+  def cache_control(max_age: 1.minute)
+    {
+      max_age: max_age,
+      stale_while_revalidate: max_age * 2,
+      stale_if_error: max_age * 5
+    }
+  end
+
+  private
 
   def midnight
     @midnight ||= Date.tomorrow.beginning_of_day

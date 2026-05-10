@@ -254,6 +254,18 @@ class Site < ActiveRecord::Base
       maximum_number_of_sponsors + 1
     end
 
+    def last_modified_at
+      [signature_count_updated_at, updated_at].compact.max
+    end
+
+    def cache_control(max_age: signature_count_interval)
+      {
+        max_age: max_age,
+        stale_while_revalidate: max_age * 2,
+        stale_if_error: max_age * 5
+      }
+    end
+
     def defaults
       {
         title:                          default_title,

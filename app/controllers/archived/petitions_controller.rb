@@ -22,6 +22,12 @@ class Archived::PetitionsController < PublicController
   end
 
   def show
+    fresh_when(
+      last_modified: @petition.last_modified_at,
+      cache_control: @petition.cache_control,
+      public: true
+    )
+
     respond_to do |format|
       format.html
       format.json

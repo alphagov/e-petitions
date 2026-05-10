@@ -502,6 +502,18 @@ module Archived
       debate_scheduled_on.present?
     end
 
+    def last_modified_at
+      updated_at
+    end
+
+    def cache_control(max_age: 2.minutes)
+      {
+        max_age: max_age,
+        stale_while_revalidate: max_age * 2,
+        stale_if_error: max_age * 5
+      }
+    end
+
     private
 
     def default_debate_scheduled_on

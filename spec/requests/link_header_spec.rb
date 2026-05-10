@@ -22,8 +22,6 @@ RSpec.describe 'Link header', type: :request do
   end
 
   context "when visiting the help page" do
-    let!(:page) { FactoryBot.create(:page, :help) }
-
     before do
       get "/help"
     end

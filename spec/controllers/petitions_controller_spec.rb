@@ -345,12 +345,23 @@ RSpec.describe PetitionsController, type: :controller do
 
   describe "GET /petitions/:id" do
     let(:petition) { double }
+    let(:now) { Time.current }
+
+    let(:cache_control) do
+      {
+        max_age: 10,
+        stale_while_revalidate: 20,
+        stale_if_error: 50
+      }
+    end
 
     it "assigns the given petition" do
       allow(petition).to receive(:stopped?).and_return(false)
       allow(petition).to receive(:collecting_sponsors?).and_return(false)
       allow(petition).to receive(:in_moderation?).and_return(false)
       allow(petition).to receive(:moderated?).and_return(true)
+      allow(petition).to receive(:last_modified_at).and_return(now)
+      allow(petition).to receive(:cache_control).and_return(cache_control)
       allow(Petition).to receive_message_chain(:show, find: petition)
 
       get :show, params: { id: 1 }

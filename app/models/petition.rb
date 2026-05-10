@@ -137,6 +137,7 @@ class Petition < ActiveRecord::Base
   delegate :responded_on, to: :government_response, allow_nil: true
 
   delegate :threshold_for_response, :threshold_for_debate, to: :Site
+  delegate :signature_count_interval, to: :Site
   delegate :formatted_threshold_for_response, to: :Site
   delegate :formatted_threshold_for_debate, to: :Site
 
@@ -1168,6 +1169,18 @@ class Petition < ActiveRecord::Base
 
   def debate_scheduled_on?
     debate_scheduled_on.present?
+  end
+
+  def last_modified_at
+    Time.zone.at(updated_at.to_i.floor(-1))
+  end
+
+  def cache_control(max_age: signature_count_interval)
+    {
+      max_age: max_age,
+      stale_while_revalidate: max_age * 2,
+      stale_if_error: max_age * 5
+    }
   end
 
   private

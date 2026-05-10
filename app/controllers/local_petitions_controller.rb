@@ -14,12 +14,24 @@ class LocalPetitionsController < PublicController
   after_action :set_content_disposition, if: :csv_request?, only: [:show, :all]
 
   def index
+    fresh_when(
+      last_modified: Site.package_built_at,
+      cache_control: Site.cache_control(max_age: 5.minutes),
+      public: true
+    )
+
     respond_to do |format|
       format.html
     end
   end
 
   def show
+    fresh_when(
+      last_modified: Site.last_modified_at,
+      cache_control: Site.cache_control,
+      public: true
+    )
+
     respond_to do |format|
       format.html
       format.json
@@ -28,6 +40,12 @@ class LocalPetitionsController < PublicController
   end
 
   def all
+    fresh_when(
+      last_modified: Site.last_modified_at,
+      cache_control: Site.cache_control,
+      public: true
+    )
+
     respond_to do |format|
       format.html
       format.json
