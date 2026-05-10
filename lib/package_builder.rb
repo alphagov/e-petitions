@@ -55,7 +55,8 @@ class PackageBuilder
   end
 
   def upload!
-    tm = Aws::S3::TransferManager.new(region: region, profile: profile)
+    s3 = Aws::S3::Client.new(region: region, profile: profile)
+    tm = Aws::S3::TransferManager.new(client: s3)
 
     info "Uploading package #{package_name} to S3 ..."
     start_time = Time.current
