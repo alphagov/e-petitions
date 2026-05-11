@@ -21,7 +21,7 @@
 
           <% if petition.debate_outcome.video_url.present? %>
             <p>
-              <%= link_to video_service(petition.debate_outcome.video_url), rel: "external" do %>
+              <%= link_to petition.debate_outcome.video_url, rel: "external" do %>
                 Watch the debate
                 <span class="visually-hidden">for the ‘<%= petition.action %>’ petition</span>
                 on <%= video_service(petition.debate_outcome.video_url) %>
