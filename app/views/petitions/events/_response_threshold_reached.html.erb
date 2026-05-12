@@ -1,0 +1,15 @@
+<li>
+  <%= time_tag(petition.response_threshold_reached_at) do %>
+    <strong><%= short_date_format(petition.response_threshold_reached_at) %></strong>
+  <% end %>
+
+  <div>
+    <h3>
+      Government will respond to this petition
+    </h3>
+
+    <p>
+      This petition got more than <%= petition.formatted_threshold_for_response %> signatures meaning that government will respond to it.
+    </p>
+  </div>
+</li>

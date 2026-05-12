@@ -1,0 +1,11 @@
+@use "sass:math";
+
+@use "../settings/typography" as *;
+
+@function px-to-rem($value) {
+  @if math.is-unitless($value) {
+    $value: $value * 1px;
+  }
+
+  @return $value / $root-font-size * 1rem;
+}

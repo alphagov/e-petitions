@@ -89,6 +89,7 @@ FactoryBot.define do
 
     after(:build) do |petition, evaluator|
       petition.parliament ||= Parliament.archived.first || FactoryBot.create(:parliament, :archived)
+      petition.published_at = [petition.open_at, petition.rejected_at].compact_blank.first
 
       if evaluator.sponsors_signed
         petition.creator ||= FactoryBot.build(:archived_signature, :validated, :creator, petition: petition)
@@ -297,6 +298,7 @@ FactoryBot.define do
       end
 
       petition.creator.assign_attributes(evaluator.creator_attributes)
+      petition.published_at = [petition.open_at, petition.rejected_at].compact_blank.first
 
       if evaluator.creator_name
         petition.creator.name = evaluator.creator_name
@@ -316,6 +318,10 @@ FactoryBot.define do
 
       if evaluator.email_attributes
         petition.emails << build(:petition_email, petition: petition, **evaluator.email_attributes)
+      end
+
+      if Site.semantic_searching?
+        petition.embedding = Embedding.generate(petition.content)
       end
     end
 
@@ -449,8 +455,14 @@ FactoryBot.define do
     after(:build) do |petition, evaluator|
       if petition.closed_at?
         petition.open_at ||= Site.opened_at_for_closing(petition.closed_at)
+        petition.published_at = petition.open_at
+
+        if petition.open?
+          petition.closed_at = nil
+        end
       else
         petition.open_at ||= Time.current
+        petition.published_at = petition.open_at
       end
     end
 
@@ -472,6 +484,23 @@ FactoryBot.define do
     state { Petition::CLOSED_STATE }
     open_at { 10.days.ago }
     closed_at { 1.day.ago }
+
+    transient do
+      validated_signatures { nil }
+    end
+
+    after(:create) do |petition, evaluator|
+      unless evaluator.validated_signatures.nil?
+        existing_signatures = petition.signatures.validated.count
+        signatures_to_add = (evaluator.validated_signatures - existing_signatures).clamp(0, 100)
+
+        signatures_to_add.times do
+          FactoryBot.create(:validated_signature, petition: petition, validated_at: 10.seconds.ago)
+        end
+
+        petition.update_signature_count!
+      end
+    end
   end
 
   factory :stopped_petition, :parent => :petition do
@@ -596,6 +625,10 @@ FactoryBot.define do
   end
 
   factory :signature do
+    transient {
+      email_confirmation { nil }
+    }
+
     sequence(:name) { |n| "Jo Public #{n}" }
     sequence(:email) { |n| "jo#{n}@public.com" }
     postcode { "SW1A 1AA" }
@@ -1018,6 +1051,11 @@ FactoryBot.define do
     trait :privacy do
       slug { "privacy" }
       title { "# Privacy notice" }
+    end
+
+    trait :standards do
+      slug { "standards" }
+      title { "# Standards for petitions" }
     end
   end
 

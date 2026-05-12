@@ -10,12 +10,11 @@ en-GB:
     local_petitions:
       index:
         zero: "Local to you - Petitions"
-        one: "Petitions in %{postcode}"
+        one: "Constituencies in %{postcode}"
       show: "Petitions in %{constituency}"
     petitions:
       index: "View all petitions - Petitions"
-      check: "Start a petition - Petitions"
-      check_results: "Start a petition - Petitions"
+      start: "Start a petition - Petitions"
       create: "Start a petition - Petitions"
       gathering_support: "This petition is gathering support - Petitions"
       moderation_info: "This petition has been sent to moderation - Petitions"

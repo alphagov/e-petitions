@@ -9,6 +9,33 @@ en-GB:
             email:
               invalid: "Email not recognised."
 
+        login_form:
+          attributes:
+            username:
+              blank: "Enter a username"
+              invalid: "Invalid username/password combination"
+            password:
+              blank: "Enter a password"
+
+        petition_creator:
+          attributes:
+            action:
+              invalid: "Petition title can’t start with a '=', '+', '-' or '@'"
+              blank: "Give your petition a title of 80 characters or fewer"
+              too_long: "Petition title is too long"
+            uk_citizenship:
+              accepted: "You must be a British citizen or normally live in the UK to create petitions"
+
+        signature_creator:
+          attributes:
+            uk_citizenship:
+              accepted: "You must be a British citizen or normally live in the UK to sign petitions"
+
+        sponsor_creator:
+          attributes:
+            uk_citizenship:
+              accepted: "You must be a British citizen or normally live in the UK to sign petitions"
+
         statistics/moderation_performance/form:
           attributes:
             parliament_id:
@@ -71,6 +98,8 @@ en-GB:
               invalid: "The submitted topics were invalid - please reselect and try again"
             scheduled_debate_date:
               invalid: "Please enter a valid date for when the debate will happen"
+            debate_scheduled_on:
+              invalid: "Please enter a valid date for when the debate was scheduled"
             reason_for_removal:
               blank: "Please enter a reason for the removal of this petition"
               too_long: "Reason for removal is too long (maximum is %{count} characters)"
@@ -134,6 +163,8 @@ en-GB:
               invalid: "The submitted topics were invalid - please reselect and try again"
             scheduled_debate_date:
               invalid: "Please enter a valid date for when the debate will happen"
+            debate_scheduled_on:
+              invalid: "Please enter a valid date for when the debate was scheduled"
             reason_for_removal:
               blank: "Please enter a reason for the removal of this petition"
               too_long: "Reason for removal is too long (maximum is %{count} characters)"
@@ -235,9 +266,14 @@ en-GB:
   errors:
     attributes:
       email:
-        blank: "Email must be completed"
+        blank: "Provide your email address"
         invalid: "Email not recognised"
         plus_address: "You can’t use ‘plus addressing’ in your email address"
+      email_confirmation:
+        blank: "Confirm your email address"
+        confirmation: "Email confirmation does not match"
+        invalid: "Email confirmation not recognised"
+        plus_address: "You can’t use ‘plus addressing’ in the confirmation of your email address"
       creator:
         blank: "Creator must be completed"
       action:
@@ -254,14 +290,17 @@ en-GB:
       comment:
         blank: "Comments must be completed"
       name:
-        invalid: "Name can’t start with a '=', '+', '-' or '@'"
-        blank: "Name must be completed"
-        has_uri: "Name can’t contain links"
+        invalid: "Full name can’t start with a '=', '+', '-' or '@'"
+        blank: "Provide your full name"
+        has_uri: "Full name can’t contain links"
+        too_long: "Full name is too long"
       location_code:
         blank: "Location must be completed"
         invalid: "Location must be one of those listed below"
       postcode:
-        blank: "Postcode must be completed"
+        blank: "Provide your postcode"
         invalid: "Postcode not recognised"
+        too_long: "Postcode is too long"
       uk_citizenship:
         accepted: "You must be a British citizen or normally live in the UK to create or sign petitions"
+        blank: "Select 'Yes' if you are a British citizen or UK resident"

@@ -78,8 +78,8 @@ Rails.application.configure do
   # Prepend all log lines with the following tags.
   # config.log_tags = [ :request_id ]
 
-  # Use a different cache store in production.
-  # config.cache_store = :mem_cache_store
+  # Replace the default in-process memory cache store with a durable alternative.
+  config.cache_store = :solid_cache_store
 
   # Disable caching for Action Mailer templates even if Action Controller
   # caching is enabled.

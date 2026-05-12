@@ -133,7 +133,8 @@ RSpec.describe Admin::Archived::PetitionEmailsController, type: :controller, adm
       let(:petition_email_attributes) do
         {
           subject: "Petition email subject",
-          body: "Petition email body"
+          body: "Petition email body",
+          occurred_on: "2024-10-31"
         }
       end
 
@@ -172,6 +173,7 @@ RSpec.describe Admin::Archived::PetitionEmailsController, type: :controller, adm
               expect(email).to be_present
               expect(email.subject).to eq "Petition email subject"
               expect(email.body).to eq "Petition email body"
+              expect(email.occurred_on).to eq Date.civil(2024, 10, 31)
               expect(email.sent_by).to eq user.pretty_name
             end
 
@@ -249,7 +251,7 @@ RSpec.describe Admin::Archived::PetitionEmailsController, type: :controller, adm
 
           describe 'with invalid params' do
             let(:petition_email_attributes) do
-              { subject: "", body: "" }
+              { subject: "", body: "", occurred_on: "" }
             end
 
             it 're-renders the petitions/show template' do
@@ -334,6 +336,7 @@ RSpec.describe Admin::Archived::PetitionEmailsController, type: :controller, adm
               expect(email).to be_present
               expect(email.subject).to eq "Petition email subject"
               expect(email.body).to eq "Petition email body"
+              expect(email.occurred_on).to eq Date.civil(2024, 10, 31)
               expect(email.sent_by).to eq user.pretty_name
             end
 
@@ -385,7 +388,7 @@ RSpec.describe Admin::Archived::PetitionEmailsController, type: :controller, adm
 
           describe 'with invalid params' do
             let(:petition_email_attributes) do
-              { subject: "", body: "" }
+              { subject: "", body: "", occurred_on: "" }
             end
 
             it 're-renders the petitions/show template' do
@@ -470,6 +473,7 @@ RSpec.describe Admin::Archived::PetitionEmailsController, type: :controller, adm
               expect(email).to be_present
               expect(email.subject).to eq "Petition email subject"
               expect(email.body).to eq "Petition email body"
+              expect(email.occurred_on).to eq Date.civil(2024, 10, 31)
               expect(email.sent_by).to eq user.pretty_name
             end
 
@@ -531,7 +535,7 @@ RSpec.describe Admin::Archived::PetitionEmailsController, type: :controller, adm
 
           describe 'with invalid params' do
             let(:petition_email_attributes) do
-              { subject: "", body: "" }
+              { subject: "", body: "", occurred_on: "" }
             end
 
             it 're-renders the petitions/show template' do
@@ -588,7 +592,8 @@ RSpec.describe Admin::Archived::PetitionEmailsController, type: :controller, adm
           :archived_petition_email,
           petition: petition,
           subject: "Petition email subject",
-          body: "Petition email body"
+          body: "Petition email body",
+          occurred_on: "2024-10-31"
         )
       end
 
@@ -637,14 +642,16 @@ RSpec.describe Admin::Archived::PetitionEmailsController, type: :controller, adm
           :archived_petition_email,
           petition: petition,
           subject: "Petition email subject",
-          body: "Petition email body"
+          body: "Petition email body",
+          occurred_on: "2024-10-31"
         )
       end
 
       let(:petition_email_attributes) do
         {
           subject: "New petition email subject",
-          body: "New petition email body"
+          body: "New petition email body",
+          occurred_on: "2025-10-31"
         }
       end
 
@@ -689,6 +696,7 @@ RSpec.describe Admin::Archived::PetitionEmailsController, type: :controller, adm
               expect(email).to be_present
               expect(email.subject).to eq "New petition email subject"
               expect(email.body).to eq "New petition email body"
+              expect(email.occurred_on).to eq Date.civil(2025, 10, 31)
               expect(email.sent_by).to eq user.pretty_name
             end
 
@@ -766,7 +774,7 @@ RSpec.describe Admin::Archived::PetitionEmailsController, type: :controller, adm
 
           describe 'with invalid params' do
             let(:petition_email_attributes) do
-              { subject: "", body: "" }
+              { subject: "", body: "", occurred_on: "" }
             end
 
             it 're-renders the petitions/show template' do
@@ -787,6 +795,7 @@ RSpec.describe Admin::Archived::PetitionEmailsController, type: :controller, adm
               expect(email).to be_present
               expect(email.subject).to eq "Petition email subject"
               expect(email.body).to eq "Petition email body"
+              expect(email.occurred_on).to eq Date.civil(2024, 10, 31)
             end
           end
         end
@@ -804,6 +813,7 @@ RSpec.describe Admin::Archived::PetitionEmailsController, type: :controller, adm
             expect(email).to be_present
             expect(email.subject).to eq "Petition email subject"
             expect(email.body).to eq "Petition email body"
+            expect(email.occurred_on).to eq Date.civil(2024, 10, 31)
           end
         end
 
@@ -860,6 +870,7 @@ RSpec.describe Admin::Archived::PetitionEmailsController, type: :controller, adm
               expect(email).to be_present
               expect(email.subject).to eq "New petition email subject"
               expect(email.body).to eq "New petition email body"
+              expect(email.occurred_on).to eq Date.civil(2025, 10, 31)
               expect(email.sent_by).to eq user.pretty_name
             end
 
@@ -911,7 +922,7 @@ RSpec.describe Admin::Archived::PetitionEmailsController, type: :controller, adm
 
           describe 'with invalid params' do
             let(:petition_email_attributes) do
-              { subject: "", body: "" }
+              { subject: "", body: "", occurred_on: "" }
             end
 
             it 're-renders the petitions/show template' do
@@ -931,6 +942,7 @@ RSpec.describe Admin::Archived::PetitionEmailsController, type: :controller, adm
               email.reload
               expect(email.subject).to eq("Petition email subject")
               expect(email.body).to eq("Petition email body")
+              expect(email.occurred_on).to eq Date.civil(2024, 10, 31)
             end
           end
         end
@@ -947,6 +959,7 @@ RSpec.describe Admin::Archived::PetitionEmailsController, type: :controller, adm
             email.reload
             expect(email.subject).to eq("Petition email subject")
             expect(email.body).to eq("Petition email body")
+            expect(email.occurred_on).to eq Date.civil(2024, 10, 31)
           end
         end
 
@@ -1006,6 +1019,7 @@ RSpec.describe Admin::Archived::PetitionEmailsController, type: :controller, adm
               expect(email).to be_present
               expect(email.subject).to eq "New petition email subject"
               expect(email.body).to eq "New petition email body"
+              expect(email.occurred_on).to eq Date.civil(2025, 10, 31)
               expect(email.sent_by).to eq user.pretty_name
             end
 
@@ -1067,7 +1081,7 @@ RSpec.describe Admin::Archived::PetitionEmailsController, type: :controller, adm
 
           describe 'with invalid params' do
             let(:petition_email_attributes) do
-              { subject: "", body: "" }
+              { subject: "", body: "", occurred_on: "" }
             end
 
             it 're-renders the petitions/show template' do
@@ -1087,6 +1101,7 @@ RSpec.describe Admin::Archived::PetitionEmailsController, type: :controller, adm
               email.reload
               expect(email.subject).to eq("Petition email subject")
               expect(email.body).to eq("Petition email body")
+              expect(email.occurred_on).to eq Date.civil(2024, 10, 31)
             end
           end
         end
@@ -1103,6 +1118,7 @@ RSpec.describe Admin::Archived::PetitionEmailsController, type: :controller, adm
             email.reload
             expect(email.subject).to eq("Petition email subject")
             expect(email.body).to eq("Petition email body")
+            expect(email.occurred_on).to eq Date.civil(2024, 10, 31)
           end
         end
 
@@ -1129,7 +1145,8 @@ RSpec.describe Admin::Archived::PetitionEmailsController, type: :controller, adm
           :archived_petition_email,
           petition: petition,
           subject: "Petition email subject",
-          body: "Petition email body"
+          body: "Petition email body",
+          occurred_on: "2024-10-31"
         )
       end
 

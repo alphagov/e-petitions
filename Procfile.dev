@@ -1,3 +1,5 @@
 web: bin/rails server -b 0.0.0.0 -p 3000
 worker: MIN_PRIORITY=10 bin/rake jobs:work
 counter: MAX_PRIORITY=5 bin/rake jobs:work
+css: bin/rails css:watch
+js: bin/rails javascript:watch

@@ -7,7 +7,7 @@ Feature: Moderator updates petition scheduled debate date
     When I view all petitions
     And I follow "More money for charities"
     And I follow "Scheduled debate date"
-    And I fill in "Scheduled debate date" with "06/12/2015"
+    And I fill in "Debate date" with "06/12/2015"
     And I press "Email 6 petitioners"
     Then I should see "Email will be sent overnight"
     And the petition creator should have been emailed about the scheduled debate

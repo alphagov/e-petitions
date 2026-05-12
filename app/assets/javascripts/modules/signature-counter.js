@@ -1,7 +1,7 @@
-class SignatureCounter {
-  constructor(container, responseThreshold, debateThreshold, interval) {
-    this.responseThreshold = responseThreshold;
-    this.debateThreshold = debateThreshold;
+export default class SignatureCounter {
+  constructor(container, interval) {
+    this.responseThreshold = parseInt(container.dataset.responseThreshold);
+    this.debateThreshold = parseInt(container.dataset.debateThreshold);
     this.baseUrl = window.location.origin + window.location.pathname;
     this.jsonUrl = this.baseUrl + '/count.json';
     this.signatureCount = container.querySelector('.signature-count-number .count');
@@ -81,7 +81,7 @@ class SignatureCounter {
   updateSignatureGoal(threshold) {
     const hiddenText = document.createElement('span');
 
-    hiddenText.classList.add('visuallyhidden');
+    hiddenText.classList.add('visually-hidden');
     hiddenText.textContent = this.signatureGoalText(threshold);
 
     this.signatureGoal.textContent = this.format(threshold);
@@ -93,7 +93,7 @@ class SignatureCounter {
     if (threshold > this.responseThreshold) {
       return ' signatures required to be considered for a debate in Parliament';
     } else {
-      return ' signatures required to get a government response';
+      return ' signatures required to get a Government response';
     }
   }
 
@@ -115,10 +115,7 @@ class SignatureCounter {
     } else if (data.response_threshold_reached_at || data.government_response_at) {
       return `${this.format(data.signature_count)} of ${this.format(this.debateThreshold)} signatures required to be considered for a debate in Parliament`;
     } else {
-      return `${this.format(data.signature_count)} of ${this.format(this.responseThreshold)} signatures required to get a government response`;
+      return `${this.format(data.signature_count)} of ${this.format(this.responseThreshold)} signatures required to get a Government response`;
     }
   }
 }
-
-window.PETS = window.PETS || {};
-window.PETS.SignatureCounter = SignatureCounter;

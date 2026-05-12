@@ -1,0 +1,27 @@
+@charset "UTF-8";
+
+@use "pkg:modern-normalize";
+
+@use "frontend/fonts";
+@use "frontend/containers";
+@use "frontend/display";
+@use "frontend/layout";
+@use "frontend/typography";
+
+@use "frontend/links";
+@use "frontend/lists";
+@use "frontend/media";
+@use "frontend/overrides";
+
+@use "frontend/components/header";
+@use "frontend/components/menu";
+@use "frontend/components/main";
+@use "frontend/components/footer";
+
+body.error-page {
+  main {
+    a {
+      white-space: nowrap;
+    }
+  }
+}

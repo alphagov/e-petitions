@@ -6,10 +6,6 @@ RSpec.describe 'Requests for pages when we do not support the format on that pag
 
   before do
     FactoryBot.create(:parliament, :archived)
-
-    %i[accessibility cookies help privacy].each do |page|
-      FactoryBot.create(:page, page)
-    end
   end
 
   shared_examples 'a route that only supports html formats' do |headers_only: false|
@@ -164,15 +160,15 @@ RSpec.describe 'Requests for pages when we do not support the format on that pag
 
   simple_html_only_urls = %w[
     accessibility
+    cookies
     help
     privacy
+    standards
     feedback
     feedback/thanks
     petitions/local
-    petitions/check
-    petitions/check_results
+    petitions/start
     petitions/new
-    cookies
   ]
 
   simple_html_only_urls.each do |simple_url|
@@ -336,27 +332,6 @@ RSpec.describe 'Requests for pages when we do not support the format on that pag
     it_behaves_like 'a route that supports html and json formats'
   end
 
-  context 'the browserconfig url' do
-    let(:url) { '/browserconfig' }
-    let(:params) { {} }
-
-    it 'does not support json via extension' do
-      get url + '.json', params: params
-      expect(response.status).to eq 404
-    end
-
-    it 'supports xml via extension' do
-      get url + '.xml', params: params
-      expect(response.status).to eq 200
-      expect(response.content_type).to eq "application/xml; charset=utf-8"
-    end
-
-    it 'does not response without an extension' do
-      get url, params: params
-      expect(response.status).to eq 404
-    end
-  end
-
   context 'the manifest url' do
     let(:url) { '/manifest' }
     let(:params) { {} }
@@ -385,7 +360,7 @@ RSpec.describe 'Requests for pages when we do not support the format on that pag
     let(:url) { '/petitions/new' }
     let(:params) {
       {
-        'stage' => 'replay-email',
+        'stage' => 'check_and_submit',
         'move' => 'next',
         'petition' => {
           'background' => 'Limit temperature rise at two degrees',
@@ -407,7 +382,7 @@ RSpec.describe 'Requests for pages when we do not support the format on that pag
     let(:petition) { FactoryBot.create(:open_petition) }
     let(:params) {
       {
-        'stage' => 'replay-email',
+        'stage' => 'check_and_submit',
         'move' => 'next',
         'petition_id' => "#{petition.id}",
         'signature' => {

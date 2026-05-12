@@ -5,15 +5,17 @@ class PetitionsController < PublicController
   before_action :do_not_cache, except: [:index, :show]
   before_action :set_cors_headers, only: [:index, :show, :count], if: :json_request?
 
-  before_action :redirect_to_home_page_if_dissolved, only: [:new, :check, :check_results, :create]
-  before_action :redirect_to_home_page_unless_opened, only: [:index, :new, :check, :check_results, :create]
+  before_action :redirect_to_home_page_if_dissolved, only: [:start, :new, :create]
+  before_action :redirect_to_home_page_unless_opened, only: [:index, :start, :new, :create]
   before_action :redirect_to_archived_petition_if_archived, only: [:show]
+  before_action :redirect_to_show_page_if_petition_exists, only: [:index]
 
-  before_action :redirect_to_home_page_if_suspended, only: [:new, :check, :check_results, :create]
+  before_action :redirect_to_home_page_if_suspended, only: [:start, :new, :create]
 
   before_action :retrieve_petitions, only: [:index]
+  before_action :redirect_to_last_page_if_out_of_bounds, only: [:index], unless: :json_request?
   before_action :retrieve_petition, only: [:show, :count, :gathering_support, :moderation_info]
-  before_action :build_petition_creator, only: [:check, :check_results, :new, :create]
+  before_action :build_petition_creator, only: [:new, :create]
 
   before_action :redirect_to_stopped_page, if: :stopped?, only: [:moderation_info, :show]
   before_action :redirect_to_gathering_support_url, if: :collecting_sponsors?, only: [:moderation_info, :show]
@@ -31,6 +33,12 @@ class PetitionsController < PublicController
   end
 
   def show
+    fresh_when(
+      last_modified: @petition.last_modified_at,
+      cache_control: @petition.cache_control,
+      public: true
+    )
+
     respond_to do |format|
       format.html
       format.json
@@ -38,18 +46,24 @@ class PetitionsController < PublicController
   end
 
   def count
+    fresh_when(
+      last_modified: @petition.last_modified_at,
+      cache_control: @petition.cache_control,
+      public: true
+    )
+
     respond_to do |format|
       format.json
     end
   end
 
-  def check
-    respond_to do |format|
-      format.html
-    end
-  end
+  def start
+    fresh_when(
+      last_modified: Site.package_built_at,
+      cache_control: Site.cache_control(max_age: 5.minutes),
+      public: true
+    )
 
-  def check_results
     respond_to do |format|
       format.html
     end
@@ -121,6 +135,12 @@ class PetitionsController < PublicController
     redirect_to home_url if Site.disable_petition_creation?
   end
 
+  def redirect_to_show_page_if_petition_exists
+    if query_param.match?(/^\d+$/)
+      redirect_to petition_url(query_param) if Petition.visible.exists?(query_param)
+    end
+  end
+
   def retrieve_petitions
     scope = Petition.visible
 
@@ -129,6 +149,12 @@ class PetitionsController < PublicController
     end
 
     @petitions = scope.search(params)
+  end
+
+  def redirect_to_last_page_if_out_of_bounds
+    if @petitions.out_of_bounds?
+      redirect_to petitions_url(@petitions.last_params)
+    end
   end
 
   def retrieve_petition
@@ -147,6 +173,10 @@ class PetitionsController < PublicController
     if state_present? && !valid_state?
       redirect_to petitions_url(search_params(state: :all))
     end
+  end
+
+  def query_param
+    params.fetch(:query, params.fetch(:q, ""))
   end
 
   def state_present?
@@ -198,7 +228,7 @@ class PetitionsController < PublicController
   end
 
   def csv_filename
-    "#{@petitions.scope}-petitions.csv"
+    "filtered-petitions.csv"
   end
 
   def set_content_disposition

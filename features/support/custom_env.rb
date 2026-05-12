@@ -3,12 +3,25 @@ require 'rspec/core/pending'
 require 'rspec/mocks'
 require 'multi_test'
 require 'faker'
+require 'rake'
+require 'vcr'
 
 # Use webmock to disable net connections except for localhost and exceptions
 WebMock.disable_net_connect!(
   allow_localhost: true,
   allow: 'chromedriver.storage.googleapis.com'
 )
+
+VCR.configure do |config|
+  config.cassette_library_dir = Rails.root.join("spec/fixtures/vcr")
+  config.hook_into :webmock
+  config.ignore_localhost = true
+end
+
+VCR.cucumber_tags do |t|
+  t.tag '@embeddings'
+  t.tag '@semantic_search'
+end
 
 MultiTest.disable_autorun
 
@@ -70,6 +83,11 @@ pid = Process.spawn('bin/local_proxy', out: 'log/proxy.log', err: 'log/proxy.log
 Process.detach(pid)
 
 at_exit { Process.kill('INT', pid) rescue nil }
+
+Rails.application.load_tasks
+
+Rake::Task["css:build"].invoke
+Rake::Task["javascript:build"].invoke
 
 module CucumberI18n
   def t(*args)

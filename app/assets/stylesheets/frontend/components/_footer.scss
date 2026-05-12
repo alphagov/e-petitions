@@ -1,0 +1,139 @@
+@use "../settings" as *;
+@use "../helpers" as *;
+
+body > footer {
+  background-color: $footer-background-colour;
+  color: $text-inverse-colour;
+
+  flex-shrink: 0;
+
+  @include responsive-padding(6, top);
+  @include responsive-padding(8, bottom);
+
+  @include font-size(20);
+
+  a {
+    color: $inverse-link-colour;
+
+    &:hover:not(:focus) {
+      color: $inverse-link-hover-colour;
+    }
+
+    &:active:not(:focus) {
+      color: $inverse-link-active-colour;
+    }
+  }
+
+  p {
+    @include font-size(20);
+
+    margin: 0;
+  }
+
+  hr {
+    @include responsive-margin(5, top);
+    @include responsive-margin(5, bottom);
+
+    border-bottom: 1px solid $footer-border-colour;
+  }
+
+  ul {
+    display: flex;
+    flex-wrap: wrap;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+
+    & > li {
+      margin: 0;
+      margin-bottom: 5px;
+      padding: 0;
+      width: 100%;
+
+      a {
+        display: inline-block;
+        padding-top: spacing(1);
+        padding-bottom: spacing(1);
+      }
+
+      @include media-query($from: laptop) {
+        margin-right: spacing(5);
+        width: auto;
+      }
+    }
+  }
+
+  p {
+    &.copyright {
+      @include responsive-margin(5, top);
+      @include responsive-margin(5, bottom);
+    }
+
+    &.licence {
+      flex: 1 1 auto;
+
+      @include media-query($from: laptop) {
+        flex: 2;
+      }
+
+      svg {
+        margin-bottom: spacing(2);
+      }
+
+      a, span {
+        white-space: nowrap;
+      }
+    }
+
+    &.uk-parliament-logo,
+    &.uk-government-logo {
+      margin-top: spacing(5);
+
+      img {
+        height: 36px;
+        width: auto;
+      }
+
+      @include media-query($from: tablet) {
+        img {
+          height: 40px;
+        }
+      }
+    }
+
+    &.uk-government-logo {
+      @include media-query($from: tablet) {
+        margin-left: spacing(9);
+        margin-top: 0;
+        padding-bottom: spacing(2);
+      }
+    }
+
+    &.uk-parliament-logo {
+      @include media-query($from: tablet) {
+        margin-left: 0;
+        padding-bottom: spacing(2);
+      }
+
+      @include media-query($from: laptop) {
+        margin-top: 0;
+        margin-left: spacing(7);
+      }
+    }
+  }
+
+  .meta {
+    display: block;
+    align-items: flex-end;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+
+    @include media-query($from: tablet) {
+      display: flex;
+    }
+
+    @include media-query($from: laptop) {
+      justify-content: space-between;
+    }
+  }
+}

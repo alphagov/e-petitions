@@ -7,19 +7,31 @@ class LocalPetitionsController < PublicController
   before_action :sanitize_postcode, only: :index
   before_action :find_by_postcode, if: :postcode?, only: :index
   before_action :find_by_slug, only: [:show, :all]
-  before_action :find_petitions, if: :constituency?, only: :show
-  before_action :find_all_petitions, if: :constituency?, only: :all
-  before_action :redirect_to_constituency, if: :constituency?, only: :index
+  before_action :find_petitions, only: :show
+  before_action :find_all_petitions, only: :all
+  before_action :redirect_to_constituency, if: :sole_constituency?, only: :index
 
   after_action :set_content_disposition, if: :csv_request?, only: [:show, :all]
 
   def index
+    fresh_when(
+      last_modified: Site.package_built_at,
+      cache_control: Site.cache_control(max_age: 5.minutes),
+      public: true
+    )
+
     respond_to do |format|
       format.html
     end
   end
 
   def show
+    fresh_when(
+      last_modified: Site.last_modified_at,
+      cache_control: Site.cache_control,
+      public: true
+    )
+
     respond_to do |format|
       format.html
       format.json
@@ -28,6 +40,12 @@ class LocalPetitionsController < PublicController
   end
 
   def all
+    fresh_when(
+      last_modified: Site.last_modified_at,
+      cache_control: Site.cache_control,
+      public: true
+    )
+
     respond_to do |format|
       format.html
       format.json
@@ -46,15 +64,19 @@ class LocalPetitionsController < PublicController
   end
 
   def find_by_postcode
-    @constituency = Constituency.current.find_by_postcode(@postcode)
+    @constituencies = Constituency.current.find_all_by_postcode(@postcode)
   end
 
   def find_by_slug
     @constituency = Constituency.current.find_by_slug!(params[:id])
   end
 
-  def constituency?
-    @constituency.present?
+  def sole_constituency
+    @constituencies && @constituencies.sole
+  end
+
+  def sole_constituency?
+    @constituencies && @constituencies.one?
   end
 
   def find_petitions
@@ -67,9 +89,9 @@ class LocalPetitionsController < PublicController
 
   def redirect_to_constituency
     if Parliament.dissolved?
-      redirect_to all_local_petition_url(@constituency.slug)
+      redirect_to all_local_petition_url(sole_constituency.slug)
     else
-      redirect_to local_petition_url(@constituency.slug)
+      redirect_to local_petition_url(sole_constituency.slug)
     end
   end
 

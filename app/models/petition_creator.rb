@@ -1,55 +1,98 @@
-require 'domain_autocorrect'
 require 'postcode_sanitizer'
 
 class PetitionCreator
-  extend ActiveModel::Naming
-  extend ActiveModel::Translation
-  include ActiveModel::Conversion
+  include StagedForm
 
-  STAGES = %w[petition replay_petition creator replay_email]
+  CREATOR_ATTRIBUTES = %i[
+    name
+    email
+    email_confirmation
+    location_code
+    postcode
+  ]
 
-  PETITION_PARAMS  = [:action, :background, :additional_details]
-  SIGNATURE_PARAMS = [:name, :email, :postcode, :location_code, :uk_citizenship, :notify_by_email, :autocorrect_domain]
-  PERMITTED_PARAMS = [:q, :stage, :move_back, :move_next, petition_creator: PETITION_PARAMS + SIGNATURE_PARAMS]
+  stage :uk_citizenship
+  stage :action
+  stage :similar_petitions
+  stage :background
+  stage :additional_details
+  stage :creator
+  stage :check_and_submit
 
-  attr_reader :params, :errors, :request
+  attribute :action, :string
+  attribute :background, :string
+  attribute :additional_details, :string
+  attribute :name, :string
+  attribute :email, :string
+  attribute :email_confirmation, :string
+  attribute :postcode, :string
+  attribute :location_code, :string, default: "GB"
+  attribute :uk_citizenship, :string
+  attribute :notify_by_email, :boolean
 
-  def initialize(params, request)
-    @params = params.permit(*PERMITTED_PARAMS)
-    @errors = ActiveModel::Errors.new(self)
-    @request = request
+  strip_attribute :action, :background, :additional_details
+  strip_attribute :name, :email, :email_confirmation
+
+  normalizes :postcode, with: PostcodeSanitizer
+
+  with_options on: [:uk_citizenship, :check_and_submit] do
+    validates :uk_citizenship, presence: true, acceptance: true
   end
 
-  def read_attribute_for_validation(attribute)
-    public_send(attribute)
+  with_options on: [:action, :check_and_submit] do
+    validates :action, presence: true
+    validates :action, format: { without: /\A[-=+@]/ }
+    validates :action, length: { maximum: 80 }
   end
 
-  def to_partial_path
-    "petitions/create/#{stage}_stage"
+  with_options on: [:background, :check_and_submit] do
+    validates :background, presence: true
+    validates :background, format: { without: /\A[-=+@]/ }
+    validates :background, length: { maximum: 300 }
   end
 
-  def duplicates
-    Petition.current.by_most_popular.search(q: action, count: 3).presence
+  with_options on: [:additional_details, :check_and_submit] do
+    validates :additional_details, format: { without: /\A[-=+@]/ }
+    validates :additional_details, length: { maximum: 800 }
   end
 
-  def stage
-    @stage ||= stage_param.in?(STAGES) ? stage_param : STAGES.first
+  with_options on: [:creator, :check_and_submit] do
+    validates :name, presence: true, length: { maximum: 255 }
+    validates :name, format: { without: /\A[-=+@]/ }
+    validates :name, format: { without: URI.regexp, message: :has_uri }
+
+    validates :email, presence: true, email: true, confirmation: true
+    validates :email_confirmation, presence: true, email: true
+
+    validates :location_code, presence: true, format: { with: /\A[A-Z]{2,3}\z/ }
+
+    validates :postcode, presence: true, postcode: true, if: :united_kingdom?
+    validates :postcode, length: { maximum: 255 }, unless: :united_kingdom?
+    validates :postcode, length: { maximum: 10 }, if: :united_kingdom?
   end
 
-  def persisted?
-    false
+  after_validation on: :uk_citizenship do
+    if citizenship_errors? && uk_citizenship.present?
+      @stage = "non_citizen"
+    end
+  end
+
+  after_validation on: :check_and_submit do
+    if citizenship_errors?
+      @stage = "uk_citizenship"
+    elsif action_errors?
+      @stage = "action"
+    elsif background_errors?
+      @stage = "background"
+    elsif additional_details_errors?
+      @stage = "additional_details"
+    elsif creator_errors?
+      @stage = "creator"
+    end
   end
 
   def save
-    if moving_backwards?
-      @stage = previous_stage and return false
-    end
-
-    unless valid?
-      return false
-    end
-
-    if done?
+    super do
       @petition = Petition.new do |p|
         p.action = action
         p.background = background
@@ -74,176 +117,33 @@ class PetitionCreator
         enqueue_job_to_update_embedding(@petition)
       end
 
-      return true
-    else
-      @stage = next_stage and return false
+      true
     end
   end
 
-  def to_param
-    if @petition && @petition.persisted?
-      @petition.to_param
-    else
-      raise RuntimeError, "PetitionCreator#to_param called before petition was created"
-    end
+  def to_partial_path
+    "petitions/create/#{stage}_stage"
   end
 
-  def action
-    (petition_creator_params[:action] || query_param).to_s.strip
+  def duplicates
+    Petition.current.duplicates(action, limit: 5)
   end
 
-  def action?
-    action.present?
+  def united_kingdom?
+    location_code == "GB"
   end
 
-  def background
-    petition_creator_params[:background].to_s.strip
+  def formatted_postcode
+    postcode.to_s.gsub(/(\w{3,4})(\w{3})/, '\1 \2')
   end
 
-  def background?
-    background.present?
+  def location
+    @location || Location.current.find_by(code: location_code)
   end
 
-  def additional_details
-    petition_creator_params[:additional_details].to_s.strip
-  end
-
-  def name
-    petition_creator_params[:name].to_s.strip
-  end
-
-  def email
-    petition_creator_params[:email].to_s.strip
-  end
-
-  def email=(value)
-    petition_creator_params[:email] = value
-  end
-
-  def postcode
-    PostcodeSanitizer.call(petition_creator_params[:postcode])
-  end
-
-  def location_code
-    petition_creator_params[:location_code] || "GB"
-  end
-
-  def uk_citizenship
-    petition_creator_params[:uk_citizenship] || "0"
-  end
-
-  def notify_by_email
-    petition_creator_params[:notify_by_email] || "0"
-  end
+  delegate :name, to: :location, prefix: true, allow_nil: true
 
   private
-
-  def query_param
-    @query_param ||= params[:q].to_s.first(255)
-  end
-
-  def stage_param
-    @stage_param ||= params[:stage].to_s
-  end
-
-  def petition_creator_params
-    params[:petition_creator] || {}
-  end
-
-  def moving_backwards?
-    params.key?(:move_back)
-  end
-
-  def stage_index
-    STAGES.index(stage)
-  end
-
-  def previous_stage
-    STAGES[[stage_index - 1, 0].max]
-  end
-
-  def next_stage
-    STAGES[[stage_index + 1, 3].min]
-  end
-
-  def validate_petition
-    errors.add(:action, :invalid) if action =~ /\A[-=+@]/
-    errors.add(:action, :blank) unless action.present?
-    errors.add(:action, :too_long, count: 80) if action.length > 80
-    errors.add(:background, :invalid) if background =~ /\A[-=+@]/
-    errors.add(:background, :blank) unless background.present?
-    errors.add(:background, :too_long, count: 300) if background.length > 300
-    errors.add(:additional_details, :invalid) if additional_details =~ /\A[-=+@]/
-    errors.add(:additional_details, :too_long, count: 800) if additional_details.length > 800
-
-    if errors.any?
-      @stage = "petition"
-    end
-  end
-
-  def validate_creator
-    if stage == "creator"
-      self.email = DomainAutocorrect.call(email)
-    end
-
-    errors.add(:name, :invalid) if name =~ /\A[-=+@]/
-    errors.add(:name, :blank) unless name.present?
-    errors.add(:name, :too_long, count: 255) if name.length > 255
-    errors.add(:email, :blank) unless email.present?
-    errors.add(:location_code, :blank) unless location_code.present?
-    errors.add(:location_code, :invalid) unless location_code =~ /\A[A-Z]{2,3}\z/
-    errors.add(:uk_citizenship, :accepted) unless uk_citizenship == "1"
-    errors.add(:postcode, :too_long, count: 255) if postcode.length > 255
-    errors.add(:name, :has_uri) if URI::regexp =~ name
-
-    if email.present?
-      email_validator.validate(self)
-    end
-
-    if location_code == "GB"
-      errors.add(:postcode, :blank) unless postcode.present?
-
-      if postcode.present?
-        postcode_validator.validate(self)
-      end
-    end
-
-    if replay_email?
-      @stage = "replay_email"
-    elsif errors.any?
-      @stage = "creator"
-    end
-  end
-
-  def validate
-    validate_petition
-
-    if errors.empty? && stage_index > 1
-      validate_creator
-    end
-  end
-
-  def valid?
-    errors.clear
-    validate
-    errors.empty?
-  end
-
-  def replay_email?
-    stage == "replay_email" && errors.attribute_names == [:email]
-  end
-
-  def done?
-    stage == "replay_email"
-  end
-
-  def email_validator
-    EmailValidator.new(attributes: [:email])
-  end
-
-  def postcode_validator
-    PostcodeValidator.new(attributes: [:postcode])
-  end
 
   def constituency
     @constituency ||= Constituency.find_by_postcode(postcode)
@@ -253,11 +153,25 @@ class PetitionCreator
     constituency.try(:external_id)
   end
 
-  def send_email_to_gather_sponsors(petition)
-    GatherSponsorsForPetitionEmailJob.perform_later(petition)
+  def citizenship_errors?
+    errors.include?(:uk_citizenship)
   end
 
-  private
+  def action_errors?
+    errors.include?(:action)
+  end
+
+  def background_errors?
+    errors.include?(:background)
+  end
+
+  def additional_details_errors?
+    errors.include?(:additional_details)
+  end
+
+  def creator_errors?
+    (CREATOR_ATTRIBUTES & errors.attribute_names).present?
+  end
 
   def enqueue_job_to_update_embedding(petition)
     UpdatePetitionEmbeddingJob.perform_later(petition)
@@ -265,5 +179,9 @@ class PetitionCreator
 
   def rate_limit
     @rate_limit ||= RateLimit.first_or_create!
+  end
+
+  def send_email_to_gather_sponsors(petition)
+    GatherSponsorsForPetitionEmailJob.perform_later(petition)
   end
 end

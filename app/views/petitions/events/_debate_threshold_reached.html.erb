@@ -1,0 +1,15 @@
+<li>
+  <%= time_tag(petition.debate_threshold_reached_at) do %>
+    <strong><%= short_date_format(petition.debate_threshold_reached_at) %></strong>
+  <% end %>
+
+  <div>
+    <h3>
+      This petition will be considered for debate in Parliament
+    </h3>
+
+    <p>
+      This petition got more than <%= petition.formatted_threshold_for_debate %> signatures meaning the Petitions Committee will consider it for debate in Parliament.
+    </p>
+  </div>
+</li>

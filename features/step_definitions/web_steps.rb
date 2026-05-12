@@ -47,6 +47,12 @@ When /^I fill in "([^"]+)" with text longer than (\d+) characters$/ do |field, c
   fill_in field, with: ?a * (count + 1)
 end
 
+When /^(?:|I )choose "([^"]*)"(?: within "([^"]*)")?$/ do |field, selector|
+  with_scope(selector) do
+    choose(field)
+  end
+end
+
 When /^(?:|I )select "([^"]*)" from "([^"]*)"(?: within "([^"]*)")?$/ do |value, field, selector|
   with_scope(selector) do
     select(value, :from => field)
@@ -92,16 +98,31 @@ Then /^the "([^"]*)" field(?: within "([^"]*)")? should contain "([^"]*)"$/ do |
   end
 end
 
+Then /^the "([^"]*)" radio button(?: within "([^"]*)")? should be chosen$/ do |label, selector|
+  with_scope(selector) do
+    binding
+    field_checked = find_field(label, visible: false)['checked']
+    expect(field_checked).to be_truthy
+  end
+end
+
+Then /^the "([^"]*)" radio button(?: within "([^"]*)")? should not be chosen$/ do |label, selector|
+  with_scope(selector) do
+    field_checked = find_field(label, visible: false)['checked']
+    expect(field_checked).to be_falsey
+  end
+end
+
 Then /^the "([^"]*)" checkbox(?: within "([^"]*)")? should be checked$/ do |label, selector|
   with_scope(selector) do
-    field_checked = find_field(label)['checked']
+    field_checked = find_field(label, visible: false)['checked']
     expect(field_checked).to be_truthy
   end
 end
 
 Then /^the "([^"]*)" checkbox(?: within "([^"]*)")? should not be checked$/ do |label, selector|
   with_scope(selector) do
-    field_checked = find_field(label)['checked']
+    field_checked = find_field(label, visible: false)['checked']
     expect(field_checked).to be_falsey
   end
 end

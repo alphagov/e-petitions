@@ -1,0 +1,11 @@
+<li>
+  <%= time_tag(petition.closed_at) do %>
+    <strong><%= short_date_format(petition.closed_at) %></strong>
+  <% end %>
+
+  <div>
+    <h3>
+      Petition closed
+    </h3>
+  </div>
+</li>

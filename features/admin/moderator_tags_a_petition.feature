@@ -63,9 +63,9 @@ Feature: A moderator user updates records notes
     And I follow "Solidarity with the Unions"
     Then I leave the form alone for 1000ms
     And I follow "Tags"
-    Then the "DWP" JS enabled govuk style checkbox should not be checked
+    Then the "DWP" checkbox should not be checked
     When I check "DWP"
     Then I leave the form alone for 1000ms
     And I wait for the petition tags to save
     Then I reload the page
-    Then the "DWP" JS enabled govuk style checkbox should be checked
+    Then the "DWP" checkbox should be checked

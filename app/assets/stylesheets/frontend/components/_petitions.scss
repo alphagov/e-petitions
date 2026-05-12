@@ -1,0 +1,596 @@
+@use "sass:map";
+@use "../settings" as *;
+@use "../helpers" as *;
+@use "../lists" as *;
+
+.petition-items {
+  @include responsive-margin(8, top);
+  @include responsive-padding(8, bottom);
+
+  border-bottom: 1px solid $border-colour;
+
+  &:last-child {
+    border-bottom: none;
+  }
+
+  ul {
+    display: flex;
+    flex-direction: column;
+    gap: spacing(5);
+
+    @include media-query($from: tablet) {
+      gap: spacing(7);
+    }
+
+    @include media-query($from: laptop) {
+      flex-direction: row;
+    }
+
+    li {
+      @include responsive-padding(5, all);
+
+      border: 1px solid $border-colour;
+      border-radius: 8px;
+
+      flex-grow: 1;
+      flex-basis: 0;
+
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+
+      @include media-query($from: laptop) {
+        max-width: calc((map.get($breakpoint-max-widths, laptop) - 60px) / 2);
+      }
+
+      @include media-query($from: desktop) {
+        max-width: calc((map.get($breakpoint-max-widths, desktop) - 60px) / 2);
+      }
+
+      h3 {
+        @include font-size(22);
+
+        margin: 0;
+        text-wrap: balance;
+
+        a {
+          display: block;
+        }
+
+        & + div.wrapper {
+          @include responsive-margin(4, top);
+        }
+      }
+
+      blockquote {
+        flex: 2;
+        display: flex;
+        flex-direction: column;
+
+        @include responsive-margin(5, top);
+
+        margin-bottom: 0;
+        padding: spacing(3) spacing(4);
+
+        & > small {
+          @include font-size(18);
+          display: block;
+        }
+
+        & > p {
+          @include font-size(20);
+          @include responsive-margin(3, top);
+          @include responsive-margin(3, bottom);
+
+          color: $text-colour;
+
+          &:before {
+            content: open-quote;
+            display: inline;
+          }
+
+          &:after {
+            content: close-quote;
+            display: inline;
+          }
+        }
+      }
+
+      hr {
+        @include responsive-margin(6, top);
+        @include responsive-margin(5, bottom);
+      }
+
+      a[rel=external] {
+        display: block;
+        margin-bottom: spacing(3);
+
+        @include media-query($from: mobile) {
+          display: inline;
+          margin-bottom: 0;
+        }
+      }
+
+      p.signature-count {
+        @include font-size(22);
+        @include responsive-margin(5, top);
+        @include responsive-padding(4, top);
+
+        border-top: 1px solid $border-colour;
+        margin-bottom: 0;
+
+        span {
+          @include font-size(33);
+
+          color: $colour-black;
+          font-weight: bold;
+          display: block;
+        }
+      }
+    }
+  }
+
+  & > p:has(+p) {
+    margin-bottom: spacing(3);
+  }
+}
+
+.petition-item {
+  h2 {
+    @include font-size(27);
+    @include responsive-margin(3, bottom);
+
+    a {
+      display: block;
+    }
+  }
+
+  p {
+    @include font-size(20);
+    @include responsive-margin(2, top);
+    @include responsive-margin(2, bottom);
+  }
+
+  img {
+    aspect-ratio: calc(375/211);
+    background-color: #000;
+    margin-top: spacing(3);
+    width: 100%;
+  }
+
+  dl {
+    @include font-size(22);
+    @include responsive-margin(4, top);
+    @include responsive-margin(2, bottom);
+
+    dt {
+      font-weight: bold;
+      margin: 0;
+      padding: 0;
+
+      @include responsive-margin(3, right);
+    }
+
+    dd {
+      margin: 0;
+      padding: 0;
+    }
+
+    div {
+      display: flex;
+
+      @include responsive-margin(1, bottom);
+    }
+  }
+}
+
+.petition-detail {
+  margin-top: 0;
+
+  h1 {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  hr {
+    @include responsive-margin(6, top);
+    @include responsive-margin(6, bottom);
+  }
+
+  blockquote {
+    h2 {
+      @extend %h3;
+
+      &:first-child {
+        margin-top: 0;
+      }
+    }
+  }
+
+  footer {
+    @include responsive-margin(8, top);
+
+    h2 {
+      @extend %h3;
+
+      &:first-child {
+        margin-top: 0;
+      }
+    }
+  }
+}
+
+.tag {
+  @include font-size(22);
+
+  border-radius: $button-border-radius;
+  font-weight: normal !important;
+  margin: 0 0 spacing(3) 0;
+  padding: spacing(2) spacing(3);
+}
+
+.tag-grey {
+  background-color: $colour-grey-6;
+  color: $colour-grey-2;
+}
+
+.tag-red {
+  background-color: $colour-error-light;
+  color: $colour-error-dark;
+}
+
+.tag-green {
+  background-color: #CCE2D8;
+  color: #005A30;
+}
+
+.petition-timeline {
+  & > h2 {
+    @include font-size(27);
+  }
+
+  & > ul {
+    @include responsive-margin(7, bottom);
+
+    & > li {
+      @include responsive-margin(6, bottom);
+
+      padding-left: 40px;
+      position: relative;
+
+      @include media-query($from: tablet) {
+        padding-left: 50px;
+      }
+
+      strong {
+        white-space: nowrap;
+      }
+
+      time {
+        @include font-size(22);
+        @include responsive-margin(4, bottom);
+
+        display: block;
+      }
+
+      h3 {
+        @include font-size(22);
+      }
+
+      ul, ol, p {
+        @include font-size(20);
+      }
+
+      p:not(:last-child) {
+        @include responsive-margin(4, bottom);
+      }
+
+      iframe, lite-youtube {
+        display: block;
+        width: 100%;
+        aspect-ratio: calc(560/315);
+
+        @include responsive-margin(4, top);
+        @include responsive-margin(4, bottom);
+      }
+
+      .video-link {
+        background-color: #000000;
+        display: block;
+        position: relative;
+
+        @include responsive-margin(4, top);
+        @include responsive-margin(4, bottom);
+
+        & > img {
+          aspect-ratio: calc(560/315);
+          object-fit: cover;
+          width: 100%;
+        }
+
+        &:hover {
+          & > img {
+            opacity: 0.8;
+          }
+        }
+
+        &::after {
+          background-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20640%20640%22%3E%3Cpath%20fill%3D%22%23f03%22%20d%3D%22M581.7%20188.1c-6.2-23.7-24.8-42.3-48.3-48.6C490.9%20128%20320.1%20128%20320.1%20128s-170.8%200-213.4%2011.5c-23.5%206.3-42%2024.9-48.3%2048.6C47%20231%2047%20320.4%2047%20320.4s0%2089.4%2011.4%20132.3c6.3%2023.6%2024.8%2041.5%2048.3%2047.8C149.3%20512%20320.1%20512%20320.1%20512s170.8%200%20213.4-11.5c23.5-6.3%2042-24.2%2048.3-47.8%2011.4-42.9%2011.4-132.3%2011.4-132.3s0-89.4-11.4-132.3z%22%2F%3E%3Cpath%20fill%3D%22%23fff%22%20d%3D%22M264.2%20401.6V239.2l142.7%2081.2z%22%2F%3E%3C%2Fsvg%3E");
+          content: "";
+          position: absolute;
+          left: 50%;
+          top: 50%;
+          margin-top: -60px;
+          margin-left: -60px;
+          width: 120px;
+          height: 120px;
+        }
+      }
+
+      details {
+        summary {
+          @include font-size(20);
+
+          display: inline-block;
+          color: $interactive-colour;
+          cursor: pointer;
+          padding-right: 22px;
+          position: relative;
+          text-decoration: underline;
+
+          &::after {
+            content: "";
+            border-bottom: 2px solid $interactive-colour;
+            border-right: 2px solid $interactive-colour;
+            position: absolute;
+            top: 4px;
+            right: 3px;
+            width: 11px;
+            height: 11px;
+            transform: rotate(45deg);
+          }
+
+          &:hover:not(:focus) {
+            color: $interactive-hover-colour;
+
+            &::after {
+              border-bottom: 2px solid $interactive-hover-colour;
+              border-right: 2px solid $interactive-hover-colour;
+            }
+          }
+
+          &:focus {
+            @extend %focused-text;
+
+            &::after {
+              border-bottom: 2px solid $focus-colour;
+              border-right: 2px solid $focus-colour;
+            }
+          }
+        }
+
+        & > div {
+          @include responsive-margin(2, top);
+          @include responsive-padding(5, top);
+
+          ul {
+            @extend %bulleted-list;
+          }
+
+          ol {
+            @extend %numbered-list;
+          }
+
+          blockquote {
+            @include responsive-margin(4, top);
+            @include responsive-margin(4, bottom);
+
+            padding-top: 0;
+            padding-bottom: 0;
+          }
+        }
+
+        &[open] {
+          summary {
+            &::after {
+              top: 10px;
+              transform: rotate(225deg);
+            }
+          }
+        }
+      }
+
+      .response-details {
+        details {
+          summary {
+            & > span {
+              display: none;
+            }
+
+            &::before {
+              content: "Read full response"
+            }
+          }
+
+          &[open] {
+            summary {
+              &::before {
+                content: "Hide full response"
+              }
+            }
+          }
+        }
+      }
+
+      .response-summary {
+        @include responsive-margin(4, bottom);
+
+        p {
+          @include font-size(22);
+
+          &:before {
+            content: open-quote;
+            display: inline;
+          }
+
+          &:after {
+            content: close-quote;
+            display: inline;
+          }
+        }
+      }
+
+      & > div {
+        border: 1px solid $border-colour;
+        border-radius: 8px;
+
+        @include responsive-padding(5, all);
+      }
+
+      &::before {
+        content: "";
+        border-left: 1px solid $border-colour;
+        position: absolute;
+        bottom: 0;
+        width: 0;
+        top: 25px;
+        left: 13px;
+
+        @include media-query($from: tablet) {
+          top: 28px;
+          left: 15px;
+        }
+      }
+
+      &::after {
+        background-color: $border-colour;
+        border-radius: 50%;
+        content: "";
+        position: absolute;
+        left: 8px;
+        top: 6px;
+        width: 11px;
+        height: 11px;
+
+        @include media-query($from: tablet) {
+          left: 8px;
+          top: 5px;
+          width: 15px;
+          height: 15px;
+        }
+      }
+
+      &:first-child {
+        &::before {
+          top: 28px;
+
+          @include media-query($from: tablet) {
+            top: 31px;
+          }
+        }
+
+        &::after {
+          background-color: $interactive-colour;
+          left: 5px;
+          top: 3px;
+          width: 17px;
+          height: 17px;
+
+          @include media-query($from: tablet) {
+            left: 5px;
+            top: 2px;
+            width: 21px;
+            height: 21px;
+          }
+        }
+      }
+    }
+  }
+}
+
+#signature-count {
+  @include responsive-margin(6, top);
+
+  .signature-count-number {
+    @include font-size(44);
+
+    color: $theme-colour;
+    font-weight: bold;
+
+    .number {
+      @include font-size(33);
+    }
+
+    .text {
+      @include font-size(22);
+      font-weight: normal;
+    }
+  }
+
+  .signature-count-progress {
+    display: block;
+    margin: 0;
+    padding: 0;
+
+    progress[value] {
+      -moz-appearance: none;
+      -webkit-appearance: none;
+      appearance: none;
+      display: block;
+
+      height: 25px;
+      width: 100%;
+
+      border: 2px solid transparent;
+      background-color: $colour-grey-4;
+      overflow: visible;
+
+      &::-moz-progress-bar {
+        background-color: $colour-blue;
+        box-sizing: content-box;
+        border: 2px solid transparent;
+        margin: -2px;
+        height: 25px;
+      }
+
+      &::-webkit-progress-value {
+        background-color: $colour-blue;
+        box-sizing: content-box;
+        border: 2px solid transparent;
+        margin: -2px;
+        height: 21px;
+      }
+
+      &::-webkit-progress-bar,
+      &::-webkit-progress-inner-element {
+        background: none;
+        box-sizing: content-box;
+        height: 21px;
+        width: 100%;
+      }
+    }
+  }
+
+  .signature-count-progress-footer {
+    @include responsive-margin(3, top);
+
+    display: flex;
+    justify-content: space-between;
+  }
+}
+
+#trending-petitions {
+  ul {
+    li {
+      @include media-query($from: laptop) {
+        max-width: calc((map.get($breakpoint-max-widths, laptop) - 90px) / 3);
+      }
+
+      @include media-query($from: desktop) {
+        max-width: calc((map.get($breakpoint-max-widths, desktop) - 90px) / 3);
+      }
+    }
+  }
+}
+

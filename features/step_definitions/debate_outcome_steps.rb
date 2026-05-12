@@ -2,6 +2,7 @@ Given(/^a petition "(.*?)" has been debated (\d+) days ago?$/) do |petition_acti
   @petition = FactoryBot.create(:debated_petition,
     action: petition_action,
     debated_on: debated_days_ago.days.ago.to_date,
+    opened_at: debated_days_ago.days.ago - 1.month,
     overview: 'Everyone was in agreement, this petition must be made law!',
     transcript_url: 'https://hansard.parliament.uk/path/to/transcript',
     video_url: 'https://www.youtube.com?v=1234abcd',
@@ -17,6 +18,7 @@ Given(/^an archived petition "(.*?)" has been debated (\d+) days ago?$/) do |pet
     action: petition_action,
     debate_outcome_at: debated_days_ago.days.ago,
     debated_on: debated_days_ago.days.ago.to_date,
+    opened_at: debated_days_ago.days.ago - 1.month,
     overview: 'Everyone was in agreement, this petition must be made law!',
     transcript_url: 'https://hansard.parliament.uk/path/to/transcript',
     video_url: 'https://www.youtube.com?v=1234abcd',
@@ -30,6 +32,7 @@ Given(/^a petition "(.*?)" has been debated yesterday$/) do |petition_action|
   @petition = FactoryBot.create(:open_petition,
     action: petition_action,
     scheduled_debate_date: 1.day.ago,
+    opened_at: 1.day.ago - 1.month,
     debate_state: 'debated'
   )
 end
@@ -38,6 +41,7 @@ Given(/^an archived petition "(.*?)" has been debated yesterday$/) do |petition_
   @petition = FactoryBot.create(:archived_petition,
     action: petition_action,
     scheduled_debate_date: 1.day.ago,
+    opened_at: 1.day.ago - 1.month,
     debate_state: 'debated'
   )
 end

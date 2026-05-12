@@ -93,54 +93,21 @@ RSpec.describe Archived::PetitionsController, type: :controller do
       context "and it is an array" do
         it "uses the default count" do
           get :index, params: { count: [ "l337haxxor" ] }
-          expect(assigns(:petitions).page_size).to eq 50
+          expect(assigns(:petitions).page_size).to eq 25
         end
       end
 
       context "and it is a hash" do
         it "uses the default count" do
           get :index, params: { count: { l337: "haxxor" } }
-          expect(assigns(:petitions).page_size).to eq 50
+          expect(assigns(:petitions).page_size).to eq 25
         end
       end
 
       context "and it is out of range" do
-        it "uses the default count" do
-          get :index, params: { count: "414141414141414141" }
+        it "uses the maximum count" do
+          get :index, params: { count: "59" }
           expect(assigns(:petitions).page_size).to eq 50
-        end
-      end
-    end
-
-    context "when a parliament parameter is provided" do
-      let(:parliament) { FactoryBot.create(:parliament, :coalition) }
-
-      it "assigns the @parliament instance variable" do
-        get :index, params: { parliament: parliament.id }
-        expect(assigns(:parliament)).to eq(parliament)
-      end
-
-      context "when the parliament parameter is not a number" do
-        it "raises a ActionController::BadRequest error" do
-          expect {
-            get :index, params: { parliament: "notanumber" }
-          }.to raise_error(ActionController::BadRequest)
-        end
-      end
-
-      context "when the parliament parameter is an array" do
-        it "raises a ActionController::BadRequest error" do
-          expect {
-            get :index, params: { parliament: [1] }
-          }.to raise_error(ActionController::BadRequest)
-        end
-      end
-
-      context "when the parliament parameter is a hash" do
-        it "raises a ActionController::BadRequest error" do
-          expect {
-            get :index, params: { parliament: { id: 1 } }
-          }.to raise_error(ActionController::BadRequest)
         end
       end
     end

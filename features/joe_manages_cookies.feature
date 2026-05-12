@@ -4,6 +4,9 @@ Feature: Joe manages cookies
   As Joe, a member of the general public
   I want to manage my cookie preferences
 
+  Background:
+    Given Google Analytics is enabled
+
   Scenario: On the first visit
     Given I am on the home page
     Then I should see the cookie banner
@@ -35,7 +38,7 @@ Feature: Joe manages cookies
     Then I should see the cookie banner
     When I press "Cookie settings"
     Then I should see the cookie settings
-    And "Do not use cookies that measure my website use" is chosen
+    And the "Do not use cookies that measure my website use" radio button should be chosen
     When I press "Close cookie settings"
     Then I should not see the cookie settings
     And I should see the cookie banner
@@ -49,7 +52,7 @@ Feature: Joe manages cookies
     And the analytics cookie preference should be set to false
     When I follow "Cookie settings"
     Then I should see the cookie settings
-    And "Do not use cookies that measure my website use" is chosen
+    And the "Do not use cookies that measure my website use" radio button should be chosen
     When I choose "Use cookies that measure my website use"
     And I press "Save cookie settings"
     Then I should not see the cookie settings

@@ -14,6 +14,12 @@ module NavigationHelpers
     when /^the help page$/
       help_url
 
+    when /^the old standards page$/
+      help_url(anchor: 'standards')
+
+    when /^the new standards page$/
+      standards_url
+
     when /^the privacy page$/
       privacy_url
 
@@ -26,8 +32,8 @@ module NavigationHelpers
     when /^the all petitions JSON page$/
       petitions_url(:json)
 
-    when /^the check for existing petitions page$/
-      check_petitions_url
+    when /^the start a new petition page$/
+      start_petitions_url
 
     when /^the new petition page$/
       new_petition_url
@@ -55,6 +61,9 @@ module NavigationHelpers
 
     when /^the Admin (.*)$/i
       admin_url($1)
+
+    when /^the local petitions page$/
+      local_petitions_url
 
     when /^the local petitions results page$/
       local_petition_url(@my_constituency.slug)

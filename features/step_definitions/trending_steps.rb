@@ -6,9 +6,9 @@ Given /^there has been activity on a number of petitions in the last hour$/ do
 end
 
 Then /^I should see the most popular petitions listed on the front page$/ do
-  expect(page).to have_css(".trending .petition-item", :count => 3)
+  expect(page).to have_css("#trending-petitions ul li", count: 3)
 end
 
 Then /^I should not see the trending petitions section$/ do
-  expect(page).to_not have_css('.trending')
+  expect(page).to_not have_css('#trending-petitions')
 end

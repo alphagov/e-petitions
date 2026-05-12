@@ -346,7 +346,7 @@ RSpec.describe Petition, type: :model do
         @p4 = FactoryBot.create(:open_petition)
       end
 
-      it "returns only the petitions have a government response timestamp" do
+      it "returns only the petitions have a Government response timestamp" do
         expect(Petition.with_response).to match_array([@p1, @p3])
       end
     end

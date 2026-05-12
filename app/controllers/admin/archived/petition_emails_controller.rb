@@ -74,7 +74,7 @@ class Admin::Archived::PetitionEmailsController < Admin::AdminController
   end
 
   def email_params
-    params.require(:archived_petition_email).permit(:subject, :body).merge(sent_by: current_user.pretty_name)
+    params.require(:archived_petition_email).permit(:subject, :body, :occurred_on).merge(sent_by: current_user.pretty_name)
   end
 
   def feedback_signature

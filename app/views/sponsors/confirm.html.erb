@@ -1,3 +1,0 @@
-<%= form_for @signature, url: petition_sponsors_path(@petition, token: @petition.sponsor_token) do |form| %>
-  <%= render "email_form", form: form, signature: @signature %>
-<% end %>

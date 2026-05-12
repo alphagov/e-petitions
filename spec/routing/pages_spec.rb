@@ -21,6 +21,10 @@ RSpec.describe "pages", type: :routes do
     it "GET /privacy routes to pages#show" do
       expect(get: "/privacy").to route_to(controller: "pages", action: "show", slug: "privacy")
     end
+
+    it "GET /standards routes to pages#show" do
+      expect(get: "/standards").to route_to(controller: "pages", action: "show", slug: "standards")
+    end
   end
 
   describe "helpers" do
@@ -44,8 +48,8 @@ RSpec.describe "pages", type: :routes do
       expect(privacy_url).to eq("https://petition.parliament.uk/privacy")
     end
 
-    it "#browserconfig_url" do
-      expect(browserconfig_url).to eq("https://petition.parliament.uk/browserconfig.xml")
+    it "#standards_url" do
+      expect(standards_url).to eq("https://petition.parliament.uk/standards")
     end
 
     it "#manifest_url" do

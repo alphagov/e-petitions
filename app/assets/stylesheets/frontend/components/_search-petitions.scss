@@ -1,0 +1,45 @@
+@use "../settings" as *;
+@use "../helpers" as *;
+
+#search-petitions {
+  margin: 0;
+
+  .item-group {
+    @include responsive-margin(3, "top");
+    @include responsive-margin(5, "bottom");
+
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+
+    @include media-query($from: tablet) {
+      justify-content: flex-start;
+    }
+
+    input[type=text] {
+      border-radius: $button-border-radius;
+      width: 100%;
+
+      @include media-query($from: tablet) {
+        width: 50%;
+      }
+    }
+
+    input[type=text] + button {
+      margin-top: spacing(3);
+
+      @include media-query($from: tablet) {
+        margin-top: 0;
+        margin-left: spacing(3);
+      }
+    }
+
+    button, .button {
+      width: 100%;
+
+      @include media-query($from: tablet) {
+        width: auto;
+      }
+    }
+  }
+}

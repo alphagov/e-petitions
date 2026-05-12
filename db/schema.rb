@@ -10,10 +10,10 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_11_12_194807) do
+ActiveRecord::Schema[8.0].define(version: 2026_05_09_101528) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "intarray"
-  enable_extension "plpgsql"
+  enable_extension "pg_catalog.plpgsql"
   enable_extension "vector"
 
   create_table "active_storage_attachments", force: :cascade do |t|
@@ -116,6 +116,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_11_12_194807) do
     t.datetime "updated_at", precision: nil, null: false
     t.integer "email_count"
     t.datetime "emails_enqueued_at", precision: nil
+    t.date "occurred_on"
     t.index ["petition_id"], name: "index_archived_petition_emails_on_petition_id"
   end
 
@@ -175,6 +176,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_11_12_194807) do
     t.datetime "published_at", precision: nil
     t.string "response_state", limit: 30, default: "pending", null: false
     t.datetime "debate_scheduled_at", precision: nil
+    t.date "debate_scheduled_on"
     t.index "to_tsvector('english'::regconfig, (action)::text)", name: "index_archived_petitions_on_action", using: :gin
     t.index "to_tsvector('english'::regconfig, (background)::text)", name: "index_archived_petitions_on_background", using: :gin
     t.index "to_tsvector('english'::regconfig, additional_details)", name: "index_archived_petitions_on_additional_details", using: :gin
@@ -463,6 +465,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_11_12_194807) do
     t.boolean "enabled", default: true, null: false
     t.boolean "redirect", default: false, null: false
     t.string "redirect_url"
+    t.boolean "disable_toc", default: false, null: false
     t.index ["slug"], name: "index_pages_on_slug", unique: true
   end
 
@@ -516,6 +519,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_11_12_194807) do
     t.datetime "updated_at", precision: nil, null: false
     t.integer "email_count"
     t.datetime "emails_enqueued_at", precision: nil
+    t.date "occurred_on"
     t.index ["petition_id"], name: "index_petition_emails_on_petition_id"
   end
 
@@ -585,6 +589,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_11_12_194807) do
     t.datetime "published_at", precision: nil
     t.string "response_state", limit: 30, default: "pending", null: false
     t.datetime "debate_scheduled_at", precision: nil
+    t.date "debate_scheduled_on"
     t.index "((last_signed_at > signature_count_validated_at))", name: "index_petitions_on_validated_at_and_signed_at"
     t.index "to_tsvector('english'::regconfig, (action)::text)", name: "index_petitions_on_action", using: :gin
     t.index "to_tsvector('english'::regconfig, (background)::text)", name: "index_petitions_on_background", using: :gin
@@ -762,6 +767,17 @@ ActiveRecord::Schema[7.2].define(version: 2025_11_12_194807) do
     t.integer "signature_count_interval", default: 60, null: false
     t.boolean "update_signature_counts", default: false, null: false
     t.integer "threshold_for_moderation_delay", default: 500, null: false
+  end
+
+  create_table "solid_cache_entries", force: :cascade do |t|
+    t.binary "key", null: false
+    t.binary "value", null: false
+    t.datetime "created_at", null: false
+    t.bigint "key_hash", null: false
+    t.integer "byte_size", null: false
+    t.index ["byte_size"], name: "index_solid_cache_entries_on_byte_size"
+    t.index ["key_hash", "byte_size"], name: "index_solid_cache_entries_on_key_hash_and_byte_size"
+    t.index ["key_hash"], name: "index_solid_cache_entries_on_key_hash", unique: true
   end
 
   create_table "tags", id: :serial, force: :cascade do |t|

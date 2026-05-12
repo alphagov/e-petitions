@@ -47,7 +47,9 @@ class Petition < ActiveRecord::Base
   after_create :update_last_petition_created_at
 
   extend Searchable(:action, :background, :additional_details)
-  include Browseable, Taggable, Departments, Topics, Anonymization
+  include Browseable, NearestNeighbours, HybridSearching, Taggable, Departments, Topics, Anonymization
+
+  self.default_page_size = 25
 
   facet :all,      -> { by_most_popular }
   facet :open,     -> { open_state.by_most_popular }
@@ -116,7 +118,7 @@ class Petition < ActiveRecord::Base
   # can't add `allow_blank: true` here because Active Record validations
   # will not call the DateValidator as all invalid dates are coerced to nil.
   # Therefore the allowing of blank values is handling in the validtor.
-  validates :scheduled_debate_date, date: true
+  validates :scheduled_debate_date, :debate_scheduled_on, date: true
 
   validates :committee_note, length: { maximum: 800, allow_blank: true }
   validates :open_at, presence: true, if: :open?
@@ -131,7 +133,11 @@ class Petition < ActiveRecord::Base
     delegate :debate_pack_url, to: :debate_outcome, prefix: false
   end
 
+  delegate :debated_on, to: :debate_outcome, allow_nil: true
+  delegate :responded_on, to: :government_response, allow_nil: true
+
   delegate :threshold_for_response, :threshold_for_debate, to: :Site
+  delegate :signature_count_interval, to: :Site
   delegate :formatted_threshold_for_response, to: :Site
   delegate :formatted_threshold_for_debate, to: :Site
 
@@ -146,8 +152,16 @@ class Petition < ActiveRecord::Base
   end
 
   class << self
+    def duplicates(action, limit: 3)
+      semantic_search(action).limit(limit).presence
+    end
+
     def by_most_popular
       reorder(signature_count: :desc, created_at: :desc)
+    end
+
+    def by_most_signatures
+      reorder('signature_count DESC NULLS LAST, created_at DESC')
     end
 
     def by_most_recent
@@ -155,7 +169,7 @@ class Petition < ActiveRecord::Base
     end
 
     def by_most_recently_published
-      reorder(open_at: :desc)
+      reorder('published_at DESC NULLS LAST')
     end
 
     def by_most_recent_debate_outcome
@@ -167,7 +181,7 @@ class Petition < ActiveRecord::Base
     end
 
     def by_most_recent_response
-      reorder(government_response_at: :desc, created_at: :desc)
+      reorder('government_response_at DESC NULLS LAST, created_at DESC')
     end
 
     def by_most_relevant_debate_date
@@ -179,11 +193,11 @@ class Petition < ActiveRecord::Base
     end
 
     def by_waiting_for_debate_longest
-      reorder(debate_threshold_reached_at: :asc, created_at: :desc)
+      reorder('debate_threshold_reached_at ASC NULLS LAST, created_at ASC')
     end
 
     def by_waiting_for_response_longest
-      reorder(response_threshold_reached_at: :asc, created_at: :desc)
+      reorder('response_threshold_reached_at ASC NULLS LAST, created_at ASC')
     end
 
     def current
@@ -351,6 +365,10 @@ class Petition < ActiveRecord::Base
       order(signatures[:id].count.desc).
       order(arel_table[:created_at].desc).
       limit(limit)
+    end
+
+    def popular(limit = 3)
+      open_state.by_most_popular.limit(limit)
     end
 
     def close_petitions!(time = Time.current)
@@ -1067,6 +1085,14 @@ class Petition < ActiveRecord::Base
     debate_state.in?(%w[awaiting scheduled])
   end
 
+  def awaiting_debate_decision?
+    debate_state == 'awaiting'
+  end
+
+  def debate_scheduled?
+    debate_state == 'scheduled'
+  end
+
   def debated?
     debate_state == 'debated'
   end
@@ -1135,5 +1161,31 @@ class Petition < ActiveRecord::Base
 
   def time_for_publishing(time)
     open_at || time
+  end
+
+  def debate_scheduled_on
+    super || default_debate_scheduled_on
+  end
+
+  def debate_scheduled_on?
+    debate_scheduled_on.present?
+  end
+
+  def last_modified_at
+    Time.zone.at(updated_at.to_i.floor(-1))
+  end
+
+  def cache_control(max_age: signature_count_interval)
+    {
+      max_age: max_age,
+      stale_while_revalidate: max_age * 2,
+      stale_if_error: max_age * 5
+    }
+  end
+
+  private
+
+  def default_debate_scheduled_on
+    debate_scheduled_at? ? debate_scheduled_at.to_date : nil
   end
 end

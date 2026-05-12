@@ -1,4 +1,11 @@
 en-GB:
+  archived_petitions:
+    search:
+      status_html:
+        zero: "We’ve found <strong>%{formatted_count}</strong> petitions that match your search"
+        one: "We’ve found <strong>%{formatted_count}</strong> petition that matches your search"
+        other: "We’ve found <strong>%{formatted_count}</strong> petitions that match your search"
+
   petitions:
     errors:
       prompt:
@@ -22,43 +29,69 @@ en-GB:
 
     share_title: "Petition: %{petition}"
 
-    sharing:
-      facebook:
-        html: <span class="icon icon-share-facebook"></span> Facebook
-      email:
-        html: <span class="icon icon-share-email"></span> Email
-      x:
-        html: <span class="icon icon-share-x"></span> X
-      whatsapp:
-        html: <span class="icon icon-share-whatsapp"></span> Whatsapp
-
     lists:
-      all: "All petitions (%{quantity})"
-      open: "Open petitions (%{quantity})"
-      recent: "Recent petitions (%{quantity})"
-      closed: "Closed petitions (%{quantity})"
-      published: "Published petitions (%{quantity})"
-      rejected: "Rejected petitions (%{quantity})"
-      awaiting_response: "Awaiting government response (%{quantity})"
-      with_response: "Government responses (%{quantity})"
-      debated: "Debated in Parliament (%{quantity})"
-      not_debated: "Not debated in Parliament (%{quantity})"
-      awaiting_debate: "Awaiting a debate in Parliament (%{quantity})"
+      all: "All petitions"
+      open: "Open petitions"
+      recent: "Recent petitions"
+      closed: "Closed petitions"
+      published: "Published petitions"
+      rejected: "Rejected petitions"
+      awaiting_response: "Awaiting Government response"
+      with_response: "Government responses"
+      debated: "Debated in Parliament"
+      not_debated: "Not debated in Parliament"
+      awaiting_debate: "Awaiting a debate in Parliament"
 
     list_headers:
-      open_html: |-
-        <p class="text-secondary">
+      all_html: |-
+        <p>
           These petitions are sorted by popularity.
-          <a href="/petitions?state=recent&amp;q=%{query}">Sort them by date of publishing</a>.
+        </p>
+      open_html: |-
+        <p>
+          These petitions are sorted by popularity.<br>
+          <a href="%{url}">Sort them by date of publishing</a>
         </p>
       recent_html: |-
-        <p class="text-secondary">
-          These petitions are sorted by date of publishing.
-          <a href="/petitions?state=open&amp;q=%{query}">Sort them by popularity</a>.
+        <p>
+          These petitions are sorted by date of publishing.<br>
+          <a href="%{url}">Sort them by popularity</a>
+        </p>
+      closed_html: |-
+        <p>
+          These petitions are sorted by popularity.
+        </p>
+      published_html: |-
+        <p>
+          These petitions are sorted by popularity.
+        </p>
+      rejected_html: |-
+        <p>
+          These petitions are sorted by the date of rejection.
+        </p>
+      awaiting_response_html: |-
+        <p>
+          These petitions are sorted by how long they’ve been waiting for a response from Government.
+        </p>
+      with_response_html: |-
+        <p>
+          These petitions are sorted by the date of the response from Government.
+        </p>
+      debated_html: |-
+        <p>
+          These petitions are sorted by the date of the debate in Parliament.
         </p>
       not_debated_html: |-
-        <p class="text-secondary">
-          The Petitions Committee decided not to debate these petitions
+        <p>
+          The Petitions Committee decided not to debate these petitions.
+        </p>
+      awaiting_debate_html: |-
+        <p>
+          These petitions are sorted by how long they’ve been waiting for a decision about a debate in Parliament.
+        </p>
+      semantic_html: |-
+        <p>
+          These petitions are sorted by relevance.
         </p>
 
     facets:
@@ -129,22 +162,22 @@ en-GB:
           rejected: "Rejected (%{quantity})"
           hidden: "Hidden (%{quantity})"
           stopped: "Stopped (%{quantity})"
-          awaiting_response: "Awaiting a government response (%{quantity})"
-          with_response: "With a government response (%{quantity})"
-          awaiting_debate: "Awaiting a debate in parliament (%{quantity})"
-          debated: "Has been debated in parliament (%{quantity})"
-          not_debated: "Has not been debated in parliament (%{quantity})"
+          awaiting_response: "Awaiting a Government response (%{quantity})"
+          with_response: "With a Government response (%{quantity})"
+          awaiting_debate: "Awaiting a debate in Parliament (%{quantity})"
+          debated: "Has been debated in Parliament (%{quantity})"
+          not_debated: "Has not been debated in Parliament (%{quantity})"
         admin_archived:
           all: "All petitions (%{quantity})"
           published: "Published (%{quantity})"
           rejected: "Rejected (%{quantity})"
           hidden: "Hidden (%{quantity})"
           stopped: "Stopped (%{quantity})"
-          awaiting_response: "Awaiting a government response (%{quantity})"
-          with_response: "With a government response (%{quantity})"
-          awaiting_debate: "Awaiting a debate in parliament (%{quantity})"
-          debated: "Has been debated in parliament (%{quantity})"
-          not_debated: "Has not been debated in parliament (%{quantity})"
+          awaiting_response: "Awaiting a Government response (%{quantity})"
+          with_response: "With a Government response (%{quantity})"
+          awaiting_debate: "Awaiting a debate in Parliament (%{quantity})"
+          debated: "Has been debated in Parliament (%{quantity})"
+          not_debated: "Has not been debated in Parliament (%{quantity})"
     emails:
       subjects:
         # Emails to people who sign petitions
@@ -240,6 +273,10 @@ en-GB:
         html:
           one: "<span class=\"count\">%{formatted_count}</span> <span class=\"text\">signature</span>"
           other: "<span class=\"count\">%{formatted_count}</span> <span class=\"text\">signatures</span>"
+      popular:
+        html:
+          one: "<span class=\"count\">%{formatted_count}</span> signature"
+          other: "<span class=\"count\">%{formatted_count}</span> signatures"
       trending:
         html:
           one: "<span class=\"count\">%{formatted_count}</span> signature in the last hour"
@@ -271,15 +308,15 @@ en-GB:
           one: "<span class=\"count\">%{formatted_count}</span> <span class=\"suffix\">petition from the current Parliament has been debated in the House of Commons</span>"
           other: "<span class=\"count\">%{formatted_count}</span> <span class=\"suffix\">petitions from the current Parliament have been debated in the House of Commons</span>"
       awaiting_response_explanation:
-        html: "See all petitions waiting for a government response (%{formatted_count})"
+        html: "See all petitions waiting for a Government response (%{formatted_count})"
       with_response_explanation:
-        html: "See all petitions with a government response (%{formatted_count})"
+        html: "See all petitions with a Government response (%{formatted_count})"
       awaiting_debate_explanation:
         html: "See all petitions waiting for a debate (%{formatted_count})"
       debated_explanation:
-        html: "See all petitions debated in parliament (%{formatted_count})"
+        html: "See all petitions debated in Parliament (%{formatted_count})"
       not_debated_explanation:
-        html: "See all petitions not debated in parliament (%{formatted_count})"
+        html: "See all petitions not debated in Parliament (%{formatted_count})"
 
     action_counts:
       in_moderation:
@@ -297,9 +334,9 @@ en-GB:
 
     debate_outcomes:
       link_titles:
-        video_url: "Watch the debate"
-        transcript_url: "Read the transcript"
-        debate_pack_url: "Read the research"
+        video_url: "Watch the debate on parliamentlive.tv"
+        transcript_url: "Read the transcript of the debate"
+        debate_pack_url: "Read the research used for the debate"
         public_engagement_url: "Read what the public said"
         debate_summary_url: "Read a summary of the debate"
 
@@ -314,3 +351,75 @@ en-GB:
           <span class="paginate-label">Next</span>
           <span class="paginate page-count">%{next_page} of %{total_pages}</span>
         </a>
+
+
+    search:
+      status_html:
+        zero: "We’ve found <strong>%{formatted_count}</strong> petitions that match your search"
+        one: "We’ve found <strong>%{formatted_count}</strong> petition that matches your search"
+        other: "We’ve found <strong>%{formatted_count}</strong> petitions that match your search"
+
+  pagination:
+    previous_label: |
+      <svg xmlns="http://www.w3.org/2000/svg" height="13" width="15" aria-hidden="true" focusable="false" viewBox="0 0 15 13">
+        <path d="m6.5938-0.0078125-6.7266 6.7266 6.7441 6.4062 1.377-1.449-4.1856-3.9768h12.896v-2h-12.984l4.2931-4.293-1.414-1.414z"></path>
+      </svg>
+      <span>
+        Previous<span class="visually-hidden"> page</span>
+      </span>
+    next_label: |
+      <span>
+        Next<span class="visually-hidden"> page</span>
+      </span>
+      <svg xmlns="http://www.w3.org/2000/svg" height="13" width="15" aria-hidden="true" focusable="false" viewBox="0 0 15 13">
+        <path d="m8.107-0.0078125-1.4136 1.414 4.2926 4.293h-12.986v2h12.896l-4.1855 3.9766 1.377 1.4492 6.7441-6.4062-6.7246-6.7266z"></path>
+      </svg>
+
+  timeline:
+    published:
+      title: Petition published
+      description_html: |
+        People can now sign this petition.
+    closes:
+      title: Petition closes
+      description_html: |
+        This petition will stay open until
+        <time datetime="%{iso_closing_date}">%{closing_date}</time>.
+    closed:
+      title: Petition closed
+      description_html: |
+        This petition collected signatures until
+        <time datetime="%{iso_closing_date}">%{closing_date}</time>.
+    response_target:
+      title: At %{response_threshold} signatures
+      description_html: |
+        If a petition gets %{response_threshold} signatures, government will respond to it.
+    awaiting_response:
+      title: Waiting for a Government response
+      description_html: |
+        Government will respond to this petition.
+    responded:
+      title: Government responded to this petition
+      description_html: |
+        <a href="#response">View response</a>
+    debate_target:
+      title: At %{debate_threshold} signatures
+      description_html: |
+        If a petition gets %{debate_threshold} signatures, it will be considered for debate in Parliament.
+    awaiting_debate:
+      title: Waiting for a decision about a debate in Parliament
+      description_html: |
+        The Petitions Committee will consider this petition for a debate in Parliament.
+    debate_scheduled:
+      title: Debate in Parliament scheduled
+      description_html: |
+        A debate about this petition will take place on
+        <time datetime="%{iso_debate_date}">%{debate_date}</time>.
+    debated:
+      title: Parliament debated this petition
+      description_html: |
+        <a href="#debate">View debate</a>
+    not_debated:
+      title: Parliament did not debate this petition
+      description_html: |
+        The Petitions Committee decided not to debate this petition.

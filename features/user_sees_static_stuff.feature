@@ -9,10 +9,18 @@ Feature: User views static pages
 
   Scenario: I navigate to Help
     When I go to the home page
-    And I follow "How petitions work"
+    And I follow "How petitions work" within ".//footer"
     Then I should be on the help page
     And I should see "How petitions work" in the browser page title
     And the markup should be valid
+
+  Scenario: I navigate to Standards
+    When I go to the home page
+    And I follow "Petition standards" within ".//footer"
+    Then I should be on the standards page
+    And I should see "Standards for petitions" in the browser page title
+    And the markup should be valid
+    And I should not see "Contents" within ".//main"
 
   Scenario: I navigate to Privacy notice
     When I go to the home page
@@ -20,6 +28,7 @@ Feature: User views static pages
     Then I should be on the privacy page
     And I should see "Privacy notice" in the browser page title
     And the markup should be valid
+    And I should not see "Contents" within ".//main"
 
   Scenario: I navigate to the Cookies page
     When I go to the home page
@@ -27,6 +36,7 @@ Feature: User views static pages
     Then I should be on the cookies page
     And I should see "Cookies" in the browser page title
     And the markup should be valid
+    And I should not see "Contents" within ".//main"
 
   Scenario: I navigate to Accessibility statement
     When I go to the home page
@@ -44,8 +54,15 @@ Feature: User views static pages
 
   @javascript
   Scenario: I navigate to a redirected page
-    Given the "cookies" page is redirected to "https://www.parliament.uk/site-information/privacy/"
+    Given Google Analytics is enabled
+    And the "cookies" page is redirected to "https://www.parliament.uk/site-information/privacy/"
     When I go to the home page
     And I press "Accept additional cookies"
     And I follow "Cookie policy"
     Then I should be redirected to "https://www.parliament.uk/site-information/privacy/"
+
+  @javascript
+  Scenario: I navigate to the old standards url
+    When I go to the old standards page
+    Then I should see "Standards for petitions"
+    And I should be on the new standards page

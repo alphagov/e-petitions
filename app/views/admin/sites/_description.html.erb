@@ -57,12 +57,6 @@
       </div>
     <% end %>
 
-    <%= form_row for: [form.object, :feedback_page_message_colour], id: "feedback-page-message-colour", class: "message-field", style: "display: none;" do %>
-      <%= form.label :feedback_page_message_colour, "Background", class: "form-label form-label-inline" %>
-      <%= error_messages_for_field @site, :feedback_page_message_colour %>
-      <%= form.select :feedback_page_message_colour, message_colours, {}, class: "form-control form-control-1-4" %>
-    <% end %>
-
     <%= form_row for: [form.object, :feedback_page_message], id: "feedback-page-message", class: "message-field", style: "display: none;" do %>
       <%= form.label :feedback_page_message, "Message for the feedback page", class: "form-label message-label", style: "display: none;" %>
       <%= error_messages_for_field @site, :feedback_page_message %>
@@ -76,7 +70,6 @@
     var $show_feedback_page_true = $('input[name="site[show_feedback_page_message]"][value=true]');
     var $show_feedback_page = $('input[name="site[show_feedback_page_message]"]');
     var $feedback_page_msg = $('#feedback-page-message');
-    var $feedback_page_msg_colour = $('#feedback-page-message-colour');
 
     var blurAndFocus = function() {
       this.blur();
@@ -93,7 +86,6 @@
 
     var toggleMessageFields = function() {
       toggleMessageField($show_feedback_page_true, $feedback_page_msg);
-      toggleMessageField($show_feedback_page_true, $feedback_page_msg_colour);
     }
 
     toggleMessageFields();

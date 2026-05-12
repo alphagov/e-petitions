@@ -1,0 +1,19 @@
+@use "sass:map";
+@use "./settings" as *;
+@use "./helpers/media-query" as *;
+
+.container {
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: $gutter-half;
+  padding-right: $gutter-half;
+  width: 100%;
+}
+
+@each $breakpoint, $width in $breakpoints {
+  @include media-query($from: $width) {
+    .container {
+      max-width: map.get($breakpoint-max-widths, $breakpoint);
+    }
+  }
+}

@@ -32,7 +32,7 @@ RSpec.describe GovernmentResponse, type: :model do
   end
 
   describe "callbacks" do
-    context "when the government response is created" do
+    context "when the Government response is created" do
       let(:petition) { FactoryBot.create(:awaiting_response_petition) }
       let(:government_response) { FactoryBot.build(:government_response, petition: petition) }
       let(:now) { Time.current }
@@ -54,7 +54,7 @@ RSpec.describe GovernmentResponse, type: :model do
       end
     end
 
-    context "when the government response is deleted" do
+    context "when the Government response is deleted" do
       let(:government_response) { petition.government_response }
 
       context "and the petition has more than 10,000 signatures" do

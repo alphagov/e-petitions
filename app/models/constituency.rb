@@ -44,14 +44,18 @@ class Constituency < ActiveRecord::Base
     end
 
     def find_by_postcode(postcode)
-      return if Site.disable_constituency_api?
-      return unless valid_postcode?(postcode)
+      find_all_by_postcode(postcode).first
+    end
 
-      results = query.fetch(postcode)
+    def find_all_by_postcode(postcode)
+      return [] if postcode.blank?
+      return [] if Site.disable_constituency_api?
+      return [] unless valid_postcode?(postcode)
 
-      if attributes = results.first
+      query.fetch(postcode).map do |attributes|
         constituency = find_or_initialize_by(external_id: attributes[:external_id])
         constituency.attributes = attributes
+
         if constituency.changed? || constituency.new_record?
           constituency.save!
         end
@@ -106,6 +110,18 @@ class Constituency < ActiveRecord::Base
 
     def external_ids
       pluck(:external_id)
+    end
+
+    def last_modified_at
+      [maximum(:updated_at), Site.package_built_at].compact.max
+    end
+
+    def cache_control(max_age: 1.minute)
+      {
+        max_age: max_age,
+        stale_while_revalidate: max_age * 2,
+        stale_if_error: max_age * 5
+      }
     end
   end
 

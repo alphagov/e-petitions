@@ -1,12 +1,12 @@
-<div class="signature-count">
+<%= tag.div(id: "signature-count", data: { response_threshold: petition.threshold_for_response, debate_threshold: petition.threshold_for_debate, module: "signature-counter" }) do %>
   <p class="signature-count-number" role="status" aria-atomic="true">
     <%= signature_count(:default, petition.signature_count) %>
   </p>
 
   <label class="signature-count-progress">
-    <span class="visuallyhidden">Progress of the petition towards its next target:</span>
+    <span class="visually-hidden">Progress of the petition towards its next target:</span>
     <% if petition.debate_outcome_at? %>
-      <%= tag.progress(value: petition.signature_count, max: [petition.signature_count, petition.threshold_for_debate].max) do %>
+      <%= progress_bar(petition) do %>
         <% if petition.debated? %>
           Parliament debated this petition
         <% else %>
@@ -14,40 +14,42 @@
         <% end %>
       <% end %>
     <% elsif petition.scheduled_debate_date? %>
-      <%= tag.progress(value: petition.signature_count, max: [petition.signature_count, petition.threshold_for_debate].max) do %>
+      <%= progress_bar(petition) do %>
         Parliament will debate this petition
       <% end %>
     <% elsif petition.debate_threshold_reached_at? %>
-      <%= tag.progress(value: petition.signature_count, max: [petition.signature_count, petition.threshold_for_debate].max) do %>
+      <%= progress_bar(petition) do %>
         This petition will be considered for a debate in Parliament
       <% end %>
     <% elsif petition.response_threshold_reached_at? || petition.government_response_at? %>
-      <%= tag.progress(value: petition.signature_count, max: [petition.signature_count, petition.threshold_for_debate].max) do %>
+      <%= progress_bar(petition) do %>
         <%= number_with_delimiter(petition.signature_count) %> of <%= petition.formatted_threshold_for_debate %> signatures required to be considered for a debate in Parliament
       <% end %>
     <% else %>
-      <%= tag.progress(value: petition.signature_count, max: [petition.signature_count, petition.threshold_for_response].max) do %>
-        <%= number_with_delimiter(petition.signature_count) %> of <%= petition.formatted_threshold_for_response %> signatures required to get a government response
+      <%= progress_bar(petition) do %>
+        <%= number_with_delimiter(petition.signature_count) %> of <%= petition.formatted_threshold_for_response %> signatures required to get a Government response
       <% end %>
     <% end %>
   </label>
 
-  <p class="signatures-on-a-map">
-    <a href="https://petitionmap.unboxedconsulting.com/?petition=<%= petition.id %>">
-      Show on a map
-      <span class="visuallyhidden">the geographical breakdown of signatures by constituency</span>
-    </a>
-  </p>
+  <div class="signature-count-progress-footer">
+    <p class="signatures-on-a-map">
+      <a href="https://petitionmap.unboxedconsulting.com/?petition=<%= petition.id %>">
+        Show on a map
+        <span class="visually-hidden">the geographical breakdown of signatures by constituency</span>
+      </a>
+    </p>
 
-  <p class="signature-count-goal">
-    <%= number_with_delimiter(current_threshold(petition)) %>
+    <p class="signature-count-goal">
+      <%= number_with_delimiter(current_threshold(petition)) %>
 
-    <% if petition.debate_threshold_reached_at? || petition.debate_outcome_at? %>
-      <span class="visuallyhidden"> signatures required to be considered for a debate in Parliament</span>
-    <% elsif petition.response_threshold_reached_at? || petition.government_response_at? %>
-      <span class="visuallyhidden"> signatures required to be considered for a debate in Parliament</span>
-    <% else %>
-      <span class="visuallyhidden"> signatures required to get a government response</span>
-    <% end %>
-  </p>
-</div>
+      <% if petition.debate_threshold_reached_at? || petition.debate_outcome_at? %>
+        <span class="visually-hidden"> signatures required to be considered for a debate in Parliament</span>
+      <% elsif petition.response_threshold_reached_at? || petition.government_response_at? %>
+        <span class="visually-hidden"> signatures required to be considered for a debate in Parliament</span>
+      <% else %>
+        <span class="visually-hidden"> signatures required to get a Government response</span>
+      <% end %>
+    </p>
+  </div>
+<% end %>

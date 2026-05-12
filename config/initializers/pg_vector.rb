@@ -1,4 +1,30 @@
 ActiveSupport.on_load(:active_record) do
+  module Arel
+    module Nodes
+      class Nearest < Arel::Nodes::Binary
+        def operator
+          "<=>"
+        end
+      end
+    end
+
+    module Predications
+      def nearest(other)
+        Arel::Nodes::Nearest.new self, quoted_node(other)
+      end
+    end
+
+    module Visitors
+      class PostgreSQL < Arel::Visitors::ToSql
+        private
+
+        def visit_Arel_Nodes_Nearest(o, collector)
+          infix_value(o, collector, " <=> ")
+        end
+      end
+    end
+  end
+
   module PgVector
     module Types
       class Vector < ActiveRecord::Type::Value

@@ -5,17 +5,12 @@ module Browseable
   VALID_PAGE_SIZE = /\A(?:[1-9]|[1-5][0-9])\z/
 
   included do
-    class_attribute :facet_definitions, instance_writer: false
-    self.facet_definitions = {}
-
-    class_attribute :filter_definitions, instance_writer: false
-    self.filter_definitions = {}
-
-    class_attribute :default_page_size, instance_writer: false
-    self.default_page_size = 50
-
-    class_attribute :max_page_size, instance_writer: false
-    self.max_page_size = 50
+    with_options instance_writer: false do
+      class_attribute :facet_definitions, default: {}
+      class_attribute :filter_definitions, default: {}
+      class_attribute :default_page_size, default: 50
+      class_attribute :max_page_size, default: 50
+    end
   end
 
   class Facets
@@ -94,7 +89,7 @@ module Browseable
     end
 
     def to_hash
-      params.slice(*filter_keys)
+      params.slice(*filter_keys).symbolize_keys
     end
 
     private
@@ -118,10 +113,11 @@ module Browseable
     delegate :next_page, :previous_page, to: :results
     delegate :total_entries, :total_pages, to: :results
     delegate :to_a, :to_ary, to: :results
-    delegate :each, :map, :size, to: :to_a
+    delegate :each, :map, :size, :length, to: :to_a
 
     def initialize(klass, params = {})
       @klass, @params = klass, params
+      @semantic_searching = Site.semantic_searching?
     end
 
     def current_page
@@ -145,15 +141,27 @@ module Browseable
     end
 
     def first_page?
-      current_page <= 1
+      current_page <= first_page
     end
 
-    def second_page?
-      current_page == 2
+    def first_page
+      1
+    end
+
+    def first_params
+      new_params(first_page)
     end
 
     def last_page?
-      current_page >= total_pages
+      current_page >= last_page
+    end
+
+    def last_page
+      total_pages
+    end
+
+    def last_params
+      new_params(last_page)
     end
 
     def query
@@ -180,12 +188,8 @@ module Browseable
       new_params(current_page)
     end
 
-    def facet_params(facet, options = {})
-      {}.tap do |new_params|
-        new_params[:state] = facet
-        new_params.merge!(filters)
-        new_params.merge!(options)
-      end
+    def facet_params(facet)
+      current_params.merge(facet)
     end
 
     def scope
@@ -198,6 +202,10 @@ module Browseable
 
     def search?
       query.present?
+    end
+
+    def semantic_search?
+      search? && semantic_searching?
     end
 
     def in_batches(&block)
@@ -223,14 +231,21 @@ module Browseable
 
     private
 
+    def semantic_searching?
+      @semantic_searching
+    end
+
     def new_params(page)
+      page = page.clamp(1, total_pages)
+      page = nil if page == 1
+
       {}.tap do |new_params|
         new_params[:q] = query if query.present?
-        new_params[:state] = scope
+        new_params[:state] = scope unless scope == :all
         new_params[:page] = page
         new_params[:count] = page_size if params.key?(:count)
         new_params.merge!(filters)
-      end
+      end.compact_blank
     end
 
     def results
@@ -242,14 +257,16 @@ module Browseable
     end
 
     def execute_search
-      if search?
-        relation = klass.basic_search(query)
-        relation = relation.except(:select).select(star)
-        relation = relation.except(:order)
-      else
-        relation = klass
+      relation = klass
+
+      if semantic_search?
+        relation = relation.hybrid_search(query)
+      elsif search?
+        relation = relation.basic_search(query)
       end
 
+      relation = relation.except(:select).select(star)
+      relation = relation.except(:order)
       relation = filters.apply(relation)
       relation.instance_exec(&klass.facet_definitions[scope])
     end

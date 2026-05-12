@@ -25,15 +25,10 @@ Rails.application.routes.draw do
         get '/cookies',       defaults: { slug: 'cookies' }
         get '/help',          defaults: { slug: 'help' }
         get '/privacy',       defaults: { slug: 'privacy' }
+        get '/standards',     defaults: { slug: 'standards' }
       end
 
       scope format: true do
-        constraints format: 'xml' do
-          defaults format: 'xml' do
-            get '/browserconfig', action: 'browserconfig'
-          end
-        end
-
         constraints format: 'json' do
           defaults format: 'json' do
             get '/manifest', action: 'manifest'
@@ -51,14 +46,6 @@ Rails.application.routes.draw do
       end
     end
 
-    controller 'icons' do
-      scope action: 'show', format: true do
-        constraints size: /\d{2,3}x\d{2,3}/, type: 'precomposed', format: 'png' do
-          get '/apple-touch-icon(-:size)(-:type)', as: :apple_touch_icon
-        end
-      end
-    end
-
     controller 'local_petitions' do
       scope '/petitions/local' do
         get '/',        action: 'index', as: :local_petitions
@@ -67,10 +54,12 @@ Rails.application.routes.draw do
       end
     end
 
+    get '/petitions/check',         to: redirect('/petitions/start')
+    get '/petitions/check_results', to: redirect('/petitions/start')
+
     resources :petitions, only: %i[new show index] do
       collection do
-        get  'check'
-        get  'check_results'
+        get  'start'
         post 'new', action: 'create', as: nil
         get  'thank-you'
       end
@@ -81,9 +70,9 @@ Rails.application.routes.draw do
         get 'moderation-info'
       end
 
-      resources :sponsors, only: %i[new create], shallow: true do
+      resources :sponsors, only: %i[new], shallow: true do
         collection do
-          post 'new', action: 'confirm', as: :confirm
+          post 'new', action: 'create', as: nil
           get  'thank-you'
         end
 
@@ -93,9 +82,9 @@ Rails.application.routes.draw do
         end
       end
 
-      resources :signatures, only: %i[new create], shallow: true do
+      resources :signatures, only: %i[new], shallow: true do
         collection do
-          post 'new', action: 'confirm', as: :confirm
+          post 'new', action: 'create', as: nil
           get  'thank-you'
         end
 
@@ -116,16 +105,25 @@ Rails.application.routes.draw do
       end
     end
 
-    # REDIRECTS OLD PAGES
-    get '/api/petitions',         to: redirect('/')
-    get '/api/petitions/:id',     to: redirect('/')
-    get '/crown-copyright',       to: redirect('https://www.nationalarchives.gov.uk/information-management/our-services/crown-copyright.htm')
-    get '/departments',           to: redirect('/')
-    get '/departments/:id',       to: redirect('/')
-    get '/how-it-works',          to: redirect('/help')
-    get '/privacy-policy',        to: redirect('/privacy')
-    get '/faq',                   to: redirect('/help')
-    get '/terms-and-conditions',  to: redirect('/help')
+    controller 'login' do
+      get  '/login',  action: 'new',     as: :login
+      post '/login',  action: 'create',  as: nil
+      get  '/logout', action: 'destroy', as: :logout
+    end
+
+    # REDIRECT OLD PAGES
+    controller 'redirects' do
+      get '/api/petitions',        action: 'home'
+      get '/api/petitions/:id',    action: 'home'
+      get '/crown-copyright',      action: 'national_archives'
+      get '/departments',          action: 'home'
+      get '/departments/:id',      action: 'home'
+      get '/help/standards',       action: 'standards'
+      get '/how-it-works',         action: 'help'
+      get '/privacy-policy',       action: 'privacy'
+      get '/faq',                  action: 'help'
+      get '/terms-and-conditions', action: 'help'
+    end
 
     scope '/images', controller: 'images' do
       get '/:signed_blob_id/:variation_key/*filename', action: 'show', as: :image_proxy
@@ -138,6 +136,14 @@ Rails.application.routes.draw do
     filename       = image.blob.filename
 
     route_for(:image_proxy, signed_blob_id, variation_key, filename, options)
+  end
+
+  direct :parliament do
+    "https://www.parliament.uk/"
+  end
+
+  direct :national_archives do
+    "https://www.nationalarchives.gov.uk/information-management/our-services/crown-copyright.htm"
   end
 
   constraints Site.constraints_for_moderation do
@@ -155,13 +161,20 @@ Rails.application.routes.draw do
       resources :profile, only: %i[edit update]
 
       resources :invalidations, except: %i[show] do
-        post :cancel, :count, :start, on: :member
+        member do
+          post :cancel
+          post :count
+          post :start
+        end
       end
 
       resource :moderation_delay, only: %i[new create], path: 'moderation-delay'
 
       resources :petitions, only: %i[show index] do
-        post :resend, :remove, on: :member
+        member do
+          post :resend
+          post :remove
+        end
 
         resource  :creator, only: %i[destroy]
         resources :emails, controller: 'petition_emails', except: %i[index show]
@@ -188,8 +201,12 @@ Rails.application.routes.draw do
         end
 
         resources :signatures, only: %i[index destroy] do
-          post :validate, :invalidate, on: :member
-          post :subscribe, :unsubscribe, on: :member
+          member do
+            post :validate
+            post :invalidate
+            post :subscribe
+            post :unsubscribe
+          end
 
           collection do
             delete :destroy, action: :bulk_destroy
@@ -211,8 +228,12 @@ Rails.application.routes.draw do
       resource :tasks, only: %i[create]
 
       resources :signatures, only: %i[index destroy] do
-        post :validate, :invalidate, on: :member
-        post :subscribe, :unsubscribe, on: :member
+        member do
+          post :validate
+          post :invalidate
+          post :subscribe
+          post :unsubscribe
+        end
 
         collection do
           delete :destroy, action: :bulk_destroy
@@ -254,7 +275,10 @@ Rails.application.routes.draw do
         end
 
         resources :signatures, only: %i[index destroy] do
-          post :subscribe, :unsubscribe, on: :member
+          member do
+            post :subscribe
+            post :unsubscribe
+          end
 
           collection do
             delete :destroy, action: :bulk_destroy

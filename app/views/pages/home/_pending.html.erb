@@ -1,31 +1,24 @@
-<div class="notification">
-  <span class="icon icon-warning-white">
-    <span class="visuallyhidden">Important:</span>
-  </span>
-  <h2 class="header"><%= Parliament.dissolved_heading %></h2>
-  <p class="content"><%= Parliament.dissolved_message %></p>
+<% content_for(:message_banner) do %>
+  <h2><%= Parliament.dissolved_heading %></h2>
+  <p><%= Parliament.dissolved_message %></p>
+
   <% if Parliament.dissolution_faq_url? %>
-    <p class="content">Find out more on the <%= link_to 'Petitions Committee website', Parliament.dissolution_faq_url %></p>
+    <p>Find out more on the <%= link_to 'Petitions Committee website', Parliament.dissolution_faq_url %></p>
   <% end %>
-</div>
+<% end %>
 
-<a href="https://www.parliament.uk/get-involved/" class="get-involved">
-  Get involved with the UK Parliament
-</a>
+<% content_for :hero_banner do %>
+  <div class="highlight">
+    <a href="https://www.parliament.uk/get-involved/" class="get-involved">
+      Get involved with the UK Parliament
+    </a>
+  </div>
 
-<%= render "pages/home/search_petitions", search_path: archived_petitions_path %>
+  <h1>
+    Find petitions
+  </h1>
+
+  <%= render "pages/home/search_petitions", search_path: archived_petitions_path %>
+<% end %>
+
 <%= render "pages/home/archived_petitions" %>
-
-<section aria-labelledby="response-threshold-heading" id="petitions-with-response">
-  <div class="threshold-panel threshold-panel-response">
-    <h2 id="response-threshold-heading"><%= Site.formatted_threshold_for_response %></h2>
-    <p>If a petition gets <%= Site.formatted_threshold_for_response %> signatures, the government will respond</p>
-  </div>
-</section>
-
-<section aria-labelledby="debate-threshold-heading" id="petitions-with-debated-outcome">
-  <div class="threshold-panel threshold-panel-debate">
-    <h2 id="debate-threshold-heading"><%= Site.formatted_threshold_for_debate %></h2>
-    <p>If a petition gets <%= Site.formatted_threshold_for_debate %> signatures, it will be considered for debate in Parliament</p>
-  </div>
-</section>

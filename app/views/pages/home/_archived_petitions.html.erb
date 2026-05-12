@@ -1,11 +1,15 @@
-<h2 id="archived-petitions">View petitions from previous parliaments</h2>
+<section id="archived-petitions">
+  <h2>
+    View petitions from previous Parliaments
+  </h2>
 
-<ul>
-  <% archived_parliaments.each do |parliament| %>
-    <li>
-      <%= link_to archived_petitions_path(parliament: parliament, state: "published") do %>
-        <%= parliament.period %>
-      <% end %>
-    </li>
-  <% end %>
-</ul>
+  <ul>
+    <% archived_parliaments.each do |parliament| %>
+      <li>
+        <%= link_to archived_petitions_path(parliament: parliament, state: "published") do %>
+          <%= parliament.start_year %> to <%= parliament.end_year %>
+        <% end %>
+      </li>
+    <% end %>
+  </ul>
+</section>

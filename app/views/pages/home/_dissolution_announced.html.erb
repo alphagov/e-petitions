@@ -1,16 +1,24 @@
 <%= render 'parliament_dissolution_warning' %>
 
-<% if Parliament.registration_closed? %>
-  <a href="https://www.parliament.uk/get-involved/" class="get-involved">
-    Get involved with the UK Parliament
-  </a>
-<% else %>
-  <a href="https://www.gov.uk/register-to-vote" class="register-to-vote">
-    Register to vote in the General Election
-  </a>
+<% content_for :hero_banner do %>
+  <div class="highlight">
+    <% if Parliament.registration_closed? %>
+      <a href="https://www.parliament.uk/get-involved/" class="get-involved">
+        Get involved with the UK Parliament
+      </a>
+    <% else %>
+      <a href="https://www.gov.uk/register-to-vote" class="register-to-vote">
+        Register to vote in the General Election
+      </a>
+    <% end %>
+  </div>
+
+  <h1>
+    Find and sign petitions
+  </h1>
+
+  <%= render "pages/home/search_petitions", search_path: petitions_path %>
 <% end %>
 
-<%= render "pages/home/actioned_petitions" %>
-<%= render "pages/home/search_petitions", search_path: petitions_path %>
 <%= render "pages/home/explanation_petitions" %>
-<%= render "pages/home/local_petitions" %>
+

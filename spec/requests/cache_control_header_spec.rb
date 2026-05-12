@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe 'Cache-Control headers', type: :request do
-  let(:cache_control) { response.headers['Cache-Control'] }
+  let(:cache_control) { response.cache_control }
   let(:status) { response.status }
 
   context "when visiting the petition index page" do
@@ -10,20 +10,7 @@ RSpec.describe 'Cache-Control headers', type: :request do
     end
 
     it "doesn't change the cache control headers" do
-      expect(cache_control).to eq("max-age=0, private, must-revalidate")
-      expect(status).to eq(200)
-    end
-  end
-
-  context "when visiting the petition show page" do
-    let!(:petition) { FactoryBot.create(:open_petition) }
-
-    before do
-      get "/petitions/#{petition.id}"
-    end
-
-    it "doesn't change the cache control headers" do
-      expect(cache_control).to eq("max-age=0, private, must-revalidate")
+      expect(cache_control).to eq(max_age: "0", private: true, must_revalidate:  true)
       expect(status).to eq(200)
     end
   end
@@ -36,7 +23,7 @@ RSpec.describe 'Cache-Control headers', type: :request do
     end
 
     it "changes the cache control headers to 'no-store'" do
-      expect(cache_control).to eq("no-store")
+      expect(cache_control).to eq(no_store: true)
       expect(status).to eq(200)
     end
   end
@@ -49,7 +36,7 @@ RSpec.describe 'Cache-Control headers', type: :request do
     end
 
     it "changes the cache control headers to 'no-store'" do
-      expect(cache_control).to eq("no-store")
+      expect(cache_control).to eq(no_store: true)
       expect(status).to eq(200)
     end
   end
@@ -62,7 +49,7 @@ RSpec.describe 'Cache-Control headers', type: :request do
     end
 
     it "changes the cache control headers to 'no-store'" do
-      expect(cache_control).to eq("no-store")
+      expect(cache_control).to eq(no_store: true)
       expect(status).to eq(200)
     end
   end
@@ -73,7 +60,7 @@ RSpec.describe 'Cache-Control headers', type: :request do
     end
 
     it "changes the cache control headers to 'no-store'" do
-      expect(cache_control).to eq("no-store")
+      expect(cache_control).to eq(no_store: true)
       expect(status).to eq(200)
     end
   end

@@ -1,37 +1,58 @@
-<h1>
-  <span class="heading-secondary">Rejected petition</span>
-  <%= petition.action %>
-</h1>
+<section class="petition-detail">
+  <h1 id="action">
+    <span class="tag tag-red">
+      Rejected<span class="visually-hidden"> petition: </span>
+    </span>
+    <%= petition.action %>
+  </h1>
 
-<% if @petition.committee_note? %>
-  <div class="committee-note">
-    <%= markdown_to_html(@petition.committee_note) %>
-  </div>
-<% end %>
+  <p>
+    Rejected on
+    <%= time_tag(petition.rejected_at) do %>
+      <strong><%= short_date_format(petition.rejected_at) %></strong>
+    <% end %>
+  </p>
 
-<div><%= auto_link(simple_format(h(petition.background)), html: { rel: 'nofollow' }) %></div>
-<% unless petition.additional_details.blank? %>
-  <details>
-    <summary><span class="summary">More details</span></summary>
-    <div><%= auto_link(simple_format(h(petition.additional_details)), html: { rel: 'nofollow' }) %></div>
-  </details>
-<% end %>
+  <% if @petition.committee_note? %>
+    <div class="highlight">
+      <%= markdown_to_html(@petition.committee_note) %>
+    </div>
+  <% end %>
 
-<p class="flash-notice">This petition was rejected</p>
+  <%= auto_link(simple_format(h(petition.background)), html: { rel: 'nofollow' }) %>
 
-<h2>Why was this petition rejected?</h2>
-<%= rejection_description(petition.rejection.code) %>
-<% if petition.rejection.details? %>
-  <p><%= auto_link(simple_format(h(petition.rejection.details))) %></p>
-<% end %>
-<p>We only reject petitions that don’t meet the <%= link_to 'petition standards', help_url(anchor: 'standards') %>.</p>
+  <% unless petition.additional_details.blank? %>
+    <%= auto_link(simple_format(h(petition.additional_details)), html: { rel: 'nofollow' }) %>
+  <% end %>
 
-<ul class="petition-meta">
-  <li>
-    <span class="label">Date submitted</span> <%= short_date_format petition.created_at %>
-  </li>
-  <li class="meta-json">
-    <span class="note"><%= link_to "Get petition data (json format)", petition_path(petition, :json) %></span>
-    <%= render "about_petition_data" %>
-  </li>
-</ul>
+  <hr>
+
+  <blockquote id="rejection">
+    <h2>
+      Why was this petition rejected?
+    </h2>
+
+    <%= rejection_description(petition.rejection.code) %>
+
+    <% if petition.rejection.details? %>
+      <%= auto_link(simple_format(h(petition.rejection.details))) %>
+    <% end %>
+
+    <p>
+      We only reject petitions that don’t meet the
+      <%= link_to 'petition standards', standards_url %>.
+    </p>
+  </blockquote>
+
+  <hr>
+
+  <footer>
+    <h2 id="data">
+      Petition data
+    </h2>
+
+    <p>
+      <%= link_to "Get petition data in JSON format", petition_path(petition, :json), download: "petition-#{petition.id}.json" %>
+    </p>
+  </footer>
+</section>

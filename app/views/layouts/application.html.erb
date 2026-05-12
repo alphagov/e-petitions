@@ -1,28 +1,34 @@
 <!DOCTYPE html>
 <html lang="en-GB">
   <head>
-    <title><%= page_title %></title>
+    <title>
+      <%= form_error? ? "Error: #{page_title}" : page_title %>
+    </title>
+
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 
     <%= preload_link_tag 'application.css', nopush: true %>
     <%= preload_link_tag 'application.js', nopush: true %>
 
-    <% if open_petition_page? %>
-      <%= preload_link_tag 'auto-updater.js', nopush: true %>
+    <% if Site.enable_analytics? %>
+      <%= tag.link rel: "preconnect", href: "https://www.googletagmanager.com" %>
+      <%= preload_link_tag 'cookie-manager.js', nopush: true %>
     <% end %>
-    <% if create_petition_page? %>
-      <%= preload_link_tag 'character-counter.js', nopush: true %>
-    <% end %>
+
+    <%= content_for :preload %>
+
+    <%= preload_link_tag 'National-LFS-Book.woff2', nopush: true %>
+    <%= preload_link_tag 'National-LFS-Semibold.woff2', nopush: true %>
 
     <%= stylesheet_link_tag 'application' %>
 
-    <meta name="viewport" content="width = device-width">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <%= render 'application/os' %>
     <%= render 'application/social_meta' %>
     <% if noindex_page? %>
       <meta name="robots" content="noindex">
     <% end %>
-    <meta name="theme-color" content="#080">
+    <meta name="theme-color" content="#373151">
 
     <% if Site.enable_analytics? %>
       <%= render 'application/gtm/tag' %>
@@ -35,24 +41,33 @@
     <% end %>
 
     <%= render 'application/header' %>
+    <%= render 'application/menu' %>
 
-    <main id="content">
-      <%= render 'application/messages' %>
-      <%= yield %>
+    <main id="main-content">
+      <% if content_for?(:hero_banner) %>
+        <header id="hero-banner">
+          <div class="container">
+            <%= yield :hero_banner %>
+          </div>
+        </header>
+      <% end %>
+
+      <div class="container">
+        <%= yield :notifications %>
+        <%= yield %>
+      </div>
     </main>
 
     <%= render 'application/footer' %>
-    <%= render 'application/cookie_banner' %>
-    <%= render 'application/cookie_preferences' %>
+
+    <% if Site.enable_analytics? %>
+      <%= render 'application/cookie_banner' %>
+      <%= render 'application/cookie_preferences' %>
+
+      <%= javascript_include_tag 'cookie-manager' %>
+    <% end %>
 
     <%= javascript_include_tag 'application' %>
-
-    <% if open_petition_page? %>
-      <%= javascript_include_tag 'auto-updater' %>
-    <% end %>
-
-    <% if create_petition_page? %>
-      <%= javascript_include_tag 'character-counter' %>
-    <% end %>
+    <%= content_for :footer %>
   </body>
 </html>

@@ -1,4 +1,4 @@
-@admin
+@admin @embeddings
 Feature: Moderator edits an archived petition
   As a moderator
   I want to edit an archived petition

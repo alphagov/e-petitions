@@ -3,16 +3,26 @@ default: &default
   encoding: utf8
   url: <%= ENV.fetch('DATABASE_URL', 'postgres://postgres@localhost') %>
   pool: 5
+  variables:
+    'hnsw.ef_search': 250
 
 development:
-  <<: *default
-  database: epets_development
+  primary: &primary_development
+    <<: *default
+    database: epets_development
+  cache:
+    <<: *primary_development
+    schema_dump: false
 
 test:
   <<: *default
   database: epets_test
 
 production:
-  <<: *default
-  database: epets_production
-  pool: <%= ENV.fetch('WEB_CONCURRENCY_MAX_THREADS') { 32 }.to_i %>
+  primary: &primary_production
+    <<: *default
+    database: epets_production
+    pool: <%= ENV.fetch('WEB_CONCURRENCY_MAX_THREADS') { 32 }.to_i %>
+  cache:
+    <<: *primary_production
+    schema_dump: false

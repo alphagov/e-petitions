@@ -1,0 +1,107 @@
+@use "../helpers" as *;
+@use "../settings" as *;
+
+:root {
+  scroll-behavior: smooth;
+}
+
+body:has(dialog[open]) {
+  height: 100vh;
+
+  main, footer {
+    display: none;
+  }
+
+  @include media-query($from: tablet) {
+    height: auto;
+    overflow: auto;
+
+    main, footer {
+      display: block;
+    }
+  }
+}
+
+.cookie-manager {
+  dialog::backdrop {
+    background-color: $colour-black;
+    opacity: .35;
+  }
+}
+
+#cookiebanner, #cookiepreferences {
+  h2 {
+    @include font-size(33);
+    margin-top: 0;
+  }
+
+  h3 {
+    @include font-size(27);
+  }
+
+  p {
+    @include font-size(22);
+    @include responsive-margin(4, bottom);
+  }
+
+  label {
+    @include font-size(22);
+  }
+
+  button {
+    @include font-size(22);
+  }
+}
+
+#cookiebanner {
+  @include responsive-padding(6, top);
+  @include responsive-padding(7, bottom);
+}
+
+#cookiepreferences {
+  background-color: $colour-white;
+  border: none;
+  height: auto;
+  max-width: none;
+  max-height: none;
+  position: absolute;
+  left: 50%;
+  right: auto;
+  top: 0;
+  bottom: auto;
+  transform: translateX(-50%);
+  z-index: 300;
+
+  margin-top: 0;
+  width: 100%;
+
+  @include media-query($from: tablet) {
+    margin-top: spacing(5);
+    width: 720px;
+  }
+
+  @include responsive-padding(7, all);
+
+  & .cookie-preferences {
+    &__header {
+      position: relative;
+    }
+
+    &__settings > form > div {
+      @include responsive-margin(5, top);
+      @include responsive-padding(5, top);
+
+      border-top: 1px solid $border-colour;
+
+      .cookie-toggle {
+        @include responsive-margin(5, top);
+      }
+    }
+  }
+}
+
+#closePreferences {
+  position: absolute;
+  top: -2px;
+  right: -2px;
+}

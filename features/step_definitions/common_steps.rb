@@ -21,22 +21,13 @@ Then('the analytics cookie preference should be set to false') do
 end
 
 Then('I should see the cookie settings') do
-  within(".//div[@id='cookiepreferences']") do
+  within(".//dialog[@id='cookiepreferences']") do
     expect(page).to have_selector(".//h2", text: "Cookie settings")
   end
 end
 
 Then('I should not see the cookie settings') do
-  expect(page).not_to have_selector(".//div[@id='cookiepreferences']", visible: true)
-end
-
-When('I choose {string}') do |field|
-  choose field
-  expect(page).to have_checked_field(field, visible: false)
-end
-
-Then('{string} is chosen') do |field|
-  expect(page).to have_checked_field(field, visible: false)
+  expect(page).not_to have_selector(".//dialog[@id='cookiepreferences']", visible: true)
 end
 
 Given(/^the site is disabled$/) do
@@ -45,6 +36,12 @@ end
 
 Given(/^the site is protected$/) do
   Site.update! protected: true, username: "username", password: "password"
+end
+
+Given('Google Analytics is enabled') do
+  allow(Site).to receive(:enable_analytics?).and_return(true)
+  allow(Site).to receive(:google_tag_manager_id).and_return("GTM-5DJ37LLQ")
+  allow(Site).to receive(:google_tag_manager_hash).and_return("sha256-UasoYLRu6TD/yvu3mtLDODDoeB35UDi67gFsONsNX54=")
 end
 
 Given(/^signature counting is handled by an external process$/) do
@@ -92,7 +89,14 @@ Given(/^the request is not local$/) do
 end
 
 Then(/^I am asked for a username and password$/) do
-  expect(page.status_code).to eq 401
+  expect(page).to have_content("Login to view the website")
+  expect(page).to have_field("Username")
+  expect(page).to have_field("Password")
+end
+
+When(/^I fill in the username and password$/) do
+  fill_in "Username", with: "username"
+  fill_in "Password", with: "password"
 end
 
 Then(/^I will see a 404 error page$/) do
@@ -121,7 +125,7 @@ Then(/^I should index the page$/) do
 end
 
 Then(/^I should see the Parliament dissolution warning message$/) do
-  within(:css, ".notification") do
+  within(:css, "body > header") do
     expect(page).to have_content "Parliament is dissolving"
     expect(page).to have_content "This means all petitions will close in 2 weeks"
     expect(page).to have_link "Petitions Committee website", href: "https://parliament.example.com/parliament-is-closing"
@@ -129,7 +133,7 @@ Then(/^I should see the Parliament dissolution warning message$/) do
 end
 
 Then(/^I should see the Parliament dissolved warning message$/) do
-  within(:css, ".notification") do
+  within(:css, "body > header") do
     expect(page).to have_content "Parliament has been dissolved"
     expect(page).to have_content "All petitions have been closed"
     expect(page).to have_link "Petitions Committee website", href: "https://parliament.example.com/parliament-is-closing"

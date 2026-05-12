@@ -11,5 +11,15 @@ class Petition < ActiveRecord::Base
         order(:created_at)
       end
     end
+
+    def occurred_on
+      super || default_occurred_on
+    end
+
+    private
+
+    def default_occurred_on
+      persisted? ? created_at.to_date : nil
+    end
   end
 end

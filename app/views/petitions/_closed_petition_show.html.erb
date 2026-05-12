@@ -1,47 +1,42 @@
-<h1>
-  <span class="heading-secondary">Closed petition</span>
-  <%= petition.action %>
-</h1>
+<section class="petition-detail">
+  <h1 id="action">
+    <span class="tag tag-grey">
+      Closed<span class="visually-hidden"> petition: </span>
+    </span>
+    <%= petition.action %>
+  </h1>
 
-<% if @petition.committee_note? %>
-  <div class="committee-note">
-    <%= markdown_to_html(@petition.committee_note) %>
-  </div>
-<% end %>
-
-<div><%= auto_link(simple_format(h(petition.background)), html: { rel: 'nofollow' }) %></div>
-<% unless petition.additional_details.blank? %>
-  <details>
-    <summary><span class="summary">More details</span></summary>
-    <div><%= auto_link(simple_format(h(petition.additional_details)), html: { rel: 'nofollow' }) %></div>
-  </details>
-<% end %>
-
-
-<% if petition.closed_early_due_to_election? %>
-  <p class="flash-notice">
-    This petition closed early because of a General Election
-
-    <% if Parliament.dissolution_faq_url? %>
-      <span>Find out more on the <%= link_to 'Petitions Committee website', Parliament.dissolution_faq_url %></span>
+  <p>
+    Closed on
+    <%= time_tag(petition.closed_at) do %>
+      <strong><%= short_date_format(petition.closed_at) %></strong>
     <% end %>
   </p>
-<% else %>
-  <p class="flash-notice">
-    This petition is closed
-    <span>All petitions run for 6 months</span>
-  </p>
-<% end %>
 
-<%= render "signature_count", petition: petition %>
-<%= render 'threshold_details', petition: petition %>
-<%= render 'related_activity_details', petition: petition %>
-<ul class="petition-meta">
-  <li>
-    <span class="label">Date closed</span> <%= short_date_format petition.closed_at %>
-  </li>
-  <li class="meta-json">
-    <span class="note"><%= link_to "Get petition data (json format)", petition_path(petition, :json) %></span>
-    <%= render "about_petition_data" %>
-  </li>
-</ul>
+  <% if @petition.committee_note? %>
+    <div class="highlight">
+      <%= markdown_to_html(@petition.committee_note) %>
+    </div>
+  <% end %>
+
+  <%= auto_link(simple_format(h(petition.background)), html: { rel: 'nofollow' }) %>
+
+  <% unless petition.additional_details.blank? %>
+    <%= auto_link(simple_format(h(petition.additional_details)), html: { rel: 'nofollow' }) %>
+  <% end %>
+
+  <%= render "signature_count", petition: petition %>
+  <%= render "petitions/timeline", petition: petition %>
+
+  <hr>
+
+  <footer>
+    <h2 id="data">
+      Petition data
+    </h2>
+
+    <p>
+      <%= link_to "Get petition data in JSON format", petition_path(petition, :json), download: "petition-#{petition.id}.json" %>
+    </p>
+  </footer>
+</section>

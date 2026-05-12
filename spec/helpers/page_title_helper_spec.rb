@@ -23,7 +23,7 @@ RSpec.describe PageTitleHelper, type: :helper do
         local_petitions: {
           index: {
             zero: "Local pour vous - Pétitions",
-            one: "Pétitions à %{postcode}"
+            one: "Circonscriptions dans %{postcode}"
           },
           show: "Pétitions à %{constituency}"
         },
@@ -120,7 +120,7 @@ RSpec.describe PageTitleHelper, type: :helper do
       end
 
       it "the formatted postcode is available for interpolation" do
-        expect(helper.page_title).to eq("Pétitions à XM4 5HQ")
+        expect(helper.page_title).to eq("Circonscriptions dans XM4 5HQ")
       end
     end
 

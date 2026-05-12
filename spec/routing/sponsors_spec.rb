@@ -10,12 +10,12 @@ RSpec.describe "routes for sponsor", type: :routes do
     expect(get("/petitions/1/sponsors/new")).to route_to("sponsors#new", petition_id: "1")
   end
 
-  it "routes POST /petitions/1/sponsors/new to sponsors#confirm" do
-    expect(post("/petitions/1/sponsors/new")).to route_to("sponsors#confirm", petition_id: "1")
+  it "routes POST /petitions/1/sponsors/new to sponsors#create" do
+    expect(post("/petitions/1/sponsors/new")).to route_to("sponsors#create", petition_id: "1")
   end
 
-  it "routes POST /petitions/1/sponsors to sponsors#create" do
-    expect(post("/petitions/1/sponsors")).to route_to("sponsors#create", petition_id: "1")
+  it "doesn't route POST /petitions/1/sponsors" do
+    expect(post("/petitions/1/sponsors")).not_to be_routable
   end
 
   it "routes GET /petitions/1/sponsors/thank-you to sponsors#thank_you" do

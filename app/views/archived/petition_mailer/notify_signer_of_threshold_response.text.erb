@@ -7,11 +7,13 @@ Government responded:
 
 <%= h(@government_response.summary) %>
 
-<%= h(@government_response.details) %>
+<%= markdown_to_text(@government_response.details) %>
+
+--
 
 Click this link to view the response online:
 
-<%= archived_petition_url(@petition, reveal_response: "yes") %>
+<%= archived_petition_url(@petition, reveal_response: "yes", anchor: "response") %>
 
 <% if @petition.signature_count < @parliament.threshold_for_debate %>
 The Petitions Committee will take a look at this petition and its response. They can press the government for action and gather evidence. If this petition reaches <%= @parliament.formatted_threshold_for_debate %> signatures, the Committee will consider it for a debate.
@@ -19,7 +21,7 @@ The Petitions Committee will take a look at this petition and its response. They
 This petition has over <%= @parliament.formatted_threshold_for_debate %> signatures. The Petitions Committee will consider it for a debate. They can also gather further evidence and press the government for action.
 <% end %>
 
-The Committee is made up of 11 MPs, from political parties in government and in opposition. It is entirely independent of the Government. Find out more about the Committee: <%= help_url(anchor: 'petitions-committee') %>
+The Committee is made up of 11 MPs, from political parties in government and in opposition. It is entirely independent of the Government. Find out more about the Committee: <%= help_url(anchor: 'the-petitions-committee') %>
 
 <%= render "footer" %>
 <%= render "unsubscribe" %>

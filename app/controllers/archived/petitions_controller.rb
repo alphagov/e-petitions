@@ -1,9 +1,11 @@
 require 'csv'
 
-class Archived::PetitionsController < ApplicationController
+class Archived::PetitionsController < PublicController
   before_action :redirect_to_valid_state, only: [:index]
+  before_action :redirect_to_show_page_if_petition_exists, only: [:index]
   before_action :fetch_parliament, only: [:index]
   before_action :fetch_petitions, only: [:index]
+  before_action :redirect_to_last_page_if_out_of_bounds, only: [:index], unless: :json_request?
   before_action :fetch_petition, only: [:show]
 
   before_action :set_cors_headers, only: [:index, :show], if: :json_request?
@@ -20,6 +22,12 @@ class Archived::PetitionsController < ApplicationController
   end
 
   def show
+    fresh_when(
+      last_modified: @petition.last_modified_at,
+      cache_control: @petition.cache_control,
+      public: true
+    )
+
     respond_to do |format|
       format.html
       format.json
@@ -62,6 +70,12 @@ class Archived::PetitionsController < ApplicationController
     @petitions = scope.search(params)
   end
 
+  def redirect_to_last_page_if_out_of_bounds
+    if @petitions.out_of_bounds?
+      redirect_to archived_petitions_url(@petitions.last_params)
+    end
+  end
+
   def fetch_petition
     if Archived::Petition.removed?(petition_id)
       raise Site::PetitionRemoved, "Archived petition #{petition_id} has been removed"
@@ -76,7 +90,7 @@ class Archived::PetitionsController < ApplicationController
   end
 
   def csv_filename
-    "#{@petitions.scope}-petitions-#{@parliament.period}.csv"
+    "filtered-archived-petitions.csv"
   end
 
   def redirect_to_valid_state
@@ -95,6 +109,16 @@ class Archived::PetitionsController < ApplicationController
 
   def valid_state?
     archived_petition_facets.include?(sanitized_state)
+  end
+
+  def redirect_to_show_page_if_petition_exists
+    if query_param.match?(/^\d+$/)
+      redirect_to archived_petition_url(query_param) if Archived::Petition.visible.exists?(query_param)
+    end
+  end
+
+  def query_param
+    params.fetch(:query, params.fetch(:q, ""))
   end
 
   def search_params(overrides = {})

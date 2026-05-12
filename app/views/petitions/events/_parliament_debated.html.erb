@@ -1,0 +1,27 @@
+<li id="debate">
+  <%= time_tag(petition.debated_on) do %>
+    <strong><%= short_date_format(petition.debated_on) %></strong>
+  <% end %>
+
+  <div>
+    <h3>
+      Parliament debated this petition
+    </h3>
+
+    <% if context.overview? %>
+      <%= auto_link(simple_format(h(context.overview)), html: { rel: 'nofollow' }) %>
+    <% end -%>
+
+    <%= debate_outcome_video(context.video_url) do %>
+      <%= link_to "Watch the debate on www.youtube.com", context.video_url, class: "video-fallback" %>
+    <%end %>
+
+    <% if debate_outcome_links?(context) %>
+      <ul class="debate-outcome-links">
+        <% debate_outcome_links(context).each do |link| %>
+          <li><%= link_to link.title, link.url, rel: 'external' %></li>
+        <% end %>
+      </ul>
+    <% end %>
+  </div>
+</li>

@@ -80,4 +80,16 @@ module PageTitleHelper
   def page_title
     PageTitleBuilder.build(self)
   end
+
+  def form_error?
+    if defined?(@new_petition)
+      @new_petition.errors.any?
+    elsif defined?(@signature)
+      @signature.errors.any?
+    elsif defined?(@feedback)
+      @feedback.errors.any?
+    else
+      false
+    end
+  end
 end

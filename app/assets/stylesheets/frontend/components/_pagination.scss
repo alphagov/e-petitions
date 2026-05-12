@@ -1,0 +1,116 @@
+@use "../settings" as *;
+@use "../helpers" as *;
+
+.pagination {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  @include font-size(22);
+  @include responsive-margin(8, bottom);
+
+  @include media-query($from: tablet) {
+    flex-direction: row;
+    align-items: flex-start;
+  }
+
+  &__list {
+    display: flex;
+    align-items: center;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  &__item {
+    display: block;
+    margin: 0;
+    padding: 0;
+    min-width: 40px;
+    min-height: 40px;
+    text-align: center;
+
+    a {
+      border-radius: $button-border-radius;
+      display: block;
+      min-width: 40px;
+      min-height: 40px;
+      padding-top: 6px;
+
+      @include media-query($from: tablet) {
+        min-width: 45px;
+        min-height: 45px;
+        padding-top: 8px;
+      }
+    }
+
+    &--current {
+      a {
+        background-color: $link-colour;
+        color: $inverse-link-colour;
+        font-weight: bold;
+
+        &:hover {
+          background-color: $link-hover-colour;
+          color: $inverse-link-hover-colour;
+        }
+
+        &:focus {
+          background-color: $focus-background-colour !important;
+          color: $focus-colour !important;
+        }
+      }
+    }
+
+    &--ellipsis {
+      padding-top: 8px;
+    }
+  }
+
+  &__prev, &__next {
+    font-weight: bold;
+
+    a {
+      border-radius: $button-border-radius;
+      display: flex;
+      min-height: 45px;
+      padding-top: 8px;
+    }
+
+    svg {
+      height: 25px;
+    }
+  }
+
+  &__prev {
+    margin-left: -25px;
+    margin-bottom: spacing(3);
+
+    @include media-query($from: tablet) {
+      margin-right: spacing(4);
+      margin-left: 0;
+      margin-bottom: 0;
+    }
+
+
+    svg {
+      margin-right: spacing(3);
+    }
+  }
+
+  &__next {
+    margin-right: -25px;
+    margin-top: spacing(3);
+
+    @include media-query($from: tablet) {
+      margin-left: spacing(4);
+      margin-right: 0;
+      margin-top: 0;
+
+    }
+
+    svg {
+      margin-left: spacing(3);
+    }
+  }
+}

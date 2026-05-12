@@ -30,6 +30,10 @@ on:
         required: false
         default: false
 
+env:
+  DATABASE_URL: postgres://postgres:postgres@localhost:5432/epets_test
+  RAILS_ENV: "test"
+
 jobs:
   build:
     runs-on: ubuntu-24.04
@@ -69,11 +73,19 @@ jobs:
           bundler-cache: true
           cache-version: 1
 
+      - name: Setup node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "24.x"
+          cache: "npm"
+
+      - name: Install node packages
+        shell: bash
+        run: |
+          npm ci
+
       - name: Setup database
         shell: bash
-        env:
-          DATABASE_URL: postgres://postgres:postgres@localhost:5432/epets_test
-          RAILS_ENV: test
         run: |
           bundle exec rake db:setup
 
@@ -100,8 +112,6 @@ jobs:
         env:
           CUCUMBER_FORMAT: "${{ inputs.cucumber_format }}"
           CUCUMBER_OPTS: "${{ inputs.cucumber_opts }}"
-          DATABASE_URL: postgres://postgres:postgres@localhost:5432/epets_test
-          RAILS_ENV: test
           SPEC_OPTS: "${{ inputs.spec_opts }}"
         run: |
           bundle exec ${{ inputs.command }}

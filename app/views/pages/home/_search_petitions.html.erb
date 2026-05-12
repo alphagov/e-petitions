@@ -1,4 +1,4 @@
-<section class="search-petitions" aria-labelledby="search-petitions-heading">
+<section id="search-petitions">
   <%= form_tag search_path, method: 'get', enforce_utf8: false do %>
     <% if Parliament.dissolved? %>
       <input type="hidden" name="state" value="closed">
@@ -10,17 +10,20 @@
       <input type="hidden" name="state" value="published">
     <% end %>
 
-    <h2 id="search-petitions-heading">
-      <%= label_tag 'search' do %>
-        Search petitions
-      <% end %>
+    <h2 class="visually-hidden">
+      <%= label_tag 'search', 'Search' %>
     </h2>
 
-    <div class="search-inline">
-      <%= search_field_tag 'q', nil, class: 'form-control', id: 'search' %>
-      <%= button_tag name: nil do %>
-        <span class="visuallyhidden">Search</span>
+    <div class="item-group">
+      <%= text_field_tag 'q', nil, id: 'search' %>
+
+      <%= button_tag name: nil, class: "button" do %>
+        Search petitions
       <% end %>
     </div>
+
+    <p>
+      or <%= link_to "search signed petitions by constituency", local_petitions_path %>
+    </p>
   <% end %>
 </section>

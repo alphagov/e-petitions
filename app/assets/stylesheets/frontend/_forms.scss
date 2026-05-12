@@ -1,0 +1,448 @@
+@use "./settings" as *;
+@use "./helpers" as *;
+
+form {
+  @include font-size(22);
+}
+
+fieldset {
+  min-width: 0;
+  padding: 0;
+  margin: 0;
+  border: 0;
+}
+
+legend {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  padding: 0;
+  margin-bottom: spacing(3);
+  font-size: 1.5rem;
+  line-height: inherit;
+  color: inherit;
+  white-space: normal;
+
+  @include media-query($from: laptop) {
+    max-width: 75%;
+  }
+
+  & > h1 {
+    max-width: 100%;
+  }
+}
+
+label {
+  color: $text-label-colour;
+  display: block;
+  font-weight: bold;
+  margin: 0;
+
+  @include responsive-margin(3, bottom);
+}
+
+input[type=text],
+input[type=search],
+input[type=email],
+input[type=password] {
+  @include font-size($input-font-size);
+
+  background-color: $input-background-colour;
+  border-radius: $input-border-radius;
+  border: $input-border-width solid $input-border-colour;
+  color: $text-input-colour;
+  display: block;
+  font-weight: normal;
+  height: $input-height-small;
+  padding: spacing(2) spacing(3);
+  width: 100%;
+
+  @include media-query($from: tablet) {
+    height: $input-height;
+  }
+
+  &:focus {
+    @extend %focused-input;
+  }
+}
+
+textarea {
+  @include font-size($input-font-size);
+
+  background-color: $input-background-colour;
+  border-radius: $input-border-radius;
+  border: $input-border-width solid $input-border-colour;
+  color: $text-input-colour;
+  display: block;
+  font-weight: normal;
+  padding: spacing(2) spacing(3);
+  width: 100%;
+  overflow: auto;
+  resize: vertical;
+
+  &:focus {
+    @extend %focused-input;
+  }
+}
+
+select {
+  @include font-size($input-font-size);
+
+  -moz-appearance: none;
+  -webkit-appearance: none;
+  appearance: none;
+
+  background-color: $input-background-colour;
+  border-radius: $input-border-radius;
+  border: $input-border-width solid $input-border-colour;
+  color: $text-input-colour;
+  font-weight: normal;
+  height: $input-height-small;
+  padding: spacing(2) spacing(3) + 20px spacing(2) spacing(3);
+  width: 100%;
+
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='none' viewBox='0 0 12 12'%3E%3Cpath fill='%23717171' d='m6.028 8.05 4.958-5.993 1.014.82L6.028 10 0 2.876.986 2l5.042 6.05Z'/%3E%3C/svg%3E");
+  background-position: right 10px center;
+  background-repeat: no-repeat;
+
+  @include media-query($from: tablet) {
+    height: $input-height;
+  }
+
+  &:focus {
+    @extend %focused-input;
+  }
+}
+
+.multiple-choice {
+  display: flex;
+  gap: spacing(3);
+  margin: spacing(3) 0;
+  position: relative;
+
+  @include media-query($from: tablet) {
+    gap: spacing(4);
+    margin: spacing(4) 0;
+  }
+
+  &:first-child {
+    margin-top: 0;
+  }
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+
+  & > input[type=checkbox],
+  & > input[type=radio] {
+    cursor: pointer;
+    flex: 0 0 30px;
+    height: 30px;
+    margin: 0;
+    padding: 0;
+    opacity: 0;
+    width: 30px;
+    z-index: 1;
+
+    @include media-query($from: tablet) {
+      flex: 0 0 40px;
+      height: 40px;
+      width: 40px;
+    }
+  }
+
+  & > label {
+    align-self: center;
+    cursor: pointer;
+    display: inline-block;
+    font-weight: normal;
+    margin: 0;
+    padding: 0;
+
+    &::before {
+      background: $input-background-colour;
+      border: 2px solid $input-border-colour;
+      content: "";
+      position: absolute;
+      left: 0px;
+      top: 0px;
+      height: 30px;
+      width: 30px;
+
+      @include media-query($from: tablet) {
+        height: 40px;
+        width: 40px;
+      }
+    }
+
+    &::after {
+      content: "";
+      position: absolute;
+      opacity: 0;
+    }
+  }
+
+  & > input[type=radio] + label::before {
+    border-radius: 50%;
+  }
+
+  & > input[type=radio] + label::after {
+    border: 7px solid $input-border-colour;
+    border-radius: 50%;
+    left: 8px;
+    top: 8px;
+    height: 0;
+    width: 0;
+
+    @include media-query($from: tablet) {
+      border: 10px solid $input-border-colour;
+      left: 10px;
+      top: 10px;
+    }
+  }
+
+  & > input[type=checkbox] + label::after {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath fill='%23717171' fill-rule='evenodd' d='M16 2.12 6.983 15 0 9.856l1.258-1.59 5.237 3.858L14.282 1 16 2.12Z' clip-rule='evenodd'/%3E%3C/svg%3E");
+    background-position: center;
+    background-repeat: no-repeat;
+    left: 7px;
+    top: 7px;
+    height: 16px;
+    width: 16px;
+
+    @include media-query($from: tablet) {
+      left: 8px;
+      top: 8px;
+      height: 24px;
+      width: 24px;
+    }
+  }
+
+  & > input[type=radio]:checked + label::after,
+  & > input[type=checkbox]:checked + label::after {
+    opacity: 1;
+  }
+
+  & > input[type=radio]:focus + label::before,
+  & > input[type=checkbox]:focus + label::before {
+    @extend %focused-input;
+  }
+
+  & > input[type=radio]:focus + label::after {
+    border-color: $focus-colour !important;
+  }
+
+  & > input[type=checkbox]:focus + label::after {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath fill='%23212121' fill-rule='evenodd' d='M16 2.12 6.983 15 0 9.856l1.258-1.59 5.237 3.858L14.282 1 16 2.12Z' clip-rule='evenodd'/%3E%3C/svg%3E");
+  }
+
+  &.small {
+    @include font-size(20);
+
+    &:first-child {
+      margin-top: 0;
+    }
+
+    @include media-query($from: tablet) {
+      gap: spacing(3);
+      margin: spacing(3) 0;
+    }
+
+    & > input[type=checkbox],
+    & > input[type=radio] {
+      @include media-query($from: tablet) {
+        flex: 0 0 30px;
+        height: 30px;
+        width: 30px;
+      }
+    }
+
+    & > label {
+      &::before {
+        @include media-query($from: tablet) {
+          height: 30px;
+          width: 30px;
+        }
+      }
+    }
+
+    & > input[type=radio] + label::after {
+      @include media-query($from: tablet) {
+        border: 7px solid $input-border-colour;
+        left: 8px;
+        top: 8px;
+      }
+    }
+
+    & > input[type=checkbox] + label::after {
+      @include media-query($from: tablet) {
+        left: 7px;
+        top: 7px;
+        height: 16px;
+        width: 16px;
+      }
+    }
+  }
+}
+
+.form-hint, .error-message {
+  @include font-size(22);
+
+  display: block;
+  font-weight: normal;
+  margin: 0 0 spacing(3) 0;
+  text-wrap: pretty;
+}
+
+.form-hint {
+  color: $text-hint-colour;
+}
+
+.character-count {
+  margin: spacing(3) 0;
+}
+
+.error-message, .too-many-characters {
+  color: $error-colour;
+  font-weight: bold;
+}
+
+.form-group {
+  @include responsive-margin(6, bottom);
+
+  & > h1 {
+    margin-bottom: spacing(4);
+    max-width: 100%;
+  }
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+
+  &.error {
+    input[type=text],
+    input[type=search],
+    input[type=email],
+    input[type=password],
+    select,
+    textarea {
+      border: $input-border-width solid $error-colour;
+    }
+  }
+}
+
+.inline-group {
+  @include responsive-margin(4, bottom);
+
+  display: flex;
+  gap: spacing(3);
+  flex-direction: column;
+
+  @include media-query($from: tablet) {
+    flex-direction: row;
+  }
+
+  & > *:first-child {
+    width: auto;
+  }
+}
+
+.input-group {
+  display: flex;
+  flex-direction: row;
+  gap: 0;
+
+  @include media-query($from: tablet) {
+    justify-content: flex-start;
+  }
+
+  & > * {
+    width: 100%;
+  }
+
+  input {
+    border-radius: $button-border-radius;
+
+    @include media-query($from: tablet) {
+      width: auto;
+    }
+  }
+
+  input:not([size]) {
+    @include media-query($from: tablet) {
+      flex: 2;
+      width: auto;
+    }
+  }
+
+  button {
+    flex-basis: 0;
+    flex-grow: 0;
+
+    @include media-query($from: tablet) {
+      width: auto;
+    }
+
+    &.icon-button {
+      flex: 0 0 $input-height-small;
+      width: $input-height-small;
+      height: $input-height-small;
+      padding: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      @include media-query($from: tablet) {
+        flex: 0 0 $input-height;
+        width: $input-height;
+        height: $input-height;
+      }
+
+      svg {
+        display: inline-block;
+        width: 20px;
+        height: 20px;
+
+        @include media-query($from: tablet) {
+          width: 22px;
+          height: 22px;
+        }
+      }
+    }
+  }
+
+  *:first-child:not(:last-child) {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+  }
+
+  *:last-child:not(:first-child) {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+  }
+}
+
+.button-group {
+  @include responsive-margin(7, top);
+
+  display: block;
+
+  & > * {
+    margin-top: spacing(4);
+    width: 100%;
+
+    &:first-child {
+      margin-top: 0;
+    }
+  }
+
+  @include media-query($from: tablet) {
+    display: flex;
+    gap: spacing(3);
+
+    & > * {
+      margin-top: 0;
+      width: auto;
+    }
+  }
+}

@@ -137,6 +137,7 @@ en-GB:
     label:
       page:
         enabled: "Make this page visible to the public?"
+        disable_toc: "Show table of contents?"
         redirect: "Redirect this page to a URL on the main Parliament website?"
         redirect_url: "URL to redirect to"
       tag:

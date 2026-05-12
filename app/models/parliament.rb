@@ -6,6 +6,8 @@ class Parliament < ActiveRecord::Base
   CUTOFF_DATE = Date.civil(2015, 5, 7)
   PERIOD_FORMAT = /\A\d{4}-\d{4}\z/
 
+  PARLIAMENT_CACHE = ActiveSupport::Cache::MemoryStore.new
+
   has_many :petitions, inverse_of: :parliament, class_name: "Archived::Petition"
   has_many :parliament_constituencies
   has_many :constituencies, through: :parliament_constituencies
@@ -153,6 +155,36 @@ class Parliament < ActiveRecord::Base
         value.respond_to?(:call) ? value.call : value
       end
     end
+
+    def last_archived_id
+      PARLIAMENT_CACHE.fetch(:last_archived_id, expires_in: 1.hour) do
+        archived.ids.first.to_s
+      end
+    end
+
+    def archived_ids
+      PARLIAMENT_CACHE.fetch(:archived_ids, expires_in: 1.hour) do
+        archived.ids.map(&:to_s)
+      end
+    end
+
+    def archive_menu
+      PARLIAMENT_CACHE.fetch(:archive_menu, expires_in: 1.hour) do
+        archived.pluck(:period, :id)
+      end
+    end
+
+    def last_modified_at
+      [maximum(:updated_at), Site.package_built_at].compact.max
+    end
+
+    def cache_control(max_age: 1.minute)
+      {
+        max_age: max_age,
+        stale_while_revalidate: max_age * 2,
+        stale_if_error: max_age * 5
+      }
+    end
   end
 
   validates_presence_of :government, :opening_at
@@ -209,6 +241,14 @@ class Parliament < ActiveRecord::Base
 
   def name
     "#{period} #{government} government"
+  end
+
+  def start_year
+    state_opening_at && state_opening_at.year
+  end
+
+  def end_year
+    dissolution_at && dissolution_at.year
   end
 
   def opened?(now = Time.current)
@@ -337,6 +377,20 @@ class Parliament < ActiveRecord::Base
   def show_on_a_map?
     opening_at > CUTOFF_DATE
   end
+
+  def last_modified_at
+    [updated_at, constituencies.last_modified_at].max
+  end
+
+  def cache_control(max_age: 1.minute)
+    {
+      max_age: max_age,
+      stale_while_revalidate: max_age * 2,
+      stale_if_error: max_age * 5
+    }
+  end
+
+  private
 
   def midnight
     @midnight ||= Date.tomorrow.beginning_of_day

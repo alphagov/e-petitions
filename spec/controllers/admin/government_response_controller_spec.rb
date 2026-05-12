@@ -46,7 +46,7 @@ RSpec.describe Admin::GovernmentResponseController, type: :controller, admin: tr
     before { login_as(user) }
 
     describe 'GET /show' do
-      shared_examples_for 'viewing government response for a petition' do
+      shared_examples_for 'viewing Government response for a petition' do
         it 'fetches the requested petition' do
           get :show, params: { petition_id: petition.id }
           expect(assigns(:petition)).to eq petition
@@ -59,7 +59,7 @@ RSpec.describe Admin::GovernmentResponseController, type: :controller, admin: tr
         end
       end
 
-      shared_examples_for 'viewing government response for a petition in the wrong state' do
+      shared_examples_for 'viewing Government response for a petition in the wrong state' do
         it 'throws a 404' do
           expect {
             get :show, params: { petition_id: petition.id }
@@ -68,32 +68,32 @@ RSpec.describe Admin::GovernmentResponseController, type: :controller, admin: tr
       end
 
       describe 'for an open petition' do
-        it_behaves_like 'viewing government response for a petition'
+        it_behaves_like 'viewing Government response for a petition'
       end
 
       describe 'for a pending petition' do
         before { petition.update_column(:state, Petition::PENDING_STATE) }
-        it_behaves_like 'viewing government response for a petition in the wrong state'
+        it_behaves_like 'viewing Government response for a petition in the wrong state'
       end
 
       describe 'for a validated petition' do
         before { petition.update_column(:state, Petition::VALIDATED_STATE) }
-        it_behaves_like 'viewing government response for a petition in the wrong state'
+        it_behaves_like 'viewing Government response for a petition in the wrong state'
       end
 
       describe 'for a sponsored petition' do
         before { petition.update_column(:state, Petition::SPONSORED_STATE) }
-        it_behaves_like 'viewing government response for a petition in the wrong state'
+        it_behaves_like 'viewing Government response for a petition in the wrong state'
       end
 
       describe 'for a rejected petition' do
         before { petition.update_columns(state: Petition::REJECTED_STATE) }
-        it_behaves_like 'viewing government response for a petition'
+        it_behaves_like 'viewing Government response for a petition'
       end
 
       describe 'for a hidden petition' do
         before { petition.update_column(:state, Petition::HIDDEN_STATE) }
-        it_behaves_like 'viewing government response for a petition'
+        it_behaves_like 'viewing Government response for a petition'
       end
     end
 
@@ -119,7 +119,7 @@ RSpec.describe Admin::GovernmentResponseController, type: :controller, admin: tr
           patch :update, params: params.merge(overrides)
         end
 
-        describe 'using valid params to add a government response' do
+        describe 'using valid params to add a Government response' do
           it 'redirects to the show page' do
             do_patch
             expect(response).to redirect_to "https://moderate.petition.parliament.uk/admin/petitions/#{petition.id}"
@@ -130,7 +130,7 @@ RSpec.describe Admin::GovernmentResponseController, type: :controller, admin: tr
             expect(flash[:notice]).to eq 'Email will be sent overnight'
           end
 
-          it 'stores the supplied government response in the db' do
+          it 'stores the supplied Government response in the db' do
             do_patch
             petition.reload
             expect(government_response.responded_on).to eq government_response_attributes[:responded_on]
@@ -229,7 +229,7 @@ RSpec.describe Admin::GovernmentResponseController, type: :controller, admin: tr
           end
         end
 
-        describe 'using no params to add a government response' do
+        describe 'using no params to add a Government response' do
           before do
             government_response_attributes[:responded_on] = nil
             government_response_attributes[:summary] = nil
@@ -263,7 +263,7 @@ RSpec.describe Admin::GovernmentResponseController, type: :controller, admin: tr
           end
         end
 
-        describe 'using invalid params to add a government response' do
+        describe 'using invalid params to add a Government response' do
           before { government_response_attributes[:summary] = 'a' * 501 }
 
           it 're-renders the petitions/show template' do
@@ -277,7 +277,7 @@ RSpec.describe Admin::GovernmentResponseController, type: :controller, admin: tr
             expect(assigns(:government_response).errors).not_to be_empty
           end
 
-          it 'does not store the supplied government response in the db' do
+          it 'does not store the supplied Government response in the db' do
             do_patch
             petition.reload
             expect(government_response).to be_nil
@@ -301,7 +301,7 @@ RSpec.describe Admin::GovernmentResponseController, type: :controller, admin: tr
           end
         end
 
-        shared_examples_for 'adding a government response to a petition' do
+        shared_examples_for 'adding a Government response to a petition' do
           it 'fetches the requested petition' do
             do_patch
             expect(assigns(:petition)).to eq petition
@@ -316,7 +316,7 @@ RSpec.describe Admin::GovernmentResponseController, type: :controller, admin: tr
           end
         end
 
-        shared_examples_for 'adding a government response to a petition in the wrong state' do
+        shared_examples_for 'adding a Government response to a petition in the wrong state' do
           it 'throws a 404' do
             expect {
               do_patch
@@ -331,32 +331,32 @@ RSpec.describe Admin::GovernmentResponseController, type: :controller, admin: tr
         end
 
         describe 'for an open petition' do
-          it_behaves_like 'adding a government response to a petition'
+          it_behaves_like 'adding a Government response to a petition'
         end
 
         describe 'for a pending petition' do
           before { petition.update_column(:state, Petition::PENDING_STATE) }
-          it_behaves_like 'adding a government response to a petition in the wrong state'
+          it_behaves_like 'adding a Government response to a petition in the wrong state'
         end
 
         describe 'for a validated petition' do
           before { petition.update_column(:state, Petition::VALIDATED_STATE) }
-          it_behaves_like 'adding a government response to a petition in the wrong state'
+          it_behaves_like 'adding a Government response to a petition in the wrong state'
         end
 
         describe 'for a sponsored petition' do
           before { petition.update_column(:state, Petition::SPONSORED_STATE) }
-          it_behaves_like 'adding a government response to a petition in the wrong state'
+          it_behaves_like 'adding a Government response to a petition in the wrong state'
         end
 
         describe 'for a rejected petition' do
           before { petition.update_columns(state: Petition::REJECTED_STATE) }
-          it_behaves_like 'adding a government response to a petition'
+          it_behaves_like 'adding a Government response to a petition'
         end
 
         describe 'for a hidden petition' do
           before { petition.update_column(:state, Petition::HIDDEN_STATE) }
-          it_behaves_like 'adding a government response to a petition'
+          it_behaves_like 'adding a Government response to a petition'
         end
       end
 
@@ -373,7 +373,7 @@ RSpec.describe Admin::GovernmentResponseController, type: :controller, admin: tr
           patch :update, params: params.merge(overrides)
         end
 
-        describe 'using valid params to add a government response' do
+        describe 'using valid params to add a Government response' do
           it 'redirects to the show page' do
             do_patch
             expect(response).to redirect_to "https://moderate.petition.parliament.uk/admin/petitions/#{petition.id}"
@@ -381,10 +381,10 @@ RSpec.describe Admin::GovernmentResponseController, type: :controller, admin: tr
 
           it 'tells the moderator that their changes were saved' do
             do_patch
-            expect(flash[:notice]).to eq 'Updated government response successfully'
+            expect(flash[:notice]).to eq 'Updated Government response successfully'
           end
 
-          it 'stores the supplied government response in the db' do
+          it 'stores the supplied Government response in the db' do
             do_patch
             petition.reload
             expect(government_response.responded_on).to eq government_response_attributes[:responded_on]
@@ -453,7 +453,7 @@ RSpec.describe Admin::GovernmentResponseController, type: :controller, admin: tr
           end
         end
 
-        describe 'using no params to add a government response' do
+        describe 'using no params to add a Government response' do
           before do
             government_response_attributes[:responded_on] = nil
             government_response_attributes[:summary] = nil
@@ -487,7 +487,7 @@ RSpec.describe Admin::GovernmentResponseController, type: :controller, admin: tr
           end
         end
 
-        describe 'using invalid params to add a government response' do
+        describe 'using invalid params to add a Government response' do
           before { government_response_attributes[:summary] = 'a' * 501 }
 
           it 're-renders the petitions/show template' do
@@ -501,7 +501,7 @@ RSpec.describe Admin::GovernmentResponseController, type: :controller, admin: tr
             expect(assigns(:government_response).errors).not_to be_empty
           end
 
-          it 'does not store the supplied government response in the db' do
+          it 'does not store the supplied Government response in the db' do
             do_patch
             petition.reload
             expect(government_response).to be_nil
@@ -525,7 +525,7 @@ RSpec.describe Admin::GovernmentResponseController, type: :controller, admin: tr
           end
         end
 
-        shared_examples_for 'adding a government response to a petition' do
+        shared_examples_for 'adding a Government response to a petition' do
           it 'fetches the requested petition' do
             do_patch
             expect(assigns(:petition)).to eq petition
@@ -540,7 +540,7 @@ RSpec.describe Admin::GovernmentResponseController, type: :controller, admin: tr
           end
         end
 
-        shared_examples_for 'adding a government response to a petition in the wrong state' do
+        shared_examples_for 'adding a Government response to a petition in the wrong state' do
           it 'throws a 404' do
             expect {
               do_patch
@@ -555,32 +555,32 @@ RSpec.describe Admin::GovernmentResponseController, type: :controller, admin: tr
         end
 
         describe 'for an open petition' do
-          it_behaves_like 'adding a government response to a petition'
+          it_behaves_like 'adding a Government response to a petition'
         end
 
         describe 'for a pending petition' do
           before { petition.update_column(:state, Petition::PENDING_STATE) }
-          it_behaves_like 'adding a government response to a petition in the wrong state'
+          it_behaves_like 'adding a Government response to a petition in the wrong state'
         end
 
         describe 'for a validated petition' do
           before { petition.update_column(:state, Petition::VALIDATED_STATE) }
-          it_behaves_like 'adding a government response to a petition in the wrong state'
+          it_behaves_like 'adding a Government response to a petition in the wrong state'
         end
 
         describe 'for a sponsored petition' do
           before { petition.update_column(:state, Petition::SPONSORED_STATE) }
-          it_behaves_like 'adding a government response to a petition in the wrong state'
+          it_behaves_like 'adding a Government response to a petition in the wrong state'
         end
 
         describe 'for a rejected petition' do
           before { petition.update_columns(state: Petition::REJECTED_STATE) }
-          it_behaves_like 'adding a government response to a petition'
+          it_behaves_like 'adding a Government response to a petition'
         end
 
         describe 'for a hidden petition' do
           before { petition.update_column(:state, Petition::HIDDEN_STATE) }
-          it_behaves_like 'adding a government response to a petition'
+          it_behaves_like 'adding a Government response to a petition'
         end
       end
 
@@ -629,14 +629,14 @@ RSpec.describe Admin::GovernmentResponseController, type: :controller, admin: tr
         expect(Petition).to receive_message_chain(:moderated, :find).with(petition.to_param).and_return(petition)
       end
 
-      context "when the petition has a government response" do
+      context "when the petition has a Government response" do
         let!(:petition) { FactoryBot.create(:responded_petition) }
 
         before do
           expect(petition).to receive(:government_response).and_return(government_response)
         end
 
-        context "when the government response is succcessfully deleted" do
+        context "when the Government response is succcessfully deleted" do
           before do
             expect(Appsignal).to receive(:increment_counter).with("petition.responded", -1)
           end
@@ -645,7 +645,7 @@ RSpec.describe Admin::GovernmentResponseController, type: :controller, admin: tr
             delete :destroy, params: { petition_id: petition.id }
 
             expect(response).to redirect_to("https://moderate.petition.parliament.uk/admin/petitions/#{petition.id}")
-            expect(controller).to set_flash[:notice].to("Deleted government response successfully")
+            expect(controller).to set_flash[:notice].to("Deleted Government response successfully")
           end
 
           it "updates the email_requested_at timestamp for 'government_response'" do
@@ -668,22 +668,22 @@ RSpec.describe Admin::GovernmentResponseController, type: :controller, admin: tr
           end
         end
 
-        context "when the government response is not successfully deleted" do
+        context "when the Government response is not successfully deleted" do
           before do
             expect(government_response).to receive(:destroy).and_return(false)
             expect(government_response).to receive(:destroyed?).and_return(false)
           end
 
-          it "redirects to the government response page and displays an alert" do
+          it "redirects to the Government response page and displays an alert" do
             delete :destroy, params: { petition_id: petition.id }
 
             expect(response).to redirect_to("https://moderate.petition.parliament.uk/admin/petitions/#{petition.id}/government-response")
-            expect(controller).to set_flash[:alert].to("Unable to delete government response - please contact support")
+            expect(controller).to set_flash[:alert].to("Unable to delete Government response - please contact support")
           end
         end
       end
 
-      context "when the petition has no government response" do
+      context "when the petition has no Government response" do
         let!(:petition) { FactoryBot.create(:open_petition) }
         let(:new_government_response) { petition.build_government_response }
 
@@ -696,7 +696,7 @@ RSpec.describe Admin::GovernmentResponseController, type: :controller, admin: tr
           delete :destroy, params: { petition_id: petition.id }
 
           expect(response).to redirect_to("https://moderate.petition.parliament.uk/admin/petitions/#{petition.id}")
-          expect(controller).to set_flash[:notice].to("Deleted government response successfully")
+          expect(controller).to set_flash[:notice].to("Deleted Government response successfully")
         end
       end
     end

@@ -1,0 +1,7 @@
+@use "../settings/links" as *;
+
+%link-decoration {
+  text-decoration: underline;
+  text-decoration-thickness: $link-underline-thickness;
+  text-underline-offset: $link-underline-offset;
+}

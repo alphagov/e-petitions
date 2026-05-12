@@ -4,7 +4,8 @@ This is the code base for the [UK Government and Parliament's petitions service]
 
 ## Setup
 
-We recommend using [Docker Desktop][2] to get setup quickly. If you'd prefer not to use Docker then you'll need Ruby (3.2+), Node (20+) and PostgreSQL (16+) installed.
+We recommend using [Docker Desktop][2] to get setup quickly. If you'd prefer not to use
+Docker then you'll need Ruby (3.2+), Node (20+) and PostgreSQL (16+) installed.
 
 ### Create the databases
 
@@ -75,6 +76,45 @@ Similarly, individual cucumber features can be run using the following command:
 ```
 bin/run cucumber features/suzie_views_a_petition.feature
 ```
+
+## Vector-based search
+
+The search has an option to use vector embeddings which is disabled by default. If you want
+to try this out we recommend using Docker and it's model runner feature to test locally - it's
+configured to use the model mxbai-embed-large by default but this can be overridden by setting
+environment variables in your `.env.local` file, e.g.
+
+```
+EMBEDDING_BACKEND=OpenAI
+OPENAI_BASE_URL=https://api.openai.com/v1
+OPENAI_API_KEY=<your-api-key>
+OPENAI_MODEL_ID=<your-preferred-model>
+```
+
+Alternatively you can use Amazon Bedrock to generate embeddings:
+
+```
+EMBEDDING_BACKEND=AmazonBedrock
+AWS_REGION=eu-west-1
+AWS_ACCESS_KEY_ID=<your-aws-access-key-id>
+AWS_SECRET_ACCESS_KEY=<your-aws-secret-access-key>
+```
+
+If you have some petitions in your database already you can backfill them like this:
+
+```
+bin/run rails runner 'BackfillPetitionEmbeddingsJob.perform_now'
+```
+
+If you switch models/backends and you need to regenerate your embeddings then you'll
+need to clear the cache and force the update like this:
+
+```
+bin/run rails runner 'BackfillPetitionEmbeddingsJob.perform_now(force: true, clear_cache: true)'
+```
+
+The embeddings use the pgvector halfvec type with 1024 dimensions so you'll need to use a
+model that matches that or can be limited to that.
 
 ## Moderation Portal SSO
 

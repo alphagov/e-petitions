@@ -53,6 +53,7 @@ RSpec.describe "API request to show a petition", type: :request, show_exceptions
           "committee_note" => a_string_matching(petition.committee_note),
           "state" => a_string_matching(petition.state),
           "signature_count" => eq_to(petition.signature_count),
+          "closing_date" => a_string_matching(%r[\A\d{4}-\d{2}-\d{2}]),
           "opened_at" => a_string_matching(%r[\A\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z\z]),
           "created_at" => a_string_matching(%r[\A\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z\z]),
           "updated_at" => a_string_matching(%r[\A\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z\z])
@@ -157,7 +158,7 @@ RSpec.describe "API request to show a petition", type: :request, show_exceptions
 
       expect(attributes).to match(
         a_hash_including(
-          "debate_scheduled_at" => a_string_matching(%r[\A\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z\z]),
+          "debate_scheduled_on" => a_string_matching(%r[\A\d{4}-\d{2}-\d{2}\z]),
           "scheduled_debate_date" => a_string_matching(%r[\A\d{4}-\d{2}-\d{2}\z])
         )
       )
@@ -376,7 +377,7 @@ RSpec.describe "API request to show a petition", type: :request, show_exceptions
 
     it "includes related activity" do
       petition = FactoryBot.create :open_petition
-      email_1  = FactoryBot.create :petition_email, petition: petition, subject: "Original Government Response", body: "This is the original government response", created_at: 1.day.ago
+      email_1  = FactoryBot.create :petition_email, petition: petition, subject: "Original Government Response", body: "This is the original Government response", created_at: 1.day.ago
       email_2  = FactoryBot.create :petition_email, petition: petition, subject: "Debate Decision", body: "Petitions committee will debate this petition", created_at: 2.days.ago
 
       get "/petitions/#{petition.id}.json"
@@ -387,13 +388,15 @@ RSpec.describe "API request to show a petition", type: :request, show_exceptions
           "other_parliamentary_business" => a_collection_containing_exactly(
             {
               "subject" => "Debate Decision",
-              "body" => "Petitions committee will debate this petition\n",
+              "body" => "Petitions committee will debate this petition",
+              "occurred_on" => a_string_matching(%r[\A\d{4}-\d{2}-\d{2}\z]),
               "created_at" => a_string_matching(%r[\A\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z\z]),
               "updated_at" => a_string_matching(%r[\A\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z\z])
             },
             {
               "subject" => "Original Government Response",
-              "body" => "This is the original government response\n",
+              "body" => "This is the original Government response",
+              "occurred_on" => a_string_matching(%r[\A\d{4}-\d{2}-\d{2}\z]),
               "created_at" => a_string_matching(%r[\A\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z\z]),
               "updated_at" => a_string_matching(%r[\A\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z\z])
             }

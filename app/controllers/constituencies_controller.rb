@@ -4,9 +4,11 @@ class ConstituenciesController < PublicController
   before_action :fetch_constituencies, only: [:index]
 
   def index
-    expires_in 1.hour, public: true,
-      stale_while_revalidate: 60.seconds,
-      stale_if_error: 5.minutes
+    fresh_when(
+      last_modified: @constituencies.last_modified_at,
+      cache_control: @constituencies.cache_control,
+      public: true
+    )
 
     respond_to do |format|
       format.json

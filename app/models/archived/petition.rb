@@ -43,7 +43,7 @@ module Archived
     # can't add `allow_blank: true` here because Active Record validations
     # will not call the DateValidator as all invalid dates are coerced to nil.
     # Therefore the allowing of blank values is handling in the validtor.
-    validates :scheduled_debate_date, date: true
+    validates :scheduled_debate_date, :debate_scheduled_on, date: true
 
     # Validate associated models so that archive petition job fails if they're not valid.
     validates_associated :debate_outcome, :government_response, :note, :rejection
@@ -51,7 +51,9 @@ module Archived
     before_save :update_debate_state, if: :scheduled_debate_date_changed?
 
     extend Searchable(:action, :background, :additional_details)
-    include Browseable, Taggable, Departments, Topics, Anonymization
+    include Browseable, NearestNeighbours, HybridSearching, Taggable, Departments, Topics, Anonymization
+
+    self.default_page_size = 25
 
     facet :all, -> { by_most_signatures }
     facet :awaiting_response, -> { awaiting_response.by_waiting_for_response_longest }
@@ -79,6 +81,9 @@ module Archived
     delegate :formatted_threshold_for_debate, to: :parliament
     delegate :show_on_a_map?, to: :parliament
 
+    delegate :debated_on, to: :debate_outcome, allow_nil: true
+    delegate :responded_on, to: :government_response, allow_nil: true
+
     with_options allow_nil: true, prefix: true do
       delegate :name, :email, to: :creator
       delegate :code, :details, to: :rejection
@@ -98,6 +103,14 @@ module Archived
         reorder(created_at: :asc)
       end
 
+      def by_most_recent
+        reorder(created_at: :desc)
+      end
+
+      def by_most_recently_published
+        reorder('published_at DESC NULLS LAST')
+      end
+
       def by_most_recent_debate_outcome
         reorder(debate_outcome_at: :desc, created_at: :desc)
       end
@@ -107,7 +120,7 @@ module Archived
       end
 
       def by_waiting_for_debate_longest
-        reorder(debate_threshold_reached_at: :asc, created_at: :desc)
+        reorder('debate_threshold_reached_at ASC NULLS LAST, created_at ASC')
       end
 
       def by_most_recent
@@ -115,15 +128,23 @@ module Archived
       end
 
       def by_most_signatures
-        reorder(signature_count: :desc)
+        reorder('signature_count DESC NULLS LAST')
+      end
+
+      def by_most_recent_response
+        reorder('government_response_at DESC NULLS LAST, created_at DESC')
       end
 
       def by_waiting_for_response_longest
-        reorder(response_threshold_reached_at: :asc, created_at: :desc)
+        reorder('response_threshold_reached_at ASC NULLS LAST, created_at ASC')
       end
 
       def awaiting_response
         response_threshold_reached.not_responded
+      end
+
+      def responded
+        where(response_state: 'responded').preload(:government_response)
       end
 
       def not_responded
@@ -131,7 +152,7 @@ module Archived
       end
 
       def with_response
-        where.not(government_response_at: nil).preload(:government_response)
+        responded
       end
 
       def response_threshold_reached
@@ -249,6 +270,10 @@ module Archived
       "#{action} - #{background}"
     end
 
+    def deadline
+      closed_at
+    end
+
     def notes?
       note && note.details.present?
     end
@@ -263,6 +288,10 @@ module Archived
 
     def stopped?
       state == STOPPED_STATE
+    end
+
+    def open?
+      false
     end
 
     def closed?
@@ -425,12 +454,36 @@ module Archived
       false
     end
 
+    def awaiting_response?
+      response_state == 'awaiting'
+    end
+
+    def responded?
+      response_state == 'responded'
+    end
+
     def debate_outcome?
       debate_outcome_at? && debate_outcome
     end
 
     def positive_debate_outcome?
       debate_outcome? && debate_outcome.debated?
+    end
+
+    def awaiting_debate?
+      debate_state.in?(%w[awaiting scheduled])
+    end
+
+    def awaiting_debate_decision?
+      debate_state == 'awaiting'
+    end
+
+    def debate_scheduled?
+      debate_state == 'scheduled'
+    end
+
+    def debated?
+      debate_state == 'debated'
     end
 
     def debated?
@@ -441,7 +494,31 @@ module Archived
       debate_state == 'not_debated'
     end
 
+    def debate_scheduled_on
+      super || default_debate_scheduled_on
+    end
+
+    def debate_scheduled_on?
+      debate_scheduled_on.present?
+    end
+
+    def last_modified_at
+      updated_at
+    end
+
+    def cache_control(max_age: 2.minutes)
+      {
+        max_age: max_age,
+        stale_while_revalidate: max_age * 2,
+        stale_if_error: max_age * 5
+      }
+    end
+
     private
+
+    def default_debate_scheduled_on
+      debate_scheduled_at? ? debate_scheduled_at.to_date : nil
+    end
 
     def evaluate_debate_state
       if scheduled_debate_date?

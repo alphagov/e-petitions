@@ -5,9 +5,11 @@ class ParliamentsController < PublicController
   before_action :fetch_constituencies, only: [:show]
 
   def index
-    expires_in 1.hour, public: true,
-      stale_while_revalidate: 60.seconds,
-      stale_if_error: 5.minutes
+    fresh_when(
+      last_modified: @parliaments.last_modified_at,
+      cache_control: @parliaments.cache_control,
+      public: true
+    )
 
     respond_to do |format|
       format.json
@@ -15,9 +17,11 @@ class ParliamentsController < PublicController
   end
 
   def show
-    expires_in 1.hour, public: true,
-      stale_while_revalidate: 60.seconds,
-      stale_if_error: 5.minutes
+    fresh_when(
+      last_modified: @parliament.last_modified_at,
+      cache_control: @parliament.cache_control,
+      public: true
+    )
 
     respond_to do |format|
      format.json

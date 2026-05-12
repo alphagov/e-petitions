@@ -1,12 +1,56 @@
 en-GB:
   metadata:
+    description:
+      archived/petitions:
+        index: "Search results for archived petitions. These petitions cannot be signed anymore."
+        show: "A petition created by a British citizen or UK resident. You can share this petition if you agree with its message."
+
+      feedback:
+        new: "Provide feedback to the Petitions Committee and find out how to contact them."
+
+      local_petitions:
+        index: "Local search: Use the postcode search to find petitions being signed in local constituencies."
+        show: "Local search results - open petitions: Browse open petitions in the local constituency you searched for."
+        all: "Local search results - open and closed petitions: Browse open and closed petitions in the local constituency you searched for."
+
+      petitions:
+        index: "Search results for open petitions. You can sign and share petitions."
+        show: "A petition created by a British citizen or UK resident. You can share this petition if you agree with its message."
+        start: "Important information you need to know before creating a petition for the UK Parliament or UK Government."
+        create:
+          uk_citizenship: "Check if you meet the criteria to create and submit a petition for the UK Parliament or UK Government."
+          action: "Add a clear and concise title to your petition for the UK Parliament or UK Government."
+          similar_petitions: "A petition similar to yours already exists. Signing an existing petition can help your case have a bigger impact."
+          background: "Add more detail to your petition and write clearly and specifically whay you want government or Parliament to do."
+          additional_details: "Add optional information to your petition to help support your cause and gain signatures."
+          creator: "Add information such as name, email address, location and postcode to proceed with submitting your petition."
+          check_and_submit: "Check your entire petition before submitting and that you agree for this information to be published. You cannot change your petition after this point."
+        thank_you: "Your petition submission has been received."
+
+      pages:
+        index: "Create or sign a petition to demand UK Government or UK Parliament to act on an issue you consider important."
+        accessibility: "Find out how we make this website accessible for as many people as possible."
+        cookies: "Find out how our cookies help us remember your preferences and keep our site running. Learn how our cookies work and how to manage them."
+        help: "Find out what you need to do to create an e-petition."
+        privacy: "This privacy notice provides the information required by UK GDPR about the personal data that we collect from you when you create or sign a petition."
+        standards: "Find out the standards an e-petition must meet."
+
+      signatures:
+        create:
+          uk_citizenship: "Confirm your are a British citizen or UK resident to be able to sign this petition."
+          signature: "Confirm all your details before signing this petition."
+          check_and_submit: "Check everything is correct and proceed with signing this petition."
+        thank_you: "You need to confirm your email address before we can count your signature for this petition."
+
     open_graph:
-      site_name: "Petitions - UK Government and Parliament"
-      default_title: "Petitions - UK Government and Parliament"
+      site_name: "Petitions - UK Parliament and UK Government"
+      default_title: "Petitions - UK Parliament and UK Government"
+      default_description: "Find, sign or create petitions calling for the UK Parliament or UK Government to act"
       title: "Petition: %{petition}"
       archived_title: "Archived Petition: %{petition}"
 
     x:
-      default_title: "Petitions - UK Government and Parliament"
+      default_title: "Petitions - UK Parliament and UK Government"
+      default_description: "Find, sign or create petitions calling for the UK Parliament or UK Government to act"
       title: "Petition: %{petition}"
       archived_title: "Archived Petition: %{petition}"

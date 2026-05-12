@@ -40,6 +40,6 @@ class Admin::PagesController < Admin::AdminController
   end
 
   def page_attributes
-    %i[title content enabled redirect redirect_url]
+    %i[title content enabled disable_toc redirect redirect_url]
   end
 end

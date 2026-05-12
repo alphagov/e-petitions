@@ -4,6 +4,10 @@ RSpec.describe 'Link header', type: :request do
   let(:link_header) { response.headers['Link'] }
   let(:status) { response.status }
 
+  let(:propshaft) { Rails.application.assets.load_path }
+  let(:application_css) { propshaft.find("application.css").digested_path.to_s }
+  let(:application_js) { propshaft.find("application.js").digested_path.to_s }
+
   context "when visiting the home page" do
     before do
       get "/"
@@ -12,17 +16,12 @@ RSpec.describe 'Link header', type: :request do
     it "sets the correct Link header" do
       expect(status).to eq(200)
       expect(link_header).to be_present
-      expect(link_header).to include("</assets/application.css>; rel=preload; as=style; type=text/css; nopush")
-      expect(link_header).to include("</assets/application.js>; rel=preload; as=script; type=text/javascript; nopush")
-
-      expect(link_header).not_to include("</assets/auto-updater.js>; rel=preload; as=script; type=text/javascript; nopush")
-      expect(link_header).not_to include("</assets/character-counter.js>; rel=preload; as=script; type=text/javascript; nopush")
+      expect(link_header).to include("</assets/#{application_css}>; rel=preload; as=style; type=text/css; nopush")
+      expect(link_header).to include("</assets/#{application_js}>; rel=preload; as=script; type=text/javascript; nopush")
     end
   end
 
   context "when visiting the help page" do
-    let!(:page) { FactoryBot.create(:page, :help) }
-
     before do
       get "/help"
     end
@@ -30,27 +29,21 @@ RSpec.describe 'Link header', type: :request do
     it "sets the correct Link header" do
       expect(status).to eq(200)
       expect(link_header).to be_present
-      expect(link_header).to include("</assets/application.css>; rel=preload; as=style; type=text/css; nopush")
-      expect(link_header).to include("</assets/application.js>; rel=preload; as=script; type=text/javascript; nopush")
-
-      expect(link_header).not_to include("</assets/auto-updater.js>; rel=preload; as=script; type=text/javascript; nopush")
-      expect(link_header).not_to include("</assets/character-counter.js>; rel=preload; as=script; type=text/javascript; nopush")
+      expect(link_header).to include("</assets/#{application_css}>; rel=preload; as=style; type=text/css; nopush")
+      expect(link_header).to include("</assets/#{application_js}>; rel=preload; as=script; type=text/javascript; nopush")
     end
   end
 
-  context "when visiting the check petition page" do
+  context "when visiting the start petition page" do
     before do
-      get "/petitions/check"
+      get "/petitions/start"
     end
 
     it "sets the correct Link header" do
       expect(status).to eq(200)
       expect(link_header).to be_present
-      expect(link_header).to include("</assets/application.css>; rel=preload; as=style; type=text/css; nopush")
-      expect(link_header).to include("</assets/application.js>; rel=preload; as=script; type=text/javascript; nopush")
-
-      expect(link_header).not_to include("</assets/auto-updater.js>; rel=preload; as=script; type=text/javascript; nopush")
-      expect(link_header).to include("</assets/character-counter.js>; rel=preload; as=script; type=text/javascript; nopush")
+      expect(link_header).to include("</assets/#{application_css}>; rel=preload; as=style; type=text/css; nopush")
+      expect(link_header).to include("</assets/#{application_js}>; rel=preload; as=script; type=text/javascript; nopush")
     end
   end
 
@@ -64,11 +57,8 @@ RSpec.describe 'Link header', type: :request do
     it "sets the correct Link header" do
       expect(status).to eq(200)
       expect(link_header).to be_present
-      expect(link_header).to include("</assets/application.css>; rel=preload; as=style; type=text/css; nopush")
-      expect(link_header).to include("</assets/application.js>; rel=preload; as=script; type=text/javascript; nopush")
-
-      expect(link_header).to include("</assets/auto-updater.js>; rel=preload; as=script; type=text/javascript; nopush")
-      expect(link_header).not_to include("</assets/character-counter.js>; rel=preload; as=script; type=text/javascript; nopush")
+      expect(link_header).to include("</assets/#{application_css}>; rel=preload; as=style; type=text/css; nopush")
+      expect(link_header).to include("</assets/#{application_js}>; rel=preload; as=script; type=text/javascript; nopush")
     end
   end
 
@@ -82,11 +72,8 @@ RSpec.describe 'Link header', type: :request do
     it "sets the correct Link header" do
       expect(status).to eq(200)
       expect(link_header).to be_present
-      expect(link_header).to include("</assets/application.css>; rel=preload; as=style; type=text/css; nopush")
-      expect(link_header).to include("</assets/application.js>; rel=preload; as=script; type=text/javascript; nopush")
-
-      expect(link_header).not_to include("</assets/auto-updater.js>; rel=preload; as=script; type=text/javascript; nopush")
-      expect(link_header).not_to include("</assets/character-counter.js>; rel=preload; as=script; type=text/javascript; nopush")
+      expect(link_header).to include("</assets/#{application_css}>; rel=preload; as=style; type=text/css; nopush")
+      expect(link_header).to include("</assets/#{application_js}>; rel=preload; as=script; type=text/javascript; nopush")
     end
   end
 
@@ -100,11 +87,8 @@ RSpec.describe 'Link header', type: :request do
     it "sets the correct Link header" do
       expect(status).to eq(200)
       expect(link_header).to be_present
-      expect(link_header).to include("</assets/application.css>; rel=preload; as=style; type=text/css; nopush")
-      expect(link_header).to include("</assets/application.js>; rel=preload; as=script; type=text/javascript; nopush")
-
-      expect(link_header).not_to include("</assets/auto-updater.js>; rel=preload; as=script; type=text/javascript; nopush")
-      expect(link_header).not_to include("</assets/character-counter.js>; rel=preload; as=script; type=text/javascript; nopush")
+      expect(link_header).to include("</assets/#{application_css}>; rel=preload; as=style; type=text/css; nopush")
+      expect(link_header).to include("</assets/#{application_js}>; rel=preload; as=script; type=text/javascript; nopush")
     end
   end
 end

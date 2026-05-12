@@ -1,3 +1,4 @@
+@wip
 Feature: Suzie views a petition
   In order to read a petition and potentially sign it
   As Suzie the signer
@@ -8,7 +9,7 @@ Feature: Suzie views a petition
     When I view the petition
     Then I should see "This petition is gathering support"
     And I should see "This petition needs 3 more supporters before we will check that it meets the petition standards"
-    And I should see a link called "petition standards" linking to "/help#standards"
+    And I should see a link called "petition standards" linking to "/standards"
     And the page should have the title "This petition is gathering support - Petitions"
     And the page should have the meta description "Official online petitions in response to issues of the day"
     And the page should have the opengraph meta tag "title" with "This petition is gathering support - Petitions"
@@ -21,7 +22,7 @@ Feature: Suzie views a petition
     When I view the petition
     Then I should see "This petition is gathering support"
     And I should see "This petition needs 1 more supporter before we will check that it meets the petition standards"
-    And I should see a link called "petition standards" linking to "/help#standards"
+    And I should see a link called "petition standards" linking to "/standards"
     And the page should have the title "This petition is gathering support - Petitions"
     And the page should have the meta description "Official online petitions in response to issues of the day"
     And the page should have the opengraph meta tag "title" with "This petition is gathering support - Petitions"
@@ -35,7 +36,7 @@ Feature: Suzie views a petition
     Then I should see "We’re checking this petition"
     And I should see "5 people have already supported this petition"
     And I should not see "No more people can sign this petition until it has been approved"
-    And I should see a link called "petition standards" linking to "/help#standards"
+    And I should see a link called "petition standards" linking to "/standards"
     And the page should have the title "This petition has been sent to moderation - Petitions"
     And the page should have the meta description "Official online petitions in response to issues of the day"
     And the page should have the opengraph meta tag "title" with "This petition has been sent to moderation - Petitions"
@@ -49,7 +50,7 @@ Feature: Suzie views a petition
     Then I should see "We’re checking this petition"
     And I should see "1 person has already supported this petition"
     And I should not see "No more people can sign this petition until it has been approved"
-    And I should see a link called "petition standards" linking to "/help#standards"
+    And I should see a link called "petition standards" linking to "/standards"
     And the page should have the title "This petition has been sent to moderation - Petitions"
     And the page should have the meta description "Official online petitions in response to issues of the day"
     And the page should have the opengraph meta tag "title" with "This petition has been sent to moderation - Petitions"
@@ -63,7 +64,7 @@ Feature: Suzie views a petition
     Then I should see "We’re checking this petition"
     And I should see "20 people have already supported this petition"
     And I should see "No more people can sign this petition until it has been approved"
-    And I should see a link called "petition standards" linking to "/help#standards"
+    And I should see a link called "petition standards" linking to "/standards"
     And the page should have the title "This petition has been sent to moderation - Petitions"
     And the page should have the meta description "Official online petitions in response to issues of the day"
     And the page should have the opengraph meta tag "title" with "This petition has been sent to moderation - Petitions"

@@ -43,7 +43,9 @@ class PackageBuilder
 
     Dir.chdir archive_path do
       package_gems unless skip_gems?
+      package_assets unless skip_assets?
       create_revision_file
+      create_timestamp_file
       remove_artifacts
     end
 
@@ -53,7 +55,8 @@ class PackageBuilder
   end
 
   def upload!
-    tm = Aws::S3::TransferManager.new(region: region, profile: profile)
+    s3 = Aws::S3::Client.new(region: region, profile: profile)
+    tm = Aws::S3::TransferManager.new(client: s3)
 
     info "Uploading package #{package_name} to S3 ..."
     start_time = Time.current
@@ -145,6 +148,10 @@ class PackageBuilder
     File.write(revision_file, revision)
   end
 
+  def create_timestamp_file
+    File.write(timestamp_file, timestamp.iso8601(0))
+  end
+
   def credentials
     { region: region, profile: profile }
   end
@@ -232,6 +239,25 @@ class PackageBuilder
     end
   end
 
+  def package_assets
+    with_build_env do
+      run "bundle exec npm install"
+    end
+
+    env = {
+      "RAILS_ENV" => "production",
+      "SECRET_KEY_BASE_DUMMY" => "1"
+    }
+
+    with_build_env do
+      run env, "bundle exec rake assets:precompile"
+    end
+
+    with_build_env do
+      run "bundle exec npm install"
+    end
+  end
+
   def package_name
     "#{timestamp.strftime('%Y%m%d%H%M%S')}.tar.gz"
   end
@@ -272,7 +298,7 @@ class PackageBuilder
   end
 
   def pull_request?
-    ENV.fetch('TRAVIS_PULL_REQUEST', 'false') != 'false'
+    ENV.fetch('GITHUB_EVENT_NAME', 'push') == 'pull_request'
   end
 
   def region
@@ -297,7 +323,7 @@ class PackageBuilder
 
   def remove_artifacts
     args = %w[rm -rf]
-    args.concat %w[.bundle .env .env.development .env.test .ruby-version log tmp]
+    args.concat %w[.bundle .env .env.development .env.test .ruby-version log tmp node_modules]
 
     info "Removing build artifacts ..."
     run(*args)
@@ -305,6 +331,10 @@ class PackageBuilder
 
   def revision_file
     File.join(archive_path, 'REVISION')
+  end
+
+  def timestamp_file
+    File.join(archive_path, 'TIMESTAMP')
   end
 
   def short_revision
@@ -329,6 +359,10 @@ class PackageBuilder
 
   def skip_gems?
     ENV.fetch('SKIP_GEMS', '0').to_i.nonzero?
+  end
+
+  def skip_assets?
+    ENV.fetch('SKIP_ASSETS', '0').to_i.nonzero?
   end
 
   def track_progress(deployment_id, &block)

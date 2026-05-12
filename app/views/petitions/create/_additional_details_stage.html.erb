@@ -1,0 +1,55 @@
+<%= form.hidden_field :uk_citizenship %>
+
+<%= form.hidden_field :action %>
+<%= form.hidden_field :background %>
+
+<%= form.hidden_field :name %>
+<%= form.hidden_field :email %>
+<%= form.hidden_field :email_confirmation %>
+<%= form.hidden_field :postcode %>
+<%= form.hidden_field :location_code %>
+<%= form.hidden_field :notify_by_email %>
+
+<div class="grid-row margin-top-7">
+  <div class="grid-column-two-thirds-from-laptop">
+    <%= form.button "Back", name: "move_back", value: "background", class: "button-back" %>
+
+    <%= form_row for: [petition, :additional_details] do %>
+      <h1>
+        <span class="heading-secondary">Start a petition</span>
+
+        <%= form.label :additional_details do %>
+          Add more information to your petition
+        <% end %>
+      </h1>
+
+      <span class="form-hint">
+        Use this section to give more information about your petition. This section is optional.
+      </span>
+
+      <span class="form-hint">
+        Explain what your petition is about so other people can understand the issue.
+      </span>
+
+      <span class="form-hint">
+        Be clear and specific.
+      </span>
+
+      <%= error_messages_for_field petition, :additional_details %>
+      <%= form.text_area :additional_details, rows: 7, data: { max_length: 500 } %>
+      <div class="character-count">500 characters max</div>
+    <% end %>
+
+    <div class="button-group">
+      <%= form.button "Continue", name: "move_next", class: "button" %>
+    </div>
+  </div>
+</div>
+
+<% content_for :preload do %>
+  <%= preload_link_tag 'character-counter.js', nopush: true %>
+<% end %>
+
+<% content_for :footer do %>
+  <%= javascript_include_tag 'character-counter' %>
+<% end %>

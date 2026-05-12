@@ -1,68 +1,115 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
+
 <head>
-  <style type="text/css">
-    h1, h2, h3 {
-      font-family: arial;
-      line-height: 1.55em;
-      margin-top: 24px;
-      margin-bottom: 6px;
-    }
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta content="telephone=no" name="format-detection"> <!-- need to add formatting for real phone numbers -->
+  <meta name="viewport" content="width=device-width">
+  <title><%= message.subject %></title>
 
-    hr {
-      background-color: #666;
-      border: none;
-      height: 1px;
-      margin: 18px 0;
+  <style>
+    @media only screen and (min-device-width: 581px) {
+      .content {
+        width: 580px !important;
+      }
     }
-
-    p, ul, ol, li {
-      font-family: arial;
-      line-height: 1.55em;
-      margin: 0;
-    }
-
-    p {
-      margin-top: 12px;
-      margin-bottom: 18px;
-    }
-
-    li {
-      margin-bottom: 6px;
-    }
-
-    ul, ol {
-      margin-bottom: 18px;
-      padding-left: 1.5em;
-    }
+    body { margin:0 !important; }
+    div[style*="margin: 16px 0"] { margin:0 !important; }
   </style>
+
+  <!--[if gte mso 9]>
+    <style>
+      li {
+        margin-left: 4px !important;
+      }
+      table {
+        mso-table-lspace: 0pt;
+        mso-table-rspace: 0pt;
+      }
+    </style>
+  <![endif]-->
+
 </head>
 
-<body>
-  <table cellspacing="0" cellpadding="0" border="0">
+<body style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;font-size: 16px;margin: 0;color:#0b0c0c; -webkit-font-smoothing: antialiased;">
+  <table role="presentation" bgcolor="#006548" width="100%" style="border-collapse: collapse;min-width: 100%;width: 100% !important;" cellpadding="0" cellspacing="0" border="0">
     <tr>
-      <td stype="width: 20px; height: 20px;"></td>
-      <td stype="width: 400px; height: 20px;"></td>
-      <td stype="width: 20px; height: 20px;"></td>
+      <td height="10" width="100%"><br></td>
     </tr>
     <tr>
-      <td> </td>
-      <td>
-        <%= yield %>
+      <td width="100%">
+        <!--[if (gte mso 9)|(IE)]>
+          <table role="presentation" width="580" align="center" cellpadding="0" cellspacing="0" border="0" style="border-collapse: collapse;width: 580px;">
+            <tr>
+              <td>
+        <![endif]-->
+        <table role="presentation" width="100%" style="border-collapse: collapse;max-width: 580px;" cellpadding="0" cellspacing="0" border="0" align="center">
+          <tr>
+            <td width="10" height="10" valign="middle"></td>
+            <td valign="middle">
+              <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="border-collapse: collapse">
+                <tr>
+                  <td style="padding: 0 15px 0 0;" valign="top">
+                    <%= image_tag(image_url("graphics/graphic_email.png", host: Site.url), height: 40, alt: "Portcullis logo") %>
+                  </td>
+                  <td width="100%" style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 32px; line-height: 32px; color: #ffffff;" valign="center">
+                    <div style="font-weight: bold;">Petitions</div>
+                  </td>
+                </tr>
+                <tr>
+                  <td colspan="2" width="100%" style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 24px; line-height: 24px; color: #ffffff;" valign="center">
+                    <div style="font-size: 16px; margin: 5px 0 0 0;">UK Parliament and UK Government</div>
+                  </td>
+                </tr>
+              </table>
+            </td>
+            <td width="10" height="10" valign="middle"></td>
+          </tr>
+        </table>
+        <!--[if (gte mso 9)|(IE)]>
+              </td>
+            </tr>
+          </table>
+        <![endif]-->
       </td>
-      <td> </td>
     </tr>
     <tr>
-      <td> </td>
-      <td style="height: 30px;"></td>
-      <td> </td>
+      <td height="10" width="100%"><br></td>
+    </tr>
+  </table>
+  <table
+      role="presentation"
+      class="content"
+      align="center"
+      cellpadding="0"
+      cellspacing="0"
+      border="0"
+      style="border-collapse: collapse;max-width: 580px; width: 100% !important;"
+      width="100%"
+  >
+    <tr>
+      <td height="30"><br></td>
     </tr>
     <tr>
-      <td stype="width: 20px; height: 20px;"></td>
-      <td stype="width: 400px; height: 20px;"></td>
-      <td stype="width: 20px; height: 20px;"></td>
+      <td width="10" valign="middle"><br></td>
+      <td style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 19px; line-height: 1.315789474; max-width: 560px;">
+        <!--[if (gte mso 9)|(IE)]>
+          <table role="presentation" width="560" align="center" cellpadding="0" cellspacing="0" border="0" style="border-collapse: collapse;width: 560px;">
+            <tr>
+              <td style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 19px; line-height: 1.315789474;">
+        <![endif]-->
+            <%= yield %>
+        <!--[if (gte mso 9)|(IE)]>
+              </td>
+            </tr>
+          </table>
+        <![endif]-->
+      </td>
+      <td width="10" valign="middle"><br></td>
+    </tr>
+    <tr>
+      <td height="30"><br></td>
     </tr>
   </table>
 </body>
 </html>
-

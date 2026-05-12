@@ -29,7 +29,7 @@ module HomeHelper
       @actioned ||= generate_actioned
     end
 
-    def generate_actioned(limit = 3)
+    def generate_actioned(limit = 2)
       scope, facets = Petition.visible, Petition.facet_definitions
 
       FACETS.each_with_object({}) do |action, actioned|
@@ -76,7 +76,7 @@ module HomeHelper
     if block_given?
       yield petitions unless petitions.empty?
     else
-      petitions
+      petitions.presence
     end
   end
 
@@ -90,4 +90,9 @@ module HomeHelper
     Petition.trending(period.ago(now)..now, limit).pluck(:id, :action, signature_count)
   end
   private :fetch_trending_petitions
+
+  def fetch_popular_petitions(limit)
+    Petition.popular(limit).pluck(:id, :action, :signature_count)
+  end
+  private :fetch_popular_petitions
 end

@@ -1,0 +1,11 @@
+@use "../settings/breakpoints" as *;
+
+@use "pkg:sass-mq/mq" as media with (
+  $breakpoints: $breakpoints
+);
+
+@mixin media-query($args...) {
+  @include media.mq($args...) {
+    @content;
+  }
+}

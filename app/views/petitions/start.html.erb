@@ -1,0 +1,57 @@
+<%= render 'parliament_dissolution_warning' %>
+
+<div class="grid-row margin-top-7">
+  <div class="grid-column-two-thirds-from-laptop">
+    <h1>
+      Start a petition
+    </h1>
+
+    <p class="lede">
+      Petitions are a way to ask the UK Government or Parliament to take action
+      on an issue that’s important to you. <a href="/help">Use the guidance</a>
+      to understand what you'll need to do to create and submit your petition.
+    </p>
+
+    <h2>
+      How it works
+    </h2>
+
+    <ul class="bulleted-list">
+      <li>
+        Write a clear and specific petition action
+      </li>
+      <li>
+        Provide details about what you want to happen and why
+      </li>
+      <li>
+        Check your petition <a href="/standards">meets the petition standards</a>
+      </li>
+    </ul>
+
+    <p>
+      After you’ve submitted your petition you'll need to share it with at least five supporters.
+    </p>
+
+    <div class="button-group">
+      <%= link_to "Start your petition", new_petition_path, class: "button" %>
+    </div>
+  </div>
+
+  <div class="grid-column-one-third-from-laptop display-none display-from-laptop">
+    <nav class="sticky-menu" aria-label="Other information">
+      <h3>Other information</h3>
+
+      <ul>
+        <li>
+          <%= link_to "How petitions work", help_path %>
+        </li>
+        <li>
+          <%= link_to "Petition standards", standards_path %>
+        </li>
+        <li>
+          <%= link_to "Privacy notice", privacy_path %>
+        </li>
+      </ul>
+    </nav>
+  </div>
+</div>

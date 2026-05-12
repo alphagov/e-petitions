@@ -17,7 +17,7 @@ RSpec.describe Archived::PetitionMailer, type: :mailer do
     )
   end
 
-  describe "notifying signature of a government response" do
+  describe "notifying signature of a Government response" do
     let :petition do
       FactoryBot.create(:archived_petition, :response,
         action: "Allow organic vegetable vans to use red diesel",
@@ -31,7 +31,7 @@ RSpec.describe Archived::PetitionMailer, type: :mailer do
 
     let(:signature_count) { 15000 }
 
-    shared_examples_for "a government response email" do
+    shared_examples_for "a Government response email" do
       it "includes a link to the petition page" do
         expect(mail).to have_body_text(%r[https://petition.parliament.uk/archived/petitions/#{petition.id}])
       end
@@ -65,7 +65,7 @@ RSpec.describe Archived::PetitionMailer, type: :mailer do
       end
 
       it "includes a link to read the response online" do
-        expect(mail).to have_body_text(%r[https://petition.parliament.uk/archived/petitions/#{petition.id}\?reveal_response=yes])
+        expect(mail).to have_body_text(%r[https://petition.parliament.uk/archived/petitions/#{petition.id}\?reveal_response=yes#response])
       end
 
       context "when the signature count is less than the debate threshold" do
@@ -93,7 +93,7 @@ RSpec.describe Archived::PetitionMailer, type: :mailer do
       let(:signature) { creator }
       subject(:mail) { described_class.notify_creator_of_threshold_response(petition, signature) }
 
-      it_behaves_like "a government response email"
+      it_behaves_like "a Government response email"
 
       it "sends it only to the creator" do
         expect(mail.to).to eq(%w[bazbutler@gmail.com])
@@ -114,7 +114,7 @@ RSpec.describe Archived::PetitionMailer, type: :mailer do
       let(:signature) { signer }
       subject(:mail) { described_class.notify_signer_of_threshold_response(petition, signature) }
 
-      it_behaves_like "a government response email"
+      it_behaves_like "a Government response email"
 
       it "sends it only to the signer" do
         expect(mail.to).to eq(%w[laurapalmer@hotmail.com])

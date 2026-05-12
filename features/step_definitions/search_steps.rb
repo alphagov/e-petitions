@@ -1,15 +1,23 @@
+When('I search for {string}') do |facet|
+  click_link facet
+end
+
 When(/^I browse to see only "([^"]*)" petitions$/) do |facet|
-  step "I go to the petitions page"
-  within :css, '#other-search-lists' do
-    click_on facet
+  if facet.in?(%w[Open Closed Rejected])
+    facet += " petitions"
   end
+
+  step "I go to the petitions page"
+  step "I search for #{facet.inspect}"
 end
 
 When(/^I browse to see only "([^"]*)" archived petitions$/) do |facet|
-  step "I go to the archived petitions page"
-  within :css, '#other-search-lists' do
-    click_on facet
+  if facet.in?(%w[Closed Rejected])
+    facet += " petitions"
   end
+
+  step "I go to the archived petitions page"
+  step "I search for #{facet.inspect}"
 end
 
 When(/^I search for "([^"]*)" with "([^"]*)"$/) do |facet, term|
@@ -17,11 +25,11 @@ When(/^I search for "([^"]*)" with "([^"]*)"$/) do |facet, term|
   step %{I fill in "#{term}" as my search term}
   step %{I press "Search"}
 
-  expect(page).to have_selector(:css, "h1.page-title", text: /petitions/i)
+  expect(page).to have_selector(:css, "h1", text: /petitions/i)
 end
 
 Then(/^I should( not)? see an? "([^"]*)" petition count of (\d+)$/) do |see_or_not, state, count|
-  have_petition_count_for_state = have_css(%{#other-search-lists a:contains("#{state.capitalize}")}, :text => count.to_s)
+  have_petition_count_for_state = have_css(%{#list-navigation a:contains("#{state.capitalize}")}, :text => count.to_s)
   if see_or_not.blank?
     expect(page).to have_petition_count_for_state
   else
@@ -34,12 +42,12 @@ When(/^I fill in "(.*?)" as my search term$/) do |search_term|
 end
 
 Then(/^I should see my search term "(.*?)" filled in the search field$/) do |search_term|
-  expect(page).to have_field('q', with: search_term)
+  expect(page).to have_field('Search', with: search_term)
 end
 
 Then(/^I should see the following similar petitions:$/) do |table|
   table.raw.each_with_index do |row, index|
-    within :xpath, "(.//li[contains(@class, 'petition-item-existing')])[#{index + 1}]" do
+    within :xpath, "(.//*[contains(@class, 'petition-item-existing')])[#{index + 1}]" do
       row.each do |column|
         expect(page).to have_content(column)
       end

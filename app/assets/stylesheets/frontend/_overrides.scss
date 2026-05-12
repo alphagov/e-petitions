@@ -1,0 +1,48 @@
+@use "sass:map";
+
+@use "./settings" as *;
+@use "./helpers" as *;
+
+@each $unit in map.keys($spacing-units) {
+  .margin-top-#{$unit} {
+    @include responsive-margin($unit, "top", $important: true);
+  }
+
+  .margin-bottom-#{$unit} {
+    @include responsive-margin($unit, "bottom", $important: true);
+  }
+}
+
+.quarter-width {
+  width: 25% !important;
+}
+
+.half-width {
+  width: 50% !important;
+}
+
+.three-quarter-width {
+  width: 75% !important;
+}
+
+.full-width {
+  width: 100% !important;
+}
+
+.visually-hidden {
+  @include visually-hidden;
+}
+
+@each $breakpoint, $width in $breakpoints {
+  .visually-hidden-from-#{$breakpoint} {
+    @include media-query($from: $width) {
+      @include visually-hidden;
+    }
+  }
+
+  .visually-hidden-until-#{$breakpoint} {
+    @include media-query($until: $width) {
+      @include visually-hidden;
+    }
+  }
+}

@@ -27,21 +27,72 @@ module MarkdownHelper
     tags: ALLOWED_TAGS, attributes: ALLOWED_ATTRIBUTES, scrubber: nil
   }
 
-  class CustomHTMLRenderer < Redcarpet::Render::HTML
-    def header(text, level)
-      text, id = text.split('|', 2)
+  class CustomTextRenderer < Redcarpet::Render::StripDown
+    COLUMN_WIDTH = 65
 
-      if id.present?
-        %(<h#{level} id="#{id}">#{text}</h#{level}>\n)
+    def header(text, level)
+      if level == 1
+        text + "\n" + "-" * text.size + "\n\n"
       else
-        %(<h#{level}>#{text}</h#{level}>\n)
+        paragraph(text)
       end
     end
-  end
 
-  class CustomTextRenderer < Redcarpet::Render::StripDown
-    def header(text, level)
-      %(#{text.split('|', 2).first}\n)
+    def hrule
+      "=" * COLUMN_WIDTH + "\n\n"
+    end
+
+    def block_quote(content)
+      content.chomp.each_line.map { |l| "> " + l }.join + "\n"
+    end
+
+    def paragraph(text)
+      text + "\n\n"
+    end
+
+    def list(content, type)
+      @counter = 0
+      content.strip + "\n\n"
+    end
+
+    def list_item(text, type)
+      @counter ||= 0
+      @counter += 1
+
+      if type == :ordered
+        "#{@counter}. #{text.lstrip}"
+      else
+        "* #{text.lstrip}"
+      end
+    end
+
+    def link(link, title, content)
+      @links ||= []
+      @links << link
+
+      "#{content}[#{@links.size}]"
+    end
+
+    def postprocess(text)
+      text.strip!
+
+      return text unless defined?(@links)
+      return text if @links.empty?
+
+      text.concat("\n\n")
+      text.concat(footnote_links)
+
+      text
+    end
+
+    private
+
+    def footnote_links
+      @links.each_with_index.map(&method(:footnote_link)).join("\n")
+    end
+
+    def footnote_link(link, index)
+      "[#{index + 1}]: #{link}"
     end
   end
 
@@ -50,17 +101,25 @@ module MarkdownHelper
   end
 
   def markdown_to_text(markup, options = {})
-    markdown_parser(text_renderer, options).render(markup)
+    markdown_parser(text_renderer, options.merge(autolink: false)).render(markup)
+  end
+
+  def markdown_to_contents(markup, options = {})
+    sanitize_markdown(markdown_parser(contents_renderer(options), options).render(markup), options).presence
   end
 
   private
 
   def html_renderer(options)
-    CustomHTMLRenderer.new(options_for_renderer(options))
+    Redcarpet::Render::HTML.new(options_for_renderer(options))
   end
 
   def text_renderer
     CustomTextRenderer.new
+  end
+
+  def contents_renderer(options)
+    Redcarpet::Render::HTML_TOC.new(options)
   end
 
   def markdown_parser(renderer, options)

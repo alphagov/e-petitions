@@ -50,6 +50,9 @@ class DebateOutcome < ActiveRecord::Base
 
   after_save do
     petition.update_columns(debate_state: debate_state)
+
+    # Update site in case it affects the home page
+    Site.touch
   end
 
   def date

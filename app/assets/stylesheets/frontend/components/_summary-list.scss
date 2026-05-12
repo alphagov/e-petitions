@@ -1,0 +1,140 @@
+@use "../settings" as *;
+@use "../helpers" as *;
+
+.summary-card {
+  @include responsive-margin(6, bottom);
+  border: 1px solid $border-colour;
+}
+
+.summary-card__title-wrapper {
+  padding: spacing(3) spacing(4);
+
+  border-bottom: 1px solid transparent;
+  background-color: $summary_card_background-colour;
+
+  @include media-query($from: tablet) {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: nowrap;
+    padding: spacing(3) spacing(5);
+  }
+}
+
+.summary-card__title {
+  @include font-size(22);
+
+  color: $text-colour;
+  margin: spacing(2) spacing(5) spacing(3) 0;
+
+  @include media-query($from: tablet) {
+    margin-bottom: spacing(2);
+  }
+}
+
+.summary-card__content {
+  padding: spacing(4) spacing(4) 0;
+
+  @include media-query($from: tablet) {
+    padding: spacing(4) spacing(5);
+  }
+
+  .summary-list {
+    margin-bottom: 0;
+  }
+
+  .summary-list__row:last-of-type {
+    margin-bottom: 0;
+    border-bottom: none;
+  }
+}
+
+.summary-list {
+  @include font-size(22);
+
+  color: $text-colour;
+
+  @include media-query($from: tablet) {
+    display: table;
+    width: 100%;
+    table-layout: fixed;
+    border-collapse: collapse;
+  }
+
+  margin: 0;
+  @include responsive-margin(7, bottom);
+}
+
+.summary-list__row {
+  border-bottom: 1px solid $border-colour;
+
+  @include media-query($until: tablet) {
+    margin-bottom: spacing(4);
+  }
+  @include media-query($from: tablet) {
+    display: table-row;
+  }
+}
+
+.summary-list__row:not(.summary-list__row--no-actions) > :last-child {
+  padding-right: 0;
+}
+
+.summary-list__row--no-actions {
+  @include media-query($from: tablet) {
+    &::after {
+      content: "";
+      display: table-cell;
+      width: 20%;
+    }
+  }
+}
+
+.summary-list__key,
+.summary-list__value,
+.summary-list__actions {
+  margin: 0;
+
+  @include media-query($from: tablet) {
+    display: table-cell;
+    padding-top: spacing(3);
+    padding-right: spacing(5);
+    padding-bottom: spacing(3);
+  }
+}
+
+.summary-list__actions {
+  margin-bottom: spacing(4);
+  @include media-query($from: tablet) {
+    width: 20%;
+    text-align: right;
+  }
+}
+
+.summary-list__key,
+.summary-list__value {
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
+
+.summary-list__key {
+  font-weight: bold;
+  margin-bottom: spacing(2);
+
+  @include media-query($from: tablet) {
+    width: 30%;
+  }
+}
+
+.summary-list__value {
+  @include media-query($until: tablet) {
+    margin-bottom: spacing(4);
+  }
+}
+
+.summary-list__value > p {
+  margin-bottom: spacing(3);
+}
+
+.summary-list__value > :last-child {
+  margin-bottom: 0;
+}

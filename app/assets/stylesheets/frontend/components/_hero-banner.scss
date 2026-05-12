@@ -1,0 +1,14 @@
+@use "../settings" as *;
+@use "../helpers" as *;
+
+#hero-banner {
+  background-color: $hero-background-colour;
+
+  @include responsive-padding(8, "top");
+  @include responsive-padding(8, "bottom");
+
+  h1 {
+    @include font-size(44);
+    @include responsive-margin(5, "bottom");
+  }
+}

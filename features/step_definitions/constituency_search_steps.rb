@@ -8,14 +8,10 @@ Given(/^a constituency "(.*?)"(?: with MP "(.*?)")? is found by postcode "(.*?)"
     @constituencies[constituency.name] = constituency
   end
 
-  for_postcode = @constituencies[postcode]
-
-  if for_postcode.nil?
-    @constituencies[postcode] = constituency
-  elsif for_postcode == constituency
-    # noop
+  if @constituencies.key?(postcode)
+    @constituencies[postcode] << constituency
   else
-    raise "Postcode #{postcode} registered for constituency #{for_postcode.name} already, can’t reassign to #{constituency.name}"
+    @constituencies[postcode] = [constituency]
   end
 end
 
@@ -40,77 +36,63 @@ Given(/^(a|few|some|many) constituents? in "(.*?)" supports? "(.*?)"$/) do |how_
 end
 
 When(/^I search for petitions local to me in "(.*?)"$/) do |postcode|
-  @my_constituency = @constituencies.fetch(postcode)
+  @my_constituencies = @constituencies.fetch(postcode)
+  @my_constituency = @my_constituencies.first
 
   if @constituency_api_down
     stub_any_api_request.to_return(api_response(:internal_server_error))
   else
     sanitized_postcode = PostcodeSanitizer.call(postcode)
 
-    if @mp_passed_away
-      stub_api_request_for(sanitized_postcode).to_return(api_response(:ok) {
-        <<-XML.strip
-          <Constituencies>
-            <Constituency>
-              <Constituency_Id>#{@my_constituency.external_id}</Constituency_Id>
-              <Name>#{@my_constituency.name}</Name>
-              <ONSCode>#{@my_constituency.ons_code}</ONSCode>
-              <RepresentingMembers>
-                <RepresentingMember>
-                  <Member_Id>#{@my_constituency.mp_id}</Member_Id>
-                  <Member>#{@my_constituency.mp_name}</Member>
-                  <StartDate>#{@my_constituency.mp_date.iso8601}</StartDate>
-                  <EndDate>#{1.day.ago.iso8601}</EndDate>
-                </RepresentingMember>
-            </Constituency>
-          </Constituencies>
-        XML
-      })
-    else
-      stub_api_request_for(sanitized_postcode).to_return(api_response(:ok) {
-        <<-XML.strip
-          <Constituencies>
-            <Constituency>
-              <Constituency_Id>#{@my_constituency.external_id}</Constituency_Id>
-              <Name>#{@my_constituency.name}</Name>
-              <ONSCode>#{@my_constituency.ons_code}</ONSCode>
-              <RepresentingMembers>
-                <RepresentingMember>
-                  <Member_Id>#{@my_constituency.mp_id}</Member_Id>
-                  <Member>#{@my_constituency.mp_name}</Member>
-                  <StartDate>#{@my_constituency.mp_date.iso8601}</StartDate>
-                  <EndDate xsi:nil="true"
-                           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
-                </RepresentingMember>
-            </Constituency>
-          </Constituencies>
-        XML
-      })
-    end
+    stub_api_request_for(sanitized_postcode).to_return(api_response(:ok) {
+      Nokogiri::XML::Builder.new do |xml|
+        xml.Constituencies {
+          @my_constituencies.each do |constituency|
+            xml.Constituency {
+              xml.Constituency_Id constituency.external_id
+              xml.Name constituency.name
+              xml.ONSCode constituency.ons_code
+              xml.RepresentingMembers {
+                xml.RepresentingMember {
+                  xml.Member_Id constituency.mp_id
+                  xml.Member constituency.mp_name
+                  xml.StartDate constituency.mp_date.iso8601
+
+                  if @mp_passed_away
+                    xml.EndDate 1.day.ago.iso8601
+                  else
+                    xml.EndDate("xsi:nil": "true", "xmlns:xsi": "http://www.w3.org/2001/XMLSchema-instance")
+                  end
+                }
+              }
+            }
+          end
+        }
+      end.to_xml(save_with: Nokogiri::XML::Node::SaveOptions::NO_DECLARATION)
+    })
   end
 
-  within :css, '.local-to-you' do
-    fill_in "UK postcode", with: postcode
-    click_on "Search"
-  end
+  fill_in "UK postcode", with: postcode
+  click_on "Search"
+end
+
+When('I click the constituency link for {string}') do |constituency_name|
+  @my_constituency = @constituencies.fetch(constituency_name)
+  click_link constituency_name
 end
 
 Then(/^I should see that my fellow constituents support "(.*?)"$/) do |petition_action|
   petition = Petition.find_by!(action: petition_action)
   all_signature_count = petition.signatures.validated.count
   local_signature_count = petition.signatures.validated.where(constituency_id: @my_constituency.external_id).count
-  within :css, '.local-petitions' do
-    within ".//*#{XPathHelpers.class_matching('petition-item')}[.//a[.='#{petition_action}']]" do
-      expect(page).to have_text("#{local_signature_count} #{'signature'.pluralize(local_signature_count)} from #{@my_constituency.name}")
-      expect(page).to have_text("#{all_signature_count} #{'signature'.pluralize(all_signature_count)} total")
-    end
+  within ".//*#{XPathHelpers.class_matching('petition-item')}[.//a[.='#{petition_action}']]" do
+    expect(page).to have_text("#{local_signature_count} #{'signature'.pluralize(local_signature_count)} from #{@my_constituency.name}")
+    expect(page).to have_text("#{all_signature_count} #{'signature'.pluralize(all_signature_count)} total")
   end
 end
 
 Then(/^I should not see that my fellow constituents support "(.*?)"$/) do |petition_action|
-  within :css, '.local-petitions' do |list|
-    expect(list).not_to have_selector(".//*#{XPathHelpers.class_matching('petition-item')}[a[.='#{petition_action}']]")
-  end
+  expect(page).not_to have_selector(".//*#{XPathHelpers.class_matching('petition-item')}[a[.='#{petition_action}']]")
 end
 
 Given(/^the constituency api is down$/) do
@@ -118,23 +100,23 @@ Given(/^the constituency api is down$/) do
 end
 
 Then(/^I should see an explanation that my constituency couldn’t be found$/) do
-  expect(page).not_to have_selector(:css, '.local-petitions .petition-item')
+  expect(page).not_to have_selector(:css, '.petition-item')
   expect(page).to have_content("We couldn’t find the postcode")
 end
 
 Then(/^I should see an explanation that there are no petitions popular in my constituency$/) do
-  within(:css, '.local-petitions') do
-    expect(page).not_to have_selector(:css, '.petition-item')
-    expect(page).to have_content('No petitions are popular in your constituency')
-  end
+  expect(page).not_to have_selector(:css, '.petition-item')
+  expect(page).to have_content('No open petitions have been signed in your constituency')
 end
 
 Then(/^the petitions I see should be ordered by my fellow constituents level of support$/) do
-  within :css, '.local-petitions ol' do
-    petitions = page.all(:css, '.petition-item')
-    my_constituents_signature_counts = petitions.map { |petition| Integer(petition.text.match(/(\d+) signatures? from/)[1]) }
-    expect(my_constituents_signature_counts).to eq my_constituents_signature_counts.sort.reverse
-  end
+  petitions = page.all(:css, '.petition-item')
+  my_constituents_signature_counts = petitions.map { |petition| Integer(petition.text.match(/(\d+) signatures? from/)[1]) }
+  expect(my_constituents_signature_counts).to eq my_constituents_signature_counts.sort.reverse
+end
+
+Then('I should see a link {string} to {string}') do |title, href|
+  expect(page).to have_link(title, href: href)
 end
 
 Then(/^I should see a link to the MP for my constituency$/) do

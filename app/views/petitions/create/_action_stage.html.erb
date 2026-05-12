@@ -1,0 +1,53 @@
+<%= form.hidden_field :uk_citizenship %>
+
+<%= form.hidden_field :background %>
+<%= form.hidden_field :additional_details %>
+
+<%= form.hidden_field :name %>
+<%= form.hidden_field :email %>
+<%= form.hidden_field :email_confirmation %>
+<%= form.hidden_field :postcode %>
+<%= form.hidden_field :location_code %>
+<%= form.hidden_field :notify_by_email %>
+
+<div class="grid-row margin-top-7">
+  <div class="grid-column-two-thirds-from-laptop">
+    <%= form.button "Back", name: "move_back", value: "uk_citizenship", class: "button-back" %>
+
+    <%= form_row for: [petition, :action] do %>
+      <h1>
+        <span class="heading-secondary">Start a petition</span>
+
+        <%= form.label :action do %>
+          Petition title
+        <% end %>
+      </h1>
+
+      <span class="form-hint">
+        Write a short title for your petition that clearly explains
+        what you want the UK Government or Parliament to do
+      </span>
+
+      <%= error_messages_for_field petition, :action %>
+      <%= form.text_area :action, rows: 2, data: { max_length: 80 } %>
+
+      <div class="character-count">80 characters max</div>
+
+      <div class="panel-indent">
+        <p>Your petition must say clearly what you want the UK Government or UK Parliament to do</p>
+      </div>
+    <% end %>
+
+    <div class="button-group">
+      <%= form.button "Continue", name: "move_next", class: "button" %>
+    </div>
+  </div>
+</div>
+
+<% content_for :preload do %>
+  <%= preload_link_tag 'character-counter.js', nopush: true %>
+<% end %>
+
+<% content_for :footer do %>
+  <%= javascript_include_tag 'character-counter' %>
+<% end %>

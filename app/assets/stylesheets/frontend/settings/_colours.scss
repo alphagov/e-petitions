@@ -1,0 +1,104 @@
+$colour-grey-1: #393939;
+$colour-grey-2: #4d4d4d;
+$colour-grey-3: #717171;
+$colour-grey-4: #cbc9cd;
+$colour-grey-5: #ebe9e8;
+$colour-grey-6: #f0f0f0;
+$colour-grey-7: #f8f7f7;
+
+$colour-black: #212121;
+$colour-blue: #3569cc;
+$colour-blue-dark: #2B57AB;
+$colour-blue-darker: #214282;
+$colour-deep-purple: #373151;
+$colour-deep-purple-light: #625a75;
+$colour-deep-purple-lighter: lighten($colour-deep-purple-light, 15%);
+$colour-mint: #96dcbe;
+$colour-mint-dark: #6ec29e;
+$colour-mint-light: #dff4eb;
+$colour-purple: #5f2db4;
+$colour-purple-dark: #3e1d78;
+$colour-purple-light: #e7dff4;
+$colour-red-3: #da1014;
+$colour-white: #ffffff;
+
+$colour-error: #da1014;
+$colour-error-light: #f7cbcc;
+$colour-error-dark: #a72326;
+$colour-success-light: #d9fff0;
+$colour-success-dark: #0d9d56;
+$colour-warning-light: #fef3c7;
+$colour-warning-dark: #e0b507;
+
+$colour-info: #e7dff4;
+$colour-info-dark: #5f2db4;
+
+// Brand colours
+$colour-bicameral: #5f2db4;
+$colour-bicameral-dark: #3e1d78;
+$colour-commons: #006548;
+$colour-commons-dark: #005434;
+$colour-lords: #b50938;
+$colour-lords-dark: #9d0830;
+$colour-westminster-white: #ebe9e8;
+
+// Interactive colours
+$interactive-colour: $colour-blue;
+$interactive-hover-colour: $colour-blue-darker;
+$interactive-inverse-colour: $colour-white;
+$interactive-inverse-hover-colour: $colour-grey-7;
+$button-colour: $interactive-colour;
+$button-hover-colour: $interactive-hover-colour;
+$button-inverse-colour: $interactive-inverse-colour;
+$button-inverse-hover-colour: $interactive-inverse-hover-colour;
+$inverse-link-colour: $interactive-inverse-colour;
+$inverse-link-hover-colour: $interactive-inverse-hover-colour;
+$inverse-link-active-colour: $colour-white;
+$link-colour: $interactive-colour;
+$link-hover-colour: $interactive-hover-colour;
+$link-active-colour: $colour-black;
+
+// Text colours
+$text-colour: $colour-grey-2;
+$text-heading-colour: $colour-deep-purple;
+$text-hover-colour: $colour-grey-3;
+$text-active-colour: $colour-black;
+$text-inverse-colour: $colour-white;
+$text-supplementary-colour: $colour-grey-2;
+$text-hint-colour: $colour-grey-3;
+$text-input-colour: $colour-grey-2;
+$text-label-colour: $colour-grey-2;
+
+// Surface colours
+$background-colour: $colour-white;
+$theme-colour: $colour-deep-purple;
+
+// Focus colours
+$focus-background-colour: $colour-white;
+$focus-border-colour: $colour-black;
+$focus-colour: $colour-black;
+$focus-shadow-colour: $colour-mint;
+
+// Border colours
+$border-colour: $colour-grey-4;
+
+// Form colours
+$error-colour: $colour-error;
+$input-background-colour: $colour-white;
+$input-border-colour: $colour-grey-3;
+$summary-card-background-colour: $colour-grey-5;
+
+// Header component
+$header-background-colour: $colour-commons;
+
+// Hero component
+$hero-background-colour: $colour-grey-7;
+
+// Highlight component
+$highlight-background-colour: $colour-purple-light;
+$highlight-colour: $colour-purple;
+$highlight-hover-colour: $colour-purple-dark;
+
+// Footer component
+$footer-background-colour: $colour-deep-purple;
+$footer-border-colour: $colour-deep-purple-lighter;

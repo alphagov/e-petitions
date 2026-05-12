@@ -1,0 +1,29 @@
+@use "sass:map";
+@use "../settings" as *;
+@use "../helpers" as *;
+
+.sticky-menu {
+  padding-left: spacing(5);
+
+  @media screen and (min-width: map.get($breakpoints, laptop)) {
+    @media screen and (min-height: 768px) {
+      position: sticky;
+      z-index: 100;
+      top: spacing(6);
+    }
+  }
+
+  h2, h3 {
+    @extend %h3;
+    font-weight: bold;
+  }
+
+  ul {
+    border-left: 1px solid $border-colour;
+    padding-left: spacing(4);
+
+    li {
+      margin: spacing(3) 0;
+    }
+  }
+}

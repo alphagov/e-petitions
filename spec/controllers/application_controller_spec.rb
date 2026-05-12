@@ -39,67 +39,6 @@ RSpec.describe ApplicationController, type: :controller do
     expect(access_control_allow_headers).to eq('Origin, X-Requested-With, Content-Type, Accept')
   end
 
-  context "when the site is disabled" do
-    before do
-      expect(Site).to receive(:enabled?).and_return(false)
-    end
-
-    it "raises a Site::ServiceUnavailable error" do
-      expect { get :index }.to raise_error(Site::ServiceUnavailable)
-    end
-  end
-
-  context "when the site is protected" do
-    context "and the request is local" do
-      before do
-        request.env["REMOTE_ADDR"] = "127.0.0.1"
-        expect(Site).not_to receive(:protected?)
-      end
-
-      it "does not request authentication" do
-        get :index
-        expect(response).to have_http_status(200)
-      end
-    end
-
-    context "and the request is not local" do
-      before do
-        request.env["REMOTE_ADDR"] = "0.0.0.0"
-        expect(Site).to receive(:protected?).and_return(true)
-      end
-
-      it "requests authentication" do
-        get :index
-        expect(response).to have_http_status(401)
-      end
-    end
-
-    context "and the request is authenticated" do
-      before do
-        http_authentication "username", "password"
-
-        request.env["REMOTE_ADDR"] = "0.0.0.0"
-        expect(Site).to receive(:protected?).and_return(true)
-        expect(Site).to receive(:authenticate).with("username", "password").and_return(true)
-      end
-
-      it "responds with 200 OK" do
-        get :index
-        expect(response).to have_http_status(200)
-      end
-    end
-  end
-
-  context '#public_petition_facets' do
-    it 'extracts the list of public facets from the locale file' do
-      expect(controller.send(:public_petition_facets)).to eq I18n.t(:"petitions.facets.public")
-    end
-
-    it 'is a helper method' do
-      expect(controller.class.helpers).to respond_to :public_petition_facets
-    end
-  end
-
   context "when the url has an invalid format" do
     before do
       request.env['HTTPS'] = 'on'

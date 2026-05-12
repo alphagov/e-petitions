@@ -1,15 +1,66 @@
-<h1 class="page-title">
-  <% if @postcode.present? %>
-    We couldn’t find that postcode
-  <% else %>
-    Local to you
-  <% end %>
-</h1>
+<div class="grid-row margin-top-7">
+  <div class="grid-column-two-thirds-from-laptop">
+    <h1>
+      Search signed petitions by constituency
+    </h1>
 
-<% if @postcode.blank? %>
-  <p>Find petitions about local issues</p>
-<% else %>
-  <p>We couldn’t find the postcode <q><%= params[:postcode] %></q>. Try again?</p>
-<% end %>
+    <% if @constituencies.present? %>
+      <p>We found more than one constituency for the postcode <q><%= params[:postcode] %></q></p>
 
-<%= render 'local_search' %>
+      <p>Select the constituency you’re interested in:</p>
+
+      <ul class="margin-bottom-7">
+        <% @constituencies.each do |constituency| %>
+          <li class="margin-top-7">
+            <h2 class="heading-3">
+              <% if Parliament.dissolved? %>
+                <%= link_to all_local_petition_path(constituency.slug) do %>
+                  <%= constituency.name %>
+                <% end %>
+              <% else %>
+                <%= link_to local_petition_path(constituency.slug) do %>
+                  <%= constituency.name %>
+                <% end %>
+              <% end %>
+            </h2>
+
+            <% if constituency.mp_id? %>
+              <p>
+                <strong><%= constituency.mp_name %></strong><br>
+                <%= constituency.party %>
+              </p>
+            <% else %>
+              <% if Parliament.dissolved? %>
+                <p>Seat is currently vacant pending a general election</p>
+              <% else %>
+                <p>Seat is currently vacant pending a by-election</p>
+              <% end %>
+            <% end %>
+          </li>
+        <% end %>
+      </ul>
+
+      <p>
+        If you don’t know your MP you can use the
+        <a href="https://members.parliament.uk/FindYourMP" target="_blank">Find your MP service</a>.
+      </p>
+
+      <p>
+        <%= link_to "Search again", local_petitions_path %>
+      </p>
+    <% else %>
+      <% if @postcode.present? %>
+        <p>We couldn’t find the postcode <q><%= params[:postcode] %></q>. Try again?</p>
+      <% end %>
+
+      <%= form_tag local_petitions_path, method: 'get', enforce_utf8: false do %>
+        <%= label_tag 'postcode', 'Enter a full UK postcode' %>
+
+        <div class="inline-group">
+          <%= text_field_tag 'postcode', @postcode, size: 30, maxlength: 30 %>
+          <%= button_tag 'Search', name: nil, class: 'button' %>
+        </div>
+      <% end %>
+    <% end %>
+  </div>
+</div>

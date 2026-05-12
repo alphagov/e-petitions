@@ -14,6 +14,7 @@ class Site < ActiveRecord::Base
 
   FEATURE_FLAGS = %w[
     disable_constituency_api
+    disable_popular_petitions
     disable_trending_petitions
     disable_invalid_signature_count_check
     disable_daily_update_statistics_job
@@ -26,7 +27,7 @@ class Site < ActiveRecord::Base
   class << self
     def table_exists?
       @table_exists ||= connection.table_exists?(table_name)
-    rescue ActiveRecord::NoDatabaseError => e
+    rescue ActiveRecord::ConnectionNotEstablished, ActiveRecord::NoDatabaseError => e
       false
     end
 
@@ -110,6 +111,10 @@ class Site < ActiveRecord::Base
       instance.protected?
     end
 
+    def login_digest
+      instance.login_digest
+    end
+
     def login_timeout
       if table_exists?
         instance.login_timeout
@@ -139,6 +144,23 @@ class Site < ActiveRecord::Base
 
     def signature_collection_disabled?
       disable_collecting_signatures?
+    end
+
+    def semantic_searching?
+      !!instance.semantic_searching
+    end
+
+    def semantic_search_threshold
+      instance.semantic_search_threshold
+    end
+
+    def with_semantic_searching
+      semantic_searching = instance.semantic_searching
+      instance.semantic_searching = true
+
+      yield
+    ensure
+      instance.semantic_searching = semantic_searching
     end
 
     def home_page_message
@@ -232,6 +254,18 @@ class Site < ActiveRecord::Base
       maximum_number_of_sponsors + 1
     end
 
+    def last_modified_at
+      [signature_count_updated_at, updated_at].compact.max
+    end
+
+    def cache_control(max_age: signature_count_interval)
+      {
+        max_age: max_age,
+        stale_while_revalidate: max_age * 2,
+        stale_if_error: max_age * 5
+      }
+    end
+
     def defaults
       {
         title:                          default_title,
@@ -252,6 +286,10 @@ class Site < ActiveRecord::Base
         threshold_for_response:         default_threshold_for_response,
         threshold_for_debate:           default_threshold_for_debate
       }
+    end
+
+    def package_built_at
+      @package_built_at ||= read_package_timestamp
     end
 
     private
@@ -371,6 +409,18 @@ class Site < ActiveRecord::Base
     def default_constraints_for_moderation
       { protocol: default_protocol, host: default_moderate_host, port: default_port }
     end
+
+    def package_timestamp_file
+      Rails.root.join("TIMESTAMP")
+    end
+
+    def read_package_timestamp
+      if File.exist?(package_timestamp_file)
+        Time.iso8601(File.read(package_timestamp_file).chomp)
+      else
+        Time.current.getutc.floor
+      end
+    end
   end
 
   if table_exists?
@@ -395,6 +445,8 @@ class Site < ActiveRecord::Base
     end
   end
 
+  store_accessor :feature_flags, :semantic_searching
+  store_accessor :feature_flags, :semantic_search_threshold
   store_accessor :feature_flags, :home_page_message
   store_accessor :feature_flags, :home_page_message_colour
   store_accessor :feature_flags, :show_home_page_message
@@ -410,6 +462,22 @@ class Site < ActiveRecord::Base
   store_accessor :feature_flags, :google_tag_manager_hash
 
   attr_reader :password
+
+  def semantic_searching
+    super || false
+  end
+
+  def semantic_searching=(value)
+    super(type_cast_feature_flag(value))
+  end
+
+  def semantic_search_threshold
+    super || default_semantic_search_threshold
+  end
+
+  def semantic_search_threshold=(value)
+    super(value.to_f)
+  end
 
   def home_page_message_colour
     super || 'default'
@@ -535,6 +603,10 @@ class Site < ActiveRecord::Base
     end
   end
 
+  def login_digest
+    Digest::SHA256.base64digest("#{username}:#{password_digest}}")
+  end
+
   def password_digest
     super.present? ? BCrypt::Password.new(super) : nil
   end
@@ -612,6 +684,10 @@ class Site < ActiveRecord::Base
   end
 
   private
+
+  def default_semantic_search_threshold
+    0.75
+  end
 
   def scope
     self.class.unscoped.where(id: id)

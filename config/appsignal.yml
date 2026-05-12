@@ -26,6 +26,11 @@ default: &defaults
     - EmailDuplicateSignaturesEmailJob#perform
     - PetitionsController#count
     - PingController#ping
+    - RedirectsController#home
+    - RedirectsController#help
+    - RedirectsController#privacy
+    - RedirectsController#national_archives
+    - RedirectsController#standards
 
   # Exceptions that should not be recorded by AppSignal
   ignore_errors:

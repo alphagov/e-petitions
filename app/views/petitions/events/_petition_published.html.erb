@@ -1,0 +1,27 @@
+<li>
+  <%= time_tag(petition.published_at) do %>
+    <strong><%= short_date_format(petition.published_at) %></strong>
+  <% end %>
+
+  <div>
+    <h3>
+      Petition published
+    </h3>
+
+    <p>
+      This petition can now be signed.
+    </p>
+
+    <p>
+      If this petition gets <%= petition.formatted_threshold_for_response %> signatures, government will respond to it.
+    </p>
+
+    <p>
+      If this petition gets <%= petition.formatted_threshold_for_debate %> signatures, it will be considered for debate in Parliament.
+    </p>
+
+    <p>
+      This petition will stay open until <strong><%= short_date_format(petition.deadline) %></strong>.
+    </p>
+  </div>
+</li>

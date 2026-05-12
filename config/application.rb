@@ -13,7 +13,6 @@ require "active_storage/engine"
 require "action_controller/railtie"
 require "action_mailer/railtie"
 require "action_view/railtie"
-require "sprockets/railtie"
 
 # Require the gems listed in Gemfile, including any gems
 # you've limited to :test, :development, or :production.
@@ -22,7 +21,7 @@ Bundler.require(*Rails.groups)
 module Epets
   class Application < Rails::Application
     # Initialize configuration defaults for originally generated Rails version.
-    config.load_defaults 7.2
+    config.load_defaults 8.0
 
     # Please, add to the `ignore` list any other `lib` subdirectories that do
     # not contain `.rb` files, or that should not be reloaded or eager loaded.
@@ -89,5 +88,9 @@ module Epets
 
     # Add application mailer previews path
     config.action_mailer.preview_paths << "#{Rails.root}/app/previews"
+
+    # Add interceptors for inlining HTML email styles
+    config.action_mailer.interceptors = ["InlineStyles"]
+    config.action_mailer.preview_interceptors = ["InlineStyles"]
   end
 end

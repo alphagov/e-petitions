@@ -1,3 +1,15 @@
+BeforeAll do
+  ActiveRecord::Base.with_connection do |connection|
+    connection.execute <<~SQL
+      ALTER SEQUENCE archived_petitions_id_seq MAXVALUE 699999
+    SQL
+
+    connection.execute <<~SQL
+      ALTER SEQUENCE petitions_id_seq START WITH 700000 RESTART WITH 700000 MINVALUE 700000
+    SQL
+  end
+end
+
 Before do
   default_url_options[:protocol] = 'https'
 end
@@ -46,6 +58,14 @@ Before do
   Parliament.reset!(government: "TBC", opening_at: 2.weeks.ago)
 end
 
+Before("@javascript") do
+  next unless page.driver.respond_to?(:invalid_element_errors)
+
+  unless page.driver.invalid_element_errors.include?(Selenium::WebDriver::Error::UnknownError)
+    page.driver.invalid_element_errors << Selenium::WebDriver::Error::UnknownError
+  end
+end
+
 After('@javascript') do
   javascript = <<~JS
     (typeof jQuery == 'defined') ? jQuery.active > 0 : false;
@@ -77,7 +97,10 @@ end
 
 After do |scenario|
   if scenario.failed? && page.respond_to?(:save_screenshot)
-    page.save_screenshot("#{scenario.name.gsub(' ', '_').gsub(/[^0-9A-Za-z_]/, '')}.png")
+    begin
+      page.save_screenshot("#{scenario.name.gsub(' ', '_').gsub(/[^0-9A-Za-z_]/, '')}.png")
+    rescue Capybara::NotSupportedByDriverError
+    end
   end
 end
 
@@ -120,12 +143,10 @@ After do
   OmniAuth.config.test_mode = false
 end
 
-Before do
-  Embedding.reload
+Before('@semantic_search') do
+  Site.update!(semantic_searching: true)
+end
 
-  client = Aws::BedrockRuntime::Client.new(stub_responses: true)
-  body = StringIO.new({ embedding: 1024.times.map { rand } }.to_json)
-  client.stub_responses(:invoke_model, client.stub_data(:invoke_model, body: body))
-
-  allow(Aws::BedrockRuntime::Client).to receive(:new).and_return(client)
+After('@semantic_search') do
+  Site.update!(semantic_searching: false)
 end

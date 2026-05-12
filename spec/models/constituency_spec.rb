@@ -243,7 +243,7 @@ RSpec.describe Constituency, type: :model do
 
     context "when the API returns updated results" do
       let(:constituency) do
-        Constituency.find_by_postcode('OL90LS')
+        Constituency.find_by_postcode("OL90LS")
       end
 
       before do
@@ -266,7 +266,7 @@ RSpec.describe Constituency, type: :model do
 
     context "when the MP has passed away" do
       let(:constituency) do
-        Constituency.find_by_postcode('S48AA')
+        Constituency.find_by_postcode("S48AA")
       end
 
       before do
@@ -293,12 +293,126 @@ RSpec.describe Constituency, type: :model do
       end
 
       it "returns nil without calling the api" do
-        expect(Constituency.find_by_postcode('ACX7B98977DXCA')).to be_nil
+        expect(Constituency.find_by_postcode("ACX7B98977DXCA")).to be_nil
         expect(stub_api_request_for("ACX7B98977DXCA")).to have_not_been_made
       end
     end
   end
 
+  describe ".find_all_by_postcode" do
+    context "when the constituencies doesn't exist in the database" do
+      before do
+        stub_api_request_for("BT69GN").to_return(api_response(:ok, "belfast"))
+      end
+
+      it "saves the constituencies to the database" do
+        constituencies = Constituency.find_all_by_postcode("BT69GN")
+        expect(constituencies.all?(&:persisted?)).to be_truthy
+      end
+    end
+
+    context "when the constituency already exists in the database" do
+      let!(:existing_constituencies) do
+        [
+          FactoryBot.create(:constituency, {
+            name: "Belfast East", external_id: "4421", ons_code: "N05000001",
+            mp_id: "4360", mp_name: "Rt Hon Gavin Robinson MP", mp_date: "2024-07-04T00:00:00"
+          }),
+          FactoryBot.create(:constituency, {
+            name: "Belfast South and Mid Down", external_id: "4423", ons_code: "N05000003",
+            mp_id: "4827", mp_name: "Claire Hanna MP", mp_date: "2024-07-04T00:00:00"
+          })
+        ]
+      end
+
+      before do
+        stub_api_request_for("BT69GN").to_return(api_response(:ok, "belfast"))
+      end
+
+      it "returns the existing record" do
+        constituencies = Constituency.find_all_by_postcode("BT69GN")
+        expect(constituencies).to eq(existing_constituencies)
+      end
+    end
+
+    context "when the API returns no results" do
+      before do
+        stub_api_request_for("BT69GN").to_return(api_response(:not_acceptable))
+      end
+
+      it "returns []" do
+        constituencies = Constituency.find_all_by_postcode("BT69GN")
+        expect(constituencies).to eq([])
+      end
+    end
+
+    context "when the API returns updated results" do
+      let(:constituencies) do
+        Constituency.find_all_by_postcode("BT69GN")
+      end
+
+      before do
+        FactoryBot.create(:constituency, {
+          name: "Belfast East", external_id: "4421", ons_code: "N05000001",
+          mp_id: nil, mp_name: nil, mp_date: nil
+        })
+
+        FactoryBot.create(:constituency, {
+          name: "Belfast South and Mid Down", external_id: "4423", ons_code: "N05000003",
+          mp_id: nil, mp_name: nil, mp_date: nil
+        })
+
+        stub_api_request_for("BT69GN").to_return(api_response(:ok, "belfast"))
+      end
+
+      it "updates the existing constituencies" do
+        expect(constituencies.pluck(:mp_name)).to eq(["Rt Hon Gavin Robinson MP", "Claire Hanna MP"])
+      end
+
+      it "persists the changes to the database" do
+        expect(constituencies.map(&:reload).pluck(:mp_name)).to eq(["Rt Hon Gavin Robinson MP", "Claire Hanna MP"])
+      end
+    end
+
+    context "when parliament has dissolved" do
+      let(:constituencies) do
+        Constituency.find_all_by_postcode("BT69GN")
+      end
+
+      before do
+        FactoryBot.create(:constituency, {
+          name: "Belfast East", external_id: "4421", ons_code: "N05000001",
+          mp_id: "4360", mp_name: "Rt Hon Gavin Robinson MP", mp_date: "2024-07-04T00:00:00"
+        })
+
+        FactoryBot.create(:constituency, {
+          name: "Belfast South and Mid Down", external_id: "4423", ons_code: "N05000003",
+          mp_id: "4827", mp_name: "Claire Hanna MP", mp_date: "2024-07-04T00:00:00"
+        })
+
+        stub_api_request_for("BT69GN").to_return(api_response(:ok, "dissolved"))
+      end
+
+      it "updates the existing constituencies" do
+        expect(constituencies.pluck(:mp_name)).to eq([nil, nil])
+      end
+
+      it "persists the changes to the database" do
+        expect(constituencies.map(&:reload).pluck(:mp_name)).to eq([nil, nil])
+      end
+    end
+
+    context "when the postcode is invalid" do
+      before do
+        stub_api_request_for("ACX7B98977DXCA").to_return(api_response(:ok, "no_results"))
+      end
+
+      it "returns [] without calling the api" do
+        expect(Constituency.find_all_by_postcode("ACX7B98977DXCA")).to eq([])
+        expect(stub_api_request_for("ACX7B98977DXCA")).to have_not_been_made
+      end
+    end
+  end
 
   describe ".for_parliament(parliament)" do
     let(:constituency) { FactoryBot.create(:constituency, start_date: "2023/05/29", end_date: "20214/05/31") }

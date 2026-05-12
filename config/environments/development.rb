@@ -36,6 +36,9 @@ Rails.application.configure do
     config.action_mailer.delivery_method = :file
   end
 
+  # Replace the default in-process memory cache store with a durable alternative.
+  config.cache_store = :solid_cache_store
+
   # Store uploaded files on the local file system (see config/storage.yml for options).
   config.active_storage.service = :local
 

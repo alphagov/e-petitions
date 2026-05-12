@@ -1,22 +1,9 @@
 <%= hidden_field_tag :tab, "petitions" %>
 
 <div class="grid-row">
-  <div class="column-half extra-gutter">
-    <%= form_row for: [form.object, :disable_petition_creation], class: "inline" do %>
-      <%= form.label :disable_petition_creation, "Stop new petitions from being created?", class: "form-label" %>
-      <%= error_messages_for_field @site, :disable_petition_creation %>
-      <div class="multiple-choice">
-        <%= form.radio_button :disable_petition_creation, true %>
-        <%= form.label :disable_petition_creation, "Yes", for: "site_disable_petition_creation_true" %>
-      </div>
-      <div class="multiple-choice">
-        <%= form.radio_button :disable_petition_creation, false %>
-        <%= form.label :disable_petition_creation, "No", for: "site_disable_petition_creation_false" %>
-      </div>
-    <% end %>
-
+  <div class="column-third">
     <%= form_row for: [form.object, :disable_collecting_signatures], class: "inline" do %>
-      <%= form.label :disable_collecting_signatures, "Stop collecting signatures on all open petitions?", class: "form-label" %>
+      <%= form.label :disable_collecting_signatures, "Stop collecting signatures?", class: "form-label" %>
       <%= error_messages_for_field @site, :disable_collecting_signatures %>
       <div class="multiple-choice">
         <%= form.radio_button :disable_collecting_signatures, true %>
@@ -41,12 +28,6 @@
       </div>
     <% end %>
 
-    <%= form_row for: [form.object, :home_page_message_colour], id: "home-page-message-colour", class: "message-field", style: "display: none;" do %>
-      <%= form.label :home_page_message_colour, "Background", class: "form-label form-label-inline" %>
-      <%= error_messages_for_field @site, :home_page_message_colour %>
-      <%= form.select :home_page_message_colour, message_colours, {}, class: "form-control form-control-1-4" %>
-    <% end %>
-
     <%= form_row for: [form.object, :home_page_message], id: "home-page-message", class: "message-field", style: "display: none;" do %>
       <%= form.label :home_page_message, "Message for the home page", class: "form-label message-label", style: "display: none;" %>
       <%= error_messages_for_field @site, :home_page_message %>
@@ -66,12 +47,6 @@
       </div>
     <% end %>
 
-    <%= form_row for: [form.object, :petition_page_message_colour], id: "petition-page-message-colour", class: "message-field", style: "display: none;" do %>
-      <%= form.label :petition_page_message_colour, "Background", class: "form-label form-label-inline" %>
-      <%= error_messages_for_field @site, :petition_page_message_colour %>
-      <%= form.select :petition_page_message_colour, message_colours, {}, class: "form-control form-control-1-4" %>
-    <% end %>
-
     <%= form_row for: [form.object, :petition_page_message], id: "petition-page-message", class: "message-field", style: "display: none;" do %>
       <%= form.label :petition_page_message, "Message for the petition page", class: "form-label message-label", style: "display: none;" %>
       <%= error_messages_for_field @site, :petition_page_message %>
@@ -79,9 +54,9 @@
     <% end %>
   </div>
 
-  <div class="column-half extra-gutter">
+  <div class="column-third">
     <%= form_row for: [form.object, :petition_duration] do %>
-      <%= form.label :petition_duration, "Duration", class: "form-label" %>
+      <%= form.label :petition_duration, "Petition duration", class: "form-label" %>
       <%= error_messages_for_field @site, :petition_duration %>
       <%= form.text_field :petition_duration, tabindex: increment, maxlength: 10, class: "form-control form-control-1-4" %> <span class="suffix">months</span>
     <% end %>
@@ -89,13 +64,47 @@
     <%= form_row for: [form.object, :threshold_for_response] do %>
       <%= form.label :threshold_for_response, "Threshold for a response", class: "form-label" %>
       <%= error_messages_for_field @site, :threshold_for_response %>
-      <%= form.text_field :threshold_for_response, tabindex: increment, maxlength: 10, class: "form-control form-control-1-4" %>
+      <%= form.text_field :threshold_for_response, tabindex: increment, maxlength: 10, class: "form-control form-control-1-2" %>
     <% end %>
 
     <%= form_row for: [form.object, :threshold_for_debate] do %>
       <%= form.label :threshold_for_debate, "Threshold for a debate", class: "form-label" %>
       <%= error_messages_for_field @site, :threshold_for_debate %>
-      <%= form.text_field :threshold_for_debate, tabindex: increment, maxlength: 10, class: "form-control form-control-1-4" %>
+      <%= form.text_field :threshold_for_debate, tabindex: increment, maxlength: 10, class: "form-control form-control-1-2" %>
+    <% end %>
+  </div>
+
+  <div class="column-third">
+    <%= form_row for: [form.object, :disable_petition_creation], class: "inline" do %>
+      <%= form.label :disable_petition_creation, "Stop new petitions from being created?", class: "form-label" %>
+      <%= error_messages_for_field @site, :disable_petition_creation %>
+      <div class="multiple-choice">
+        <%= form.radio_button :disable_petition_creation, true %>
+        <%= form.label :disable_petition_creation, "Yes", for: "site_disable_petition_creation_true" %>
+      </div>
+      <div class="multiple-choice">
+        <%= form.radio_button :disable_petition_creation, false %>
+        <%= form.label :disable_petition_creation, "No", for: "site_disable_petition_creation_false" %>
+      </div>
+    <% end %>
+
+    <%= form_row for: [form.object, :semantic_searching], class: "inline" do %>
+      <%= form.label :semantic_searching, "Enable semantic searching of petitions?", class: "form-label" %>
+      <%= error_messages_for_field @site, :semantic_searching %>
+      <div class="multiple-choice">
+        <%= form.radio_button :semantic_searching, true %>
+        <%= form.label :semantic_searching, "Yes", for: "site_semantic_searching_true" %>
+      </div>
+      <div class="multiple-choice">
+        <%= form.radio_button :semantic_searching, false %>
+        <%= form.label :semantic_searching, "No", for: "site_semantic_searching_false" %>
+      </div>
+    <% end %>
+
+    <%= form_row for: [form.object, :semantic_search_threshold] do %>
+      <%= form.label :semantic_search_threshold, "Semantic search threshold", class: "form-label" %>
+      <%= error_messages_for_field @site, :semantic_search_threshold %>
+      <%= form.text_field :semantic_search_threshold, tabindex: increment, maxlength: 10, class: "form-control form-control-1-4" %>
     <% end %>
   </div>
 </div>
@@ -107,11 +116,9 @@
     var $show_home_page_true = $('input[name="site[show_home_page_message]"][value=true]');
     var $show_home_page = $('input[name="site[show_home_page_message]"]');
     var $home_page_msg = $('#home-page-message');
-    var $home_page_msg_colour = $('#home-page-message-colour');
     var $show_petition_page_true = $('input[name="site[show_petition_page_message]"][value=true]');
     var $show_petition_page = $('input[name="site[show_petition_page_message]"]');
     var $petition_page_msg = $('#petition-page-message');
-    var $petition_page_msg_colour = $('#petition-page-message-colour');
     var $message_fields = $('.message-field');
     var $message_controls = $('.message-control');
     var $message_labels = $('.message-label');
@@ -131,12 +138,10 @@
 
     var toggleHomePageMessageFields = function() {
       toggleMessageField($show_home_page_true, $home_page_msg);
-      toggleMessageField($show_home_page_true, $home_page_msg_colour);
     }
 
     var togglePetitionPageMessageFields = function() {
       toggleMessageField($show_petition_page_true, $petition_page_msg);
-      toggleMessageField($show_petition_page_true, $petition_page_msg_colour);
     }
 
     var toggleMessageFields = function() {
@@ -173,4 +178,4 @@
       togglePetitionPageMessageFields();
     });
   });
-<% end -%>
+<% end %>

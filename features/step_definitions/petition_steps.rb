@@ -62,7 +62,7 @@ Given(/^an open petition "(.*?)" with response "(.*?)" and response summary "(.*
   @petition = FactoryBot.create(:responded_petition, action: petition_action, response_details: details, response_summary: summary)
 end
 
-Given(/^a ?(open|closed)? petition "([^"]*)" exists and has received a government response (\d+) days ago$/) do |state, petition_action, parliament_response_days_ago |
+Given(/^a ?(open|closed)? petition "([^"]*)" exists and has received a Government response (\d+) days ago$/) do |state, petition_action, parliament_response_days_ago |
   petition_attributes = {
     action: petition_action,
     closed_at: state == 'closed' ? 1.day.ago : 6.months.from_now,
@@ -189,22 +189,17 @@ Then(/^I should be redirected to the archived url$/) do
   expect(current_path).to eq(archived_petition_path(@petition))
 end
 
-When(/^I view all petitions from the home page$/) do
+When(/^I browse petitions from the home page$/) do
   visit home_url
-  click_link "All petitions"
-end
-
-When(/^I check for similar petitions$/) do
-  fill_in "q", :with => "rioters benefits"
-  click_button("Continue")
+  click_link "Browse petitions"
 end
 
 When(/^I choose to create a petition anyway$/) do
   click_link_or_button "My petition is different"
 end
 
-Then(/^I should see all petitions$/) do
-  expect(page).to have_css("ol li", :count => 3)
+Then(/^I should see (\d+) (open|closed|rejected) petitions?$/) do |count, status|
+  expect(page).to have_css(".petition-item", text: "Status #{status.capitalize}", count: count)
 end
 
 Then(/^I should see the petition details$/) do
@@ -212,7 +207,6 @@ Then(/^I should see the petition details$/) do
   expect(page).to have_content(@petition.background) if @petition.background?
 
   if @petition.additional_details?
-    click_details "More details"
     expect(page).to have_content(@petition.additional_details)
   end
 end
@@ -260,24 +254,12 @@ Then(/^I should see the reason for rejection$/) do
   expect(page).to have_content(@petition.rejection.details)
 end
 
-Then(/^I should be asked to search for a new petition$/) do
-  expect(page).to have_content("What do you want us to do?")
-  expect(page).to have_css("form textarea[name=q]")
-end
-
 Then(/^I should see my search query already filled in as the action of the petition$/) do
-  expect(page).to have_field("What do you want us to do?", text: "rioters benefits")
+  expect(page).to have_field("Petition title", text: "rioters benefits")
 end
 
 Then(/^I can click on a link to return to the petition$/) do
   expect(page).to have_css("a[href*='/petitions/#{@petition.id}']")
-end
-
-When(/^I am allowed to make the petition action too long$/) do
-  # NOTE: we do this to remove the maxlength attribtue on the petition
-  # action input because any modern browser/driver will not let us enter
-  # values longer than maxlength and so we can't test our JS validation
-  page.execute_script "document.getElementById('petition_creator_action').removeAttribute('maxlength');"
 end
 
 When(/^I am allowed to make the creator name too long$/) do
@@ -297,9 +279,17 @@ end
 
 When(/^I fill in the petition details/) do
   steps %Q(
-    When I fill in "What do you want us to do?" with "The wombats of wimbledon rock."
-    And I fill in "Tell us more about what you want the Government or Parliament to do" with "Give half of Wimbledon rock to wombats!"
-    And I fill in "Tell us more about why you want the Government or Parliament to do it" with "The racial tensions between the wombles and the wombats are heating up. Racial attacks are a regular occurrence and the death count is already in 5 figures. The only resolution to this crisis is to give half of Wimbledon common to the Wombats and to recognise them as their own independent state."
+    When I fill in "Petition title" with "The wombats of wimbledon rock."
+    And I press "Continue"
+    Then I should see "We checked for similar petitions"
+    And I press "Continue with my petition"
+    Then I should see "Say what you want the UK Government or Parliament to do"
+    When I fill in "Say what you want the UK Government or Parliament to do" with "Give half of Wimbledon rock to wombats!"
+    And I press "Continue"
+    Then I should see "Add more information to your petition"
+    When I fill in "Add more information to your petition" with "The racial tensions between the wombles and the wombats are heating up. Racial attacks are a regular occurrence and the death count is already in 5 figures. The only resolution to this crisis is to give half of Wimbledon common to the Wombats and to recognise them as their own independent state."
+    And I press "Continue"
+    Then I should see "Confirm your details"
   )
 end
 
@@ -333,19 +323,19 @@ Then(/^I can share it via (.+)$/) do |service|
   case service
   when 'Email'
     within(:css, '.petition-share') do
-      expect(page).to have_link('Email', href: %r[\Amailto:\?body=#{ERB::Util.url_encode(petition_url(@petition))}&subject=Petition%3A%20#{ERB::Util.url_encode(@petition.action)}\z])
+      expect(page).to have_link('Send via email', href: %r[\Amailto:\?body=#{ERB::Util.url_encode(petition_url(@petition))}&subject=Petition%3A%20#{ERB::Util.url_encode(@petition.action)}\z])
     end
   when 'Facebook'
     within(:css, '.petition-share') do
-      expect(page).to have_link('Facebook', href: %r[\Ahttps://www\.facebook\.com/sharer/sharer\.php\?ref=responsive&u=#{ERB::Util.url_encode(petition_url(@petition))}\z])
+      expect(page).to have_link('Share on Facebook', href: %r[\Ahttps://www\.facebook\.com/sharer/sharer\.php\?ref=responsive&u=#{ERB::Util.url_encode(petition_url(@petition))}\z])
     end
   when 'X'
     within(:css, '.petition-share') do
-      expect(page).to have_link('X', href: %r[\Ahttps://x\.com/intent/post\?text=Petition%3A%20#{ERB::Util.url_encode(@petition.action)}&url=#{ERB::Util.url_encode(petition_url(@petition))}\z])
+      expect(page).to have_link('Post on X', href: %r[\Ahttps://x\.com/intent/post\?text=Petition%3A%20#{ERB::Util.url_encode(@petition.action)}&url=#{ERB::Util.url_encode(petition_url(@petition))}\z])
     end
   when 'Whatsapp'
     within(:css, '.petition-share') do
-      expect(page).to have_link('Whatsapp', href: %r[\Awhatsapp://send\?text=Petition%3A%20#{ERB::Util.url_encode(@petition.action + "\n" + petition_url(@petition))}\z])
+      expect(page).to have_link('Share via Whatsapp', href: %r[\Awhatsapp://send\?text=Petition%3A%20#{ERB::Util.url_encode(@petition.action + "\n" + petition_url(@petition))}\z])
     end
   else
     raise ArgumentError, "Unknown sharing service: #{service.inspect}"
@@ -393,7 +383,7 @@ Given(/^the threshold for a parliamentary debate is "(.*?)"$/) do |amount|
   Site.update!(threshold_for_debate: amount)
 end
 
-Given(/^there are (\d+) petitions awaiting a government response$/) do |response_count|
+Given(/^there are (\d+) petitions awaiting a Government response$/) do |response_count|
   response_count.times do |count|
     FactoryBot.create(:awaiting_response_petition, :action => "Petition #{count}")
   end
@@ -407,11 +397,11 @@ Given(/^a petition "(.*?)" exists with a debate outcome and with response thresh
   @petition = FactoryBot.create(:debated_petition, action: action, debated_on: 1.day.ago, overview: 'Everyone was in agreement, this petition must be made law!', response_threshold_reached_at: 30.days.ago)
 end
 
-Given(/^a petition "(.*?)" exists with government response$/) do |action|
+Given(/^a petition "(.*?)" exists with Government response$/) do |action|
   @petition = FactoryBot.create(:responded_petition, action: action)
 end
 
-Given(/^a petition "(.*?)" exists awaiting government response$/) do |action|
+Given(/^a petition "(.*?)" exists awaiting Government response$/) do |action|
   @petition = FactoryBot.create(:awaiting_response_petition, action: action)
 end
 
@@ -478,7 +468,9 @@ Given(/^these archived petitions? exist?:?$/) do |table|
       action:          petition[0],
       state:           petition[1],
       signature_count: petition[2],
-      created_at:      petition[3]
+      created_at:      petition[3],
+      rejected_at:     petition[4],
+      opened_at:       petition[5]
     }
 
     FactoryBot.create(:archived_petition, attributes)
@@ -486,10 +478,23 @@ Given(/^these archived petitions? exist?:?$/) do |table|
 end
 
 When (/^I search all petitions for "(.*?)"$/) do |search_term|
-  within :css, '.search-petitions' do
-    fill_in :search, with: search_term
-    step %{I press "Search"}
-  end
+  fill_in "Search", with: search_term
+  click_button "Search petitions"
+end
+
+When('I search all petitions using the id of the petition {string}') do |action|
+  petition = Petition.find_by!(action: action)
+  step %{I search all petitions for "#{petition.id}"}
+end
+
+When('I fill in {string} with the id of the petition {string}') do |field, action|
+  petition = Petition.find_by!(action: action)
+  step %{I fill in "#{field}" with "#{petition.id}"}
+end
+
+When('I fill in {string} with the id of the archived petition {string}') do |field, action|
+  petition = Archived::Petition.find_by!(action: action)
+  step %{I fill in "#{field}" with "#{petition.id}"}
 end
 
 Given(/^all the open petitions have been closed$/) do
@@ -502,4 +507,24 @@ Given(/^(\d+) archived petitions exist$/) do |number|
   number.times do
     FactoryBot.create(:archived_petition)
   end
+end
+
+Then('I should be asked to confirm my eligibility') do
+  expect(page).to have_css("h1", text: "Are you a British citizen or UK resident?")
+end
+
+When("I confirm that I am UK citizen or resident") do
+  within_fieldset "Are you a British citizen or UK resident?" do
+    choose "Yes"
+  end
+
+  click_button "Continue"
+end
+
+When("I say that I am not UK citizen or resident") do
+  within_fieldset "Are you a British citizen or UK resident?" do
+    choose "No"
+  end
+
+  click_button "Continue"
 end

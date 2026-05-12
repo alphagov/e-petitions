@@ -82,23 +82,23 @@ RSpec.describe AdminHelper, type: :helper do
     end
 
     it "generates the correct option for 'awaiting_response'" do
-      expect(subject).to have_css("option:nth-of-type(16)[value='awaiting_response']", text: "Awaiting a government response (16)")
+      expect(subject).to have_css("option:nth-of-type(16)[value='awaiting_response']", text: "Awaiting a Government response (16)")
     end
 
     it "generates the correct option for 'with_response'" do
-      expect(subject).to have_css("option:nth-of-type(17)[value='with_response']", text: "With a government response (17)")
+      expect(subject).to have_css("option:nth-of-type(17)[value='with_response']", text: "With a Government response (17)")
     end
 
     it "generates the correct option for 'awaiting_debate'" do
-      expect(subject).to have_css("option:nth-of-type(18)[value='awaiting_debate']", text: "Awaiting a debate in parliament (18)")
+      expect(subject).to have_css("option:nth-of-type(18)[value='awaiting_debate']", text: "Awaiting a debate in Parliament (18)")
     end
 
     it "generates the correct option for 'debated'" do
-      expect(subject).to have_css("option:nth-of-type(19)[value='debated']", text: "Has been debated in parliament (19)")
+      expect(subject).to have_css("option:nth-of-type(19)[value='debated']", text: "Has been debated in Parliament (19)")
     end
 
     it "generates the correct option for 'not_debated'" do
-      expect(subject).to have_css("option:nth-of-type(20)[value='not_debated']", text: "Has not been debated in parliament (20)")
+      expect(subject).to have_css("option:nth-of-type(20)[value='not_debated']", text: "Has not been debated in Parliament (20)")
     end
 
     it "marks the correct option as selected" do

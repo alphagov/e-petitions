@@ -1,42 +1,53 @@
 class PagesController < PublicController
   before_action :retrieve_page, only: :show
-  before_action :respond_if_fresh, only: :show
   before_action :set_cors_headers, only: :trending, if: :json_request?
 
   def index
+    fresh_when(
+      last_modified: Site.last_modified_at,
+      cache_control: Site.cache_control,
+      public: true
+    )
+
     respond_to do |format|
       format.html
     end
   end
 
   def show
-    respond_to do |format|
-      format.html do
-        if @page.redirect?
-          redirect_to @page.redirect_url, allow_other_host: true
-        else
-          render :show
-        end
+    if @page.redirect?
+      redirect_to @page.redirect_url, allow_other_host: true
+    else
+      fresh_when(
+        last_modified: @page.last_modified_at,
+        cache_control: @page.cache_control,
+        public: true
+      )
+
+      respond_to do |format|
+        format.html
       end
     end
   end
 
   def trending
+    fresh_when(
+      last_modified: Site.last_modified_at,
+      cache_control: Site.cache_control,
+      public: true
+    )
+
     respond_to do |format|
       format.json
     end
   end
 
-  def browserconfig
-    expires_in 1.hour, public: true
-
-    respond_to do |format|
-      format.xml
-    end
-  end
-
   def manifest
-    expires_in 1.hour, public: true
+    fresh_when(
+      last_modified: Site.package_built_at,
+      cache_control: Site.cache_control(max_age: 5.minutes),
+      public: true
+    )
 
     respond_to do |format|
       format.json
@@ -47,9 +58,5 @@ class PagesController < PublicController
 
   def retrieve_page
     @page = Page.find_by!(slug: params[:slug], enabled: true)
-  end
-
-  def respond_if_fresh
-    local_request? || fresh_when(@page, public: true)
   end
 end

@@ -1,0 +1,20 @@
+@use "./settings" as *;
+@use "./helpers" as *;
+
+a {
+  color: $link-colour;
+
+  @extend %link-decoration;
+
+  &:hover:not(:focus) {
+    color: $link-hover-colour;
+  }
+
+  &:active:not(:focus) {
+    color: $link-active-colour;
+  }
+
+  &:focus {
+    @extend %focused-text;
+  }
+}

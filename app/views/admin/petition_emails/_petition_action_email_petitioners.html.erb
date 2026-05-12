@@ -41,12 +41,16 @@
     <p class="character-count">5000 characters max</p>
   <% end %>
 
+  <%= form_row :for => [f.object, :occurred_on] do %>
+    <%= f.label :occurred_on, 'Occurred on', class: 'form-label' %>
+    <%= error_messages_for_field f.object, :occurred_on %>
+    <%= f.date_field :occurred_on, tabindex: increment, class: 'form-control', disabled: @petition.editing_disabled? %>
+  <% end %>
+
   <%= email_petitioners_with_count_submit_button(f, petition, disabled: @petition.editing_disabled?) %>
   <%= f.submit "Preview", name: 'save_and_preview', class: 'button-secondary', disabled: @petition.editing_disabled? %>
   <%= f.submit "Save", name: 'save', class: 'button-secondary', disabled: @petition.editing_disabled? %>
   <%= link_to 'Cancel', admin_petition_path(@petition), class: 'button-secondary' %>
 <% end %>
-
-<%= javascript_include_tag 'character-counter' %>
 
 <%= render 'edit_lock' %>

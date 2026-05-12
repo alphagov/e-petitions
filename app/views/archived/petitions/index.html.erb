@@ -1,87 +1,131 @@
-<div class="notification">
-  <span class="icon icon-warning-white">
-    <span class="visuallyhidden">Important:</span>
-  </span>
-  <p class="content">
-    These petitions were submitted during the <%= @parliament.period %> parliament
-  </p>
-
-  <details class="list-of-parliaments">
-    <summary><span class="summary">View petitions from previous parliaments</span></summary>
-    <div>
-      <ul>
-        <% archived_parliaments.each do |parliament| %>
-          <li><%= link_to parliament.period, archived_petitions_path(parliament: parliament, state: "published") %></li>
-        <% end %>
-        <li><%= link_to "Back to current petitions", petitions_path(state: "open") %></li>
-      </ul>
-    </div>
-  </details>
-</div>
-
-<details class="lists-of-petitions">
-  <summary><span class="summary">Other lists of petitions</span></summary>
-  <div>
-    <ul>
-    <% archived_petition_facets_with_counts(@petitions).each do |facet, count| %>
-      <li>
-        <%= link_to archived_petitions_path(@petitions.facet_params(facet, parliament: @parliament)) do %>
-          <%= t(facet, scope: :"petitions.lists", quantity: number_with_delimiter(count)) %>
-        <% end %>
-      </li>
-    <% end %>
-    </ul>
-  </div>
-</details>
-
-<h1 class="page-title"><%= t(@petitions.scope, scope: :"petitions.page_titles") %></h1>
-
-<%= form_tag archived_petitions_path, method: 'get', enforce_utf8: false do %>
-  <div class="search-inline">
-    <label for="search" class="visuallyhidden">Search petitions</label>
-    <%= search_field_tag  'q', @petitions.query, class: 'form-control', id: 'search' %>
-    <%= hidden_field_tag 'state', @petitions.scope %>
-    <%= hidden_field_tag 'parliament', @parliament.id %>
-    <%= button_tag name: nil do %>
-      <span class="visuallyhidden">Search</span>
-    <% end %>
+<%= content_for :notifications do %>
+  <div class="highlight margin-top-7">
+    <p>Archived petitions are closed and cannot be signed</p>
+    <p><%= link_to "Back to current petitions", petitions_path(state: "open") %></p>
   </div>
 <% end %>
 
-<p class="filtered-petition-count"><%= filtered_petition_count(@petitions) %></p>
+<%= form_tag archived_petitions_path, method: 'get', enforce_utf8: false do %>
+  <%= hidden_field_tag :state, @petitions.scope %>
 
-<div class="search-results section-panel">
-  <% if @petitions.empty? %>
-    <p>No archived petitions could be found matching your search terms</p>
-  <% else %>
-    <ol>
-      <%= render partial: "petitions/petition", collection: @petitions %>
-    </ol>
+  <div class="grid-row">
+    <div class="grid-column">
+      <h1 class="margin-bottom-3">Search archived petitions</h1>
+      <p>
+        <%= t(:"archived_petitions.search.status_html", count: @petitions.total_entries, formatted_count: number_with_delimiter(@petitions.total_entries)) %>
+      </p>
+    </div>
+  </div>
 
-    <div class="search-pagination">
-      <%= paginate @petitions %>
+  <div class="grid-row margin-top-5">
+    <div class="grid-column-one-third-from-laptop">
+      <div class="search-lists">
+        <section class="search-lists__query">
+          <h2>
+            <label for="search">Search</label>
+          </h2>
+
+          <div class="input-group">
+            <%= text_field_tag "q", @petitions.query, id: "search" %>
+            <%= button_tag name: nil, class: 'button icon-button' do %>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" aria-hidden="true">
+                <path fill="currentColor" d="M2.083 2.083a7.112 7.112 0 0 1 10.646 9.391l3.01 3.01a.888.888 0 1 1-1.255 1.256l-3.01-3.01a7.112 7.112 0 0 1-9.39-10.647Zm5.037-.291a5.328 5.328 0 1 0 0 10.656 5.328 5.328 0 0 0 0-10.656Z"/>
+              </svg>
+              <span class="visually-hidden">Search</span>
+            <% end %>
+          </div>
+        </section>
+
+        <section class="search-lists__menu" data-module="navigation-menu" data-breakpoint="992px" aria-label="Lists of archived petitions from previous parliaments">
+          <button class="button-menu" type="button" aria-controls="petition-lists" aria-expanded="false" hidden>
+            <span>Lists of archived petitions from previous Parliaments</span>
+          </button>
+
+          <div id="petition-lists" class="search-lists__hidden-content">
+            <h3>
+              Lists of archived petitions from previous Parliaments
+            </h3>
+
+            <ul class="parliament-lists">
+              <% archived_parliaments.each do |parliament| %>
+                <li>
+                  <%= parliament_menu(parliament) do %>
+                    <% archived_petition_facets.each do |facet| %>
+                      <%= archived_petition_list_item(parliament, facet) %>
+                    <% end %>
+                  <% end %>
+                </li>
+              <% end %>
+            </ul>
+          </div>
+        </section>
+      </div>
     </div>
 
-    <p>
-      Get this data in
-      <%= link_to "JSON", archived_petitions_path(:json, @petitions.current_params) %> or
-      <%= link_to 'CSV', archived_petitions_path(:csv, @petitions.current_params.without(:page)) %> format
-    </p>
-  <% end %>
-</div>
+    <div class="grid-column-two-thirds-from-laptop">
+      <h2>
+        Archived petitions submitted during the <%= @parliament.start_year %> to <%= @parliament.end_year %> Parliament
+      </h2>
 
-<nav id="other-search-lists" aria-labelledby="other-lists-heading">
-  <h2 id="other-lists-heading">Other lists of petitions</h2>
-  <div class="section-panel">
-    <ul>
-    <% archived_petition_facets_with_counts(@petitions).each do |facet, count| %>
-      <li>
-        <%= link_to archived_petitions_path(@petitions.facet_params(facet, parliament: @parliament)) do %>
-          <%= t(facet, scope: :"petitions.lists", quantity: number_with_delimiter(count)) %>
+      <h3>
+        <%= t(@petitions.scope, scope: :"petitions.page_titles") %>
+      </h3>
+
+      <% if @petitions.empty? %>
+        <hr>
+
+        <p>
+          <% if @petitions.search? %>
+            There are no results for <q><%= @petitions.query %></q>.
+          <% else %>
+            There are no results.
+          <% end %>
+        </p>
+
+        <h3>
+          Suggestions
+        </h3>
+
+        <ul class="bulleted-list">
+          <li>
+            Make sure that all words are spelled correctly.
+          </li>
+          <li>
+            Search again with different keywords.
+          </li>
+          <li>
+            Search again with more general keywords.
+          </li>
+        </ul>
+      <% else %>
+        <% if petition_list_header? %>
+          <%= petition_list_header %>
         <% end %>
-      </li>
-    <% end %>
-    </ul>
+
+        <%= render partial: "petitions/petition", collection: @petitions %>
+
+        <% if @petitions.total_pages > 1 %>
+          <hr>
+
+          <%= paginate @petitions %>
+        <% end %>
+
+        <hr>
+
+        <p>
+          Get this data in
+          <%= link_to "JSON", archived_petitions_path(:json, @petitions.current_params), download: "archived-petitions.json" %> or
+          <%= link_to 'CSV', archived_petitions_path(:csv, @petitions.current_params.without(:page)), download: "archived-petitions.csv" %> format
+        </p>
+      <% end %>
+    </div>
   </div>
-  <%= link_to 'Current petitions', petitions_path(state: "open") %>
-</nav>
+<% end %>
+
+<% content_for :preload do %>
+  <%= preload_link_tag 'archived-petitions.js', nopush: true %>
+<% end %>
+
+<% content_for :footer do %>
+  <%= javascript_include_tag 'archived-petitions' %>
+<% end %>

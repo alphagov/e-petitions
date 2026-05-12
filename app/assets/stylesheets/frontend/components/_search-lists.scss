@@ -1,0 +1,107 @@
+@use "sass:map";
+@use "../settings" as *;
+@use "../helpers" as *;
+
+.search-lists {
+  margin-bottom: spacing(4);
+
+  @media screen and (min-width: map.get($breakpoints, laptop)) {
+    @media screen and (min-height: 786px) {
+      position: sticky;
+      z-index: 100;
+      top: spacing(6);
+    }
+  }
+
+  section {
+    margin-top: 0;
+  }
+
+  &__query {
+    margin-bottom: spacing(4);
+  }
+
+  &__menu {
+    border-bottom: 1px solid $border-colour;
+    margin-bottom: spacing(4);
+    padding-bottom: spacing(4);
+
+    @include media-query($from: laptop) {
+      border-bottom: none;
+      margin-bottom: 0;
+      padding-bottom: 0;
+    }
+
+    & > button {
+      text-align: left;
+
+      &[aria-expanded=false] + div {
+        display: none;
+
+        @include media-query($from: laptop) {
+          display: block;
+        }
+      }
+    }
+
+    h3 {
+      display: none;
+
+      @include media-query($from: laptop) {
+        display: block;
+        margin-top: spacing(6);
+      }
+    }
+
+    ul.petition-lists {
+      margin-top: spacing(4);
+
+      & > li {
+        margin-left: -15px;
+        padding-left: 15px;
+
+        &[aria-current="true"] {
+          border-left: 3px solid $interactive-colour;
+          font-weight: bold;
+          padding-left: 12px;
+        }
+
+        & > a {
+          display: block;
+
+          @include responsive-padding(1, top);
+          @include responsive-padding(1, bottom);
+        }
+      }
+    }
+
+    ul.parliament-lists {
+      margin-top: spacing(4);
+
+      & > li {
+        & > button {
+          display: block;
+          text-align: left;
+
+          &[aria-expanded="true"] + ul {
+            display: block;
+          }
+
+          &[aria-expanded="false"] + ul {
+            display: none;
+          }
+        }
+
+        & > ul {
+          margin-left: spacing(4);
+          margin-top: spacing(4);
+          margin-bottom: spacing(6);
+        }
+      }
+    }
+
+    p:last-child > a {
+      display: block;
+    }
+  }
+}
