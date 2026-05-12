@@ -346,7 +346,7 @@ RSpec.describe ArchivePetitionJob, type: :job do
   context "with a petition that has a petition_email email that has been sent" do
     let(:email_attributes) do
       {
-        subject: "This is a previous government response",
+        subject: "This is a previous Government response",
         body: "We will not be doing the things you asked about",
         occurred_on: "2024-10-31",
         email_count: 216,

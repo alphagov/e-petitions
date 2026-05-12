@@ -108,7 +108,7 @@ RSpec.describe AdminHubHelper, type: :helper do
       end
     end
 
-    describe "for counting the government response queue" do
+    describe "for counting the Government response queue" do
       it "returns a HTML-safe string" do
         expect(helper.action_count(:awaiting_response, 1)).to be_an(ActiveSupport::SafeBuffer)
       end

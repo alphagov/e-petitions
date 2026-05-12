@@ -40,7 +40,7 @@ RSpec.describe HomeHelper, type: :helper do
   end
 
   describe "#petition_count" do
-    describe "for counting government responses" do
+    describe "for counting Government responses" do
       it "returns a HTML-safe string" do
         expect(helper.petition_count(:with_response, 1)).to be_an(ActiveSupport::SafeBuffer)
       end

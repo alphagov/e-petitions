@@ -17,7 +17,7 @@ module SignatureHelper
     else
       signature_max = [petition.signature_count, petition.threshold_for_response].max
       formatted_threshold = petition.formatted_threshold_for_response
-      suffix = "signatures required to get a government response"
+      suffix = "signatures required to get a Government response"
     end
 
     attributes = {

@@ -137,7 +137,7 @@ RSpec.describe ArchiveSignaturesJob, type: :job do
     it_behaves_like "a copied signature"
   end
 
-  context "with a signature that has been notified about a government response" do
+  context "with a signature that has been notified about a Government response" do
     let!(:signature) { FactoryBot.create(:validated_signature, petition: petition, government_response_email_at: 4.weeks.ago) }
 
     before do

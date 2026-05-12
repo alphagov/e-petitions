@@ -36,7 +36,7 @@ en-GB:
       closed: "Closed petitions"
       published: "Published petitions"
       rejected: "Rejected petitions"
-      awaiting_response: "Awaiting government response"
+      awaiting_response: "Awaiting Government response"
       with_response: "Government responses"
       debated: "Debated in Parliament"
       not_debated: "Not debated in Parliament"
@@ -162,22 +162,22 @@ en-GB:
           rejected: "Rejected (%{quantity})"
           hidden: "Hidden (%{quantity})"
           stopped: "Stopped (%{quantity})"
-          awaiting_response: "Awaiting a government response (%{quantity})"
-          with_response: "With a government response (%{quantity})"
-          awaiting_debate: "Awaiting a debate in parliament (%{quantity})"
-          debated: "Has been debated in parliament (%{quantity})"
-          not_debated: "Has not been debated in parliament (%{quantity})"
+          awaiting_response: "Awaiting a Government response (%{quantity})"
+          with_response: "With a Government response (%{quantity})"
+          awaiting_debate: "Awaiting a debate in Parliament (%{quantity})"
+          debated: "Has been debated in Parliament (%{quantity})"
+          not_debated: "Has not been debated in Parliament (%{quantity})"
         admin_archived:
           all: "All petitions (%{quantity})"
           published: "Published (%{quantity})"
           rejected: "Rejected (%{quantity})"
           hidden: "Hidden (%{quantity})"
           stopped: "Stopped (%{quantity})"
-          awaiting_response: "Awaiting a government response (%{quantity})"
-          with_response: "With a government response (%{quantity})"
-          awaiting_debate: "Awaiting a debate in parliament (%{quantity})"
-          debated: "Has been debated in parliament (%{quantity})"
-          not_debated: "Has not been debated in parliament (%{quantity})"
+          awaiting_response: "Awaiting a Government response (%{quantity})"
+          with_response: "With a Government response (%{quantity})"
+          awaiting_debate: "Awaiting a debate in Parliament (%{quantity})"
+          debated: "Has been debated in Parliament (%{quantity})"
+          not_debated: "Has not been debated in Parliament (%{quantity})"
     emails:
       subjects:
         # Emails to people who sign petitions
@@ -308,15 +308,15 @@ en-GB:
           one: "<span class=\"count\">%{formatted_count}</span> <span class=\"suffix\">petition from the current Parliament has been debated in the House of Commons</span>"
           other: "<span class=\"count\">%{formatted_count}</span> <span class=\"suffix\">petitions from the current Parliament have been debated in the House of Commons</span>"
       awaiting_response_explanation:
-        html: "See all petitions waiting for a government response (%{formatted_count})"
+        html: "See all petitions waiting for a Government response (%{formatted_count})"
       with_response_explanation:
-        html: "See all petitions with a government response (%{formatted_count})"
+        html: "See all petitions with a Government response (%{formatted_count})"
       awaiting_debate_explanation:
         html: "See all petitions waiting for a debate (%{formatted_count})"
       debated_explanation:
-        html: "See all petitions debated in parliament (%{formatted_count})"
+        html: "See all petitions debated in Parliament (%{formatted_count})"
       not_debated_explanation:
-        html: "See all petitions not debated in parliament (%{formatted_count})"
+        html: "See all petitions not debated in Parliament (%{formatted_count})"
 
     action_counts:
       in_moderation:
@@ -395,7 +395,7 @@ en-GB:
       description_html: |
         If a petition gets %{response_threshold} signatures, government will respond to it.
     awaiting_response:
-      title: Waiting for a government response
+      title: Waiting for a Government response
       description_html: |
         Government will respond to this petition.
     responded:

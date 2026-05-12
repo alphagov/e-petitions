@@ -34,15 +34,15 @@ Feature: A moderator user views all petitions
     And a petition "My open petition that was not debated" with a negative debate outcome
     And a petition "My open petition with debate outcome" exists with a debate outcome
     And a petition "My open petition awaiting debate date" passed the threshold for a debate 7 days ago and has no debate date set
-    And a petition "My open petition with government response" exists with government response
-    And a petition "My open petition awaiting government response" exists awaiting government response
+    And a petition "My open petition with Government response" exists with Government response
+    And a petition "My open petition awaiting Government response" exists awaiting Government response
     And a petition "My open petition with scheduled debate date" passed the threshold for a debate 14 days ago and has a debate in 7 days
 
     When I view all petitions
     Then I should see the following list of petitions:
      | My open petition with scheduled debate date   |
-     | My open petition awaiting government response |
-     | My open petition with government response     |
+     | My open petition awaiting Government response |
+     | My open petition with Government response     |
      | My open petition awaiting debate date         |
      | My open petition with debate outcome          |
      | My open petition that was not debated         |
@@ -70,8 +70,8 @@ Feature: A moderator user views all petitions
     And I filter the list to show "Open" petitions
     Then I should see the following list of petitions:
      | My open petition with scheduled debate date   |
-     | My open petition awaiting government response |
-     | My open petition with government response     |
+     | My open petition awaiting Government response |
+     | My open petition with Government response     |
      | My open petition awaiting debate date         |
      | My open petition with debate outcome          |
      | My open petition that was not debated         |
@@ -89,20 +89,20 @@ Feature: A moderator user views all petitions
     Then I should see the following list of petitions:
      | My hidden petition |
 
-    And I filter the list to show "Awaiting a government response" petitions
+    And I filter the list to show "Awaiting a Government response" petitions
     Then I should see the following list of petitions:
-     | My open petition awaiting government response |
+     | My open petition awaiting Government response |
 
-    And I filter the list to show "With a government response" petitions
+    And I filter the list to show "With a Government response" petitions
     Then I should see the following list of petitions:
-     | My open petition with government response |
+     | My open petition with Government response |
 
-    And I filter the list to show "Awaiting a debate in parliament" petitions
+    And I filter the list to show "Awaiting a debate in Parliament" petitions
     Then I should see the following list of petitions:
      | My open petition with scheduled debate date |
      | My open petition awaiting debate date |
 
-    And I filter the list to show "Has been debated in parliament" petitions
+    And I filter the list to show "Has been debated in Parliament" petitions
     Then I should see the following list of petitions:
      | My open petition with debate outcome |
 

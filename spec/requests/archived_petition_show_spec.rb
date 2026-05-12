@@ -381,7 +381,7 @@ RSpec.describe "API request to show an archived petition", type: :request, show_
 
     it "includes related activity" do
       petition = FactoryBot.create :archived_petition
-      email_1  = FactoryBot.create :archived_petition_email, petition: petition, subject: "Original Government Response", body: "This is the original government response", created_at: 12.months.ago
+      email_1  = FactoryBot.create :archived_petition_email, petition: petition, subject: "Original Government Response", body: "This is the original Government response", created_at: 12.months.ago
       email_2  = FactoryBot.create :archived_petition_email, petition: petition, subject: "Debate Decision", body: "Petitions committee will debate this petition", created_at: 13.months.ago
 
       get "/archived/petitions/#{petition.id}.json"
@@ -399,7 +399,7 @@ RSpec.describe "API request to show an archived petition", type: :request, show_
             },
             {
               "subject" => "Original Government Response",
-              "body" => "This is the original government response",
+              "body" => "This is the original Government response",
               "occurred_on" => a_string_matching(%r[\A\d{4}-\d{2}-\d{2}\z]),
               "created_at" => a_string_matching(%r[\A\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z\z]),
               "updated_at" => a_string_matching(%r[\A\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z\z])

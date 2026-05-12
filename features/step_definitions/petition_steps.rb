@@ -62,7 +62,7 @@ Given(/^an open petition "(.*?)" with response "(.*?)" and response summary "(.*
   @petition = FactoryBot.create(:responded_petition, action: petition_action, response_details: details, response_summary: summary)
 end
 
-Given(/^a ?(open|closed)? petition "([^"]*)" exists and has received a government response (\d+) days ago$/) do |state, petition_action, parliament_response_days_ago |
+Given(/^a ?(open|closed)? petition "([^"]*)" exists and has received a Government response (\d+) days ago$/) do |state, petition_action, parliament_response_days_ago |
   petition_attributes = {
     action: petition_action,
     closed_at: state == 'closed' ? 1.day.ago : 6.months.from_now,
@@ -383,7 +383,7 @@ Given(/^the threshold for a parliamentary debate is "(.*?)"$/) do |amount|
   Site.update!(threshold_for_debate: amount)
 end
 
-Given(/^there are (\d+) petitions awaiting a government response$/) do |response_count|
+Given(/^there are (\d+) petitions awaiting a Government response$/) do |response_count|
   response_count.times do |count|
     FactoryBot.create(:awaiting_response_petition, :action => "Petition #{count}")
   end
@@ -397,11 +397,11 @@ Given(/^a petition "(.*?)" exists with a debate outcome and with response thresh
   @petition = FactoryBot.create(:debated_petition, action: action, debated_on: 1.day.ago, overview: 'Everyone was in agreement, this petition must be made law!', response_threshold_reached_at: 30.days.ago)
 end
 
-Given(/^a petition "(.*?)" exists with government response$/) do |action|
+Given(/^a petition "(.*?)" exists with Government response$/) do |action|
   @petition = FactoryBot.create(:responded_petition, action: action)
 end
 
-Given(/^a petition "(.*?)" exists awaiting government response$/) do |action|
+Given(/^a petition "(.*?)" exists awaiting Government response$/) do |action|
   @petition = FactoryBot.create(:awaiting_response_petition, action: action)
 end
 

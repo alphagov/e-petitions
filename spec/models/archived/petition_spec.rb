@@ -370,7 +370,7 @@ RSpec.describe Archived::Petition, type: :model do
       @p4 = FactoryBot.create(:archived_petition)
     end
 
-    it "returns only the petitions have a government response timestamp" do
+    it "returns only the petitions have a Government response timestamp" do
       expect(described_class.with_response).to match_array([@p1, @p3])
     end
   end

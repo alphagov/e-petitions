@@ -92,12 +92,12 @@ RSpec.describe DeletePetitionJob, type: :job do
       end
     end
 
-    context "when the petition has a government response" do
+    context "when the petition has a Government response" do
       before do
         FactoryBot.create(:government_response, petition: petition)
       end
 
-      it "destroys the associated government response" do
+      it "destroys the associated Government response" do
         expect {
           described_class.perform_now(petition)
         }.to change {

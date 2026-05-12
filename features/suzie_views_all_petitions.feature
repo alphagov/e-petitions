@@ -33,12 +33,12 @@ Feature: Suzy Signer views all petitions
      | Free the wombles                                    |
     And the markup should be valid
 
-  Scenario: Suzie browses petitions awaiting a government response
+  Scenario: Suzie browses petitions awaiting a Government response
     Given a petition "Abolish bank holidays" exists and hasn’t passed the threshold for a response
     And a petition "Free the wombles" exists and passed the threshold for a response less than a day ago
     And a petition "Force supermarkets to give unsold food to charities" exists and passed the threshold for a response 1 day ago
     And a petition "Make every monday bank holiday" exists and passed the threshold for a response 10 days ago
-    When I browse to see only "Awaiting government response" petitions
+    When I browse to see only "Awaiting Government response" petitions
     Then I should see "We’ve found 3 petitions"
     And I should see the following ordered list of petitions:
      | Make every monday bank holiday                      |
@@ -47,9 +47,9 @@ Feature: Suzy Signer views all petitions
     And the markup should be valid
 
   Scenario: Suzie browses petitions with a government response
-    Given a closed petition "Free the wombles" exists and has received a government response 100 days ago
-    And a petition "Force supermarkets to give unsold food to charities" exists and has received a government response 10 days ago
-    And a petition "Make every monday bank holiday" exists and has received a government response 1 days ago
+    Given a closed petition "Free the wombles" exists and has received a Government response 100 days ago
+    And a petition "Force supermarkets to give unsold food to charities" exists and has received a Government response 10 days ago
+    And a petition "Make every monday bank holiday" exists and has received a Government response 1 days ago
     When I browse to see only "Government responses" petitions
     Then I should see "We’ve found 3 petitions"
     And I should see the following ordered list of petitions:

@@ -93,7 +93,7 @@ export default class SignatureCounter {
     if (threshold > this.responseThreshold) {
       return ' signatures required to be considered for a debate in Parliament';
     } else {
-      return ' signatures required to get a government response';
+      return ' signatures required to get a Government response';
     }
   }
 
@@ -115,7 +115,7 @@ export default class SignatureCounter {
     } else if (data.response_threshold_reached_at || data.government_response_at) {
       return `${this.format(data.signature_count)} of ${this.format(this.debateThreshold)} signatures required to be considered for a debate in Parliament`;
     } else {
-      return `${this.format(data.signature_count)} of ${this.format(this.responseThreshold)} signatures required to get a government response`;
+      return `${this.format(data.signature_count)} of ${this.format(this.responseThreshold)} signatures required to get a Government response`;
     }
   }
 }

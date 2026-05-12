@@ -27,7 +27,7 @@
       <% end %>
     <% else %>
       <%= progress_bar(petition) do %>
-        <%= number_with_delimiter(petition.signature_count) %> of <%= petition.formatted_threshold_for_response %> signatures required to get a government response
+        <%= number_with_delimiter(petition.signature_count) %> of <%= petition.formatted_threshold_for_response %> signatures required to get a Government response
       <% end %>
     <% end %>
   </label>
@@ -48,7 +48,7 @@
       <% elsif petition.response_threshold_reached_at? || petition.government_response_at? %>
         <span class="visually-hidden"> signatures required to be considered for a debate in Parliament</span>
       <% else %>
-        <span class="visually-hidden"> signatures required to get a government response</span>
+        <span class="visually-hidden"> signatures required to get a Government response</span>
       <% end %>
     </p>
   </div>
