@@ -25,3 +25,4 @@ production:
     pool: <%= ENV.fetch('WEB_CONCURRENCY_MAX_THREADS') { 32 }.to_i %>
   cache:
     <<: *primary_production
+    schema_dump: false
