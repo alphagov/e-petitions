@@ -36,6 +36,11 @@
           See all petitions debated in Parliament
         <% end %>
       </p>
+      <p>
+        <%= link_to(petitions_path(state: "awaiting_debate")) do %>
+          See all petitions waiting for a debate in Parliament
+        <% end %>
+      </p>
     </section>
   <% end %>
 <% end %>

@@ -129,6 +129,10 @@
       }
     }
   }
+
+  & > p:has(+p) {
+    margin-bottom: spacing(3);
+  }
 }
 
 .petition-item {
