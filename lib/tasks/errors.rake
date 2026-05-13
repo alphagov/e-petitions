@@ -5,17 +5,20 @@ namespace :errors do
 
     load_path = Rails.root.join("app/assets/stylesheets")
     build_path = Rails.root.join("app/assets/builds")
+    assets_path = Rails.application.assets.load_path
 
-    args = %W[
-      #{load_path.join("error.scss")}:#{build_path.join("error.css")}
-    ]
-
-    args.concat %w[--quiet --quiet-deps]
-    args.concat %w[--pkg-importer node]
-    args.concat %w[--style compressed]
-    args.concat %w[--no-source-map]
+    assets_path.find("error.css")
 
     begin
+      args = %W[
+        #{load_path.join("error.scss")}:#{build_path.join("error.css")}
+      ]
+
+      args.concat %w[--quiet --quiet-deps]
+      args.concat %w[--pkg-importer node]
+      args.concat %w[--style compressed]
+      args.concat %w[--no-source-map]
+
       system("bin/sass", *args, exception: true)
     rescue Interrupt
       abort("Exiting ...")
@@ -27,8 +30,10 @@ namespace :errors do
       abort("Exiting ...")
     end
 
-    css_file = Rails.application.assets.load_path.find("error.css")
-    js_file = Rails.application.assets.load_path.find("error.js")
+    assets_path.cache_sweeper.execute
+
+    css_file = assets_path.find("error.css")
+    js_file = assets_path.find("error.js")
     output_path = Rails.public_path.join("assets")
     FileUtils.mkdir_p(output_path)
 

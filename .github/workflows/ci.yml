@@ -67,6 +67,7 @@ jobs:
       description: "Run specs"
       command: "rake spec"
       spec_opts: "-f doc --force-color -P spec/{helpers,lib,presenters,tasks,validators,views}/**/*_spec.rb"
+      save_logs: true
 
   javascript:
     uses: ./.github/workflows/build.yml
