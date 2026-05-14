@@ -16,7 +16,7 @@
     "lighthouse:ci": "start-server-and-test start-server http-get://petitions.localhost:3000 test"
   },
   "dependencies": {
-    "esbuild": "^0.25.9",
+    "esbuild": "^0.28.0",
     "jquery": "^3.7.1",
     "jquery-ujs": "^1.2.3",
     "modern-normalize": "^3.0.1",
