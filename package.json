@@ -17,7 +17,7 @@
   },
   "dependencies": {
     "esbuild": "^0.28.0",
-    "jquery": "^3.7.1",
+    "jquery": "^4.0.0",
     "jquery-ujs": "^1.2.3",
     "modern-normalize": "^3.0.1",
     "sass-mq": "^7.0.0"
