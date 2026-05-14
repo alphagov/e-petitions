@@ -89,6 +89,15 @@ jobs:
         run: |
           bundle exec rake db:setup
 
+      - name: ${{ inputs.description }}
+        shell: bash
+        env:
+          CUCUMBER_FORMAT: "${{ inputs.cucumber_format }}"
+          CUCUMBER_OPTS: "${{ inputs.cucumber_opts }}"
+          SPEC_OPTS: "${{ inputs.spec_opts }}"
+        run: |
+          bundle exec ${{ inputs.command }}
+
       - name: Save screenshots
         if: ${{ inputs.save_screenshots && failure() }}
         uses: actions/upload-artifact@v7
@@ -106,12 +115,3 @@ jobs:
           path: ${{ github.workspace }}/log/test.log
           retention-days: 7
           if-no-files-found: ignore
-
-      - name: ${{ inputs.description }}
-        shell: bash
-        env:
-          CUCUMBER_FORMAT: "${{ inputs.cucumber_format }}"
-          CUCUMBER_OPTS: "${{ inputs.cucumber_opts }}"
-          SPEC_OPTS: "${{ inputs.spec_opts }}"
-        run: |
-          bundle exec ${{ inputs.command }}
