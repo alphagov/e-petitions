@@ -58,7 +58,7 @@ module Archived
     facet :all, -> { by_most_signatures }
     facet :awaiting_response, -> { awaiting_response.by_waiting_for_response_longest }
     facet :awaiting_debate, -> { awaiting_debate.by_most_relevant_debate_date }
-    facet :with_debate_outcome, -> { with_debate_outcome.by_most_recent_debate_outcome }
+    facet :with_debate_outcome, -> { with_debate_outcome.by_most_recent_debate }
     facet :with_debated_outcome, -> { with_debated_outcome.by_most_recent_debate_outcome }
     facet :published, -> { published.by_most_signatures }
     facet :stopped, -> { stopped.by_most_signatures }
@@ -66,7 +66,7 @@ module Archived
     facet :rejected, -> { rejected.by_most_signatures }
     facet :hidden, -> { hidden.by_most_recent }
     facet :with_response, -> { with_response.by_most_signatures }
-    facet :debated, -> { debated.by_most_recent_debate_outcome }
+    facet :debated, -> { debated.by_most_recent_debate }
     facet :not_debated, -> { not_debated.by_most_recent_debate_outcome }
     facet :by_most_signatures, -> { by_most_signatures }
     facet :by_created_at, -> { by_created_at }
@@ -109,6 +109,10 @@ module Archived
 
       def by_most_recently_published
         reorder('published_at DESC NULLS LAST')
+      end
+
+      def by_most_recent_debate
+        reorder(scheduled_debate_date: :desc, debate_outcome_at: :desc, created_at: :desc)
       end
 
       def by_most_recent_debate_outcome

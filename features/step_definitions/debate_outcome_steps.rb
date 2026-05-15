@@ -10,12 +10,17 @@ Given(/^a petition "(.*?)" has been debated (\d+) days ago?$/) do |petition_acti
     public_engagement_url: "https://committees.parliament.uk/public-engagement",
     debate_summary_url: "https://ukparliament.shorthandstories.com/about-a-petition"
   )
-  @petition.update(debate_outcome_at: debated_days_ago.days.ago)
+
+  @petition.update!(
+    debate_outcome_at: debated_days_ago.days.ago,
+    scheduled_debate_date: debated_days_ago.days.ago.to_date
+  )
 end
 
 Given(/^an archived petition "(.*?)" has been debated (\d+) days ago?$/) do |petition_action, debated_days_ago|
   @petition = FactoryBot.create(:archived_petition, :debated,
     action: petition_action,
+    scheduled_debate_date: debated_days_ago.days.ago.to_date,
     debate_outcome_at: debated_days_ago.days.ago,
     debated_on: debated_days_ago.days.ago.to_date,
     opened_at: debated_days_ago.days.ago - 1.month,

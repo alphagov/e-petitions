@@ -1,0 +1,15 @@
+<li id="debate">
+  <%= time_tag(petition.scheduled_debate_date) do %>
+    <strong><%= short_date_format(petition.scheduled_debate_date) %></strong>
+  <% end %>
+
+  <div>
+    <h3>
+      Parliament debated this petition
+    </h3>
+
+    <p>
+      You can watch the debate online on the <a href="https://www.youtube.com/UKParliament">UK Parliament YouTube channel</a>.
+    </p>
+  </div>
+</li>
