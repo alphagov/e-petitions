@@ -1,4 +1,5 @@
 require 'rails_helper'
+require 'puma/cli'
 
 RSpec.describe PetitionsCSVPresenter do
   class DummyPresenterClass
@@ -37,18 +38,33 @@ RSpec.describe PetitionsCSVPresenter do
   end
 
   describe "#render" do
+    let(:enumerator) { subject.render }
+
     it "returns an enumerator" do
-      expect(subject.render).to be_a Enumerator
+      expect(enumerator).to be_an Enumerator
     end
 
-    it "renders a header row as the first enumerator call" do
-      expect(subject.render.next).to eq("id,name\n")
-    end
-
-    it "renders the fields for each petition after the header" do
-      enumerator = subject.render
-      enumerator.next
+    it "renders the header and petition fields" do
+      expect(enumerator.next).to eq("id,name\n")
       expect(enumerator.next).to eq("321,Slim Jim\n")
+
+      expect {
+        enumerator.next
+      }.to raise_error(StopIteration)
+    end
+
+    context "when the user closes the connection" do
+      before do
+        allow_any_instance_of(DummyPresenterClass).to receive(:to_csv).and_raise(Puma::ConnectionError)
+      end
+
+      it "doesn't raise an error" do
+        expect(enumerator.next).to eq("id,name\n")
+
+        expect {
+          enumerator.next
+        }.to raise_error(StopIteration)
+      end
     end
   end
 end
