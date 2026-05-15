@@ -14,6 +14,8 @@ class PetitionsCSVPresenter
       petitions.in_batches do |petition|
         stream << presenter_class.new(petition).to_csv
       end
+    rescue Puma::ConnectionError
+      # User most likely closed the connection so ignore the exception
     end
   end
 end
