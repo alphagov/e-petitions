@@ -37,6 +37,8 @@ module TimelineHelper
       else
         events << PetitionEvent.new(:parliament_did_not_debate, petition.debate_outcome_at, debate_outcome)
       end
+    elsif petition.debated?
+      events << PetitionEvent.new(:parliament_debated_pending_outcome, petition.scheduled_debate_date, petition)
     end
 
     petition.emails.each do |email|

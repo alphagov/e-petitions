@@ -63,9 +63,9 @@ class Petition < ActiveRecord::Base
   facet :with_response,        -> { with_response.by_most_recent_response }
 
   facet :awaiting_debate,      -> { awaiting_debate.by_most_relevant_debate_date }
-  facet :with_debate_outcome,  -> { with_debate_outcome.by_most_recent_debate_outcome }
+  facet :with_debate_outcome,  -> { with_debate_outcome.by_most_recent_debate }
   facet :with_debated_outcome, -> { with_debated_outcome.by_most_recent_debate_outcome }
-  facet :debated,              -> { debated.by_most_recent_debate_outcome }
+  facet :debated,              -> { debated.by_most_recent_debate }
   facet :not_debated,          -> { not_debated.by_most_recent_debate_outcome }
 
   facet :collecting_sponsors,  -> { collecting_sponsors.by_most_recent }
@@ -170,6 +170,10 @@ class Petition < ActiveRecord::Base
 
     def by_most_recently_published
       reorder('published_at DESC NULLS LAST')
+    end
+
+    def by_most_recent_debate
+      reorder(scheduled_debate_date: :desc, debate_outcome_at: :desc, created_at: :desc)
     end
 
     def by_most_recent_debate_outcome
