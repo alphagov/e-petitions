@@ -5,6 +5,8 @@ class Admin::TopicsController < Admin::AdminController
   before_action :build_topic, only: [:new, :create]
   before_action :destroy_topic, only: [:destroy]
 
+  helper_method :search_params
+
   def index
     respond_to do |format|
       format.html
@@ -49,8 +51,12 @@ class Admin::TopicsController < Admin::AdminController
 
   private
 
+  def search_params
+    params.permit(:q, :page).to_h
+  end
+
   def find_topics
-    @topics = Topic.search(params)
+    @topics = Topic.search(search_params)
   end
 
   def find_topic
@@ -74,7 +80,7 @@ class Admin::TopicsController < Admin::AdminController
   end
 
   def index_url
-    admin_topics_url(params.permit(:q))
+    admin_topics_url(search_params.except(:page))
   end
 
   def redirect_to_index_url(options = {})

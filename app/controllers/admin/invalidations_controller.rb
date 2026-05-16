@@ -4,6 +4,8 @@ class Admin::InvalidationsController < Admin::AdminController
   before_action :find_invalidation, only: [:edit, :update, :destroy, :count, :cancel, :start]
   before_action :find_invalidations, only: [:index]
 
+  helper_method :search_params
+
   def index
     respond_to do |format|
       format.html
@@ -100,6 +102,10 @@ class Admin::InvalidationsController < Admin::AdminController
 
   private
 
+  def search_params
+    params.permit(:state, :q, :page).to_h
+  end
+
   def invalidation_params
     if params.key?(:invalidation)
       params.require(:invalidation).permit(*invalidation_attributes)
@@ -125,7 +131,7 @@ class Admin::InvalidationsController < Admin::AdminController
   end
 
   def index_url
-    admin_invalidations_url(params.permit(:state, :q))
+    admin_invalidations_url(search_params.except(:page))
   end
 
   def redirect_to_index_url(options = {})

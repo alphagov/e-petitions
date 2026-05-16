@@ -5,6 +5,8 @@ class Admin::TagsController < Admin::AdminController
   before_action :build_tag, only: [:new, :create]
   before_action :destroy_tag, only: [:destroy]
 
+  helper_method :search_params
+
   def index
     respond_to do |format|
       format.html
@@ -49,8 +51,12 @@ class Admin::TagsController < Admin::AdminController
 
   private
 
+  def search_params
+    params.permit(:q, :page).to_h
+  end
+
   def find_tags
-    @tags = Tag.search(params)
+    @tags = Tag.search(search_params)
   end
 
   def find_tag
@@ -74,7 +80,7 @@ class Admin::TagsController < Admin::AdminController
   end
 
   def index_url
-    admin_tags_url(params.permit(:q))
+    admin_tags_url(search_params.except(:page))
   end
 
   def redirect_to_index_url(options = {})

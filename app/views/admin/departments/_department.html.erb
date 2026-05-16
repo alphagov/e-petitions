@@ -6,6 +6,6 @@
     <%= department.acronym.presence || "–" %>
   </td>
   <td>
-    <%= button_to 'Delete', admin_department_path(department, params.permit(:q)), method: :delete, class: 'button-warning', data: { confirm: 'Delete department?' } %>
+    <%= button_to 'Delete', admin_department_path(department, search_params.except(:page)), method: :delete, class: 'button-warning', data: { confirm: 'Delete department?' } %>
   </td>
 </tr>
