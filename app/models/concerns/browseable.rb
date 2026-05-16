@@ -232,7 +232,7 @@ module Browseable
     private
 
     def semantic_searching?
-      @semantic_searching
+      @semantic_searching && klass.respond_to?(:embedding_column)
     end
 
     def new_params(page)
