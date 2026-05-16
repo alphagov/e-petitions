@@ -32,7 +32,7 @@ class Admin::PetitionsController < Admin::AdminController
   protected
 
   def search_params
-    params.permit(:state, :q, :page, :tmatch, :dmatch, tags: [], depts: []).to_h
+    params.permit(:state, :q, :page, :tmatch, :dmatch, :count, tags: [], depts: []).to_h
   end
 
   def petition_id?
@@ -80,7 +80,7 @@ class Admin::PetitionsController < Admin::AdminController
   end
 
   def fetch_petitions
-    @petitions = scope.search(search_params)
+    @petitions = scope.search(search_params.with_defaults(count: 50))
   end
 
   def fetch_petition
