@@ -92,5 +92,10 @@ module Epets
     # Add interceptors for inlining HTML email styles
     config.action_mailer.interceptors = ["InlineStyles"]
     config.action_mailer.preview_interceptors = ["InlineStyles"]
+
+    # Always permit url constraint parameters
+    config.action_controller.always_permitted_parameters = %w[
+      controller action format protocol host port
+    ]
   end
 end

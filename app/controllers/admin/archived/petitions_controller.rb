@@ -7,6 +7,8 @@ class Admin::Archived::PetitionsController < Admin::AdminController
 
   after_action :set_back_location, only: [:index]
 
+  helper_method :search_params
+
   rescue_from ActiveRecord::RecordNotFound do
     redirect_to admin_root_url, alert: "Sorry, we couldn’t find petition #{params[:id]}"
   end
@@ -25,6 +27,10 @@ class Admin::Archived::PetitionsController < Admin::AdminController
   end
 
   protected
+
+  def search_params
+    params.permit(:state, :q, :page, :parliament, :tmatch, :dmatch, :count, tags: [], depts: []).to_h
+  end
 
   def petition_id?
     /^\d+$/ =~ params[:q].to_s
@@ -91,7 +97,7 @@ class Admin::Archived::PetitionsController < Admin::AdminController
   end
 
   def fetch_petitions
-    @petitions = scope.search(params)
+    @petitions = scope.search(search_params.with_defaults(count: 50))
   end
 
   def fetch_petition

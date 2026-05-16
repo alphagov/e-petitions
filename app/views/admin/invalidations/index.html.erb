@@ -10,7 +10,7 @@
       <div class="search-inline">
         <%= label_tag :q, "Search invalidations", class: "visuallyhidden" %>
         <%= search_field_tag 'q', params[:q], class: 'form-control', placeholder:"Enter a search query" %>
-        <%= submit_tag 'Search', class: 'inline-submit' %>
+        <%= submit_tag 'Search', name: nil, class: 'inline-submit' %>
       </div>
     </div>
     <div class="column-third actions-right search-inline">

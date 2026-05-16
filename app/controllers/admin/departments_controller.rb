@@ -5,6 +5,8 @@ class Admin::DepartmentsController < Admin::AdminController
   before_action :build_department, only: [:new, :create]
   before_action :destroy_department, only: [:destroy]
 
+  helper_method :search_params
+
   def index
     respond_to do |format|
       format.html
@@ -49,8 +51,12 @@ class Admin::DepartmentsController < Admin::AdminController
 
   private
 
+  def search_params
+    params.permit(:q, :page).to_h
+  end
+
   def find_departments
-    @departments = Department.search(params)
+    @departments = Department.search(search_params)
   end
 
   def find_department
@@ -74,7 +80,7 @@ class Admin::DepartmentsController < Admin::AdminController
   end
 
   def index_url
-    admin_departments_url(params.permit(:q))
+    admin_departments_url(search_params.except(:page))
   end
 
   def redirect_to_index_url(options = {})
