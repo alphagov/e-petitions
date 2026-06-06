@@ -27,6 +27,7 @@ gem 'nokogiri'
 gem 'openai'
 gem 'pg'
 gem 'propshaft'
+gem 'puma', '< 8'
 gem 'rack', '< 3'
 gem 'rake'
 gem 'redcarpet'
@@ -73,8 +74,4 @@ group :test do
   gem 'shoulda-matchers'
   gem 'webmock'
   gem 'vcr'
-end
-
-group :production do
-  gem 'puma'
 end
