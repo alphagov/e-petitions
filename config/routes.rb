@@ -153,6 +153,7 @@ Rails.application.routes.draw do
       mount Delayed::Web::Engine, at: '/delayed'
 
       root to: 'admin#index'
+      get '/editor', to: 'editor#show'
 
       resource :parliament, only: %i[show update]
       resource :search, only: %i[show]
