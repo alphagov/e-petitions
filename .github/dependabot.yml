@@ -11,6 +11,9 @@ updates:
       interval: daily
     versioning-strategy: increase-if-necessary
     open-pull-requests-limit: 10
+    allow:
+      - dependency-type: "direct"
+      - dependency-type: "indirect"
     groups:
       aws:
         applies-to: version-updates
