@@ -166,10 +166,10 @@ GEM
     daemons (1.4.1)
     database_cleaner (2.1.0)
       database_cleaner-active_record (>= 2, < 3)
-    database_cleaner-active_record (2.2.0)
+    database_cleaner-active_record (2.2.2)
       activerecord (>= 5.a)
-      database_cleaner-core (~> 2.0.0)
-    database_cleaner-core (2.0.1)
+      database_cleaner-core (~> 2.0)
+    database_cleaner-core (2.1.0)
     date (3.5.1)
     delayed-web (0.4.9)
       rails (>= 3.2.13)
@@ -655,8 +655,8 @@ CHECKSUMS
   cucumber-tag-expressions (6.1.2) sha256=f790e4e820b80d453e83c6a462ed6de36b9477b046543322f646c1e8c275916d
   daemons (1.4.1) sha256=8fc76d76faec669feb5e455d72f35bd4c46dc6735e28c420afb822fac1fa9a1d
   database_cleaner (2.1.0) sha256=1dcba26e3b1576da692fc6bac10136a4744da5bcc293d248aae19640c65d89cd
-  database_cleaner-active_record (2.2.0) sha256=3228d6d8ec1f2103fd6ab468dae923424318bcfabcf5dd5b02e5fcb0c486e1c7
-  database_cleaner-core (2.0.1) sha256=8646574c32162e59ed7b5258a97a208d3c44551b854e510994f24683865d846c
+  database_cleaner-active_record (2.2.2) sha256=88296b9f3088c31f7c0d4fcec10f68e4b71c96698043916de59b04debec10388
+  database_cleaner-core (2.1.0) sha256=b2875266d9b26b716e8b669c883e01c5250839f6f2ec56422b5e79aa97fb6927
   date (3.5.1) sha256=750d06384d7b9c15d562c76291407d89e368dda4d4fff957eb94962d325a0dc0
   delayed-web (0.4.9) sha256=f47edc5ac131e39afcc2d4cf232975be091db222a0064e170afcb1dec3c4260b
   delayed_job (4.1.13) sha256=4941e64c646b8349279fd6a98f699fd3725c79fc8dab8edf78b6da61c8853bbb
