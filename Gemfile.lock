@@ -173,8 +173,10 @@ GEM
     date (3.5.1)
     delayed-web (0.4.9)
       rails (>= 3.2.13)
-    delayed_job (4.1.13)
+    delayed_job (4.2.0)
       activesupport (>= 3.0, < 9.0)
+      benchmark
+      logger
     delayed_job_active_record (4.1.11)
       activerecord (>= 3.0, < 9.0)
       delayed_job (>= 3.0, < 5)
@@ -659,7 +661,7 @@ CHECKSUMS
   database_cleaner-core (2.1.0) sha256=b2875266d9b26b716e8b669c883e01c5250839f6f2ec56422b5e79aa97fb6927
   date (3.5.1) sha256=750d06384d7b9c15d562c76291407d89e368dda4d4fff957eb94962d325a0dc0
   delayed-web (0.4.9) sha256=f47edc5ac131e39afcc2d4cf232975be091db222a0064e170afcb1dec3c4260b
-  delayed_job (4.1.13) sha256=4941e64c646b8349279fd6a98f699fd3725c79fc8dab8edf78b6da61c8853bbb
+  delayed_job (4.2.0) sha256=51dc1f68bb9084398317884c2178debd38c13a7eb48d8aa4ff4775465d7713ef
   delayed_job_active_record (4.1.11) sha256=64f34a6d50316dd7a7df1daf7c6e04ad888c0e86938762318f6f52522b7c1ba8
   devise (5.0.4) sha256=d605f2b85854e74e56ee789e2d398702bc2d06e6bcd894717a670a3199c74cc1
   diff-lcs (1.6.2) sha256=9ae0d2cba7d4df3075fe8cd8602a8604993efc0dfa934cff568969efb1909962
