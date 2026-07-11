@@ -212,14 +212,14 @@ GEM
     faraday-net_http_persistent (2.3.1)
       faraday (~> 2.5)
       net-http-persistent (>= 4.0.4, < 5)
-    ffi (1.17.2-aarch64-linux-gnu)
-    ffi (1.17.2-aarch64-linux-musl)
-    ffi (1.17.2-arm-linux-gnu)
-    ffi (1.17.2-arm-linux-musl)
-    ffi (1.17.2-arm64-darwin)
-    ffi (1.17.2-x86_64-darwin)
-    ffi (1.17.2-x86_64-linux-gnu)
-    ffi (1.17.2-x86_64-linux-musl)
+    ffi (1.17.4-aarch64-linux-gnu)
+    ffi (1.17.4-aarch64-linux-musl)
+    ffi (1.17.4-arm-linux-gnu)
+    ffi (1.17.4-arm-linux-musl)
+    ffi (1.17.4-arm64-darwin)
+    ffi (1.17.4-x86_64-darwin)
+    ffi (1.17.4-x86_64-linux-gnu)
+    ffi (1.17.4-x86_64-linux-musl)
     ffi-compiler (1.3.2)
       ffi (>= 1.15.5)
       rake
@@ -291,6 +291,7 @@ GEM
     marcel (1.1.0)
     matrix (0.4.2)
     maxminddb (0.1.22)
+    memoist3 (1.0.0)
     method_source (1.1.0)
     mini_magick (5.1.2)
       benchmark
@@ -499,8 +500,9 @@ GEM
       activejob (>= 7.2)
       activerecord (>= 7.2)
       railties (>= 7.2)
-    sys-uname (1.3.1)
+    sys-uname (1.5.1)
       ffi (~> 1.1)
+      memoist3 (~> 1.0.0)
     textacular (5.7.0)
       activerecord (>= 5.0)
     thor (1.5.0)
@@ -676,14 +678,14 @@ CHECKSUMS
   faraday-follow_redirects (0.5.0) sha256=5cde93c894b30943a5d2b93c2fe9284216a6b756f7af406a1e55f211d97d10ad
   faraday-net_http (3.4.4) sha256=0e78af151747ed1b00f33e25973b4bc220d7f16c00c39676817c8b12331eb588
   faraday-net_http_persistent (2.3.1) sha256=23ffba37d6a27807a10f033d01918ec958aa73fa6ff0fccfbcd5ce2d2e68fca3
-  ffi (1.17.2-aarch64-linux-gnu) sha256=c910bd3cae70b76690418cce4572b7f6c208d271f323d692a067d59116211a1a
-  ffi (1.17.2-aarch64-linux-musl) sha256=69e6556b091d45df83e6c3b19d3c54177c206910965155a6ec98de5e893c7b7c
-  ffi (1.17.2-arm-linux-gnu) sha256=d4a438f2b40224ae42ec72f293b3ebe0ba2159f7d1bd47f8417e6af2f68dbaa5
-  ffi (1.17.2-arm-linux-musl) sha256=977dfb7f3a6381206dbda9bc441d9e1f9366bf189a634559c3b7c182c497aaa3
-  ffi (1.17.2-arm64-darwin) sha256=54dd9789be1d30157782b8de42d8f887a3c3c345293b57ffb6b45b4d1165f813
-  ffi (1.17.2-x86_64-darwin) sha256=981f2d4e32ea03712beb26e55e972797c2c5a7b0257955d8667ba58f2da6440e
-  ffi (1.17.2-x86_64-linux-gnu) sha256=05d2026fc9dbb7cfd21a5934559f16293815b7ce0314846fee2ac8efbdb823ea
-  ffi (1.17.2-x86_64-linux-musl) sha256=97c0eb3981414309285a64dc4d466bd149e981c279a56371ef811395d68cb95c
+  ffi (1.17.4-aarch64-linux-gnu) sha256=b208f06f91ffd8f5e1193da3cae3d2ccfc27fc36fba577baf698d26d91c080df
+  ffi (1.17.4-aarch64-linux-musl) sha256=9286b7a615f2676245283aef0a0a3b475ae3aae2bb5448baace630bb77b91f39
+  ffi (1.17.4-arm-linux-gnu) sha256=d6dbddf7cb77bf955411af5f187a65b8cd378cb003c15c05697f5feee1cb1564
+  ffi (1.17.4-arm-linux-musl) sha256=9d4838ded0465bef6e2426935f6bcc93134b6616785a84ffd2a3d82bc3cf6f95
+  ffi (1.17.4-arm64-darwin) sha256=19071aaf1419251b0a46852abf960e77330a3b334d13a4ab51d58b31a937001b
+  ffi (1.17.4-x86_64-darwin) sha256=aa70390523cf3235096cf64962b709b4cfbd5c082a2cb2ae714eb0fe2ccda496
+  ffi (1.17.4-x86_64-linux-gnu) sha256=9d3db14c2eae074b382fa9c083fe95aec6e0a1451da249eab096c34002bc752d
+  ffi (1.17.4-x86_64-linux-musl) sha256=3fdf9888483de005f8ef8d1cf2d3b20d86626af206cbf780f6a6a12439a9c49e
   ffi-compiler (1.3.2) sha256=a94f3d81d12caf5c5d4ecf13980a70d0aeaa72268f3b9cc13358bcc6509184a0
   foreman (0.90.0) sha256=ff675e2d47b607ac58714a6d4ac3e1ee8f06f41d8db084531c31961e2c3f117c
   globalid (1.3.0) sha256=05c639ad6eb4594522a0b07983022f04aa7254626ab69445a0e493aa3786ff11
@@ -714,6 +716,7 @@ CHECKSUMS
   marcel (1.1.0) sha256=fdcfcfa33cc52e93c4308d40e4090a5d4ea279e160a7f6af988260fa970e0bee
   matrix (0.4.2) sha256=71083ccbd67a14a43bfa78d3e4dc0f4b503b9cc18e5b4b1d686dc0f9ef7c4cc0
   maxminddb (0.1.22) sha256=50933be438fbed9dceabef4163eab41884bd8830d171fdb8f739bee769c4907e
+  memoist3 (1.0.0) sha256=686e42402cf150a362050c23143dc57b0ef88f8c344943ff8b7845792b50d56f
   method_source (1.1.0) sha256=181301c9c45b731b4769bc81e8860e72f9161ad7d66dd99103c9ab84f560f5c5
   mini_magick (5.1.2) sha256=2c57112a2c55d9f86b1ed7ab568b3c389a3265788ac5c1ad3e632a201b629a7e
   mini_mime (1.1.5) sha256=8681b7e2e4215f2a159f9400b5816d85e9d8c6c6b491e96a12797e798f8bccef
@@ -800,7 +803,7 @@ CHECKSUMS
   simplecov_json_formatter (0.1.4) sha256=529418fbe8de1713ac2b2d612aa3daa56d316975d307244399fa4838c601b428
   slack-notifier (2.4.0) sha256=cd9aba3f5f3e6227f73df1f6a33ac6c127c5fac35b513b86b7ba900cd98d2b00
   solid_cache (1.0.10) sha256=bc05a2fb3ac78a6f43cbb5946679cf9db67dd30d22939ededc385cb93e120d41
-  sys-uname (1.3.1) sha256=b7b3eb817a9dd4a2f26a8b616a4f150ab1b79f4682d7538ceb992c8b7346f49c
+  sys-uname (1.5.1) sha256=784d7e6491b0393c25cbbe5ac38324ac7be9fda083a6094832648af669386d7b
   textacular (5.7.0) sha256=7c25df13c0152cf991cddfeb832c0dc16928bdaccb98f9a88fe29d7b032dd31f
   thor (1.5.0) sha256=e3a9e55fe857e44859ce104a84675ab6e8cd59c650a49106a05f55f136425e73
   timeout (0.6.1) sha256=78f57368a7e7bbadec56971f78a3f5ecbcfb59b7fcbb0a3ed6ddc08a5094accb
