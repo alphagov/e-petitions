@@ -1,0 +1,29 @@
+<form accept-charset="UTF-8" id="petition">
+  <div class="grid-row margin-top-7">
+    <div class="grid-column-two-thirds-from-laptop">
+      <div class="form-group">
+        <h2><label for="petition-action">Petition title</label></h2>
+        <textarea rows="2" data-max-length="80" name="petition[action]" id="petition-action" aria-controls="char-count-petition-action"></textarea>
+        <div class="character-count" id="char-count-petition-action" aria-atomic="true" role="status">You have 80 characters remaining</div>
+      </div>
+
+      <div class="form-group">
+        <h2><label for="petition-background">Say what you want the UK Government or Parliament to do</label></h2>
+        <textarea rows="5" data-max-length="300" name="petition[background]" id="petition-background" aria-controls="char-count-petition-background"></textarea>
+        <div class="character-count" id="char-count-petition-background" aria-atomic="true" role="status">You have 300 characters remaining</div>
+      </div>
+
+      <div class="form-group">
+        <h2><label for="petition-additional-details">Add more information to your petition</label></h2>
+        <textarea rows="8" data-max-length="500" name="petition[additional_details]" id="petition-additional-details" aria-controls="char-count-petition-additional-details"></textarea>
+        <div class="character-count" id="char-count-petition-additional-details" aria-atomic="true" role="status">You have 500 characters remaining</div>
+      </div>
+    </div>
+  </div>
+
+  <p class="button-group">
+    <button type="button" class="button" id="copy-petition">
+      Copy to clipboard
+    </button>
+  </p>
+</form>
