@@ -82,6 +82,14 @@ Before do
   Parliament.reset!(government: "TBC", opening_at: 2.weeks.ago)
 end
 
+Before('@locking') do
+  Site.enable_petition_moderation_locking!
+end
+
+Before('not @locking') do
+  Site.disable_petition_moderation_locking!
+end
+
 Before("@javascript") do
   next unless page.driver.respond_to?(:invalid_element_errors)
 

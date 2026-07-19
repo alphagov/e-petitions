@@ -22,6 +22,7 @@ class Site < ActiveRecord::Base
     disable_feedback_sending
     disable_collecting_signatures
     disable_petition_creation
+    disable_petition_moderation_locking
   ]
 
   class << self
@@ -264,6 +265,14 @@ class Site < ActiveRecord::Base
         stale_while_revalidate: max_age * 2,
         stale_if_error: max_age * 5
       }
+    end
+
+    def disable_petition_moderation_locking!
+      instance.update!(disable_petition_moderation_locking: true)
+    end
+
+    def enable_petition_moderation_locking!
+      instance.update!(disable_petition_moderation_locking: false)
     end
 
     def defaults

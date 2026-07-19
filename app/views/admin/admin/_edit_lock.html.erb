@@ -1,21 +1,23 @@
-<div id="edit-lock">
-  <div class="edit-lock-modal">
-    <p class="edit-lock-message">
-      This petition is currently being edited by someone else.
-    </p>
-    <p class="edit-lock-actions">
-      <button id="edit-lock-override" class="button">Override</button>
-      <button id="edit-lock-cancel" class="button-secondary">Cancel</button>
-    </p>
+<% unless Site.disable_petition_moderation_locking? %>
+  <div id="edit-lock">
+    <div class="edit-lock-modal">
+      <p class="edit-lock-message">
+        This petition is currently being edited by someone else.
+      </p>
+      <p class="edit-lock-actions">
+        <button id="edit-lock-override" class="button">Override</button>
+        <button id="edit-lock-cancel" class="button-secondary">Cancel</button>
+      </p>
+    </div>
   </div>
-</div>
 
-<%= javascript_tag(nonce: true) do %>
-  $(document).ready(function() {
-    <% if @petition.is_a?(::Archived::Petition) %>
-      $("#edit-lock").editLock(<%= @petition.id %>, <%= current_user.id %>, '/admin/archived/petitions', true);
-    <% else %>
-      $("#edit-lock").editLock(<%= @petition.id %>, <%= current_user.id %>, '/admin/petitions', <%= @petition.moderated? %>);
-    <% end %>
-  });
+  <%= javascript_tag(nonce: true) do %>
+    $(document).ready(function() {
+      <% if @petition.is_a?(::Archived::Petition) %>
+        $("#edit-lock").editLock(<%= @petition.id %>, <%= current_user.id %>, '/admin/archived/petitions', true);
+      <% else %>
+        $("#edit-lock").editLock(<%= @petition.id %>, <%= current_user.id %>, '/admin/petitions', <%= @petition.moderated? %>);
+      <% end %>
+    });
+  <% end %>
 <% end %>
