@@ -10,6 +10,30 @@ BeforeAll do
   end
 end
 
+Before do |s|
+  message = <<~TEXT
+    ================================================================================
+    =                                                                              =
+    = BEGIN: #{sprintf("%-69s", s.name)} =
+    =                                                                              =
+    ================================================================================
+  TEXT
+
+  Rails.logger.debug(message)
+end
+
+After do |s|
+  message = <<~TEXT
+    ================================================================================
+    =                                                                              =
+    = AFTER: #{sprintf("%-69s", s.name)} =
+    =                                                                              =
+    ================================================================================
+  TEXT
+
+  Rails.logger.debug(message)
+end
+
 Before do
   default_url_options[:protocol] = 'https'
 end
@@ -56,6 +80,14 @@ end
 Before do
   Site.reset!
   Parliament.reset!(government: "TBC", opening_at: 2.weeks.ago)
+end
+
+Before('@locking') do
+  Site.enable_petition_moderation_locking!
+end
+
+Before('not @locking') do
+  Site.disable_petition_moderation_locking!
 end
 
 Before("@javascript") do
