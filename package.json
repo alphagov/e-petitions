@@ -3,7 +3,7 @@
   "private": true,
   "devDependencies": {
     "chrome-launcher": "^1.2.1",
-    "jasmine-browser-runner": "^4.0.0",
+    "jasmine-browser-runner": "^5.0.0",
     "jasmine-core": "^6.3.0",
     "jest": "^30.4.2",
     "lighthouse": "^13.4.0",
