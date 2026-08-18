@@ -4,7 +4,7 @@
   "devDependencies": {
     "chrome-launcher": "^1.2.1",
     "jasmine-browser-runner": "^4.0.0",
-    "jasmine-core": "^6.3.0",
+    "jasmine-core": "^7.0.1",
     "jest": "^30.4.2",
     "lighthouse": "^13.4.0",
     "start-server-and-test": "^3.0.11"
