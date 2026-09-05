@@ -4,6 +4,8 @@
   <div class="grid-column-two-thirds-from-laptop">
     <%= form.button "Back", name: "move_back", value: "uk_citizenship", class: "button-back" %>
 
+    <%= render 'signatures/petition_context', petition: @petition, full_text: true %>
+
     <h1>
       Confirm your details
     </h1>

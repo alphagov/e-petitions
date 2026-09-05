@@ -1,0 +1,28 @@
+<p class="margin-bottom-2">
+  You’re signing the petition:
+  <% if full_text %>
+    <strong><%= petition.action %></strong>
+  <% else %>
+    <strong><%= link_to "#{petition.action}", petition_path(petition), target: "_blank" %></strong>
+  <% end %>
+</p>
+
+<% if (creator = petition.creator) && !creator.anonymized? %>
+  <span class="form-hint margin-bottom-7">
+    Created by <strong><%= creator.name %></strong>
+  </span>
+<% end %>
+
+<% if full_text %>
+  <details class="margin-bottom-7">
+    <summary>Show petition text</summary>
+
+    <div class="panel-indent">
+      <%= auto_link(simple_format(h(petition.background)), html: { rel: 'nofollow' }) %>
+
+      <% unless petition.additional_details.blank? %>
+        <%= auto_link(simple_format(h(petition.additional_details)), html: { rel: 'nofollow' }) %>
+      <% end %>
+    </div>
+  </details>
+<% end %>
