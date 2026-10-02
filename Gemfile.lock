@@ -274,9 +274,10 @@ GEM
     launchy (2.5.2)
       addressable (~> 2.8)
     logger (1.7.0)
-    lograge (0.15.0)
+    lograge (0.15.1)
       actionpack (>= 4)
       activesupport (>= 4)
+      logger
       railties (>= 4)
       request_store (~> 1.0)
     logstash-event (1.2.02)
@@ -424,7 +425,7 @@ GEM
       logger
       prism (>= 1.6.0)
       tsort
-    rdoc (8.0.0)
+    rdoc (8.1.0)
       erb
       prism (>= 1.6.0)
       rbs (>= 4.0.0)
@@ -710,7 +711,7 @@ CHECKSUMS
   json (2.21.2) sha256=1f1d3b7cf2b3ba1a69beca0bb6db13d5438b80bff3cd54cdaaa620b9b07c1c6a
   launchy (2.5.2) sha256=8aa0441655aec5514008e1d04892c2de3ba57bd337afb984568da091121a241b
   logger (1.7.0) sha256=196edec7cc44b66cfb40f9755ce11b392f21f7967696af15d274dde7edff0203
-  lograge (0.15.0) sha256=34072c1f50b95019dc185137f5fec1a6759f5a1b6d55c28163d0cba204e6df16
+  lograge (0.15.1) sha256=b8a6b3d45f15855f3b038ce01019317e783fa9ddf774eb20818c751438c5c761
   logstash-event (1.2.02) sha256=89a7dc60fac67070a5f60ba07409e541b09cb58906c391e90cb74b9f217467ae
   logstash-logger (0.26.1) sha256=577ab470cb177630e4603804e7cfe264c0690c520ed0b4705786d04cfe9300da
   loofah (2.25.2) sha256=2007f746959ac65552456e04b433e83deb22759ab38c838b4445c70e43425918
@@ -773,7 +774,7 @@ CHECKSUMS
   railties (8.0.5.1) sha256=da1958e1d9dab04691a2f8721b3ff7fab323715d37f103c19972dedfd644d5c7
   rake (13.4.2) sha256=cb825b2bd5f1f8e91ca37bddb4b9aaf345551b4731da62949be002fa89283701
   rbs (4.1.3) sha256=0c4474a9751cdc14364bfad0b3e53678323bbdc2c31683b0445932867dbab8c4
-  rdoc (8.0.0) sha256=03bf8c08a9639658855a0cfd77c0abca8325c227693f7f33f82957811348c469
+  rdoc (8.1.0) sha256=befc37880a5cfd36dcb176c748b5fd5ee39dd3536a75e81824e4972ce230f60a
   redcarpet (3.6.1) sha256=d444910e6aa55480c6bcdc0cdb057626e8a32c054c29e793fa642ba2f155f445
   regexp_parser (2.13.0) sha256=d105d95d2138954e73914d2fbfb3d0a8f8605a49a3e89864c32e78b9107cb770
   reline (0.7.0) sha256=5b012d8e55dbf9d450f12bde2cf7d15ff546ae80b3f8f3b30e570d431815583d
