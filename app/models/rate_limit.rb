@@ -7,6 +7,7 @@ class RateLimit < ActiveRecord::Base
   SINGLE_GLOB = "*."
   SINGLE_PATTERN = "(?:[-a-z0-9]+\\.)"
   DOMAIN_PATTERN = /^(?:[a-z0-9][a-z0-9-]{0,61}[a-z0-9]\.)+[a-z]{2,}$/
+  DOMAIN_CHARACTERS = /\A[-a-z0-9.]+\z/
 
   validates :burst_rate, presence: true, numericality: { only_integer: true, greater_than: 0 }
   validates :burst_period, presence: true, numericality: { only_integer: true, greater_than: 0 }
@@ -255,12 +256,21 @@ class RateLimit < ActiveRecord::Base
   end
 
   def convert_glob(pattern)
-    pattern.gsub(GLOB_PATTERN) do |match|
-      if match == RECURSIVE_GLOB
-        RECURSIVE_PATTERN
-      elsif match == SINGLE_GLOB
-        SINGLE_PATTERN
-      end
+    glob = pattern[GLOB_PATTERN]
+    domain = pattern.delete_prefix(glob.to_s)
+
+    unless domain.match?(DOMAIN_CHARACTERS)
+      raise ArgumentError, "Invalid domain pattern: #{pattern.inspect}"
+    end
+
+    domain = Regexp.escape(domain)
+
+    if glob == RECURSIVE_GLOB
+      RECURSIVE_PATTERN + domain
+    elsif glob == SINGLE_GLOB
+      SINGLE_PATTERN + domain
+    else
+      domain
     end
   end
 

@@ -164,6 +164,11 @@ RSpec.describe RateLimit, type: :model do
         allow(signature).to receive(:domain).and_return("foo.bar.baz.com")
         expect(subject.exceeded?(signature)).to eq(false)
       end
+
+      it "returns true when the domain only matches if dots are treated as wildcards" do
+        allow(signature).to receive(:domain).and_return("fooxcom")
+        expect(subject.exceeded?(signature)).to eq(true)
+      end
     end
 
     shared_examples_for "blocked domains" do
@@ -187,6 +192,11 @@ RSpec.describe RateLimit, type: :model do
       it "returns true when the domain is blocked by a recursive grep pattern" do
         allow(signature).to receive(:domain).and_return("foo.bar.baz.com")
         expect(subject.exceeded?(signature)).to eq(true)
+      end
+
+      it "returns false when the domain only matches if dots are treated as wildcards" do
+        allow(signature).to receive(:domain).and_return("fooxcom")
+        expect(subject.exceeded?(signature)).to eq(false)
       end
     end
 
@@ -582,7 +592,7 @@ RSpec.describe RateLimit, type: :model do
       end
 
       it "is is stripped" do
-        expect(subject.allowed_domains_list).to eq([/\Afoo.com\z/, /\Abar.com\z/])
+        expect(subject.allowed_domains_list).to eq([/\Afoo\.com\z/, /\Abar\.com\z/])
       end
     end
 
@@ -597,7 +607,7 @@ RSpec.describe RateLimit, type: :model do
       end
 
       it "they are stripped" do
-        expect(subject.allowed_domains_list).to eq([/\Afoo.com\z/, /\Abar.com\z/])
+        expect(subject.allowed_domains_list).to eq([/\Afoo\.com\z/, /\Abar\.com\z/])
       end
     end
 
@@ -613,7 +623,7 @@ RSpec.describe RateLimit, type: :model do
       end
 
       it "they are stripped" do
-        expect(subject.allowed_domains_list).to eq([/\Afoo.com\z/, /\Abar.com\z/])
+        expect(subject.allowed_domains_list).to eq([/\Afoo\.com\z/, /\Abar\.com\z/])
       end
     end
 
@@ -628,7 +638,7 @@ RSpec.describe RateLimit, type: :model do
       end
 
       it "they are stripped" do
-        expect(subject.allowed_domains_list).to eq([/\Afoo.com\z/, /\Abar.com\z/])
+        expect(subject.allowed_domains_list).to eq([/\Afoo\.com\z/, /\Abar\.com\z/])
       end
     end
   end
@@ -717,7 +727,7 @@ RSpec.describe RateLimit, type: :model do
       end
 
       it "is is stripped" do
-        expect(subject.blocked_domains_list).to eq([/\Afoo.com\z/, /\Abar.com\z/])
+        expect(subject.blocked_domains_list).to eq([/\Afoo\.com\z/, /\Abar\.com\z/])
       end
     end
 
@@ -732,7 +742,7 @@ RSpec.describe RateLimit, type: :model do
       end
 
       it "they are stripped" do
-        expect(subject.blocked_domains_list).to eq([/\Afoo.com\z/, /\Abar.com\z/])
+        expect(subject.blocked_domains_list).to eq([/\Afoo\.com\z/, /\Abar\.com\z/])
       end
     end
 
@@ -748,7 +758,7 @@ RSpec.describe RateLimit, type: :model do
       end
 
       it "they are stripped" do
-        expect(subject.blocked_domains_list).to eq([/\Afoo.com\z/, /\Abar.com\z/])
+        expect(subject.blocked_domains_list).to eq([/\Afoo\.com\z/, /\Abar\.com\z/])
       end
     end
 
@@ -763,7 +773,7 @@ RSpec.describe RateLimit, type: :model do
       end
 
       it "they are stripped" do
-        expect(subject.blocked_domains_list).to eq([/\Afoo.com\z/, /\Abar.com\z/])
+        expect(subject.blocked_domains_list).to eq([/\Afoo\.com\z/, /\Abar\.com\z/])
       end
     end
   end
