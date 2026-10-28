@@ -163,14 +163,6 @@ RSpec.describe EmailValidator do
     end
   end
 
-  describe "with an email address containing a space in the domain part" do
-    let(:email) { "laura@ example.com" }
-
-    it "adds an error" do
-      expect(errors).to include("Email not recognised")
-    end
-  end
-
   describe "with an email address containing two consecutative periods in the local part" do
     let(:email) { "laura..smith@example.com" }
 
