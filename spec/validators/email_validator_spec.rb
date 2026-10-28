@@ -35,10 +35,42 @@ RSpec.describe EmailValidator do
     end
   end
 
+  describe "with a hyphenated email address" do
+    let(:email) { "laura@example-domain.com" }
+
+    it "doesn’t add an error" do
+      expect(errors).to be_empty
+    end
+  end
+
   describe "with a subdomain email address" do
     let(:email) { "laura@subdomain.example.com" }
 
     it "doesn't add an error" do
+      expect(errors).to be_empty
+    end
+  end
+
+  describe "with a hyphenated subdomain email address" do
+    let(:email) { "laura@subdomain.example-domain.com" }
+
+    it "doesn’t add an error" do
+      expect(errors).to be_empty
+    end
+  end
+
+  describe "with a country code email address" do
+    let(:email) { "laura@example.co.uk" }
+
+    it "doesn’t add an error" do
+      expect(errors).to be_empty
+    end
+  end
+
+  describe "with a hyphenated country code email address" do
+    let(:email) { "laura@example-domain.co.uk" }
+
+    it "doesn’t add an error" do
       expect(errors).to be_empty
     end
   end
@@ -117,6 +149,46 @@ RSpec.describe EmailValidator do
 
   describe "with an email address containing an @ symbol in the domain part" do
     let(:email) { "laura@example.@com" }
+
+    it "adds an error" do
+      expect(errors).to include("Email not recognised")
+    end
+  end
+
+  describe "with an email address containing a leading hyphen in the domain name" do
+    let(:email) { "laura@-example.com" }
+
+    it "adds an error" do
+      expect(errors).to include("Email not recognised")
+    end
+  end
+
+  describe "with an email address containing a leading hyphen in the tld" do
+    let(:email) { "laura@example.-com" }
+
+    it "adds an error" do
+      expect(errors).to include("Email not recognised")
+    end
+  end
+
+  describe "with an email address containing a trailing hyphen in the domain name" do
+    let(:email) { "laura@example-.com" }
+
+    it "adds an error" do
+      expect(errors).to include("Email not recognised")
+    end
+  end
+
+  describe "with an email address containing a trailing hyphen in the tld" do
+    let(:email) { "laura@example.com-" }
+
+    it "adds an error" do
+      expect(errors).to include("Email not recognised")
+    end
+  end
+
+  describe "with an email address that is too long" do
+    let(:email) { "laura@" + "a" * 100 + ".com" }
 
     it "adds an error" do
       expect(errors).to include("Email not recognised")
