@@ -1,11 +1,10 @@
 require 'mail'
 
 class EmailValidator < ActiveModel::EachValidator
-  HOST  = "(?i-mx:xn-|[a-z0-9])(?i-mx:[-a-z0-9]*)"
+  HOST  = "(?i-mx:xn-|[a-z0-9])(?i-mx:(?>[-a-z0-9]{0,62}))(?<!-)"
   TLD   = "(?i-mx:[a-z]{2,63}|xn--(?i-mx:[a-z0-9]+-)*[a-z0-9]+)"
   LOCAL = "(?i-mx:[a-zA-Z0-9!#$%&'*+/=?^_`{|}~\-]+)"
-
-  EMAIL_REGEX = /\A#{LOCAL}(?:\.#{LOCAL})*@(?:#{HOST}\.)+#{TLD}\z/
+  EMAIL_REGEX = Regexp.new("\\A#{LOCAL}(?:\\.#{LOCAL})*@(?:#{HOST}\\.)+#{TLD}\\z", timeout: 0.5)
 
   def validate_each(record, attribute, value)
     if value =~ EMAIL_REGEX
