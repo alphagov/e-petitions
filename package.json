@@ -20,6 +20,9 @@
     "modern-normalize": "^3.0.1",
     "sass-mq": "^7.0.1"
   },
+  "overrides": {
+    "minimatch": "^11.0.1"
+  },
   "allowScripts": {
     "esbuild@0.28.2": true,
     "unrs-resolver@1.12.2": true
