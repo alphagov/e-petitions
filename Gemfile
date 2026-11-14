@@ -3,7 +3,7 @@ source 'https://rubygems.org'
 # Load environment variables
 gem 'dotenv', require: 'dotenv/load'
 
-gem 'rails', '8.0.5.1'
+gem 'rails', '8.0.5.2'
 
 gem 'appsignal'
 gem 'bcrypt'
