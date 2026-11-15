@@ -1,3 +1,4 @@
+require 'rack'
 require 'action_dispatch/middleware/remote_ip'
 
 class CloudFrontRemoteIp < ActionDispatch::RemoteIp

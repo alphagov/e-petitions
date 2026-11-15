@@ -5,7 +5,7 @@ module StagedForm
   include ActiveModel::Attributes
   include ActiveModel::Dirty
   include ActiveModel::Validations::Callbacks
-  include ActiveRecord::Normalization
+  include ActiveModel::Attributes::Normalization
 
   Stripper = ->(attribute) { attribute.strip }
 

@@ -66,6 +66,10 @@ namespace :errors do
         Rails.application.assets.load_path.find(path).digested_path
       end
 
+      def content_security_policy_nonce
+        nil
+      end
+
       def home_page?
         false
       end
