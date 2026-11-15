@@ -1,40 +1,6 @@
 {
   "ignored_warnings": [
     {
-      "warning_type": "Dynamic Render Path",
-      "warning_code": 15,
-      "fingerprint": "02b75494d25669bf3aba7642f476287cc2d5514897e5bcfeea09aaefcaaf5621",
-      "check_name": "Render",
-      "message": "Render path contains parameter value",
-      "file": "app/views/admin/statistics/index.html.erb",
-      "line": 10,
-      "link": "https://brakemanscanner.org/docs/warning_types/dynamic_render_path/",
-      "code": "render(partial => Statistics[tab_param].build(params).tab, { :locals => ({ :form => FormBuilder.new }) })",
-      "render_path": [
-        {
-          "type": "controller",
-          "class": "Admin::StatisticsController",
-          "method": "create",
-          "line": 17,
-          "file": "app/controllers/admin/statistics_controller.rb",
-          "rendered": {
-            "name": "admin/statistics/index",
-            "file": "app/views/admin/statistics/index.html.erb"
-          }
-        }
-      ],
-      "location": {
-        "type": "template",
-        "template": "admin/statistics/index"
-      },
-      "user_input": "params",
-      "confidence": "Weak",
-      "cwe_id": [
-        22
-      ],
-      "note": ""
-    },
-    {
       "warning_type": "SSL Verification Bypass",
       "warning_code": 71,
       "fingerprint": "83faaaee2d372a0a73dc703bf46452d519d79dbf3b069a5007f71392ec7d4a3e",
@@ -187,6 +153,5 @@
       "note": ""
     }
   ],
-  "updated": "2026-03-31 13:32:08 +0000",
-  "brakeman_version": "6.2.2"
+  "brakeman_version": "8.1.0"
 }
