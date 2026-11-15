@@ -169,7 +169,7 @@ GEM
       capybara (>= 3.25, < 4)
       cucumber (>= 7, < 12)
       railties (>= 6.1, < 9)
-    cucumber-tag-expressions (6.1.2)
+    cucumber-tag-expressions (8.1.0)
     daemons (1.4.1)
     database_cleaner (2.1.0)
       database_cleaner-active_record (>= 2, < 3)
@@ -662,7 +662,7 @@ CHECKSUMS
   cucumber-html-formatter (23.1.0) sha256=7789b4a792c876394b9604aeb66aa5cf4c61514473b7e712c76d5eaedcdd8cdf
   cucumber-messages (32.3.1) sha256=ddc88e4c1cf7afb96c06005b92a4a6f221a2fa435a8b4ca04677d215fd82771c
   cucumber-rails (4.1.0) sha256=43538dddc133e79c3763ef11287f2163ea9bfd72fb2fbe782b4b7db91d8ad621
-  cucumber-tag-expressions (6.1.2) sha256=f790e4e820b80d453e83c6a462ed6de36b9477b046543322f646c1e8c275916d
+  cucumber-tag-expressions (8.1.0) sha256=9bd8c4b6654f8e5bf2a9c99329b6f32136a75e50cd39d4cfb3927d0fa9f52e21
   daemons (1.4.1) sha256=8fc76d76faec669feb5e455d72f35bd4c46dc6735e28c420afb822fac1fa9a1d
   database_cleaner (2.1.0) sha256=1dcba26e3b1576da692fc6bac10136a4744da5bcc293d248aae19640c65d89cd
   database_cleaner-active_record (2.2.2) sha256=88296b9f3088c31f7c0d4fcec10f68e4b71c96698043916de59b04debec10388
