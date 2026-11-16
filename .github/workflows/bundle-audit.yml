@@ -1,0 +1,34 @@
+name: Bundle Audit
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+  schedule:
+    - cron: "0 6 * * *"
+  workflow_dispatch:
+
+jobs:
+  bundle-audit:
+    runs-on: ubuntu-24.04
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v7
+
+      - name: Setup ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: "3.2"
+
+      - name: Install bundler-audit
+        shell: bash
+        run: |
+          version=$(sed -n 's/^    bundler-audit (\(.*\))$/\1/p' Gemfile.lock)
+          gem install bundler-audit --version "$version" --no-document
+
+      - name: Check bundle for known CVEs
+        shell: bash
+        run: |
+          bundle-audit check --update

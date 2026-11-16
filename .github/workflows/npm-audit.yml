@@ -1,0 +1,28 @@
+name: NPM Audit
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+  schedule:
+    - cron: "0 6 * * *"
+  workflow_dispatch:
+
+jobs:
+  npm-audit:
+    runs-on: ubuntu-24.04
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v7
+
+      - name: Setup node
+        uses: actions/setup-node@v7
+        with:
+          node-version: "24.x"
+
+      - name: Check node packages for known vulnerabilities
+        shell: bash
+        run: |
+          npm audit --audit-level=moderate
