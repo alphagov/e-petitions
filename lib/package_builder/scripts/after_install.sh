@@ -5,6 +5,9 @@ set -o pipefail
 chown -R deploy:deploy /home/deploy/epetitions/releases/<%= release %>
 
 su - deploy <<'EOF'
+set -e
+set -o pipefail
+
 ln -nfs /home/deploy/epetitions/shared/config/sso.yml /home/deploy/epetitions/releases/<%= release %>/config/sso.yml
 ln -nfs /home/deploy/epetitions/shared/tmp /home/deploy/epetitions/releases/<%= release %>/tmp
 ln -nfs /home/deploy/epetitions/shared/log /home/deploy/epetitions/releases/<%= release %>/log
@@ -14,7 +17,7 @@ mv -Tf /home/deploy/epetitions/current_<%= release %> /home/deploy/epetitions/cu
 cd /home/deploy/epetitions/current && bundle config set --local deployment 'true'
 cd /home/deploy/epetitions/current && bundle config set --local without 'development test'
 cd /home/deploy/epetitions/current && bundle install --quiet
-cd /home/deploy/epetitions/current && bundle exec rake db:migrate
+cd /home/deploy/epetitions/current && bundle exec rake db:migrate:wait
 cd /home/deploy/epetitions/current && aws s3 sync public/assets s3://${ASSETS_S3_BUCKET}/assets --size-only
 cd /home/deploy/epetitions/current && aws s3 sync public/errors s3://${ERRORS_S3_BUCKET}/errors
 if [ ${SERVER_TYPE} = "worker" ] ; then cd /home/deploy/epetitions/current && bundle exec whenever -w ; else echo not running whenever ; fi

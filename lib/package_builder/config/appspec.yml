@@ -16,7 +16,7 @@ hooks:
   AfterInstall:
     - location: scripts/after_install
       runas: root
-      timeout: 900
+      timeout: 1800
   ApplicationStart:
     - location: scripts/application_start
       runas: root
