@@ -11,6 +11,8 @@
   <div class="grid-column-two-thirds-from-laptop">
     <%= form.button "Back", name: "move_back", value: "signature", class: "button-back" %>
 
+    <%= render 'signatures/petition_context', petition: @petition, full_text: true %>
+
     <h1>
       Check and sign this petition
     </h1>
