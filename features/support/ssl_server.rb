@@ -1,12 +1,12 @@
 require 'fileutils'
 require 'webrick/https'
-require 'rack/handler/webrick'
+require 'rackup/handler/webrick'
 
 module Epets
   class SSLServer
     class << self
       def build(app, port)
-        Rack::Handler::WEBrick.run(app, **(defaults.merge(Port: port)))
+        Rackup::Handler::WEBrick.run(app, **(defaults.merge(Port: port)))
       end
 
       private
