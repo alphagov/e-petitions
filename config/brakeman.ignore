@@ -58,6 +58,27 @@
       "note": ""
     },
     {
+      "warning_type": "Remote Code Execution",
+      "warning_code": 130,
+      "fingerprint": "b2ef9ca037e09c20a8a7b7aec14bd62b16fb830e3723adf3b6936529ed347bde",
+      "check_name": "Ruby2Shell",
+      "message": "Ruby 3.2.11 has a critical remote code execution vulnerability (CVE-2026-132825). Upgrade to Ruby 3.3.14 or later",
+      "file": ".ruby-version",
+      "line": 1,
+      "link": "https://www.ruby-lang.org/en/news/2026/11/18/multiple-vulnerabilities-in-regexp-and-string/",
+      "code": null,
+      "render_path": null,
+      "location": null,
+      "user_input": null,
+      "confidence": "High",
+      "cwe_id": [
+        122,
+        125,
+        787
+      ],
+      "note": "Patched in the Ubuntu 24.04 LTS Ruby 3.2 package by USN-9176-1. Remove when upgrading to Ruby 3.3."
+    },
+    {
       "warning_type": "Cross-Site Scripting",
       "warning_code": 4,
       "fingerprint": "b44e200c1415ee4d50599d5a9854799a8de42354f84c7530d5c382a35fe2547e",
@@ -153,5 +174,5 @@
       "note": ""
     }
   ],
-  "brakeman_version": "8.1.0"
+  "brakeman_version": "8.1.1"
 }
