@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe 'session cookie', type: :request, show_exceptions: true do
   let(:date) { Time.utc(2016, 4, 12, 12, 59, 59) }
-  let(:cookies) { response.header["Set-Cookie"].split("\n") }
+  let(:cookies) { Array(response.headers["Set-Cookie"]) }
 
   subject do
     cookies.find{ |c| c =~ /^_epets_session/ }
